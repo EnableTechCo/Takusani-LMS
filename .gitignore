@@ -1,0 +1,24 @@
+# Codex-local skills installed for the working environment
+.agents/
+skills-lock.json
+
+# Local secrets and environment files
+.env
+.env.*
+!.env.example
+
+# Next.js / Node.js outputs
+node_modules/
+.next/
+out/
+coverage/
+
+# Vercel local metadata
+.vercel/
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
