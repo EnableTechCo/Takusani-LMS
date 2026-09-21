@@ -2,7 +2,7 @@
 
 ## Status
 
-Proposed
+Proposed. Refined by ADR-025 (enqueue inside the domain transaction; no separate dispatcher).
 
 ## Context
 

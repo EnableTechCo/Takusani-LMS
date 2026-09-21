@@ -2,7 +2,7 @@
 
 ## Status
 
-Proposed
+Proposed. Award keying refined by ADR-022; the result aggregate is defined in ADR-021.
 
 ## Context
 
