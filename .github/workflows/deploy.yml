@@ -1,8 +1,9 @@
 name: Deploy
 
-# main -> staging -> production (ADR-018). Production waits for staging to deploy and pass its smoke test,
-# then for the approval required on the "production" GitHub environment.
-# Vercel's own Git integration does not deploy main (vercel.json), so this is the only route to production.
+# main -> staging, today. This repository's current Supabase and Vercel projects are the staging environment.
+# Production is added later (ADR-018): when it exists, set the repository variable PRODUCTION_ENABLED=true and
+# production will deploy after staging passes, then wait for the approval required on the "production" environment.
+# Vercel's own Git integration does not deploy main (vercel.json), so this workflow is the only deploy route.
 
 on:
   workflow_run:
@@ -32,6 +33,7 @@ jobs:
 
   production:
     needs: staging
+    if: ${{ vars.PRODUCTION_ENABLED == 'true' }}
     uses: ./.github/workflows/deploy-environment.yml
     with:
       environment: production
