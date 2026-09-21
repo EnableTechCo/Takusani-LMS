@@ -87,6 +87,8 @@ Mandatory negative cases include cross-cohort reads, URL/ID enumeration, own-ass
 27. A correction requires two distinct authorised users, supersedes the decision, and appends compensating credit entries.
 28. With only the publishable key and a learner token, direct Data API calls cannot execute any command function with a forged actor, read answer keys, write a score, or exceed the autosave cadence; the privilege enumeration matches the expected list.
 29. A message sent inside a domain transaction that rolls back is absent from the queue; a committed one is always present.
+30. An accommodation granted before the sitting extends that learner's duration and close time and is snapshotted on the attempt; granting or changing one after the attempt has started is refused; a paste event on an attempt that permits paste is not counted towards the integrity threshold.
+31. Assigning the Moderator role to a user who has assessed work in the same cohort succeeds with an advisory naming the excluded results; allocating that user to one of those results is refused with the same conflict named.
 
 ## Idempotency tests
 
