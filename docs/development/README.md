@@ -23,7 +23,28 @@
 - **Styling** uses the design tokens only. `src/styles/tokens.css` is a copy of `docs/design/ui/prototype/assets/tokens.css`; change the prototype file first, then copy it. A unit test fails if they differ.
 - **Server-only code** starts with `import "server-only";` so the build fails if a Client Component imports it. Anything that touches cookies, secrets or privileged keys is server-only.
 - **API errors** use `errorResponse()` in `src/lib/http/error-response.ts`: `{ "error": { code, message, request_id, retryable, details } }` with lower snake_case codes.
-- **Database changes** start from `supabase/templates`. Every grant to `anon` or `authenticated` is added to the allow-list in `supabase/tests/database/0002_privilege_allowlist.test.sql` in the same pull request, or CI fails.
+- **Database changes** start from `supabase/templates` and follow "Database changes" below. Every grant to `anon` or `authenticated` is added to the allow-list in `supabase/tests/database/0002_privilege_allowlist.test.sql` in the same pull request, or CI fails.
+
+## Database changes
+
+The same convention as BluBook: migrations run locally before the pull request, and reach the hosted database after merge.
+
+1. Start from current `main` on a new branch.
+2. Create the migration with `supabase migration new <lower_snake_case_name>`, starting from `supabase/templates`.
+3. Run `npm run db:check` with the local stack running. In order, it:
+   - checks migration names, that no migration already on `main` was changed, and that yours sorts after them;
+   - checks for schema drift: anything changed in local Studio or by hand SQL that no migration captures;
+   - rebuilds the database from migrations (`supabase db reset`), runs the database lint and pgTAP tests;
+   - regenerates `src/types/database.ts` from the `api` schema.
+4. Commit the migration, the regenerated types and the code together in one pull request, and fill in the Database section of the pull request template.
+5. CI checks the same rules again (except drift, which only exists on a developer's machine): names, immutability and order against the base branch, a fresh database built from every migration, lint, pgTAP tests, and that the committed types match the schema.
+6. After merge, the deploy workflow applies the migration to staging (`supabase db push`), the job BluBook did by hand.
+
+Rules:
+
+- Never edit, rename or delete a migration once it is on `main`. Fix forward with a new migration.
+- Never change a hosted database from the Supabase dashboard.
+- Vercel can deploy the code a few minutes before its migration is applied, so the code already on `main` must keep working against the new schema: add first, switch over, remove later.
 
 ## Health checks
 
@@ -32,7 +53,7 @@
 
 ## Required checks
 
-Run npm run ci for the application checks. With Docker running, also run npm run db:lint and npm run db:test.
+Run npm run ci for the application checks. With Docker running, also run npm run db:check.
 
 ## CI/CD setup
 

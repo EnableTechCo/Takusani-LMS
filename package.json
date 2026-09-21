@@ -20,7 +20,11 @@
     "db:stop": "supabase stop",
     "db:reset": "supabase db reset",
     "db:lint": "supabase db lint --local --level warning",
-    "db:test": "supabase test db"
+    "db:test": "supabase test db",
+    "db:migrations:check": "bash scripts/check-migrations.sh origin/main",
+    "db:drift": "bash scripts/check-db-drift.sh",
+    "db:types": "supabase gen types typescript --local --schema api > src/types/database.ts",
+    "db:check": "npm run db:migrations:check && npm run db:drift && supabase db reset && npm run db:lint && npm run db:test && npm run db:types"
   },
   "dependencies": {
     "@supabase/ssr": "0.12.7",
