@@ -1,0 +1,102 @@
+name: Deploy one environment
+
+# Called by deploy.yml for staging and then production. Each GitHub environment ("staging", "production")
+# holds its own secrets and variables under the same names, so this file never mixes them up.
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      ref:
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    environment:
+      name: ${{ inputs.environment }}
+      url: ${{ vars.SITE_URL }}
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+      SUPABASE_PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
+      SITE_URL: ${{ vars.SITE_URL }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Check required settings
+        run: |
+          missing=""
+          for name in SUPABASE_ACCESS_TOKEN SUPABASE_DB_PASSWORD SUPABASE_PROJECT_ID SITE_URL VERCEL_ORG_ID VERCEL_PROJECT_ID VERCEL_TOKEN; do
+            [ -n "${!name}" ] || missing="$missing $name"
+          done
+          if [ -n "$missing" ]; then
+            echo "::error::The ${{ inputs.environment }} environment is missing:$missing (see docs/development/README.md)"
+            exit 1
+          fi
+
+      - name: Vercel region matches the Supabase region (ADR-027)
+        run: node scripts/deploy-region.mjs "$SUPABASE_PROJECT_ID"
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.117.0  # keep in step with the supabase devDependency
+
+      - run: supabase link --project-ref "$SUPABASE_PROJECT_ID" --password "$SUPABASE_DB_PASSWORD"
+
+      - name: Apply database migrations
+        run: supabase db push --linked
+
+      # Project settings are code: supabase/config.toml supplies the security settings (only the api schema
+      # exposed, no public sign-up, password rules). Only the URLs differ per environment, so they are added
+      # here as a [remotes] block for this project and never committed.
+      - name: Push project settings from supabase/config.toml
+        run: |
+          cat >> supabase/config.toml <<EOF
+
+          [remotes.${{ inputs.environment }}]
+          project_id = "$SUPABASE_PROJECT_ID"
+
+          [remotes.${{ inputs.environment }}.auth]
+          site_url = "$SITE_URL"
+          additional_redirect_urls = ["$SITE_URL/**"]
+          EOF
+          # config push runs unattended here, so print the exact changes first for the deploy log.
+          supabase config diff --project-ref "$SUPABASE_PROJECT_ID"
+          supabase --yes config push --project-ref "$SUPABASE_PROJECT_ID"
+
+      - run: npm ci
+      - run: npm install --global vercel@59.23.2
+      - run: vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
+      - run: vercel build --prod --token="$VERCEL_TOKEN"
+      - id: deploy
+        run: echo "url=$(vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN")" >> "$GITHUB_OUTPUT"
+
+      - name: Smoke test
+        env:
+          BYPASS: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+        run: |
+          for attempt in 1 2 3 4 5; do
+            status=$(curl -s -o /tmp/ready.json -w '%{http_code}' ${BYPASS:+-H "x-vercel-protection-bypass: $BYPASS"} "$SITE_URL/api/health/ready")
+            [ "$status" = "200" ] && { cat /tmp/ready.json; exit 0; }
+            echo "Attempt $attempt: HTTP $status"; sleep 10
+          done
+          cat /tmp/ready.json; exit 1

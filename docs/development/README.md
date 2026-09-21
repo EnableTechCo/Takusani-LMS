@@ -38,27 +38,30 @@ Run npm run ci for the application checks. With Docker running, also run npm run
 
 CI validates linting, types, unit tests, the production build, database linting, and pgTAP tests on pull requests and pushes to main. The Supabase and Vercel CLI versions are pinned in the workflows; update them deliberately.
 
-Production delivery is intentionally disabled until infrastructure exists. Configure a protected GitHub environment named production, set the repository variable CD_ENABLED=true, and add:
+### Deployment as code
 
-- SUPABASE_ACCESS_TOKEN
-- SUPABASE_DB_PASSWORD
-- SUPABASE_PROJECT_ID
-- VERCEL_TOKEN
-- VERCEL_ORG_ID
-- VERCEL_PROJECT_ID
+After CI passes on `main`, `deploy.yml` deploys **staging, then production** (ADR-018), using `deploy-environment.yml` for each:
 
-Delivery applies committed Supabase migrations before deploying the same commit to Vercel. Development, staging, and production use separate Supabase projects and environment-scoped secrets.
+1. Check the environment has every secret and variable it needs.
+2. Check `vercel.json`'s function region matches the Supabase project's region (`scripts/deploy-region.mjs`, ADR-027).
+3. Apply database migrations (`supabase db push`).
+4. Push project settings from `supabase/config.toml` (`supabase config push`), after printing `supabase config diff` to the log. This is how the hosted projects get the security settings: only the `api` schema exposed, no public sign-up, 12-character passwords, email confirmation, secure password change. Only the site URL differs per environment; it is added at deploy time from the `SITE_URL` variable.
+5. Build and deploy to Vercel, then smoke-test `/api/health/ready`.
 
-## Settings the repository cannot enforce
+Production starts only after staging passes, and then waits for approval on the `production` environment.
 
-These live in GitHub, Supabase and Vercel. Check each one before the first production deploy and after creating any new project.
+`vercel.json` also turns off Vercel's own Git deployments for `main`, so the workflow above is the only route to production. Pull request previews still deploy automatically.
 
-| Where | Setting | Why |
+The function region is `lhr1` (London), matching Supabase `eu-west-2`. That is the planning default for decision P-16 (ADR-027), pending the latency spike. To change it, create the Supabase projects in the chosen region and change `regions` in `vercel.json`; the deploy stops if the two disagree.
+
+### One-time setup
+
+Deployment stays off until the repository variable `CD_ENABLED` is `true`. Before turning it on:
+
+| Where | What | Why |
 |---|---|---|
-| GitHub | Protect `main`: require a pull request and both CI jobs ("Web application", "Database boundaries") to pass | Merges to `main` deploy once CD is enabled |
-| GitHub | Production environment requires a reviewer | A person approves each production deploy |
-| Supabase, every hosted project | API settings: exposed schemas = `api` only (remove `public` and `graphql_public`) | `supabase/config.toml` sets this for the local stack only; ADR-024 |
-| Supabase, every hosted project | Auth: public sign-up off; minimum password length 12; email confirmation on; secure password change on | Accounts come from invitation and import (FR-103); matches `config.toml` |
-| Supabase | Plan with point-in-time recovery for production | 15-minute recovery point (ADR-027, P-14) |
-| Vercel | Function region pinned to the Supabase project's region | Each database call otherwise crosses continents (ADR-027) |
-| Vercel and Supabase | A staging project and deployment that `main` reaches before production | ADR-018: staging validation before production |
+| Supabase | Create two projects, staging and production, in the region that matches `vercel.json` (`eu-west-2` for `lhr1`). Production on a plan with point-in-time recovery | ADR-018, ADR-027, P-14 |
+| Vercel | A second Vercel project for staging (deployed only by the workflow, not connected to Git). In each Vercel project set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` for the Production environment | The app reads them at build time |
+| GitHub | Environments `staging` and `production`, each with secrets `SUPABASE_ACCESS_TOKEN`, `SUPABASE_DB_PASSWORD`, `SUPABASE_PROJECT_ID`, `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`, optionally `VERCEL_AUTOMATION_BYPASS_SECRET`, and variable `SITE_URL` (for example `https://lms.example.org`) | Same names in both; the environment decides which project is used |
+| GitHub | `production` environment requires a reviewer | A person approves each production deploy |
+| GitHub | Protect `main`: require a pull request and both CI jobs ("Web application", "Database boundaries") to pass | Merges to `main` deploy once CD is on |
