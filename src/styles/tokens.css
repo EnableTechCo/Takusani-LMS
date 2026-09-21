@@ -1,0 +1,255 @@
+/* ==========================================================================
+   Takusani LMS — design tokens
+   Source of truth for colour, type, space, radius, elevation, z-index, motion.
+   Light theme is primary. On <html>: data-theme="light" | "dark" | "auto" (System: follows
+   prefers-color-scheme). The account menu and the sign-in footer set it; exam mode follows it.
+   Contrast ratios in comments are WCAG 2.x relative-luminance ratios,
+   computed (not estimated) for the pair named. AA body text needs 4.5:1,
+   large text and UI boundaries/graphics need 3:1.
+   ========================================================================== */
+
+:root {
+  color-scheme: light;
+
+  /* ---- Colour: canvas, surfaces, borders -------------------------------- */
+  --color-canvas: #F7F6F3;          /* page background, warm bone */
+  --color-surface: #FFFFFF;         /* cards, tables, inputs */
+  --color-surface-subtle: #FBFBFA;  /* table header, card footer */
+  --color-surface-sunken: #EFEEEA;  /* wells, hovered rows, skeleton base */
+  --color-border: #E6E4DF;          /* decorative 1px hairline (not a control boundary) */
+  --color-border-strong: #85837E;   /* control boundaries: 3.79:1 surface, 3.50:1 canvas, 3.26:1 sunken */
+  --color-scrim: rgb(17 17 16 / 0.45);
+
+  /* ---- Colour: text tiers ------------------------------------------------ */
+  --color-text-strong: #111110;     /* headings, figures: 17.48:1 on canvas */
+  --color-text: #1B1B19;            /* body: 15.96:1 canvas, 17.25:1 surface, 14.86:1 sunken */
+  --color-text-secondary: #55544F;  /* labels, help: 7.02:1 canvas, 7.59:1 surface, 6.54:1 sunken */
+  --color-text-tertiary: #696863;   /* metadata, placeholders: 5.17:1 canvas, 5.58:1 surface, 4.81:1 sunken */
+  --color-text-disabled: #9A9893;   /* disabled only (exempt from 1.4.3); never for live content */
+  --color-text-inverse: #FFFFFF;    /* on --color-ink: 18.89:1 */
+
+  /* ---- Colour: ink (primary action) and brand accent -------------------- */
+  --color-ink: #111110;             /* primary button fill */
+  --color-ink-hover: #33332F;       /* white text on it: 12.69:1 */
+  --color-accent: #2B3A8C;          /* Takusani indigo: 9.31:1 canvas, 10.06:1 surface */
+  --color-accent-hover: #1E2A6B;    /* 12.15:1 canvas */
+  --color-accent-subtle: #ECEEF8;   /* selected nav / selected row; accent text on it 8.70:1, body text 14.91:1 */
+  --color-accent-border: #C5CBE8;
+  --color-on-accent: #FFFFFF;       /* 10.06:1 on accent */
+  --color-focus: #2B3A8C;           /* focus ring (3:1 needed): 9.31 canvas, 10.06 surface, 8.67 sunken, 9.08 caution-bg, 8.84 info-bg */
+
+  /* ---- Colour: status tones (bg / border / text / solid) -----------------
+     Tones follow the UX architecture: neutral, info, positive, caution, critical.
+     critical = system faults, blocking validation, destructive confirmation. Never a learner's outcome.
+     text on its bg:   neutral 8.53, info 6.48, positive 7.13, caution 6.24, critical 6.26   (4.5:1 needed)
+     text on surface:  info 7.38, positive 8.03, caution 6.92, critical 7.20
+     solid = tag borders, left bars, icons, chart marks                                      (3:1 needed)
+     solid on its bg:  neutral 3.64, info 4.20, positive 4.40, caution 4.47, critical 4.85
+     solid on surface: neutral 4.23, info 4.78, positive 4.96, caution 4.96, critical 5.58
+     solid on canvas:  neutral 3.91, info 4.42, positive 4.59, caution 4.59, critical 5.16
+     border = pale decorative hairline for banners only; it is not relied on for meaning. */
+  --color-neutral-bg: #EFEEEA;  --color-neutral-border: #D9D7D1;  --color-neutral-text: #44433F;  --color-neutral-solid: #7D7B76;
+  --color-info-bg: #E1F3FE;     --color-info-border: #9CCBEA;     --color-info-text: #185A86;     --color-info-solid: #2B78AD;
+  --color-positive-bg: #EDF3EC;  --color-positive-border: #B9D3B7;  --color-positive-text: #2C5A31;  --color-positive-solid: #3F7D46;
+  --color-caution-bg: #FBF3DB;  --color-caution-border: #E6CF8E;  --color-caution-text: #7A5200;  --color-caution-solid: #9A6500;
+  --color-critical-bg: #FDEBEC;   --color-critical-border: #EDB9BA;   --color-critical-text: #9F2F2D;   --color-critical-solid: #B5403D;
+  --color-critical-fill: #9F2F2D;        /* destructive button fill; white text 7.20:1 */
+  --color-critical-fill-hover: #822422;
+  --color-on-critical: #FFFFFF;
+
+  /* ---- Typography -------------------------------------------------------- */
+  --font-serif: "Newsreader", "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --font-sans: "Instrument Sans", "Segoe UI Variable Text", "Segoe UI", "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+  --font-mono: "Geist Mono", "Cascadia Mono", "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+
+  --text-xs: 0.75rem;      /* 12px  tags-min, overlines */
+  --text-sm: 0.875rem;     /* 14px  labels, table cells, help */
+  --text-base: 1rem;       /* 16px  body */
+  --text-md: 1.125rem;     /* 18px  lead, card titles */
+  --text-lg: 1.25rem;      /* 20px  section headings */
+  --text-xl: 1.5rem;       /* 24px  page title (mobile) */
+  --text-2xl: 1.875rem;    /* 30px  page title (desktop) */
+  --text-3xl: 2.25rem;     /* 36px  key figures */
+  --text-4xl: 3rem;        /* 48px  exam timer, hero figure */
+
+  --leading-tight: 1.15;   /* serif titles, figures */
+  --leading-snug: 1.35;    /* headings, UI labels */
+  --leading-normal: 1.6;   /* body, feedback text */
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+
+  --tracking-tight: -0.02em;   /* serif titles */
+  --tracking-normal: 0;
+  --tracking-wide: 0.06em;     /* overlines, uppercase meta */
+
+  --measure: 38rem;            /* reading measure: about 70 to 75 characters of 16px body text (the ch unit overshoots: it is the width of "0") */
+
+  /* ---- Spacing (4px base) ------------------------------------------------ */
+  --space-0: 0;
+  --space-1: 0.25rem;   /* 4 */
+  --space-2: 0.5rem;    /* 8 */
+  --space-3: 0.75rem;   /* 12 */
+  --space-4: 1rem;      /* 16 */
+  --space-5: 1.25rem;   /* 20 */
+  --space-6: 1.5rem;    /* 24 */
+  --space-8: 2rem;      /* 32 */
+  --space-10: 2.5rem;   /* 40 */
+  --space-12: 3rem;     /* 48 */
+  --space-16: 4rem;     /* 64 */
+
+  /* ---- Density (overridden by [data-density="compact"]) ------------------ */
+  --control-height: 2.75rem;      /* 44px: default and mobile */
+  --control-height-sm: 2.25rem;   /* 36px */
+  --cell-pad-y: 0.75rem;
+  --cell-pad-x: 1rem;
+  --card-pad: 1.5rem;
+
+  /* ---- Radii -------------------------------------------------------------- */
+  --radius-xs: 4px;     /* kbd, checkbox */
+  --radius-sm: 6px;     /* buttons, inputs */
+  --radius-md: 8px;     /* cards, banners */
+  --radius-lg: 12px;    /* modal, large panels (maximum) */
+  --radius-pill: 9999px;/* tags and chips only */
+
+  /* ---- Borders ------------------------------------------------------------ */
+  --border-width: 1px;
+  --border: 1px solid var(--color-border);
+  --border-control: 1px solid var(--color-border-strong);
+
+  /* ---- Elevation (nearly none) ------------------------------------------- */
+  --shadow-none: none;
+  --shadow-overlay: 0 12px 40px rgb(17 17 16 / 0.05);  /* modal, menu, toast only */
+
+  /* ---- Z-index ------------------------------------------------------------ */
+  --z-base: 0;
+  --z-sticky: 100;     /* sticky table head, bulk bar */
+  --z-nav: 200;        /* top bar, bottom tabs, sticky action bars, exam bar */
+  --z-sheet: 300;      /* bottom sheets (workspace picker, decision sheet, sort and filter) */
+  --z-menu: 350;       /* dropdown menus */
+  --z-modal: 400;
+  --z-toast: 500;
+  --z-exam: 600;       /* integrity overlay, time-up overlay */
+
+  /* ---- Motion (state changes only) ---------------------------------------- */
+  --duration-fast: 120ms;
+  --duration-base: 160ms;
+  --duration-slow: 200ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* ---- Focus ring ---------------------------------------------------------- */
+  --focus-width: 2px;
+  --focus-offset: 2px;
+
+  /* ---- Layout -------------------------------------------------------------- */
+  --topbar-height: 3.5rem;       /* 56px, fixed */
+  --sidenav-width: 16rem;        /* 256px from lg */
+  --rail-width: 4.5rem;          /* 72px icon rail at md */
+  --bottomtabs-height: 3.75rem;  /* 60px, phones */
+  --actionbar-height: 4.5rem;    /* sticky action / decision bar, exam action bar */
+  --switcher-height: 3rem;       /* sticky section switcher below xl */
+  --exam-navigator-width: 15rem; /* 240px */
+  --width-content: 75rem;        /* 1200px content cap */
+  --width-prose: 45rem;          /* 720px prose cap; text inside is further limited to --measure */
+  --width-form: 45rem;           /* forms: single column, max 720px */
+  --width-auth: 26rem;           /* sign-in column */
+  --aside-min: 20rem;            /* optional aside: 320 to 400px */
+  --aside-max: 25rem;
+  --panel-min: 26.25rem;         /* marking / moderation panel: 420 to 480px from xl */
+  --panel-max: 30rem;
+  /* Breakpoints (custom properties cannot be used in media queries; listed for reference). Mobile first, min-width:
+     base 320px · md 768px (48rem) · lg 1024px (64rem) · xl 1280px (80rem) · 2xl 1440px (90rem) */
+}
+
+/* ---- Compact density: desktop marking and table workspaces ---------------- */
+[data-density="compact"] {
+  --control-height: 2.25rem;
+  --control-height-sm: 2rem;
+  --cell-pad-y: 0.5rem;
+  --cell-pad-x: 0.75rem;
+  --card-pad: 1rem;
+}
+
+/* ==========================================================================
+   Dark theme
+   text 15.45:1 canvas / 14.31:1 surface / 12.87:1 raised
+   text-secondary 8.69 / 8.04 / 7.24 · text-tertiary 5.69 surface / 5.12 raised
+   border-strong 4.50:1 surface / 4.05:1 sunken · accent 9.57:1 canvas / 8.86:1 surface / 7.40:1 on accent-subtle
+   focus ring: 9.57 canvas, 8.86 surface, 7.97 sunken, 7.33 caution-bg
+   tone text on its bg: neutral 9.33, info 8.76, positive 8.85, caution 8.98, critical 8.47
+   solid on its bg: neutral 4.17, info 5.19, positive 5.58, caution 6.51, critical 5.01
+   solid on surface: neutral 4.94, info 6.41, positive 6.59, caution 7.87, critical 5.49
+   ========================================================================== */
+[data-theme="dark"] {
+  color-scheme: dark;
+  --color-canvas: #141413;
+  --color-surface: #1C1C1A;
+  --color-surface-subtle: #20201E;
+  --color-surface-sunken: #252523;
+  --color-border: #2E2E2B;
+  --color-border-strong: #85837D;
+  --color-scrim: rgb(0 0 0 / 0.6);
+  --color-text-strong: #F6F5F1;
+  --color-text: #ECEBE7;
+  --color-text-secondary: #B4B2AB;
+  --color-text-tertiary: #97958E;
+  --color-text-disabled: #6B6A65;
+  --color-text-inverse: #141413;
+  --color-ink: #ECEBE7;
+  --color-ink-hover: #D2D0C9;
+  --color-accent: #A9B7FF;
+  --color-accent-hover: #C4CEFF;
+  --color-accent-subtle: #23284A;
+  --color-accent-border: #3A4377;
+  --color-on-accent: #141413;
+  --color-focus: #A9B7FF;
+  --color-neutral-bg: #2A2A27;  --color-neutral-border: #3D3D39;  --color-neutral-text: #D2D0C9;  --color-neutral-solid: #8C8A84;
+  --color-info-bg: #12303F;     --color-info-border: #1F4A61;     --color-info-text: #A5D4F3;     --color-info-solid: #5BA6D8;
+  --color-positive-bg: #1B2E1D;  --color-positive-border: #2D4A30;  --color-positive-text: #AFD4B1;  --color-positive-solid: #6DB074;
+  --color-caution-bg: #352A0B;  --color-caution-border: #564514;  --color-caution-text: #EBCB7A;  --color-caution-solid: #D9A93A;
+  --color-critical-bg: #3B1A1A;   --color-critical-border: #5E2A2A;   --color-critical-text: #F2AEAB;   --color-critical-solid: #E0716D;
+  --color-critical-fill: #F2AEAB;
+  --color-critical-fill-hover: #F7C6C4;
+  --color-on-critical: #141413;
+  --shadow-overlay: 0 12px 40px rgb(0 0 0 / 0.4);
+}
+
+/* Follow the operating system only when the page opts in with data-theme="auto".
+   (Values duplicated from the block above because CSS has no mixins; keep in sync.) */
+@media (prefers-color-scheme: dark) {
+  [data-theme="auto"] {
+    color-scheme: dark;
+    --color-canvas: #141413;
+    --color-surface: #1C1C1A;
+    --color-surface-subtle: #20201E;
+    --color-surface-sunken: #252523;
+    --color-border: #2E2E2B;
+    --color-border-strong: #85837D;
+    --color-scrim: rgb(0 0 0 / 0.6);
+    --color-text-strong: #F6F5F1;
+    --color-text: #ECEBE7;
+    --color-text-secondary: #B4B2AB;
+    --color-text-tertiary: #97958E;
+    --color-text-disabled: #6B6A65;
+    --color-text-inverse: #141413;
+    --color-ink: #ECEBE7;
+    --color-ink-hover: #D2D0C9;
+    --color-accent: #A9B7FF;
+    --color-accent-hover: #C4CEFF;
+    --color-accent-subtle: #23284A;
+    --color-accent-border: #3A4377;
+    --color-on-accent: #141413;
+    --color-focus: #A9B7FF;
+    --color-neutral-bg: #2A2A27;  --color-neutral-border: #3D3D39;  --color-neutral-text: #D2D0C9;  --color-neutral-solid: #8C8A84;
+    --color-info-bg: #12303F;     --color-info-border: #1F4A61;     --color-info-text: #A5D4F3;     --color-info-solid: #5BA6D8;
+    --color-positive-bg: #1B2E1D;  --color-positive-border: #2D4A30;  --color-positive-text: #AFD4B1;  --color-positive-solid: #6DB074;
+    --color-caution-bg: #352A0B;  --color-caution-border: #564514;  --color-caution-text: #EBCB7A;  --color-caution-solid: #D9A93A;
+    --color-critical-bg: #3B1A1A;   --color-critical-border: #5E2A2A;   --color-critical-text: #F2AEAB;   --color-critical-solid: #E0716D;
+    --color-critical-fill: #F2AEAB;
+    --color-critical-fill-hover: #F7C6C4;
+    --color-on-critical: #141413;
+    --shadow-overlay: 0 12px 40px rgb(0 0 0 / 0.4);
+  }
+}

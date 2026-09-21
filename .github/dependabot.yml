@@ -9,6 +9,16 @@ updates:
         dependency-type: production
       development-dependencies:
         dependency-type: development
+    ignore:
+      # typescript-eslint (via eslint-config-next) does not support TypeScript 7 yet; lint fails on the bump.
+      - dependency-name: typescript
+        update-types: ["version-update:semver-major"]
+      # ESLint 10 needs the Next.js ESLint config to support it first.
+      - dependency-name: eslint
+        update-types: ["version-update:semver-major"]
+      # Node types follow the runtime in .nvmrc (22), not the newest Node.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: github-actions
     directory: /
     schedule:
