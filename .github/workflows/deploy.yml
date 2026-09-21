@@ -34,7 +34,7 @@ jobs:
           ref: ${{ github.event.workflow_run.head_sha || github.sha }}
       - uses: supabase/setup-cli@v1
         with:
-          version: latest
+          version: 2.117.0  # keep in step with the supabase devDependency
       - run: supabase link --project-ref "$SUPABASE_PROJECT_ID" --password "$SUPABASE_DB_PASSWORD"
       - run: supabase db push --linked --include-all
 
@@ -58,7 +58,7 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
-      - run: npm install --global vercel@latest
+      - run: npm install --global vercel@59.23.2
       - run: vercel pull --yes --environment=production --token="${{ secrets.VERCEL_TOKEN }}"
       - run: vercel build --prod --token="${{ secrets.VERCEL_TOKEN }}"
       - id: deploy
