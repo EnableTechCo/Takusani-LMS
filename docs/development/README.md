@@ -44,17 +44,17 @@ CI validates linting, types, unit tests, the production build, database linting,
 
 ### Deployment as code
 
-After CI passes on `main`, `deploy.yml` deploys to **staging** through `deploy-environment.yml`:
+**Staging (now).** When a pull request merges to `main`, Vercel's Git integration deploys it to the staging site straight away, as it does for pull request previews. Separately, once CI passes on `main`, `deploy.yml` runs `deploy-environment.yml` for staging:
 
 1. Check the environment has every secret and variable it needs.
 2. Check `vercel.json`'s function region matches the Supabase project's region (`scripts/deploy-region.mjs`, ADR-027).
 3. Apply database migrations (`supabase db push`).
 4. Push project settings from `supabase/config.toml` (`supabase config push`), after printing `supabase config diff` to the log. This is how the hosted project gets the security settings: only the `api` schema exposed, no public sign-up, 12-character passwords, email confirmation, secure password change. Only the site URL differs per environment; it is added at deploy time from the `SITE_URL` variable.
-5. Build and deploy to Vercel, then smoke-test `/api/health/ready`.
+5. Smoke-test `/api/health/ready` on the staging site, allowing up to two minutes for Vercel's build to finish.
 
-The workflow deploys to the Vercel project's Production target, which for this project is the staging site.
+Because Vercel deploys on merge and migrations run after CI, the new code can be live on staging for a few minutes before its migration is applied, and Vercel deploys even if CI fails on `main`. That is acceptable for staging. Write migrations so the previous code keeps working (expand, then migrate, then contract; see the security and operations document), which keeps that window harmless.
 
-`vercel.json` turns off Vercel's own Git deployments for `main`, so the workflow above is the only way `main` reaches the site, and migrations always run first. Pull request previews still deploy automatically.
+**Production (later)** does not use Vercel's Git integration. The workflow builds and deploys it itself (`deploy_app: true`) after migrations, so the order is always migrations first.
 
 The function region is `lhr1` (London), matching Supabase `eu-west-2`. That is the planning default for decision P-16 (ADR-027), pending the latency spike. To change it, create the Supabase project in the chosen region and change `regions` in `vercel.json`; the deploy stops if the two disagree.
 
@@ -66,12 +66,12 @@ Deployment stays off until the repository variable `CD_ENABLED` is `true`. Befor
 |---|---|
 | Supabase | Create the staging project in `eu-west-2` (or change `vercel.json` to match its region) |
 | Vercel | In the existing project, set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` for the Production target (the staging site) |
-| GitHub | Create an environment named `staging` with secrets `SUPABASE_ACCESS_TOKEN`, `SUPABASE_DB_PASSWORD`, `SUPABASE_PROJECT_ID`, `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`, optionally `VERCEL_AUTOMATION_BYPASS_SECRET`, and variable `SITE_URL` (the staging site's address) |
+| GitHub | Create an environment named `staging` with secrets `SUPABASE_ACCESS_TOKEN`, `SUPABASE_DB_PASSWORD`, `SUPABASE_PROJECT_ID`, optionally `VERCEL_AUTOMATION_BYPASS_SECRET`, and variable `SITE_URL` (the staging site's address). No Vercel token is needed: Vercel deploys staging itself |
 
 `main` is protected: changes arrive by pull request, and both CI jobs ("Web application", "Database boundaries") must pass, for administrators too.
 
 ### Adding production (later)
 
 1. Create a production Supabase project in the same region as staging, on a plan with point-in-time recovery (ADR-027, P-14), and a separate production Vercel project that is not connected to Git.
-2. Create the `production` GitHub environment with the same secret and variable names as `staging`, pointing at the production projects, and require a reviewer on it. GitHub environment names are not case-sensitive, so this is the same environment as the `Production` one Vercel created for its deployments; that is fine.
+2. Create the `production` GitHub environment with the same secret and variable names as `staging` plus `VERCEL_TOKEN`, `VERCEL_ORG_ID` and `VERCEL_PROJECT_ID` for the production Vercel project, and require a reviewer on it. GitHub environment names are not case-sensitive, so this is the same environment as the `Production` one Vercel created for its deployments; that is fine.
 3. Set the repository variable `PRODUCTION_ENABLED=true`. Production then deploys after staging passes, and waits for the reviewer.

@@ -25,8 +25,4 @@ describe("vercel.json", () => {
     expect(config.regions).toHaveLength(1);
     expect(Object.values(SUPABASE_TO_VERCEL)).toContain(config.regions[0]);
   });
-
-  it("stops Vercel's Git integration deploying main, so production goes only through the gated workflow", () => {
-    expect(config.git?.deploymentEnabled?.main).toBe(false);
-  });
 });
