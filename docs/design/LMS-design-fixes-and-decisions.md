@@ -190,6 +190,17 @@ Requirements that had no specific design element, or an incomplete one. Several 
 | S-19 | FR-208, NFR-01 | Recording uploads absent from capacity | Capacity note; links preferred (CR-13) | Decided |
 | S-20 | FR-314, NFR-07 | "Timer at its recorded state" ambiguous | Timer never pauses (CR-11; ADR-023) | Working (P-13) |
 
+## 3a. Decisions from the UI design work
+
+Raised by the UX architecture ([ui/LMS-ux-architecture.md](ui/LMS-ux-architecture.md), section 12) and decided by the product owner. The remaining UX questions in that section keep the architect's recommended default until answered.
+
+| ID | Question | Decision | Status | Applied in |
+|---|---|---|---|---|
+| U-01 | FR-104 speaks of rejecting a conflicting role assignment, but BR-01 applies per assessment instance and the architecture enforces it at allocation. Block or advise at role assignment? | Advise at role assignment, block at allocation. The assignment succeeds and returns an advisory naming the results the user will be excluded from; allocation refuses with the named conflict. One panel serves both (CR-20). | Decided by product owner, 21 September 2026 | Data model "Identity"; API role assignments; UX spec Q4 |
+| U-02 | Are per-learner exam accommodations in scope? | Yes. Before the sitting a coordinator may grant additional time, permit paste, and note assistive technology in use. The start function folds the time into the learner's duration and close time and snapshots the accommodation on the attempt, visible to the assessor beside the integrity log. Nothing changes once the attempt is active. This supports the WCAG 2.2.1 "essential" exception for the exam timer and stops assistive technology being misread as an integrity event. | Decided by product owner, 21 September 2026 | Data model `exam_accommodations`; API accommodations route and exam start; UX spec Q5 |
+
+U-02 adds a category of restricted personal information. The reason is stored as a category, not a medical detail, and its handling belongs in the POPIA assessment alongside integrity-event collection.
+
 ## 4. Deferred work
 
 | ID | Item | Why deferred | When |

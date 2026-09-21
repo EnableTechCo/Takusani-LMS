@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="en-ZA" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Moderation planning · Takusani LMS</title>
+<!-- Fonts: optional. The page is fully usable on the fallback stacks if this request fails (no web-font dependency for first paint). -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400..600&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap">
+<!-- Optional extended icon set (Phosphor Bold). Critical icons come from the inline sprite in ui.js. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/ui.css">
+<link rel="stylesheet" href="assets/proto.css">
+<link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+<style>
+/* Page-specific layout only. Tokens only. Not part of the component library. */
+.cohort-nav { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-5); margin-bottom: var(--space-6); font-size: var(--text-sm); }
+.cohort-nav a, .cohort-nav strong { display: inline-flex; align-items: center; min-height: 2.75rem; }
+.cohort-nav strong { color: var(--color-text-strong); font-weight: var(--weight-semibold); box-shadow: inset 0 -3px 0 var(--color-text-strong); }
+.plan-form { max-width: var(--width-form); }
+.strata { min-width: 36rem; }
+.scope-list { display: flex; flex-direction: column; gap: var(--space-1); padding: var(--space-2) var(--space-4); border: var(--border); border-radius: var(--radius-md); background: var(--color-surface); }
+</style>
+</head>
+<body data-proto-screen="P0-15" data-proto-title="Moderation planning" data-proto-frs="FR-501 FR-502 FR-503 FR-505 FR-506" data-proto-states="nocycle:No cycle planned, pool growing|planned:Cycle planned|sampled:Frozen and sampled|overlap:Scope overlap refused">
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<div class="app-shell">
+  <header class="app-shell__topbar">
+    <a class="brand" href="index.html" aria-label="Takusani LMS, all prototype screens">
+      <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M7 0H25A7 7 0 0 1 32 7V25A7 7 0 0 1 25 32H7A7 7 0 0 1 0 25V7A7 7 0 0 1 7 0ZM7 8.5H25V12H17.75V24H14.25V12H7ZM8.25 17.5A1.75 1.75 0 1 0 11.75 17.5A1.75 1.75 0 1 0 8.25 17.5ZM20.25 17.5A1.75 1.75 0 1 0 23.75 17.5A1.75 1.75 0 1 0 20.25 17.5Z"/></svg>
+      <span class="brand__name">Takusani</span><span class="brand__suffix">LMS</span>
+    </a>
+    <span class="topbar__institution">Khanya Skills Institute</span>
+    <div class="topbar__context"><details class="menu-wrap" data-menu><summary class="context-select__button" aria-label="Cohort. Current: 2026 Intake B"><span class="context-select__label">Cohort</span><span class="context-select__value">2026 Intake B</span><svg class="icon icon--sm" aria-hidden="true"><use href="#i-caret-down"/></svg></summary><div class="menu"><p class="menu__label">Coordinating</p><a class="menu__item" href="#main" data-toast="This screen is not part of the prototype"><span class="menu__item-text">All my cohorts</span></a><a class="menu__item" href="coordinate-cohort-setup.html#state=active" aria-current="true"><span class="menu__item-text">2026 Intake B<span class="menu__item-meta">Certificate in Business Administration · Active</span></span><span class="tag tag--plain">Moderated</span><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></a><a class="menu__item" href="#main" data-toast="This screen is not part of the prototype"><span class="menu__item-text">2026 Intake C<span class="menu__item-meta">Certificate in Business Administration · Active</span></span><span class="tag tag--plain">Not moderated</span></a><div class="menu__divider" role="separator"></div><p class="menu__label">Archived</p><a class="menu__item" href="#main" data-toast="This screen is not part of the prototype"><span class="menu__item-text">2025 Intake A<span class="menu__item-meta">Certificate in Business Administration · Archived (read-only)</span></span></a></div></details></div>
+    <span class="topbar__spacer"></span>
+    <form class="topbar__search" role="search" action="#main" method="get" onsubmit="return false"><label class="input-icon"><span class="u-visually-hidden">Search</span><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><input class="input" type="search" name="q" placeholder="Search"></label></form>
+    <div class="topbar__actions">
+      <a class="btn btn--ghost btn--icon" href="notifications.html" aria-label="Notifications, 3 unread"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg><span class="badge-count" aria-hidden="true">3</span></a>
+      <details class="menu-wrap" data-menu>
+        <summary class="btn btn--ghost btn--icon" aria-label="Account menu for Zanele Dlamini"><span class="avatar" aria-hidden="true">ZD</span></summary>
+        <div class="menu menu--end">
+          <div class="account__identity"><p class="account__name">Zanele Dlamini</p><p class="account__email">zanele.dlamini@khanya.example</p><ul class="account__roles"><li>Coordinator: Certificate in Business Administration</li></ul></div>
+          <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg>Profile</a>
+          <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg>Notification preferences</a>
+          <div class="menu__section"><fieldset class="fieldset"><legend class="fieldset__legend">Appearance</legend>
+            <div class="segmented">
+              <label class="segmented__option"><input type="radio" name="theme" value="light" data-theme-choice checked><span>Light</span></label>
+              <label class="segmented__option"><input type="radio" name="theme" value="dark" data-theme-choice><span>Dark</span></label>
+              <label class="segmented__option"><input type="radio" name="theme" value="auto" data-theme-choice><span>System</span></label>
+            </div></fieldset></div>
+          <div class="menu__divider" role="separator"></div>
+          <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-help"/></svg>Help</a>
+          <a class="menu__item" href="sign-in.html"><svg class="icon" aria-hidden="true"><use href="#i-sign-out"/></svg>Sign out</a>
+        </div>
+      </details>
+    </div>
+  </header>
+
+  <aside class="app-shell__sidenav" aria-label="Workspaces">
+    <nav class="sidenav" aria-label="Main navigation">
+      <div class="sidenav__group"><ul class="sidenav__list">
+        <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-house"/></svg><span class="sidenav__label">My work</span><span class="sidenav__short" aria-hidden="true">My work</span></a></li>
+      </ul></div>
+      <div class="sidenav__group"><h2 class="sidenav__heading">Coordinating</h2>
+        <ul class="sidenav__list">
+          <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg><span class="sidenav__label">Overview</span><span class="sidenav__short" aria-hidden="true">Overview</span></a></li>
+          <li><a class="sidenav__item" href="coordinate-cohort-setup.html#state=active" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-users"/></svg><span class="sidenav__label">Cohorts</span><span class="sidenav__short" aria-hidden="true">Cohorts</span></a></li>
+          <li><a class="sidenav__item" href="coordinate-appeals.html"><svg class="icon" aria-hidden="true"><use href="#i-scales"/></svg><span class="sidenav__label">Appeals</span><span class="sidenav__short" aria-hidden="true">Appeals</span><span class="sidenav__count" aria-label="3 appeals need your action">3</span></a></li>
+          <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-megaphone"/></svg><span class="sidenav__label">Notices</span><span class="sidenav__short" aria-hidden="true">Notices</span></a></li>
+          <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-help"/></svg><span class="sidenav__label">Queries</span><span class="sidenav__short" aria-hidden="true">Queries</span></a></li>
+          <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg><span class="sidenav__label">Logistics</span><span class="sidenav__short" aria-hidden="true">Logistics</span></a></li>
+          <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-chart"/></svg><span class="sidenav__label">Reports</span><span class="sidenav__short" aria-hidden="true">Reports</span></a></li>
+        </ul>
+      </div>
+    </nav>
+  </aside>
+
+  <main class="app-shell__main" id="main" tabindex="-1">
+    <div class="page">
+      <header class="page-header">
+        <nav aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="#main" data-toast="This screen is not part of the prototype">Cohorts</a></li><li><a href="coordinate-cohort-setup.html#state=active">2026 Intake B</a></li><li aria-current="page">Moderation</li></ol></nav>
+        <p class="page-header__workspace">Coordinating</p>
+        <h1 class="page-header__title">Moderation planning</h1>
+        <p class="page-header__lead">Every result in this cohort is held from the moment the assessor decides. A result is released only when a moderation cycle that covers it is signed off.</p>
+        <div class="page-header__meta">
+          <span class="tag tag--caution" data-proto-state="nocycle">Results waiting, no cycle planned</span>
+          <span class="tag" data-proto-state="planned">1 cycle planned</span>
+          <span class="tag tag--info" data-proto-state="sampled">1 cycle sampled</span>
+          <span class="tag tag--info tag--shape-half" data-proto-state="overlap">1 cycle in review</span>
+          <span>2026 Intake B <span class="tag tag--plain">Moderated</span></span>
+          <span class="text-meta">As at <span data-proto-state="nocycle">Mon 7 Sep 2026, 08:30</span><span data-proto-state="planned">Fri 11 Sep 2026, 16:10</span><span data-proto-state="sampled">Tue 15 Sep 2026, 16:00</span><span data-proto-state="overlap">Thu 17 Sep 2026, 10:26</span> SAST</span>
+        </div>
+      </header>
+
+      <nav class="cohort-nav" aria-label="Pages for this cohort">
+        <a href="coordinate-cohort-setup.html#state=active">Setup</a>
+        <a href="#main" data-toast="This screen is not part of the prototype">People</a>
+        <a href="#main" data-toast="This screen is not part of the prototype">Readiness</a>
+        <strong aria-current="page">Moderation</strong>
+      </nav>
+
+      <div class="banner banner--caution" role="alert" data-proto-state="nocycle"><svg class="icon banner__icon" aria-hidden="true"><use href="#i-info"/></svg><p class="banner__title">38 results are waiting and no cycle is planned to release them</p><p class="banner__body">The number grows every time an assessor decides. The oldest was decided 4 days ago, on Thu 3 Sep 2026. Nothing is released until a cycle covering Task 3 is planned, sampled and signed off. The maximum hold is 21 days, so the oldest result passes it on Thu 24 Sep 2026.</p><div class="banner__actions"><a href="#plan-h">Plan a cycle for these results</a></div></div>
+      <div class="banner banner--info" role="status" data-proto-state="planned"><svg class="icon banner__icon" aria-hidden="true"><use href="#i-clock"/></svg><p class="banner__title">"Term 3 tasks" starts by itself on Mon 14 Sep 2026 at 09:00</p><p class="banner__body">At that moment it locks every Task 3 result that is waiting and draws the sample. You do not need to be here. Decisions made after that moment wait for the next cycle.</p></div>
+      <div class="banner banner--positive" role="status" data-proto-state="sampled"><svg class="icon banner__icon" aria-hidden="true"><use href="#i-check-circle"/></svg><p class="banner__title">"Term 3 tasks" was frozen and sampled on Mon 14 Sep 2026 at 09:00</p><p class="banner__body">96 results are locked as the population. 22 were sampled and given to Anil Naidoo. 3 results decided since then are waiting for the next cycle.</p></div>
+
+      <!-- ============ Pending pool ============ -->
+      <section aria-labelledby="pool-h">
+        <div class="section__header"><h2 class="text-heading" id="pool-h">Decided and waiting for a cycle</h2><span class="text-small text-muted">Held results that no cycle has locked yet</span></div>
+        <div class="grid grid--3">
+          <div class="stat"><span class="stat__label">Waiting for a cycle</span>
+            <span class="stat__value"><span data-proto-state="nocycle">38</span><span data-proto-state="planned">96</span><span data-proto-state="sampled">3</span><span data-proto-state="overlap">14</span> <span class="stat__unit">results</span></span>
+            <span class="stat__meta"><span data-proto-state="nocycle">Thandiwe Nkosi 36 · Bongani Sithole 2. No cycle will claim them.</span><span data-proto-state="planned">Thandiwe Nkosi 92 · Bongani Sithole 4. All 96 will be claimed by "Term 3 tasks".</span><span data-proto-state="sampled">Thandiwe Nkosi 2 · Bongani Sithole 1. Decided after the freeze.</span><span data-proto-state="overlap">Thandiwe Nkosi 9 · Bongani Sithole 5. No cycle will claim them.</span></span></div>
+          <div class="stat"><span class="stat__label">Oldest waiting result</span>
+            <span class="stat__value"><span data-proto-state="nocycle">4</span><span data-proto-state="planned">8</span><span data-proto-state="sampled">0</span><span data-proto-state="overlap">2</span> <span class="stat__unit">days of the 21-day maximum hold</span></span>
+            <span class="stat__meta">
+              <span data-proto-state="nocycle">Decided Thu 3 Sep 2026</span><span data-proto-state="planned">Decided Thu 3 Sep 2026</span><span data-proto-state="sampled">Decided today, Tue 15 Sep 2026</span><span data-proto-state="overlap">Decided Tue 15 Sep 2026</span></span>
+            <div class="progress" role="img" aria-label="4 of 21 days" data-proto-state="nocycle"><div class="progress__bar" style="--value:19%"></div></div>
+            <div class="progress" role="img" aria-label="8 of 21 days" data-proto-state="planned"><div class="progress__bar" style="--value:38%"></div></div>
+            <div class="progress" role="img" aria-label="0 of 21 days" data-proto-state="sampled"><div class="progress__bar" style="--value:1%"></div></div>
+            <div class="progress" role="img" aria-label="2 of 21 days" data-proto-state="overlap"><div class="progress__bar" style="--value:10%"></div></div></div>
+          <div class="stat"><span class="stat__label">Held in a frozen cycle</span>
+            <span class="stat__value"><span data-proto-state="nocycle planned">0</span><span data-proto-state="sampled overlap">96</span> <span class="stat__unit">results</span></span>
+            <span class="stat__meta"><span data-proto-state="nocycle planned">Nothing is frozen yet.</span><span data-proto-state="sampled">"Term 3 tasks". Oldest decided 12 days ago, of the 21-day maximum hold.</span><span data-proto-state="overlap">"Term 3 tasks". Oldest decided 14 days ago, of the 21-day maximum hold.</span></span>
+            <div class="progress" role="img" aria-label="12 of 21 days" data-proto-state="sampled"><div class="progress__bar" style="--value:57%"></div></div>
+            <div class="progress progress--caution" role="img" aria-label="14 of 21 days" data-proto-state="overlap"><div class="progress__bar" style="--value:67%"></div></div></div>
+        </div>
+
+        <div class="table-wrap u-mt-4">
+          <table class="table table--cards">
+            <caption class="u-visually-hidden">Waiting results by assessable item, with the assessor split and the age of the oldest</caption>
+            <thead><tr><th scope="col">Assessable item</th><th scope="col">By assessor</th><th scope="col" class="table__num">Waiting</th><th scope="col">Oldest decided</th><th scope="col">Age against the 21-day maximum hold</th><th scope="col">What happens to them</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="table__primary-cell" data-label="Item"><span class="table__primary">Task 3: Workplace records portfolio</span><span class="table__secondary">Unit 3 · 8 credits</span></td>
+                <td data-label="By assessor"><span><span data-proto-state="nocycle">Thandiwe Nkosi 36 · Bongani Sithole 2</span><span data-proto-state="planned">Thandiwe Nkosi 92 · Bongani Sithole 4</span><span data-proto-state="sampled overlap">Thandiwe Nkosi 2 · Bongani Sithole 1</span></span></td>
+                <td class="table__num" data-label="Waiting"><span><span data-proto-state="nocycle">38</span><span data-proto-state="planned">96</span><span data-proto-state="sampled overlap">3</span></span></td>
+                <td data-label="Oldest decided"><span><span data-proto-state="nocycle planned">Thu 3 Sep 2026</span><span data-proto-state="sampled overlap">Tue 15 Sep 2026</span></span></td>
+                <td data-label="Age"><span class="mono"><span data-proto-state="nocycle">4 of 21 days</span><span data-proto-state="planned">8 of 21 days</span><span data-proto-state="sampled">0 of 21 days</span><span data-proto-state="overlap">2 of 21 days</span></span></td>
+                <td data-label="What happens"><span><span class="tag tag--caution" data-proto-state="nocycle">Not in any cycle</span><span class="tag" data-proto-state="planned">"Term 3 tasks" claims them Mon 14 Sep, 09:00</span><span class="tag tag--caution" data-proto-state="sampled overlap">Waiting for the next cycle</span><span class="table__secondary" data-proto-state="sampled overlap">Decided after "Term 3 tasks" was frozen. They cannot join it.</span></span></td>
+              </tr>
+              <tr data-proto-state="overlap">
+                <td class="table__primary-cell" data-label="Item"><span class="table__primary">Task 4: Business communication report</span><span class="table__secondary">Unit 4 · 10 credits</span></td>
+                <td data-label="By assessor">Thandiwe Nkosi 5 · Bongani Sithole 4</td>
+                <td class="table__num" data-label="Waiting">9</td>
+                <td data-label="Oldest decided">Wed 16 Sep 2026</td>
+                <td data-label="Age"><span class="mono">1 of 21 days</span></td>
+                <td data-label="What happens"><span class="tag tag--caution">Not in any cycle</span></td>
+              </tr>
+              <tr data-proto-state="overlap">
+                <td class="table__primary-cell" data-label="Item"><span class="table__primary">Unit 2 summative exam</span><span class="table__secondary">Unit 2 · late sittings</span></td>
+                <td data-label="By assessor">Thandiwe Nkosi 2</td>
+                <td class="table__num" data-label="Waiting">2</td>
+                <td data-label="Oldest decided">Wed 16 Sep 2026</td>
+                <td data-label="Age"><span class="mono">1 of 21 days</span></td>
+                <td data-label="What happens"><span class="tag tag--caution">Not in any cycle</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="text-small text-muted u-mt-2">Learners see "Being assessed" for all of these. The maximum hold is set by the System Administrator under Configuration.</p>
+      </section>
+
+      <!-- ============ Cycles ============ -->
+      <section class="section" aria-labelledby="cycles-h">
+        <div class="section__header"><h2 class="text-heading" id="cycles-h">Cycles</h2>
+          <button type="button" class="btn btn--secondary btn--sm" data-proto-goto="overlap" data-proto-state="planned sampled">Plan another cycle</button></div>
+        <div class="table-wrap">
+          <table class="table table--cards">
+            <caption class="u-visually-hidden">Moderation cycles for 2026 Intake B, newest first</caption>
+            <thead><tr><th scope="col">Cycle</th><th scope="col">Scope</th><th scope="col">Start (SAST)</th><th scope="col">State</th><th scope="col">Results</th><th scope="col" class="table__actions"><span class="u-visually-hidden">Actions</span></th></tr></thead>
+            <tbody>
+              <tr data-proto-state="!nocycle">
+                <td class="table__primary-cell" data-label="Cycle"><span class="table__primary">Term 3 tasks</span><span class="table__secondary">Planned by Zanele Dlamini, Mon 7 Sep 2026</span></td>
+                <td data-label="Scope">Task 3: Workplace records portfolio</td>
+                <td data-label="Start">Automatically, Mon 14 Sep 2026, 09:00</td>
+                <td data-label="State"><span><span class="tag" data-proto-state="planned">Planned. Starts Mon 14 Sep at 09:00</span><span class="tag tag--info" data-proto-state="sampled">Sampled. Ready for review (22 items)</span><span class="tag tag--info tag--shape-half" data-proto-state="overlap">In review (9 of 22 done)</span></span></td>
+                <td data-label="Results"><span><span data-proto-state="planned">96 waiting now</span><span data-proto-state="sampled overlap">96 held · 22 sampled</span></span></td>
+                <td class="table__actions"><a class="btn btn--secondary btn--sm" href="#cycle-h" data-proto-state="planned sampled">View<span class="u-visually-hidden"> Term 3 tasks</span></a><a class="btn btn--secondary btn--sm" href="moderate-signoff.html" data-proto-state="overlap">Sign-off status<span class="u-visually-hidden"> of Term 3 tasks</span></a></td>
+              </tr>
+              <tr>
+                <td class="table__primary-cell" data-label="Cycle"><span class="table__primary">Term 2 tasks</span><span class="table__secondary">Planned by Zanele Dlamini, Mon 8 Jun 2026</span></td>
+                <td data-label="Scope">Task 1, Task 2</td>
+                <td data-label="Start">When chosen: Mon 15 Jun 2026, 10:12</td>
+                <td data-label="State"><span class="tag tag--positive">Signed off. 188 results released</span></td>
+                <td data-label="Results">Signed off by Anil Naidoo, Fri 26 Jun 2026, 15:30</td>
+                <td class="table__actions"><a class="btn btn--secondary btn--sm" href="#main" data-toast="This screen is not part of the prototype">View<span class="u-visually-hidden"> Term 2 tasks</span></a></td>
+              </tr>
+              <tr>
+                <td class="table__primary-cell" data-label="Cycle"><span class="table__primary">Term 2 tasks (first plan)</span><span class="table__secondary">Planned by Zanele Dlamini, Tue 2 Jun 2026</span></td>
+                <td data-label="Scope">Task 1 only</td>
+                <td data-label="Start">Not started</td>
+                <td data-label="State"><span class="tag tag--shape-square">Cancelled before freeze</span></td>
+                <td data-label="Results">Cancelled by Zanele Dlamini, Mon 8 Jun 2026. The results stayed waiting and joined "Term 2 tasks".</td>
+                <td class="table__actions"><a class="btn btn--secondary btn--sm" href="#main" data-toast="This screen is not part of the prototype">View<span class="u-visually-hidden"> the cancelled cycle</span></a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ Selected cycle: planned / sampled ============ -->
+      <section class="section" aria-labelledby="cycle-h" data-proto-state="planned sampled">
+        <div class="section__header"><h2 class="text-heading" id="cycle-h" tabindex="-1">Term 3 tasks</h2>
+          <span class="tag" data-proto-state="planned">Planned. Starts Mon 14 Sep at 09:00</span><span class="tag tag--info" data-proto-state="sampled">Sampled. Ready for review (22 items)</span></div>
+
+        <ol class="stepper stepper--horizontal u-mb-6" aria-label="Term 3 tasks: progress" data-proto-state="planned">
+          <li class="stepper__step is-current" aria-current="step"><span class="stepper__label">Planned<span class="u-visually-hidden"> (current step)</span></span><span class="stepper__meta">Zanele Dlamini, 7 Sep</span></li>
+          <li class="stepper__step"><span class="stepper__label">Frozen and sampled<span class="u-visually-hidden"> (not yet)</span></span><span class="stepper__body">Automatically, Mon 14 Sep at 09:00.</span></li>
+          <li class="stepper__step"><span class="stepper__label">In review<span class="u-visually-hidden"> (not yet)</span></span></li>
+          <li class="stepper__step"><span class="stepper__label">Signed off<span class="u-visually-hidden"> (not yet)</span></span><span class="stepper__body">Releases the frozen results.</span></li>
+        </ol>
+        <ol class="stepper stepper--horizontal u-mb-6" aria-label="Term 3 tasks: progress" data-proto-state="sampled">
+          <li class="stepper__step is-complete"><span class="stepper__label">Planned<span class="u-visually-hidden"> (done)</span></span><span class="stepper__meta">Zanele Dlamini, 7 Sep</span></li>
+          <li class="stepper__step is-complete"><span class="stepper__label">Frozen and sampled<span class="u-visually-hidden"> (done)</span></span><span class="stepper__meta">14 Sep, 09:00 · 22 of 96 · rule-v4</span></li>
+          <li class="stepper__step is-current" aria-current="step"><span class="stepper__label">In review<span class="u-visually-hidden"> (current step)</span></span><span class="stepper__body">0 of 22 done. With Anil Naidoo.</span></li>
+          <li class="stepper__step"><span class="stepper__label">Signed off<span class="u-visually-hidden"> (not yet)</span></span><span class="stepper__body">Releases all 96 results.</span></li>
+        </ol>
+
+        <div class="page-layout">
+          <div class="page-layout__main stack">
+            <!-- planned -->
+            <div class="card" data-proto-state="planned">
+              <div class="card__header"><h3 class="card__title">Plan</h3></div>
+              <div class="card__body stack">
+                <dl class="dl dl--inline">
+                  <div class="dl__row"><dt>Scope</dt><dd>Task 3: Workplace records portfolio (Unit 3). No period limit.</dd></div>
+                  <div class="dl__row"><dt>Start</dt><dd>Automatically on Monday 14 September 2026 at 09:00 (SAST)</dd></div>
+                  <div class="dl__row"><dt>Population if frozen now</dt><dd>96 results. It can still grow until the freeze.</dd></div>
+                  <div class="dl__row"><dt>Sampling rule in force</dt><dd class="mono">rule-v4 · 15% · every Not yet competent · every first-time assessor</dd></div>
+                  <div class="dl__row"><dt>Moderators</dt><dd>Anil Naidoo. He assessed none of the 96 results, so he can be given any of them.</dd></div>
+                </dl>
+                <div class="cluster">
+                  <button type="button" class="btn btn--primary" data-modal-open="m-freeze">Freeze and sample now</button>
+                  <button type="button" class="btn btn--destructive-quiet" data-modal-open="m-cancel">Cancel cycle</button>
+                </div>
+                <p class="text-small text-muted">You can cancel a cycle only while it is planned. The results stay waiting.</p>
+              </div>
+            </div>
+
+            <!-- sampled -->
+            <div class="card" data-proto-state="sampled">
+              <div class="card__header"><h3 class="card__title">Sample record</h3><span class="text-meta">Drawn Mon 14 Sep 2026, 09:00:03 SAST</span></div>
+              <div class="card__body stack">
+                <div class="grid grid--4">
+                  <div class="stat"><span class="stat__label">Population</span><span class="stat__value">96</span><span class="stat__meta">Fixed. It cannot grow or shrink.</span></div>
+                  <div class="stat"><span class="stat__label">Sample</span><span class="stat__value">22</span><span class="stat__meta">23% of the population</span></div>
+                  <div class="stat"><span class="stat__label">Mandatory inclusions</span><span class="stat__value">10</span><span class="stat__meta">6 Not yet competent · 4 by a first-time assessor</span></div>
+                  <div class="stat"><span class="stat__label">Random draw</span><span class="stat__value">12</span><span class="stat__meta">15% of the other 86, by mark band</span></div>
+                </div>
+                <div class="table-wrap" tabindex="0" role="region" aria-label="Strata counts, scrolls sideways on small screens">
+                  <table class="table table--compact strata">
+                    <caption class="u-visually-hidden">Sample by stratum: population, sampled and the reason</caption>
+                    <thead><tr><th scope="col">Stratum</th><th scope="col" class="table__num">In population</th><th scope="col" class="table__num">In sample</th><th scope="col">Why</th></tr></thead>
+                    <tbody>
+                      <tr><th scope="row">Not yet competent</th><td class="table__num">6</td><td class="table__num">6</td><td>Mandatory: every Not yet competent decision</td></tr>
+                      <tr><th scope="row">First-time assessor: Bongani Sithole</th><td class="table__num">4</td><td class="table__num">4</td><td>Mandatory: no decision of his is in a signed-off cycle yet</td></tr>
+                      <tr><th scope="row">Competent, 6 of 8</th><td class="table__num">31</td><td class="table__num">4</td><td>15% draw</td></tr>
+                      <tr><th scope="row">Competent, 7 of 8</th><td class="table__num">38</td><td class="table__num">6</td><td>15% draw</td></tr>
+                      <tr><th scope="row">Competent, 8 of 8</th><td class="table__num">17</td><td class="table__num">2</td><td>15% draw</td></tr>
+                      <tr><th scope="row">Total</th><td class="table__num"><strong>96</strong></td><td class="table__num"><strong>22</strong></td><td>All 22 allocated to Anil Naidoo. None excluded: he assessed none of them.</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="form__row form__row--2">
+                  <div class="field"><label class="field__label" for="s-seed">Sampling rule and seed</label><input class="input input--mono" id="s-seed" value="rule-v4 · seed 8841207 · sampler 1.3" readonly></div>
+                  <div class="field"><label class="field__label" for="s-digest">Population digest</label><input class="input input--mono" id="s-digest" value="sha256:9f2c41d7a0e3…b86ce41a" readonly></div>
+                </div>
+                <div class="cluster"><button type="button" class="btn btn--secondary" data-toast="Sample record copied" data-toast-meta="rule-v4 · seed 8841207"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-copy"/></svg>Copy seed and rule version</button><a class="btn btn--secondary" href="moderate-item.html">Open the sampled items</a><a class="link link--standalone" href="moderate-signoff.html">Sign-off status</a></div>
+                <p class="text-small text-muted u-measure">The same population, rule version and seed always give the same 22 items. The sample cannot be redrawn.</p>
+              </div>
+            </div>
+          </div>
+
+          <aside class="page-layout__aside stack" aria-label="What this cycle can still do">
+            <div class="card card--sunken" data-proto-state="sampled">
+              <div class="card__header"><h3 class="card__title">This cycle can no longer be cancelled</h3></div>
+              <div class="card__body stack"><p class="text-small">It was frozen on Mon 14 Sep 2026 at 09:00. The 96 results in it can only be released by sign-off. If a moderator becomes unavailable, reallocate the items instead.</p>
+                <button type="button" class="btn btn--destructive-quiet" disabled aria-describedby="cancel-why">Cancel cycle</button>
+                <p class="blocked-reason" id="cancel-why"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg>Not available: a cycle can be cancelled only before it is frozen.</p></div>
+            </div>
+            <ol class="log log--boxed" aria-label="Cycle record, oldest first. Times in SAST.">
+              <li class="log__item"><time class="log__time" datetime="2026-09-07T09:14:00+02:00">7 Sep 2026, 09:14</time><div class="log__event"><span class="log__actor">Zanele Dlamini</span> planned the cycle. Scope: Task 3. Start: automatically, Mon 14 Sep at 09:00.</div></li>
+              <li class="log__item" data-proto-state="sampled"><time class="log__time" datetime="2026-09-14T09:00:03+02:00">14 Sep 2026, 09:00</time><div class="log__event"><span class="log__actor">System</span> froze the population (96 results) and drew the sample (22 items) at the scheduled start.<div class="log__detail">rule-v4 · seed 8841207</div></div></li>
+              <li class="log__item" data-proto-state="sampled"><time class="log__time" datetime="2026-09-14T09:00:04+02:00">14 Sep 2026, 09:00</time><div class="log__event"><span class="log__actor">System</span> allocated 22 items to Anil Naidoo and notified him.</div></li>
+            </ol>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ============ Plan a cycle ============ -->
+      <section class="section" aria-labelledby="plan-h" data-proto-state="nocycle overlap">
+        <div class="section__header"><h2 class="text-heading" id="plan-h" tabindex="-1">Plan a cycle</h2></div>
+        <form class="form plan-form" onsubmit="return false" novalidate>
+
+          <div class="conflict" role="alert" aria-labelledby="ov-h" data-proto-state="overlap">
+            <h3 class="conflict__title" id="ov-h" tabindex="-1" data-proto-focus><svg class="icon" aria-hidden="true"><use href="#i-scales"/></svg>The cycle was not planned: Task 3 is already in a cycle that is not finished</h3>
+            <p class="conflict__body">Task 3 is already in the cycle "Term 3 tasks", which is in review. An item can be in only one open cycle at a time, so that no result can be sampled or released twice. Nothing was changed.</p>
+            <dl class="conflict__evidence dl">
+              <div class="dl__row"><dt>Item in both scopes</dt><dd>Task 3: Workplace records portfolio (Unit 3)</dd></div>
+              <div class="dl__row"><dt>Cycle that already covers it</dt><dd><a href="moderate-signoff.html">"Term 3 tasks"</a>, in review (9 of 22 done), frozen Mon 14 Sep 2026, planned by Zanele Dlamini</dd></div>
+              <div class="dl__row"><dt>What to do</dt><dd>Take Task 3 out of this scope and plan the cycle for Task 4 and the Unit 2 exam. The 3 waiting Task 3 results stay held. Plan a cycle for them after "Term 3 tasks" is signed off.</dd></div>
+            </dl>
+            <p class="conflict__rule">ADR-019 · cycle_scope_overlap · Reference c07d55a1 · Thu 17 Sep 2026, 10:26 SAST</p>
+            <div class="conflict__actions"><button type="button" class="btn btn--primary" id="ov-fix">Take Task 3 out of the scope</button><a class="btn btn--ghost" href="moderate-signoff.html">View "Term 3 tasks"</a></div>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="p-name">Cycle name <span class="field__required">(required)</span></label>
+            <p class="field__help" id="p-name-help">Moderators and assessors see this name.</p>
+            <input class="input" id="p-name" type="text" value="Term 3 tasks" aria-describedby="p-name-help">
+          </div>
+
+          <fieldset class="fieldset">
+            <legend class="fieldset__legend">Choose the scope by</legend>
+            <label class="check"><input class="check__input" type="radio" name="scope-by" checked><span class="check__label">Assessable items</span></label>
+            <label class="check"><input class="check__input" type="radio" name="scope-by"><span class="check__label">Whole units</span><span class="check__help">Every assessable item in the unit, including ones added later.</span></label>
+          </fieldset>
+
+          <fieldset class="fieldset" aria-describedby="p-scope-help">
+            <legend class="fieldset__legend">Items in this cycle <span class="field__required">(required)</span></legend>
+            <p class="field__help" id="p-scope-help">When the cycle freezes it locks every waiting result for these items. An item can be in one open cycle at a time.</p>
+            <div class="scope-list">
+              <label class="check"><input class="check__input" type="checkbox" id="p-t3" checked aria-describedby="p-t3-help"><span class="check__label">Task 3: Workplace records portfolio</span><span class="check__help" id="p-t3-help"><span data-proto-state="nocycle">Unit 3 · 38 waiting now · 58 still to be marked</span><span data-proto-state="overlap">Unit 3 · 3 waiting now</span></span></label>
+              <p class="field__error" id="p-t3-err" data-proto-state="overlap"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert-circle"/></svg>Task 3 is already in "Term 3 tasks", which is not finished. Take it out of this scope.</p>
+              <label class="check"><input class="check__input" type="checkbox" id="p-t4"><span class="check__label">Task 4: Business communication report</span><span class="check__help"><span data-proto-state="nocycle">Unit 4 · 0 waiting · due Fri 11 Sep 2026</span><span data-proto-state="overlap">Unit 4 · 9 waiting now</span></span></label>
+              <label class="check"><input class="check__input" type="checkbox" id="p-u2"><span class="check__label">Unit 2 summative exam</span><span class="check__help"><span data-proto-state="nocycle">Unit 2 · 0 waiting</span><span data-proto-state="overlap">Unit 2 · 2 waiting now (late sittings)</span></span></label>
+              <label class="check"><input class="check__input" type="checkbox" disabled aria-describedby="p-t2-help"><span class="check__label">Task 2: Meeting minutes</span><span class="check__help" id="p-t2-help">Nothing to moderate: all 96 results were released in "Term 2 tasks" on Fri 26 Jun 2026.</span></label>
+            </div>
+          </fieldset>
+
+          <div class="form__row form__row--2">
+            <div class="field"><label class="field__label" for="p-from">Only results decided from <span class="field__optional">(optional)</span></label><input class="input" id="p-from" type="date"></div>
+            <div class="field"><label class="field__label" for="p-to">to the end of <span class="field__optional">(optional)</span></label><input class="input" id="p-to" type="date"></div>
+          </div>
+
+          <fieldset class="fieldset">
+            <legend class="fieldset__legend">When should the cycle freeze and draw its sample?</legend>
+            <div class="choice-group choice-group--2">
+              <label class="choice"><input class="choice__input" type="radio" name="start" id="p-manual"><span class="choice__title">When I choose</span><span class="choice__desc">Results keep waiting until you select Freeze and sample.</span></label>
+              <label class="choice"><input class="choice__input" type="radio" name="start" id="p-auto" checked><span class="choice__title">Automatically on a date</span><span class="choice__desc">The LMS freezes and samples at that time, whether or not anyone is signed in.</span></label>
+            </div>
+          </fieldset>
+          <div class="form__row form__row--2">
+            <div class="field"><label class="field__label" for="p-date">Start date</label><input class="input" id="p-date" type="date" value="2026-09-14"></div>
+            <div class="field"><label class="field__label" for="p-time">Start time (SAST)</label><input class="input" id="p-time" type="time" value="09:00"></div>
+          </div>
+
+          <div class="form__row form__row--2">
+            <div class="field"><label class="field__label" for="p-rule">Sampling rule in force</label><p class="field__help" id="p-rule-help">Set by the System Administrator. The cycle keeps the version in force when it freezes.</p><input class="input input--mono" id="p-rule" value="rule-v4 · 15% · all NYC · all first-time assessors" readonly aria-describedby="p-rule-help"></div>
+            <div class="field"><label class="field__label" for="p-mods">Moderators available</label><p class="field__help" id="p-mods-help">Anyone who assessed an item is never given that item.</p><input class="input" id="p-mods" value="Anil Naidoo: can take every item in scope" readonly aria-describedby="p-mods-help"></div>
+          </div>
+
+          <div class="form__actions"><button type="button" class="btn btn--primary" id="p-submit">Plan cycle</button><button type="reset" class="btn btn--ghost">Clear</button></div>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <nav class="bottom-tabs" aria-label="Coordinating, phone tabs">
+    <a class="bottom-tabs__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg>Overview</a>
+    <a class="bottom-tabs__item" href="coordinate-cohort-setup.html#state=active" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-users"/></svg>Cohorts</a>
+    <a class="bottom-tabs__item" href="coordinate-appeals.html"><svg class="icon" aria-hidden="true"><use href="#i-scales"/></svg>Appeals</a>
+    <a class="bottom-tabs__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-megaphone"/></svg>Notices</a>
+    <a class="bottom-tabs__item" href="#main" data-modal-open="m-more"><svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg>More</a>
+  </nav>
+</div>
+
+<dialog class="modal modal--sheet" id="m-more" aria-labelledby="m-more-t">
+  <div class="modal__header"><h2 class="modal__title" id="m-more-t">More in Coordinating</h2><button type="button" class="btn btn--ghost btn--icon" data-modal-close aria-label="Close"><svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+  <div class="modal__body">
+    <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-help"/></svg><span class="menu__item-text">Queries</span></a>
+    <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg><span class="menu__item-text">Logistics</span></a>
+    <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-chart"/></svg><span class="menu__item-text">Reports</span></a>
+    <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><span class="menu__item-text">Search</span></a>
+  </div>
+</dialog>
+<dialog class="modal" id="m-freeze" aria-labelledby="m-fr-t" data-modal-static>
+  <div class="modal__header"><h2 class="modal__title" id="m-fr-t">Freeze and sample "Term 3 tasks" now?</h2></div>
+  <div class="modal__body">
+    <p class="modal__consequence">This locks the 96 results that are waiting now and draws the sample. It cannot be undone or redrawn. Results decided after this moment wait for the next cycle.</p>
+    <ul class="modal__list">
+      <li>The 96 learners still see "Being assessed". Nothing is released until the moderator signs off.</li>
+      <li>The sample uses rule-v4: 15%, every Not yet competent decision and every first-time assessor.</li>
+      <li>The cycle can no longer be cancelled.</li>
+      <li>It is scheduled to do this by itself on Mon 14 Sep 2026 at 09:00. Freezing now does it early. You are doing this as the coordinator: Zanele Dlamini.</li>
+    </ul>
+    <label class="check"><input class="check__input" type="checkbox" id="ack-fr"><span class="check__label">I understand that the population becomes fixed and the sample cannot be redrawn.</span></label>
+  </div>
+  <div class="modal__footer"><button type="button" class="btn btn--secondary" data-modal-close autofocus>Not yet</button><button type="button" class="btn btn--primary" data-requires="#ack-fr" data-modal-close data-proto-goto="sampled">Freeze 96 results and draw the sample</button></div>
+</dialog>
+
+<dialog class="modal" id="m-cancel" aria-labelledby="m-ca-t" data-modal-static>
+  <div class="modal__header"><h2 class="modal__title" id="m-ca-t">Cancel "Term 3 tasks"?</h2></div>
+  <div class="modal__body">
+    <p class="modal__consequence">The cycle is cancelled and kept on record. The 96 results stay held and waiting, and nothing is released. They will have no cycle until you plan another.</p>
+    <div class="field"><label class="field__label" for="ca-reason">Reason <span class="field__required">(required)</span></label><p class="field__help" id="ca-reason-help">Kept with the cycle record. The button stays off until you enter a reason.</p><textarea class="textarea" id="ca-reason" rows="2" aria-describedby="ca-reason-help"></textarea></div>
+  </div>
+  <div class="modal__footer"><button type="button" class="btn btn--secondary" data-modal-close autofocus>Keep the cycle</button><button type="button" class="btn btn--destructive" data-requires="#ca-reason" data-modal-close data-proto-goto="nocycle">Cancel cycle</button></div>
+</dialog>
+
+<div class="toast-region" role="status" aria-live="polite"></div>
+<script src="assets/ui.js"></script>
+<script src="assets/proto.js"></script>
+<script>
+/* Prototype only. Keeps placeholder links and in-page anchors from replacing the state in the URL hash,
+   lets a button move the screen to another prototype state, and moves focus to a refusal when a state shows one. */
+(function () {
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest) return;
+    var a = e.target.closest('a[href^="#"]');
+    if (a && a.getAttribute('href').indexOf('#state=') !== 0) {
+      e.preventDefault();
+      var t = document.getElementById(a.getAttribute('href').slice(1));
+      if (t && !a.hasAttribute('data-toast') && !a.hasAttribute('data-modal-open')) { t.scrollIntoView(); t.focus({ preventScroll: true }); }
+    }
+    var g = e.target.closest('[data-proto-goto]');
+    if (g) location.hash = 'state=' + g.getAttribute('data-proto-goto');
+  });
+  function settle(initial) {
+    setTimeout(function () {
+      var f = Array.prototype.filter.call(document.querySelectorAll('[data-proto-focus]'), function (el) { return !el.closest('[hidden]'); })[0];
+      if (f) { f.focus(); return; }
+      if (!initial) { window.scrollTo(0, 0); document.getElementById('main').focus({ preventScroll: true }); }
+    }, 0);
+  }
+  document.addEventListener('proto:state', function () { settle(false); });
+  if (/state=/.test(location.hash)) settle(true);
+})();
+</script>
+<script>
+/* Prototype only: fills the plan form for each state and wires its two buttons. */
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  function apply() {
+    var overlap = document.body.getAttribute('data-proto-current') === 'overlap';
+    $('p-name').value = overlap ? 'Term 3 late work and Task 4' : 'Term 3 tasks';
+    $('p-t3').checked = true; $('p-t4').checked = overlap; $('p-u2').checked = overlap;
+    $('p-manual').checked = overlap; $('p-auto').checked = !overlap;
+    $('p-date').value = overlap ? '' : '2026-09-14'; $('p-time').value = overlap ? '' : '09:00';
+    $('p-t3').setAttribute('aria-describedby', overlap ? 'p-t3-help p-t3-err' : 'p-t3-help');
+    if (overlap) $('p-t3').setAttribute('aria-invalid', 'true'); else $('p-t3').removeAttribute('aria-invalid');
+  }
+  document.addEventListener('proto:state', apply); apply();
+  $('p-submit').addEventListener('click', function () {
+    var overlap = document.body.getAttribute('data-proto-current') === 'overlap';
+    if (overlap && $('p-t3').checked) { $('ov-h').focus(); return; }
+    if (overlap) { window.TakusaniUI.toast({ title: 'Cycle planned', body: 'Task 4 and the Unit 2 exam: 11 results', meta: 'Thu 17 Sep 2026, 10:28' }); return; }
+    location.hash = 'state=planned';
+  });
+  $('ov-fix').addEventListener('click', function () {
+    $('p-t3').checked = false; $('p-t3').removeAttribute('aria-invalid'); $('p-t3').setAttribute('aria-describedby', 'p-t3-help');
+    $('p-t3-err').hidden = true; $('p-t4').focus();
+  });
+})();
+</script>
+</body>
+</html>

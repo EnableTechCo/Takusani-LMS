@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en-ZA" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Unit 5 summative exam: before you start · Takusani LMS</title>
+<!-- Fonts: optional. The page is fully usable on the fallback stacks if this request fails (no web-font dependency for first paint). -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400..600&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap">
+<!-- Optional extended icon set (Phosphor Bold). Critical icons come from the inline sprite in ui.js. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/ui.css">
+<link rel="stylesheet" href="assets/proto.css">
+<link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+<style>
+/* Page-specific (prefix pf-). Below 1024px the Start area is replaced by the mobile gate (NFR-10, UX architecture 9.4).
+   Everything else on the page stays readable on a phone, so that the learner can prepare. */
+/* A11Y-01: gate on the input device, not on width alone. A laptop zoomed to 200% is narrow but is still a laptop. */
+.pf-narrow-only, .pf-zoomed-only { display: none !important; }
+@media (max-width: 63.99rem) and (hover: none), (max-width: 63.99rem) and (pointer: coarse) {
+  .pf-narrow-only { display: revert !important; }
+  .pf-desktop-only { display: none !important; }
+}
+@media (max-width: 63.99rem) and (hover: hover) and (pointer: fine) { .pf-zoomed-only { display: revert !important; } }
+.pf-section { margin-top: var(--space-8); }
+.pf-section > .text-heading { margin-bottom: var(--space-3); }
+.pf-gate { width: 100%; }
+</style>
+</head>
+<body data-proto-screen="P0-05" data-proto-title="Exam pre-flight and start"
+      data-proto-frs="FR-312 FR-313 FR-901 FR-902 NFR-07 NFR-10 U-02"
+      data-proto-states="ready:Ready to start|not-open:Window not open yet|closed:Window closed|check-failed:A device check failed|accommodation:Extra time granted|resume:Attempt already in progress">
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<div class="app-shell">
+  <header class="app-shell__topbar">
+    <a class="brand" href="learn-home.html" aria-label="Takusani LMS, go to your home page">
+      <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M7 0H25A7 7 0 0 1 32 7V25A7 7 0 0 1 25 32H7A7 7 0 0 1 0 25V7A7 7 0 0 1 7 0ZM7 8.5H25V12H17.75V24H14.25V12H7ZM8.25 17.5A1.75 1.75 0 1 0 11.75 17.5A1.75 1.75 0 1 0 8.25 17.5ZM20.25 17.5A1.75 1.75 0 1 0 23.75 17.5A1.75 1.75 0 1 0 20.25 17.5Z"/></svg>
+      <span class="brand__name">Takusani</span><span class="brand__suffix">LMS</span>
+    </a>
+    <span class="topbar__institution">Khanya Skills Institute</span>
+    <span class="topbar__spacer"></span>
+    <form class="topbar__search" role="search" action="index.html" method="get"><label class="input-icon"><span class="u-visually-hidden">Search materials, tasks, sessions and exams</span><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><input class="input" type="search" name="q" placeholder="Search"></label></form>
+    <div class="topbar__actions">
+      <a class="btn btn--ghost btn--icon" href="notifications.html" aria-label="Notifications, 2 unread"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg><span class="badge-count" aria-hidden="true">2</span></a>
+      <details class="menu-wrap" data-menu>
+        <summary class="btn btn--ghost btn--icon" aria-label="Account menu for Lerato Mokoena"><span class="avatar" aria-hidden="true">LM</span></summary>
+        <div class="menu menu--end">
+          <div class="account__identity"><p class="account__name">Lerato Mokoena</p><p class="account__email">l.mokoena@example.org</p><ul class="account__roles"><li>Learner: 2026 Intake B</li><li>Learner number KSI-2026-0417</li></ul></div>
+          <a class="menu__item" href="index.html"><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg>Profile</a>
+          <a class="menu__item" href="index.html"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg>Notification preferences</a>
+          <a class="menu__item" href="index.html"><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg>Subscribe to your calendar</a>
+          <div class="menu__section"><fieldset class="fieldset"><legend class="fieldset__legend">Appearance</legend>
+            <div class="segmented">
+              <label class="segmented__option"><input type="radio" name="theme" value="light" data-theme-choice checked><span>Light</span></label>
+              <label class="segmented__option"><input type="radio" name="theme" value="dark" data-theme-choice><span>Dark</span></label>
+              <label class="segmented__option"><input type="radio" name="theme" value="auto" data-theme-choice><span>System</span></label>
+            </div></fieldset></div>
+          <div class="menu__divider" role="separator"></div>
+          <a class="menu__item" href="index.html"><svg class="icon" aria-hidden="true"><use href="#i-help"/></svg>Help</a>
+          <a class="menu__item" href="sign-in.html"><svg class="icon" aria-hidden="true"><use href="#i-sign-out"/></svg>Sign out</a>
+        </div>
+      </details>
+    </div>
+  </header>
+
+  <aside class="app-shell__sidenav" aria-label="Main navigation">
+    <nav class="sidenav" aria-label="Learning">
+      <div class="sidenav__group">
+        <ul class="sidenav__list">
+          <li><a class="sidenav__item" href="learn-home.html"><svg class="icon" aria-hidden="true"><use href="#i-house"/></svg><span class="sidenav__label">Home</span><span class="sidenav__short" aria-hidden="true">Home</span></a></li>
+          <li><a class="sidenav__item" href="learn-task.html"><svg class="icon" aria-hidden="true"><use href="#i-clipboard"/></svg><span class="sidenav__label">Tasks</span><span class="sidenav__short" aria-hidden="true">Tasks</span></a></li>
+          <li><a class="sidenav__item" href="learn-exam-preflight.html" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-laptop"/></svg><span class="sidenav__label">Exams</span><span class="sidenav__short" aria-hidden="true">Exams</span></a></li>
+          <li><a class="sidenav__item" href="index.html"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg><span class="sidenav__label">Materials</span><span class="sidenav__short" aria-hidden="true">Materials</span></a></li>
+          <li><a class="sidenav__item" href="index.html"><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg><span class="sidenav__label">Calendar</span><span class="sidenav__short" aria-hidden="true">Calendar</span></a></li>
+          <li><a class="sidenav__item" href="learn-result.html"><svg class="icon" aria-hidden="true"><use href="#i-check-circle"/></svg><span class="sidenav__label">Results</span><span class="sidenav__short" aria-hidden="true">Results</span></a></li>
+          <li><a class="sidenav__item" href="learn-credits.html"><svg class="icon" aria-hidden="true"><use href="#i-chart"/></svg><span class="sidenav__label">Credits</span><span class="sidenav__short" aria-hidden="true">Credits</span></a></li>
+          <li><a class="sidenav__item" href="index.html"><svg class="icon" aria-hidden="true"><use href="#i-note"/></svg><span class="sidenav__label">Notes</span><span class="sidenav__short" aria-hidden="true">Notes</span></a></li>
+        </ul>
+      </div>
+    </nav>
+  </aside>
+
+  <main class="app-shell__main" id="main" tabindex="-1">
+    <div class="page page--prose">
+      <header class="page-header">
+        <nav aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="learn-home.html">Home</a></li><li><a href="learn-exam-preflight.html">Exams</a></li><li aria-current="page">Unit 5 summative exam</li></ol></nav>
+        <p class="text-overline">Exam · Unit 5: Office administration</p>
+        <h1 class="page-header__title">Unit 5 summative exam</h1>
+        <p class="page-header__lead" data-proto-state="ready check-failed accommodation">Read this page before you start. It tells you how long you have, what is switched off during the exam, and what is recorded.</p>
+        <p class="page-header__lead" data-proto-state="not-open">This exam is not open yet. You can read the rules and check your device now, so that you are ready on the day.</p>
+        <p class="page-header__lead" data-proto-state="closed">This exam has closed.</p>
+        <p class="page-header__lead" data-proto-state="resume">You have started this exam. The timer is still running.</p>
+        <div class="page-header__meta">
+          <span class="tag tag--info" data-proto-state="ready check-failed accommodation">Open now, until <span data-proto-state="!accommodation">12:00</span><span data-proto-state="accommodation">12:30 for you</span></span>
+          <span class="tag" data-proto-state="not-open">Opens Wed 14 Oct, 09:00</span>
+          <span class="tag tag--shape-square" data-proto-state="closed">Closed</span>
+          <span class="tag tag--info tag--shape-half" data-proto-state="resume">In progress. Time left 01:12</span>
+          <span>2026 Intake B</span>
+        </div>
+      </header>
+
+      <!-- ========== State messages (first screenful) ========== -->
+
+      <!-- Attempt already in progress -->
+      <section class="card" aria-labelledby="pf-resume-h" data-proto-state="resume">
+        <div class="card__body stack">
+          <h2 class="text-heading" id="pf-resume-h">You have an exam in progress</h2>
+          <div class="timer timer--lg" role="timer" aria-label="Time left: 1 hour 12 minutes"><span class="timer__label">Time left in this exam</span><span class="timer__value">01:12:40</span></div>
+          <p>The timer did not stop while you were away. Your answers up to <span class="mono">10:42</span> are saved. Any answers kept on this device will be added when you resume.</p>
+          <p class="text-small text-muted">If the exam is open in another tab or window, that one will stop working when you resume here.</p>
+          <div class="pf-desktop-only"><a class="btn btn--primary btn--lg" href="exam-attempt.html">Resume exam</a></div>
+        </div>
+      </section>
+
+      <!-- Window not open yet (FR-312: the reason and the opening time) -->
+      <p class="deadline-line" data-proto-state="not-open"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg><span>You cannot start yet. <span class="deadline-line__date">This exam opens on Wednesday 14 October 2026 at 09:00 (SAST)</span> and closes at 12:00 on the same day.</span></p>
+
+      <!-- Window closed -->
+      <div class="stack" data-proto-state="closed">
+        <p class="deadline-line deadline-line--closed"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg><span>This exam closed on Wednesday 14 October 2026 at 12:00 (SAST). It can no longer be started.</span></p>
+        <div class="banner banner--info" role="status"><svg class="icon banner__icon" aria-hidden="true"><use href="#i-info"/></svg>
+          <p class="banner__title">You did not start this exam</p>
+          <p class="banner__body">No attempt was used. If something stopped you from sitting the exam, tell your coordinator, Zanele Dlamini, as soon as you can. She can tell you what your options are.</p>
+          <div class="banner__actions"><a href="learn-home.html">Back to Home</a><a href="notifications.html">Check your notifications</a></div>
+        </div>
+      </div>
+
+      <!-- A device check failed -->
+      <div class="banner banner--caution" role="alert" data-proto-state="check-failed"><svg class="icon banner__icon" aria-hidden="true"><use href="#i-info"/></svg>
+        <p class="banner__title">You cannot start yet: 1 device check found a problem</p>
+        <p class="banner__body">This device cannot keep a safety copy of your answers. The fix is under "Check this device" on this page. The exam has not started and no time has been used.</p>
+      </div>
+
+      <!-- Accommodation applied (decision U-02): the learner's OWN duration, in plain words -->
+      <div class="banner banner--info" role="status" data-proto-state="accommodation"><svg class="icon banner__icon" aria-hidden="true"><use href="#i-info"/></svg>
+        <p class="banner__title">You have 2 hours 30 minutes for this exam</p>
+        <p class="banner__body">The usual time is 2 hours. Your coordinator, Zanele Dlamini, added 30 minutes for you on 7 October 2026. The exam also stays open for you until 12:30. Pasting text into your answers is allowed for you, because some assistive software needs it.</p>
+        <p class="banner__body">Your assessor can see that these arrangements were made. You do not need to do anything. Your timer will show your own time.</p>
+      </div>
+
+      <!-- ========== 1. Exam facts ========== -->
+      <section class="pf-section" aria-labelledby="pf-facts-h">
+        <h2 class="text-heading" id="pf-facts-h">About this exam</h2>
+        <div class="card"><div class="card__body">
+          <dl class="dl dl--inline">
+            <div class="dl__row"><dt>When</dt><dd><time datetime="2026-10-14T09:00:00+02:00">Wednesday 14 October 2026, open from 09:00 to <span data-proto-state="!accommodation">12:00</span><span data-proto-state="accommodation">12:30 for you</span> (SAST)</time>. You may start at any time while it is open.</dd></div>
+            <div class="dl__row" data-proto-state="!accommodation"><dt>Your time</dt><dd>2 hours, from the moment you start. If you start after 10:00 you will have less than 2 hours, because the exam closes at 12:00.</dd></div>
+            <div class="dl__row" data-proto-state="accommodation"><dt>Your time</dt><dd>2 hours 30 minutes, from the moment you start. This includes 30 minutes of extra time. If you start after 10:00 you will have less, because the exam closes for you at 12:30.</dd></div>
+            <div class="dl__row"><dt>Attempts</dt><dd><span data-proto-state="!resume !closed">1 attempt. You have used 0 of 1.</span><span data-proto-state="resume">1 attempt. It is in progress now.</span><span data-proto-state="closed">1 attempt. You used 0 of 1.</span></dd></div>
+            <div class="dl__row"><dt>Questions</dt><dd>6 questions, 42 marks. One question on the screen at a time. You can move between questions and change your answers until you submit.</dd></div>
+            <div class="dl__row"><dt>Device</dt><dd>A laptop or desktop computer. Phones and tablets cannot be used.</dd></div>
+          </dl>
+        </div></div>
+        
+      </section>
+
+      <section class="pf-section" aria-labelledby="pf-support-h" data-proto-state="!accommodation !closed !resume">
+        <h2 class="text-heading" id="pf-support-h">If you need more time or use assistive software</h2>
+        <div class="card"><div class="card__body stack stack--sm">
+          <p class="text-body u-measure">You can ask for extra time, or tell us that you use software such as a screen reader, a screen magnifier, speech-to-text or an on-screen keyboard. This must be set up before you start. It cannot be changed once the exam has begun.</p>
+          <p class="text-body u-measure"><strong>Ask by the end of Wednesday 7 October 2026.</strong> Your coordinator is Zanele Dlamini. You do not need to explain a medical condition. You only choose what you need.</p>
+          <p><a class="link link--standalone" href="mailto:zanele.dlamini@khanya.example?subject=Exam%20support%20for%20Unit%205%20summative%20exam">Ask Zanele Dlamini about exam support</a></p>
+        </div></div>
+      </section>
+
+      <!-- ========== 2. Device check ========== -->
+      <section class="pf-section" aria-labelledby="pf-check-h" data-proto-state="!closed">
+        <div class="section__header"><h2 class="text-heading" id="pf-check-h">Check this device</h2><button type="button" class="btn btn--secondary" id="pf-recheck">Run the check again</button></div>
+        <ul class="checklist" aria-label="Device check">
+          <li class="checklist__item checklist__item--pass pf-desktop-only"><svg class="icon checklist__icon" aria-hidden="true"><use href="#i-check-circle"/></svg><span class="checklist__title">Laptop or desktop browser</span><span class="tag tag--positive">Pass</span></li><li class="checklist__item checklist__item--pass pf-zoomed-only"><svg class="icon checklist__icon" aria-hidden="true"><use href="#i-info"/></svg><span class="checklist__title">This window is narrow</span><span class="checklist__detail">If you have zoomed in so that you can read more easily, that is fine. The exam works at this size.</span></li>
+          <li class="checklist__item checklist__item--problem pf-narrow-only"><svg class="icon checklist__icon" aria-hidden="true"><use href="#i-info"/></svg><span class="checklist__title">Laptop or desktop browser</span><span class="tag tag--caution">Problem</span><span class="checklist__detail">This looks like a phone, a tablet or a small window. Open the LMS on a laptop or desktop computer to sit the exam.</span></li>
+          <li class="checklist__item checklist__item--pass"><svg class="icon checklist__icon" aria-hidden="true"><use href="#i-check-circle"/></svg><span class="checklist__title">Full-screen mode is available</span><span class="tag tag--positive">Pass</span></li>
+          <li class="checklist__item checklist__item--pass"><svg class="icon checklist__icon" aria-hidden="true"><use href="#i-check-circle"/></svg><span class="checklist__title">The browser can tell when the exam window is in view</span><span class="tag tag--positive">Pass</span></li>
+          <li class="checklist__item checklist__item--pass" data-proto-state="!check-failed"><svg class="icon checklist__icon" aria-hidden="true"><use href="#i-check-circle"/></svg><span class="checklist__title">This device can keep a safety copy of your answers</span><span class="tag tag--positive">Pass</span></li>
+          <li class="checklist__item checklist__item--problem" data-proto-state="check-failed"><svg class="icon checklist__icon" aria-hidden="true"><use href="#i-info"/></svg><span class="checklist__title">This device can keep a safety copy of your answers</span><span class="tag tag--caution">Problem</span><span class="checklist__detail">Your browser is in private mode, so it cannot store anything. Close this window, open the LMS in a normal browser window, and run the check again. If that does not help, try Chrome, Edge or Firefox, or ask your invigilator.</span></li>
+          <li class="checklist__item checklist__item--pass"><svg class="icon checklist__icon" aria-hidden="true"><use href="#i-check-circle"/></svg><span class="checklist__title">Connection to the LMS</span><span class="tag tag--positive">Pass</span><span class="checklist__detail">Good. If the connection drops during the exam, you can carry on. See "If your connection drops" on this page.</span></li>
+        </ul>
+        <p class="text-small text-muted u-mt-2" role="status"><span id="pf-check-result"><span data-proto-state="!check-failed">Checked just now. All checks passed on a laptop or desktop computer.</span><span data-proto-state="check-failed">Checked just now. 4 of 5 checks passed. 1 needs your attention.</span></span><span id="pf-checking" hidden>Checking this device</span></p>
+      </section>
+
+      <!-- ========== 3. What happens in exam mode (FR-901) ========== -->
+      <section class="pf-section" aria-labelledby="pf-mode-h" data-proto-state="!closed">
+        <h2 class="text-heading" id="pf-mode-h">What happens in exam mode</h2>
+        <div class="prose">
+          <p>The exam fills the whole screen. This is so that the exam is the only thing in front of you, and so that the exam is fair for everyone.</p>
+          <h3>What is switched off, and why</h3>
+          <ul>
+            <li>The LMS menus, search and notifications. Nothing else in the LMS can be opened until you submit.</li>
+            <li data-proto-state="!accommodation">Copying, cutting and pasting. Your answers must be typed during the exam, in your own words.</li>
+            <li data-proto-state="accommodation">Copying and cutting. Pasting is allowed for you, because of the arrangement made by your coordinator.</li>
+            <li>The right-click menu, and selecting the text of a question.</li>
+            <li>Printing.</li>
+          </ul>
+          <h3>What still works</h3>
+          <ul>
+            <li>Typing, undo, the arrow keys and the spelling checker.</li>
+            <li>Making the text bigger with your browser's zoom.</li>
+            <li>Screen readers and other assistive software.</li>
+          </ul>
+          <h3>The timer does not stop</h3>
+          <p>Your time starts when the exam starts. The timer keeps running if you leave the exam window, if you close the browser, and if your connection drops. When your time ends, the exam is submitted for you automatically with the answers you have given. You get a receipt either way.</p>
+        </div>
+      </section>
+
+      <!-- ========== 4. What is recorded (FR-902, FR-903) ========== -->
+      <section class="pf-section" aria-labelledby="pf-log-h" data-proto-state="!closed">
+        <h2 class="text-heading" id="pf-log-h">What is recorded</h2>
+        <div class="prose">
+          <p>The LMS records these moments, with the time:</p>
+          <ul>
+            <li>when you leave the exam window, for example by switching to another tab or program</li>
+            <li>when the browser leaves full-screen mode</li>
+            <li>when you come back.</li>
+          </ul>
+          <p>If this happens, a message tells you that it was recorded and how to return. Your exam carries on. A record does not end your exam and does not decide your result. Your assessor sees the record and decides whether it matters.</p>
+          <p><strong>Not recorded:</strong> your camera, your microphone, your screen, and anything you do outside the LMS.</p>
+          <p>Before you start, close other programs and turn off notifications, so that nothing takes you out of the exam window by accident. If something outside your control does, tell your coordinator after the exam.</p>
+        </div>
+      </section>
+
+      <!-- ========== 5. If your connection drops (NFR-07, P-13) ========== -->
+      <section class="pf-section" aria-labelledby="pf-offline-h" data-proto-state="!closed">
+        <h2 class="text-heading" id="pf-offline-h">If your connection drops</h2>
+        <div class="prose">
+          <ul>
+            <li>Carry on answering. Every answer is kept on this device straight away, and saved to the server about every 10 seconds. The top of the exam always shows where your answers are: "Saved on this device" or "Saved" with the time.</li>
+            <li><strong>The timer keeps running while you are offline.</strong></li>
+            <li>When the connection comes back, all your answers are saved to the server together.</li>
+            <li>If the browser closes or the computer restarts, open the LMS again on the same computer and select "Resume exam".</li>
+            <li>If you lose your connection for a long time, tell your coordinator, Zanele Dlamini, what happened as soon as you can.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ========== 6. Start ========== -->
+      <section class="pf-section" aria-labelledby="pf-start-h" data-proto-state="!closed !resume">
+        <h2 class="text-heading" id="pf-start-h">Start the exam</h2>
+
+        <!-- From 1024px: the Start area -->
+        <div class="card pf-desktop-only"><div class="card__body stack">
+          <p>When you select "Start exam", your browser will ask to show the exam in full screen. <strong>The exam and the timer start only after the screen has gone full screen.</strong> If it does not, the exam has not started and no time has been used. You can then select "Start exam" again.</p>
+
+          <!-- Ready, or ready with an accommodation: acknowledgement gates Start -->
+          <form class="stack" action="exam-attempt.html" method="get" data-proto-state="ready accommodation">
+            <label class="check"><input class="check__input" type="checkbox" id="pf-ack"><span class="check__label">I have read what is switched off and what is recorded. I understand that the timer does not stop once I start.</span></label>
+            <div class="cluster">
+              <button type="submit" class="btn btn--primary btn--lg" data-requires="#pf-ack" aria-describedby="pf-start-note">Start exam</button>
+              <p class="text-small text-muted" id="pf-start-note">You will have <span data-proto-state="ready">2 hours</span><span data-proto-state="accommodation">2 hours 30 minutes</span>. Tick the box to switch on the button.</p>
+            </div>
+          </form>
+
+          <!-- Not open yet: the reason and the opening time, as text -->
+          <div class="cluster" data-proto-state="not-open">
+            <button type="button" class="btn btn--primary btn--lg" disabled aria-describedby="pf-blocked-open">Start exam</button>
+            <p class="blocked-reason" id="pf-blocked-open"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg>You can start from 09:00 on Wednesday 14 October 2026. The button will work then.</p>
+          </div>
+
+          <!-- A check failed: Start is disabled and the reason is named -->
+          <div class="cluster" data-proto-state="check-failed">
+            <button type="button" class="btn btn--primary btn--lg" disabled aria-describedby="pf-blocked-check">Start exam</button>
+            <p class="blocked-reason" id="pf-blocked-check"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg>You cannot start yet: this device cannot keep a safety copy of your answers. Fix it under "Check this device", then run the check again.</p>
+          </div>
+        </div></div>
+
+        <!-- Below 1024px: the mobile gate replaces the Start area. It runs before any attempt exists, so no time is used. -->
+        <div class="exam-notice__panel pf-gate pf-narrow-only">
+          <h3 class="exam-notice__title"><svg class="icon icon--lg" aria-hidden="true"><use href="#i-laptop"/></svg>You need a laptop or desktop computer to sit this exam</h3>
+          <div class="exam-notice__body">
+            <p>Phones and tablets cannot be used, because the exam needs a full-screen mode that they do not support properly. The exam has not started and no time has been used.</p>
+            <p>You can still read this page here. If you do not have a computer you can use, speak to your coordinator, Zanele Dlamini, before the exam day.</p>
+          </div>
+          <p class="exam-notice__fact">Open from 09:00 to <span data-proto-state="!accommodation">12:00</span><span data-proto-state="accommodation">12:30</span> on Wednesday 14 October 2026</p>
+          <div class="exam-notice__actions"><a class="btn btn--secondary" href="exam-mobile-gate.html">What you need for the exam</a><a class="btn btn--ghost" href="learn-home.html">Back to Home</a></div>
+        </div>
+      </section>
+
+      <!-- Resume on a phone or tablet: the gate, with the true time left -->
+      <section class="pf-section pf-narrow-only" aria-labelledby="pf-resume-gate-h" data-proto-state="resume">
+        <div class="exam-notice__panel pf-gate">
+          <h2 class="exam-notice__title" id="pf-resume-gate-h"><svg class="icon icon--lg" aria-hidden="true"><use href="#i-laptop"/></svg>Go back to a laptop or desktop computer to carry on</h2>
+          <div class="exam-notice__body"><p>Your exam is running, but it cannot be opened on a phone or tablet. Open the LMS on a computer as soon as you can, and select "Resume exam".</p></div>
+          <p class="exam-notice__fact">Time left 01:12:40 · the timer is still running</p>
+          <div class="exam-notice__actions"><a class="btn btn--secondary" href="exam-mobile-gate.html#state=resume">What you need for the exam</a></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <nav class="bottom-tabs" aria-label="Learning, main destinations">
+    <a class="bottom-tabs__item" href="learn-home.html"><svg class="icon" aria-hidden="true"><use href="#i-house"/></svg>Home</a>
+    <a class="bottom-tabs__item" href="learn-task.html"><svg class="icon" aria-hidden="true"><use href="#i-clipboard"/></svg>Tasks</a>
+    <a class="bottom-tabs__item" href="index.html"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg>Materials</a>
+    <a class="bottom-tabs__item" href="learn-result.html"><svg class="icon" aria-hidden="true"><use href="#i-check-circle"/></svg>Results</a>
+    <a class="bottom-tabs__item" href="index.html" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg>More<span class="u-visually-hidden"> (Exams is in this section)</span></a>
+  </nav>
+</div>
+
+<div class="toast-region" role="status" aria-live="polite"></div>
+<script src="assets/ui.js"></script>
+<script src="assets/proto.js"></script>
+<script>
+/* Prototype-only: pretend to run the device check again. The real check tests fullscreen, page visibility,
+   IndexedDB and the connection; nothing is tested here and fullscreen is never requested. */
+(function () {
+  'use strict';
+  var button = document.getElementById('pf-recheck'), result = document.getElementById('pf-check-result'), checking = document.getElementById('pf-checking');
+  var busy = false;
+  button.addEventListener('click', function () {
+    if (busy) return; busy = true;
+    button.classList.add('is-loading'); button.setAttribute('aria-busy', 'true');
+    result.hidden = true; checking.hidden = false;
+    window.setTimeout(function () {
+      checking.hidden = true; result.hidden = false;
+      button.classList.remove('is-loading'); button.removeAttribute('aria-busy'); busy = false;
+    }, 1500);
+  });
+  /* A state change unticks the acknowledgement so that every state starts from the same place. */
+  document.addEventListener('proto:state', function () {
+    var ack = document.getElementById('pf-ack');
+    if (ack.checked) { ack.checked = false; ack.dispatchEvent(new Event('change', { bubbles: true })); }
+  });
+})();
+</script>
+</body>
+</html>

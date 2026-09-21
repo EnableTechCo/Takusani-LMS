@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en-ZA" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sampling percentage · Takusani LMS</title>
+<!-- Fonts: optional. The page is fully usable on the fallback stacks if this request fails (no web-font dependency for first paint). -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400..600&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap">
+<!-- Optional extended icon set (Phosphor Bold). Critical icons come from the inline sprite in ui.js. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/ui.css">
+<link rel="stylesheet" href="assets/proto.css">
+<link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+</head>
+<body data-proto-screen="P0-18b" data-proto-title="One setting with version history" data-proto-frs="FR-108 FR-109 NFR-09" data-proto-states="default:Current value and history|invalid:Value out of range|scheduled:Change recorded and scheduled">
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<div class="app-shell">
+  <header class="app-shell__topbar">
+    <a class="brand" href="index.html" aria-label="Takusani LMS, all prototype screens">
+      <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M7 0H25A7 7 0 0 1 32 7V25A7 7 0 0 1 25 32H7A7 7 0 0 1 0 25V7A7 7 0 0 1 7 0ZM7 8.5H25V12H17.75V24H14.25V12H7ZM8.25 17.5A1.75 1.75 0 1 0 11.75 17.5A1.75 1.75 0 1 0 8.25 17.5ZM20.25 17.5A1.75 1.75 0 1 0 23.75 17.5A1.75 1.75 0 1 0 20.25 17.5Z"/></svg>
+      <span class="brand__name">Takusani</span><span class="brand__suffix">LMS</span>
+    </a>
+    <span class="topbar__institution">Khanya Skills Institute</span>
+    
+    <span class="topbar__spacer"></span>
+    <form class="topbar__search" role="search" action="#main" method="get" onsubmit="return false"><label class="input-icon"><span class="u-visually-hidden">Search</span><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><input class="input" type="search" name="q" placeholder="Search"></label></form>
+    <div class="topbar__actions">
+      <a class="btn btn--ghost btn--icon" href="notifications.html" aria-label="Notifications, 1 unread"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg><span class="badge-count" aria-hidden="true">1</span></a>
+      <details class="menu-wrap" data-menu>
+        <summary class="btn btn--ghost btn--icon" aria-label="Account menu for Sibusiso Khumalo"><span class="avatar" aria-hidden="true">SK</span></summary>
+        <div class="menu menu--end">
+          <div class="account__identity"><p class="account__name">Sibusiso Khumalo</p><p class="account__email">sibusiso.khumalo@khanya.example</p><ul class="account__roles"><li>System Administrator: Khanya Skills Institute</li></ul></div>
+          <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg>Profile</a>
+          <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg>Notification preferences</a>
+          <div class="menu__section"><fieldset class="fieldset"><legend class="fieldset__legend">Appearance</legend>
+            <div class="segmented">
+              <label class="segmented__option"><input type="radio" name="theme" value="light" data-theme-choice checked><span>Light</span></label>
+              <label class="segmented__option"><input type="radio" name="theme" value="dark" data-theme-choice><span>Dark</span></label>
+              <label class="segmented__option"><input type="radio" name="theme" value="auto" data-theme-choice><span>System</span></label>
+            </div></fieldset></div>
+          <div class="menu__divider" role="separator"></div>
+          <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-help"/></svg>Help</a>
+          <a class="menu__item" href="sign-in.html"><svg class="icon" aria-hidden="true"><use href="#i-sign-out"/></svg>Sign out</a>
+        </div>
+      </details>
+    </div>
+  </header>
+
+  <aside class="app-shell__sidenav" aria-label="Workspaces">
+    <nav class="sidenav" aria-label="Main navigation">
+      <div class="sidenav__group"><ul class="sidenav__list">
+        <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-house"/></svg><span class="sidenav__label">My work</span><span class="sidenav__short" aria-hidden="true">My work</span></a></li>
+      </ul></div>
+      <div class="sidenav__group"><h2 class="sidenav__heading">Administration</h2>
+        <ul class="sidenav__list">
+          <li><a class="sidenav__item" href="admin-roles.html"><svg class="icon" aria-hidden="true"><use href="#i-users"/></svg><span class="sidenav__label">Accounts</span><span class="sidenav__short" aria-hidden="true">Accounts</span></a></li>
+          <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-upload"/></svg><span class="sidenav__label">Imports</span><span class="sidenav__short" aria-hidden="true">Imports</span></a></li>
+          <li><a class="sidenav__item" href="admin-configuration.html" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-sliders"/></svg><span class="sidenav__label">Configuration</span><span class="sidenav__short" aria-hidden="true">Config</span></a></li>
+          <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-external"/></svg><span class="sidenav__label">Department integration</span><span class="sidenav__short" aria-hidden="true">Dept API</span></a></li>
+          <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-clipboard"/></svg><span class="sidenav__label">Audit log</span><span class="sidenav__short" aria-hidden="true">Audit</span></a></li>
+          <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-archive"/></svg><span class="sidenav__label">Cohort archive</span><span class="sidenav__short" aria-hidden="true">Archive</span></a></li>
+        </ul>
+      </div>
+    </nav>
+  </aside>
+
+  <main class="app-shell__main" id="main" tabindex="-1">
+    <div class="page">
+      <header class="page-header">
+        <nav aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="admin-configuration.html">Configuration</a></li><li>Moderation sampling</li><li aria-current="page">Sampling percentage</li></ol></nav>
+        <p class="page-header__workspace">Administration</p>
+        <h1 class="page-header__title">Sampling percentage</h1>
+        <p class="page-header__lead">The share of Competent results drawn at random into each moderation sample, on top of the mandatory inclusions.</p>
+        <div class="page-header__meta">
+          <span class="tag tag--positive tag--shape-dot" data-proto-state="default invalid">In force: 15% (version 4)</span>
+          <span class="tag tag--info" data-proto-state="scheduled">Scheduled change: 20% from Thu 1 Oct 2026</span>
+          <span class="text-meta">moderation.sampling.percentage</span><span class="text-meta">As at Mon 21 Sep 2026, 11:30 SAST</span>
+        </div>
+      </header>
+
+      <div class="page-layout">
+        <div class="page-layout__main stack stack--lg">
+
+          <section aria-labelledby="cur-h">
+            <h2 class="u-visually-hidden" id="cur-h">Value in force</h2>
+            <div class="grid grid--2">
+              <div class="stat"><span class="stat__label">Value in force now</span><span class="stat__value">15<span class="stat__unit">%</span></span><span class="stat__meta">Version 4 · from Wed 1 Jul 2026 · recorded by Sibusiso Khumalo · previous value 10%</span></div>
+              <div class="stat" data-proto-state="default invalid"><span class="stat__label">Next value</span><span class="stat__value">None</span><span class="stat__meta">No change is scheduled.</span></div>
+              <div class="stat" data-proto-state="scheduled"><span class="stat__label">Next value</span><span class="stat__value">20<span class="stat__unit">%</span></span><span class="stat__meta">Version 5 · from the start of Thu 1 Oct 2026 · in 10 days</span></div>
+            </div>
+          </section>
+
+          <!-- ===== scheduled: result ===== -->
+          <div class="stack" data-proto-state="scheduled">
+            <div class="banner banner--positive" role="status"><svg class="icon banner__icon" aria-hidden="true"><use href="#i-check-circle"/></svg><p class="banner__title" id="sched-h" tabindex="-1" data-proto-focus>Version 5 recorded: 20% from the start of Thursday 1 October 2026</p><p class="banner__body">15% stays in force until the end of Wednesday 30 September 2026. Version 4 is kept in the history and will be labelled Superseded on 1 October. Nothing that is already frozen changes.</p>
+              <div class="banner__actions"><button type="button" class="btn btn--secondary" data-modal-open="m-cancel-change">Cancel the scheduled change</button><a href="admin-configuration.html#state=scheduled">Back to Configuration</a></div></div>
+          </div>
+
+          <!-- ===== form: default ===== -->
+          <section aria-labelledby="new-h" data-proto-state="default">
+            <div class="section__header"><h2 class="text-heading" id="new-h">Record a new value</h2></div>
+            <form class="form card" onsubmit="return false" novalidate><div class="card__body form">
+              <div class="banner banner--info banner--compact" role="note"><svg class="icon banner__icon" aria-hidden="true"><use href="#i-info"/></svg><p class="banner__body">This value is supplied in writing by the quality-assurance authority. Record the reference of their letter in the reason.</p></div>
+              <div class="form__row form__row--2">
+                <div class="field"><label class="field__label" for="nv-value">New value, as a percentage <span class="field__required">(required)</span></label><p class="field__help" id="nv-value-help">A whole number from 5 to 100. The value in force is 15.</p><input class="input" id="nv-value" type="number" min="5" max="100" step="1" value="20" inputmode="numeric" aria-describedby="nv-value-help"></div>
+                <div class="field"><label class="field__label" for="nv-date">Takes effect at the start of <span class="field__required">(required)</span></label><p class="field__help" id="nv-date-help">Today for an immediate change, or a later day. It cannot be in the past.</p><input class="input" id="nv-date" type="date" value="2026-10-01" min="2026-09-21" aria-describedby="nv-date-help"></div>
+              </div>
+              <div class="field"><label class="field__label" for="nv-reason">Reason <span class="field__required">(required)</span></label><p class="field__help" id="nv-reason-help">Kept with the version for auditors. Say who asked for the change and quote their reference.</p><textarea class="textarea" id="nv-reason" rows="3" aria-describedby="nv-reason-help">Quality-assurance authority letter QA/2026/118 of 14 Sep 2026: raise random sampling to 20% for the remainder of 2026 after the Term 2 verification visit.</textarea></div>
+              <div class="form__actions"><button type="button" class="btn btn--primary" data-modal-open="m-confirm">Review the change</button><button type="button" class="btn btn--ghost" data-proto-goto="invalid">Show a failed attempt</button></div>
+            </div></form>
+          </section>
+
+          <!-- ===== form: invalid ===== -->
+          <section aria-labelledby="new2-h" data-proto-state="invalid">
+            <div class="section__header"><h2 class="text-heading" id="new2-h">Record a new value</h2></div>
+            <form class="form card" onsubmit="return false" novalidate><div class="card__body form">
+              <div class="error-summary" role="group" tabindex="-1" data-proto-focus>
+                <p class="error-summary__title">Nothing was recorded. There are 2 things to fix</p>
+                <ul><li><a href="#iv-value">Enter a whole number from 5 to 100 for the new value</a></li><li><a href="#iv-reason">Enter the reason for this change</a></li></ul>
+              </div>
+              <div class="form__row form__row--2">
+                <div class="field"><label class="field__label" for="iv-value">New value, as a percentage <span class="field__required">(required)</span></label><p class="field__help" id="iv-value-help">A whole number from 5 to 100. The value in force is 15.</p><input class="input" id="iv-value" type="number" min="5" max="100" step="1" value="200" inputmode="numeric" aria-invalid="true" aria-describedby="iv-value-help iv-value-err"><p class="field__error" id="iv-value-err"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert-circle"/></svg>You entered 200. A sample cannot be more than 100% of the results. Enter a whole number from 5 to 100.</p></div>
+                <div class="field"><label class="field__label" for="iv-date">Takes effect at the start of <span class="field__required">(required)</span></label><p class="field__help" id="iv-date-help">Today for an immediate change, or a later day. It cannot be in the past.</p><input class="input" id="iv-date" type="date" value="2026-10-01" min="2026-09-21" aria-describedby="iv-date-help"><p class="field__valid"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg>Thursday 1 October 2026, in 10 days</p></div>
+              </div>
+              <div class="field"><label class="field__label" for="iv-reason">Reason <span class="field__required">(required)</span></label><p class="field__help" id="iv-reason-help">Kept with the version for auditors. Say who asked for the change and quote their reference.</p><textarea class="textarea" id="iv-reason" rows="3" aria-invalid="true" aria-describedby="iv-reason-help iv-reason-err"></textarea><p class="field__error" id="iv-reason-err"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert-circle"/></svg>Enter a reason. A version cannot be recorded without one, because auditors read it.</p></div>
+              <div class="form__actions"><button type="button" class="btn btn--primary" data-proto-goto="default">Review the change</button></div>
+            </div></form>
+          </section>
+
+          <!-- ===== what it does not affect ===== -->
+          <section class="card card--sunken" aria-labelledby="not-h">
+            <div class="card__header"><h2 class="card__title" id="not-h">What a change to this setting does and does not affect</h2></div>
+            <div class="card__body">
+              <dl class="dl dl--inline">
+                <div class="dl__row"><dt>Affects</dt><dd>Every sample drawn on or after the effective day, in every moderated cohort. Today that is 1 cohort: 2026 Intake B, 96 learners.</dd></div>
+                <div class="dl__row"><dt>Does not affect</dt><dd>Cycles that are already frozen. "Term 3 tasks" (frozen Mon 14 Sep 2026) keeps rule-v4 at 15% and its 22 sampled items. A sample copies its configuration when it is drawn and is never redrawn.</dd></div>
+                <div class="dl__row"><dt>Also unchanged</dt><dd>The mandatory inclusions: every Not yet competent decision and every first-time assessor are sampled whatever the percentage.</dd></div>
+                <div class="dl__row"><dt>The same rule elsewhere</dt><dd>Exam attempts that have already started keep the integrity settings they started with, for the same reason.</dd></div>
+              </dl>
+            </div>
+          </section>
+
+          <!-- ===== history ===== -->
+          <section aria-labelledby="hist-h">
+            <div class="section__header"><h2 class="text-heading" id="hist-h">Version history</h2><span class="text-small text-muted">Newest first. Nothing here can be edited or deleted.</span></div>
+            <div class="table-wrap">
+              <table class="table table--cards">
+                <caption class="u-visually-hidden">Every version of the sampling percentage, newest first. Times in SAST.</caption>
+                <thead><tr><th scope="col">Version</th><th scope="col">Value</th><th scope="col">Previous value</th><th scope="col">In force from</th><th scope="col">Until</th><th scope="col">Changed by</th><th scope="col">Reason</th><th scope="col">Recorded (SAST)</th></tr></thead>
+                <tbody>
+                  <tr data-proto-state="scheduled"><td class="table__primary-cell" data-label="Version"><span class="table__primary">Version 5 <span class="tag tag--info">Scheduled</span></span></td><td data-label="Value">20%</td><td data-label="Previous">15%</td><td data-label="From">Start of Thu 1 Oct 2026</td><td data-label="Until">No end date</td><td data-label="Changed by">Sibusiso Khumalo (you)</td><td data-label="Reason">Quality-assurance authority letter QA/2026/118 of 14 Sep 2026: raise random sampling to 20% for the remainder of 2026.</td><td data-label="Recorded"><span class="mono">21 Sep 2026, 11:34</span></td></tr>
+                  <tr><td class="table__primary-cell" data-label="Version"><span class="table__primary">Version 4 <span class="tag tag--positive tag--shape-dot">In force</span></span></td><td data-label="Value">15%</td><td data-label="Previous">10%</td><td data-label="From">Start of Wed 1 Jul 2026</td><td data-label="Until"><span><span data-proto-state="default invalid">No end date</span><span data-proto-state="scheduled">End of Wed 30 Sep 2026</span></span></td><td data-label="Changed by">Sibusiso Khumalo</td><td data-label="Reason">Letter QA/2026/061: 15% from Term 3 after two first-time assessors joined.</td><td data-label="Recorded"><span class="mono">22 Jun 2026, 09:05</span></td></tr>
+                  <tr><td class="table__primary-cell" data-label="Version"><span class="table__primary">Version 3 <span class="tag tag--shape-square">Superseded</span></span></td><td data-label="Value">10%</td><td data-label="Previous">10%, cancelled change to 12%</td><td data-label="From">Start of Mon 12 Jan 2026</td><td data-label="Until">End of Tue 30 Jun 2026</td><td data-label="Changed by">Sibusiso Khumalo</td><td data-label="Reason">Carried over for the 2026 intakes. Letter QA/2025/204.</td><td data-label="Recorded"><span class="mono">9 Jan 2026, 14:20</span></td></tr>
+                  <tr><td class="table__primary-cell" data-label="Version"><span class="table__primary">Version 2 <span class="tag tag--shape-square">Cancelled before it took effect</span></span></td><td data-label="Value">12%</td><td data-label="Previous">10%</td><td data-label="From">Was to start Mon 12 Jan 2026</td><td data-label="Until">Cancelled 9 Jan 2026</td><td data-label="Changed by">Sibusiso Khumalo</td><td data-label="Reason">Recorded from a draft letter. Cancelled when the signed letter kept 10%.</td><td data-label="Recorded"><span class="mono">5 Jan 2026, 10:48</span></td></tr>
+                  <tr><td class="table__primary-cell" data-label="Version"><span class="table__primary">Version 1 <span class="tag tag--shape-square">Superseded</span></span></td><td data-label="Value">10%</td><td data-label="Previous">None: first value</td><td data-label="From">Start of Mon 13 Jan 2025</td><td data-label="Until">End of Sun 11 Jan 2026</td><td data-label="Changed by">Sibusiso Khumalo</td><td data-label="Reason">Initial value at go-live. Letter QA/2024/310.</td><td data-label="Recorded"><span class="mono">6 Jan 2025, 08:30</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+
+        <aside class="page-layout__aside stack" aria-label="Where this value was used">
+          <h2 class="text-subheading">Samples that used this setting</h2>
+          <ol class="history-list" aria-label="Cycles and the version they were frozen with, newest first">
+            <li class="history-list__item is-current"><span class="history-list__badge">v4</span><span class="history-list__title">Term 3 tasks · 2026 Intake B</span><span class="history-list__meta">Frozen 14 Sep 2026 · 15% · 22 of 96 sampled · in review</span></li>
+            <li class="history-list__item"><span class="history-list__badge">v3</span><span class="history-list__title">Term 2 tasks · 2026 Intake B</span><span class="history-list__meta">Frozen 15 Jun 2026 · 10% · signed off 26 Jun 2026</span></li>
+          </ol>
+          <p class="text-small text-muted">Each cycle shows the version it was frozen with, not the version in force today.</p>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <nav class="bottom-tabs" aria-label="Administration, phone tabs">
+    <a class="bottom-tabs__item" href="admin-roles.html"><svg class="icon" aria-hidden="true"><use href="#i-users"/></svg>Accounts</a>
+    <a class="bottom-tabs__item" href="admin-configuration.html" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-sliders"/></svg>Config</a>
+    <a class="bottom-tabs__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-clipboard"/></svg>Audit log</a>
+    <a class="bottom-tabs__item" href="#main" data-modal-open="m-more"><svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg>More</a>
+  </nav>
+</div>
+
+<dialog class="modal modal--sheet" id="m-more" aria-labelledby="m-more-t">
+  <div class="modal__header"><h2 class="modal__title" id="m-more-t">More in Administration</h2><button type="button" class="btn btn--ghost btn--icon" data-modal-close aria-label="Close"><svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+  <div class="modal__body">
+    <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-upload"/></svg><span class="menu__item-text">Imports</span></a>
+    <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-external"/></svg><span class="menu__item-text">Department integration</span></a>
+    <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-archive"/></svg><span class="menu__item-text">Cohort archive</span></a>
+    <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><span class="menu__item-text">Search</span></a>
+  </div>
+</dialog>
+<dialog class="modal" id="m-confirm" aria-labelledby="m-cf-t" data-modal-static>
+  <div class="modal__header"><h2 class="modal__title" id="m-cf-t">Record 20% as version 5?</h2></div>
+  <div class="modal__body">
+    <p class="modal__consequence">From the start of Thursday 1 October 2026, every moderation sample is drawn at 20% instead of 15%. Today that affects 1 moderated cohort: 2026 Intake B, 96 learners.</p>
+    <dl class="dl dl--inline">
+      <div class="dl__row"><dt>Before</dt><dd>15% · version 4 · stays in force to the end of Wed 30 Sep 2026</dd></div>
+      <div class="dl__row"><dt>After</dt><dd>20% · version 5 · from the start of Thu 1 Oct 2026</dd></div>
+    </dl>
+    <ul class="modal__list">
+      <li>It does not alter cycles that are already frozen. "Term 3 tasks" keeps 15% and its 22 sampled items, because a cycle copies its configuration when it is frozen.</li>
+      <li>In the same way, exam attempts that have already started keep the settings they started with.</li>
+      <li>A version cannot be edited or deleted. Until 1 October you can cancel it, and the cancellation is recorded too.</li>
+      <li>You are recording this as the System Administrator: Sibusiso Khumalo.</li>
+    </ul>
+    <label class="check"><input class="check__input" type="checkbox" id="ack-cf"><span class="check__label">I have the quality-assurance authority's letter QA/2026/118 for this value.</span></label>
+  </div>
+  <div class="modal__footer"><button type="button" class="btn btn--secondary" data-modal-close autofocus>Go back</button><button type="button" class="btn btn--primary" data-requires="#ack-cf" data-modal-close data-proto-goto="scheduled">Record version 5</button></div>
+</dialog>
+
+<dialog class="modal" id="m-cancel-change" aria-labelledby="m-cc-t" data-modal-static>
+  <div class="modal__header"><h2 class="modal__title" id="m-cc-t">Cancel the scheduled change to 20%?</h2></div>
+  <div class="modal__body">
+    <p class="modal__consequence">15% stays in force with no end date. Version 5 is kept in the history, labelled "Cancelled before it took effect", with your name and the time.</p>
+    <div class="field"><label class="field__label" for="cc-reason">Reason <span class="field__required">(required)</span></label><p class="field__help" id="cc-reason-help">The button stays off until you enter a reason.</p><textarea class="textarea" id="cc-reason" rows="2" aria-describedby="cc-reason-help"></textarea></div>
+  </div>
+  <div class="modal__footer"><button type="button" class="btn btn--secondary" data-modal-close autofocus>Keep the change</button><button type="button" class="btn btn--primary" data-requires="#cc-reason" data-modal-close data-proto-goto="default">Cancel the scheduled change</button></div>
+</dialog>
+
+<div class="toast-region" role="status" aria-live="polite"></div>
+<script src="assets/ui.js"></script>
+<script src="assets/proto.js"></script>
+<script>
+/* Prototype only. Keeps placeholder links and in-page anchors from replacing the state in the URL hash,
+   lets a button move the screen to another prototype state, and moves focus to a refusal when a state shows one. */
+(function () {
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest) return;
+    var a = e.target.closest('a[href^="#"]');
+    if (a && a.getAttribute('href').indexOf('#state=') !== 0) {
+      e.preventDefault();
+      var t = document.getElementById(a.getAttribute('href').slice(1));
+      if (t && !a.hasAttribute('data-toast') && !a.hasAttribute('data-modal-open')) { t.scrollIntoView(); t.focus({ preventScroll: true }); }
+    }
+    var g = e.target.closest('[data-proto-goto]');
+    if (g) location.hash = 'state=' + g.getAttribute('data-proto-goto');
+  });
+  function settle(initial) {
+    setTimeout(function () {
+      var f = Array.prototype.filter.call(document.querySelectorAll('[data-proto-focus]'), function (el) { return !el.closest('[hidden]'); })[0];
+      if (f) { f.focus(); return; }
+      if (!initial) { window.scrollTo(0, 0); document.getElementById('main').focus({ preventScroll: true }); }
+    }, 0);
+  }
+  document.addEventListener('proto:state', function () { settle(false); });
+  if (/state=/.test(location.hash)) settle(true);
+})();
+</script>
+
+</body>
+</html>

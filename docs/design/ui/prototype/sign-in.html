@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en-ZA" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sign in · Takusani LMS</title>
+<!-- Fonts: optional. The page is fully usable on the fallback stacks if this request fails (no web-font dependency for first paint). -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400..600&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap">
+<!-- Optional extended icon set (Phosphor Bold). Critical icons come from the inline sprite in ui.js. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/ui.css">
+<link rel="stylesheet" href="assets/proto.css">
+<link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+</head>
+<body data-proto-screen="P0-01" data-proto-title="Sign in" data-proto-frs="FR-101 FR-106" data-proto-states="default:Default|wrong:Wrong email or password|locked:Too many attempts|forgot:Forgot password|reset:Password reset sent|expired:Signed out for security">
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<div class="auth-shell">
+  <header class="auth-shell__header">
+    <p class="auth-shell__institution">Khanya Skills Institute</p>
+    <span class="brand"><svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M7 0H25A7 7 0 0 1 32 7V25A7 7 0 0 1 25 32H7A7 7 0 0 1 0 25V7A7 7 0 0 1 7 0ZM7 8.5H25V12H17.75V24H14.25V12H7ZM8.25 17.5A1.75 1.75 0 1 0 11.75 17.5A1.75 1.75 0 1 0 8.25 17.5ZM20.25 17.5A1.75 1.75 0 1 0 23.75 17.5A1.75 1.75 0 1 0 20.25 17.5Z"/></svg><span class="brand__name">Takusani</span><span class="brand__suffix">LMS</span></span>
+  </header>
+
+  <main class="auth-shell__main" id="main" tabindex="-1">
+
+    <!-- ===== Sign in: default, wrong details, signed out for security ===== -->
+    <!-- The fields have no name attribute on purpose: this static form must never put a password in a URL. -->
+    <div class="auth-shell__card form">
+    <h1 class="text-title"><span data-proto-state="default wrong locked expired">Sign in</span><span data-proto-state="forgot">Reset your password</span><span data-proto-state="reset">Check your email</span></h1>
+
+    <form class="form" action="learn-home.html" method="get" novalidate data-proto-state="default wrong expired" aria-label="Sign in">
+
+      <div class="banner banner--info banner--compact" role="status" data-proto-state="expired">
+        <svg class="icon banner__icon" aria-hidden="true"><use href="#i-lock"/></svg>
+        <p class="banner__title">You were signed out for security</p>
+        <p class="banner__body">Sign in to carry on where you left off. Work that you had already submitted is safe.</p>
+      </div>
+
+      <div class="error-summary" role="alert" tabindex="-1" id="signin-error" data-proto-state="wrong">
+        <p class="error-summary__title">We could not sign you in</p>
+        <p id="signin-error-text">The email or password is not correct. Check both and try again.</p>
+        <p class="text-small text-muted u-mt-2">If you have forgotten your password, you can <a href="#state=forgot">reset it</a>.</p>
+      </div>
+
+      <!-- Default and signed-out: clean fields -->
+      <div class="field" data-proto-state="default expired">
+        <label class="field__label" for="email">Email address</label>
+        <input class="input" id="email" type="email" autocomplete="username" inputmode="email" spellcheck="false" placeholder="name@example.org">
+      </div>
+      <div class="field" data-proto-state="default expired">
+        <label class="field__label" for="password">Password</label>
+        <input class="input" id="password" type="password" autocomplete="current-password">
+        <label class="check"><input class="check__input" type="checkbox" onchange="document.getElementById('password').type = this.checked ? 'text' : 'password'"><span class="check__label">Show password</span></label>
+      </div>
+
+      <!-- Wrong details: the email is kept, the password is cleared. Both fields point to the one message.
+           The message never says which of the two was wrong, and is the same for an unknown or deactivated account. -->
+      <div class="field" data-proto-state="wrong">
+        <label class="field__label" for="email-w">Email address</label>
+        <input class="input" id="email-w" type="email" autocomplete="username" inputmode="email" spellcheck="false" value="l.mokoena@example.org" aria-invalid="true" aria-describedby="signin-error-text">
+      </div>
+      <div class="field" data-proto-state="wrong">
+        <label class="field__label" for="password-w">Password</label>
+        <input class="input" id="password-w" type="password" autocomplete="current-password" aria-invalid="true" aria-describedby="signin-error-text">
+        <label class="check"><input class="check__input" type="checkbox" onchange="document.getElementById('password-w').type = this.checked ? 'text' : 'password'"><span class="check__label">Show password</span></label>
+      </div>
+
+      <button type="submit" class="btn btn--primary btn--block">Sign in</button>
+      <p class="text-small"><a href="#state=forgot">Forgot your password?</a></p>
+    </form>
+
+    <!-- ===== Too many attempts: password sign-in is paused. Generic wording, so it does not confirm that an account exists. ===== -->
+    <div class="stack" data-proto-state="locked">
+      <div class="banner banner--caution" role="alert">
+        <svg class="icon banner__icon" aria-hidden="true"><use href="#i-lock"/></svg>
+        <p class="banner__title">Too many attempts</p>
+        <div class="banner__body stack stack--sm">
+          <p>Sign-in with a password is paused for a short time. You do not need to do anything: the pause ends by itself after 15 minutes.</p>
+          <p>You can try again after <strong>09:32</strong> (SAST).</p>
+        </div>
+      </div>
+      <div class="banner banner--info banner--compact" role="note">
+        <svg class="icon banner__icon" aria-hidden="true"><use href="#i-info"/></svg>
+        <p class="banner__body">If you are already signed in on another device, that session carries on. An exam or an upload that is in progress is not affected.</p>
+      </div>
+      <div class="field">
+        <label class="field__label" for="email-l">Email address</label>
+        <input class="input" id="email-l" type="email" value="l.mokoena@example.org" disabled>
+      </div>
+      <div class="field">
+        <label class="field__label" for="password-l">Password</label>
+        <input class="input" id="password-l" type="password" disabled aria-describedby="locked-reason">
+      </div>
+      <button type="button" class="btn btn--primary btn--block" disabled aria-describedby="locked-reason">Sign in</button>
+      <p class="blocked-reason" id="locked-reason"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg>Sign-in with a password is paused until 09:32.</p>
+      <hr>
+      <p class="text-subheading">If you do not want to wait</p>
+      <ul class="prose text-small">
+        <li><a href="#state=forgot">Reset your password now</a>. A new password lets you sign in straight away.</li>
+        <li>Or ask the administrator at Khanya Skills Institute to unlock sign-in for you: <a href="mailto:lms-help@khanya.example">lms-help@khanya.example</a>.</li>
+      </ul>
+    </div>
+
+    <!-- ===== Forgot password: ask for the email address ===== -->
+    <form class="form" action="sign-in.html" method="get" onsubmit="location.hash = 'state=reset'; return false" data-proto-state="forgot" aria-label="Reset your password">
+      <p class="text-muted">Enter the email address you use for the LMS. We will send you a link to choose a new password.</p>
+      <div class="field">
+        <label class="field__label" for="email-f">Email address</label>
+        <input class="input" id="email-f" type="email" autocomplete="username" inputmode="email" spellcheck="false" value="lerato.mokoena@example.org">
+      </div>
+      <button type="submit" class="btn btn--primary btn--block">Send me a reset link</button>
+      <p class="text-small"><a href="#state=default">Back to sign in</a></p>
+    </form>
+
+    <!-- ===== Password reset sent: same wording whether or not the account exists ===== -->
+    <div class="stack" data-proto-state="reset">
+      <div class="banner banner--positive" role="status">
+        <svg class="icon banner__icon" aria-hidden="true"><use href="#i-check-circle"/></svg>
+        <p class="banner__title">Reset link sent</p>
+        <p class="banner__body">If there is an LMS account for <strong>l.mokoena@example.org</strong>, we have sent a link to that address.</p>
+      </div>
+      <ul class="prose text-small">
+        <li>The link works once, and for 60 minutes: until 10:17 (SAST).</li>
+        <li>The email can take a few minutes. Look in your spam or junk folder too.</li>
+        <li>Your old password keeps working until you choose a new one.</li>
+      </ul>
+      <p class="text-small text-muted">No email after 10 minutes? Check the spelling of the address, then <a href="#state=forgot">send the link again</a>.</p>
+      <a class="btn btn--secondary btn--block" href="#state=default">Back to sign in</a>
+    </div>
+    </div>
+
+  </main>
+
+  <footer class="auth-shell__footer">
+    <a href="index.html">Help with signing in</a>
+    <span>Times are shown in South African time (SAST)</span>
+    <fieldset class="fieldset"><legend class="u-visually-hidden">Appearance</legend><div class="segmented">
+      <label class="segmented__option"><input type="radio" name="theme-auth" value="light" data-theme-choice checked><span>Light</span></label>
+      <label class="segmented__option"><input type="radio" name="theme-auth" value="dark" data-theme-choice><span>Dark</span></label>
+      <label class="segmented__option"><input type="radio" name="theme-auth" value="auto" data-theme-choice><span>System</span></label>
+    </div></fieldset>
+  </footer>
+</div>
+
+<div class="toast-region" role="status" aria-live="polite"></div>
+<script src="assets/ui.js"></script>
+<script src="assets/proto.js"></script>
+</body>
+</html>

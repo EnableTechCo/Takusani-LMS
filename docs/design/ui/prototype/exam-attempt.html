@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="en-ZA" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Unit 5 summative exam · Takusani LMS</title>
+<!-- Fonts: optional. The page is fully usable on the fallback stacks if this request fails (no web-font dependency for first paint). -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400..600&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap">
+<!-- Optional extended icon set (Phosphor Bold). Critical icons come from the inline sprite in ui.js. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/ui.css">
+<link rel="stylesheet" href="assets/proto.css">
+<link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+<style>
+/* Page-specific (prefix xm-). Layout switches only; every visual comes from ui.css.
+   Below 1024px the exam is replaced by the mobile gate (NFR-10). On a device with a mouse and hover (for example a
+   desktop browser zoomed to 400%) the gate also offers "Carry on at this size", because ExamShell reflows to 320px
+   and UX architecture 9.4 asks for a warning, not a refusal, when only the width test fails. */
+.xm-gate { display: none; }
+@media (max-width: 63.99rem) {
+  body:not(.xm-narrow-ok) .xm-gate { display: grid; }
+  body:not(.xm-narrow-ok) .xm-app { display: none; }
+}
+@media not all and (hover: hover) and (pointer: fine) { .xm-gate__fine { display: none; } }
+.xm-review { margin-top: var(--space-5); }
+</style>
+</head>
+<body data-proto-screen="P0-06" data-proto-title="Exam mode (ExamShell)"
+      data-proto-frs="FR-313 FR-314 FR-315 FR-901 FR-902 FR-903 FR-904 FR-905 NFR-07 NFR-10"
+      data-proto-states="default:Answering|low-time:5 minutes left|offline:No connection|reconnected:Back online, backlog saved|integrity-warning:After leaving the exam window|lease-lost:Open in another tab or window|time-up:Time is up, sending answers|submit-confirm:Submit confirmation">
+
+<!-- ExamShell contains NO navigation components: no side navigation, tabs, bell, search, account menu or brand link (FR-901). -->
+<div class="xm-app" id="xm-app">
+
+  <!-- Skip links come first in tab order: to the question, to the question list, to the action bar. -->
+  <a class="skip-link" href="#question" data-skip="question" data-proto-state="!lease-lost">Skip to the question</a>
+  <a class="skip-link" href="#navigator" data-skip="navigator" data-proto-state="!lease-lost">Skip to the list of questions</a>
+  <a class="skip-link" href="#actions" data-skip="actions" data-proto-state="!lease-lost">Skip to Previous and Next</a>
+
+  <!-- One polite announcer for everything that is said once: low-time thresholds, marking a question, recovery messages.
+       The ticking timer and the ten-second "Saved" tick are never announced (UX architecture 8.3, 8.4, 11.3). -->
+  <p class="u-visually-hidden" role="status" aria-live="polite" id="xm-announce"></p>
+
+  <div class="exam-shell" id="exam" data-proto-state="!lease-lost">
+    <header class="exam-shell__bar exam-bar">
+      <span class="exam-bar__title">Unit 5 summative exam</span>
+      <span class="exam-bar__position" id="xm-position">Question 3 of 6</span>
+      <!-- Persistence status. role="status" with aria-live="off": routine changes (Saved on this device, Saved 10:42)
+           are visible but silent. Moving into or out of a problem state is announced by the offline banner (alert),
+           the "Back online" banner (status) or the announcer above, so nothing is said twice. -->
+      <span role="status" aria-live="off" id="xm-status">
+        <span class="status-line status-line--local" data-status="local" hidden><svg class="icon" aria-hidden="true"><use href="#i-device"/></svg>Saved on this device</span>
+        <span class="status-line status-line--saved" data-status="saved"><svg class="icon" aria-hidden="true"><use href="#i-cloud-check"/></svg>Saved <span class="status-line__time" id="xm-saved-time">10:42</span></span>
+        <span class="status-line status-line--problem" data-status="problem" hidden><svg class="icon" aria-hidden="true"><use href="#i-offline"/></svg>Not saved to the server. Your answers are being kept on this device.</span>
+        <span class="status-line" data-status="sending" hidden><span class="spinner" aria-hidden="true"></span>Saving your final answers</span>
+        <span class="status-line status-line--locked" data-status="locked" hidden><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Submitted and locked</span>
+      </span>
+      <div class="timer" id="xm-timer" role="timer" aria-label="Time left: 1 hour 12 minutes">
+        <svg class="icon" aria-hidden="true" id="xm-timer-clock" hidden><use href="#i-clock"/></svg>
+        <svg class="icon" aria-hidden="true" id="xm-timer-lock" hidden><use href="#i-lock"/></svg>
+        <span class="timer__label" id="xm-timer-label">Time left</span>
+        <span class="timer__value" id="xm-timer-value">01:12:40</span>
+      </div>
+    </header>
+
+    <!-- The banner row is always present so that the shell grid keeps its rows; the banners inside come and go. -->
+    <div class="exam-shell__banner">
+      <div class="banner banner--offline banner--compact" role="region" aria-label="Connection" data-proto-state="offline">
+        <svg class="icon banner__icon" aria-hidden="true"><use href="#i-offline"/></svg>
+        <p class="banner__body"><strong class="banner__title">No connection.</strong> Carry on answering. Your answers are being kept on this device. The timer is still running.</p>
+        <p class="banner__body">Check your Wi-Fi or network cable if you can. Do not close or refresh this window. Your answers will be saved to the server as soon as the connection is back.<span id="xm-offline-low" hidden> If you are still offline when time runs out, the answers already saved to the server are the ones that count.</span></p>
+      </div>
+      <div role="status">
+        <div class="banner banner--positive banner--compact" id="xm-back-online" data-proto-state="reconnected">
+          <svg class="icon banner__icon" aria-hidden="true"><use href="#i-check-circle"/></svg>
+          <p class="banner__body"><strong class="banner__title">Back online.</strong> All answers saved.</p>
+        </div>
+      </div>
+    </div>
+
+    <details class="exam-shell__navigator" id="navigator" role="region" aria-label="Questions" open>
+      <summary>Questions <span class="text-meta" id="xm-answered-count">2 of 6 answered</span></summary>
+      <nav class="qnav" aria-label="Question navigator">
+        <button type="button" class="qnav__item is-answered" data-go="1" aria-label="Question 1, answered">1</button>
+        <button type="button" class="qnav__item is-answered is-marked" data-go="2" aria-label="Question 2, answered, to come back to">2</button>
+        <button type="button" class="qnav__item" data-go="3" aria-current="true" aria-label="Question 3, not answered, current">3</button>
+        <button type="button" class="qnav__item" data-go="4" aria-label="Question 4, not answered">4</button>
+        <button type="button" class="qnav__item is-marked" data-go="5" aria-label="Question 5, not answered, to come back to">5</button>
+        <button type="button" class="qnav__item" data-go="6" aria-label="Question 6, not answered">6</button>
+      </nav>
+      <ul class="qnav__key" aria-label="Key">
+        <li><span class="qnav__item is-answered" aria-hidden="true">1</span>Answered</li>
+        <li><span class="qnav__item" aria-hidden="true">1</span>Not answered</li>
+        <li><span class="qnav__item is-marked" aria-hidden="true">1</span>Come back to</li>
+        <li><span class="qnav__item" aria-current="true" aria-hidden="true">1</span>The question you are on</li>
+        <li><span class="qnav__item is-local" aria-hidden="true">1</span>On this device only</li>
+      </ul>
+      <div class="stack stack--sm u-mt-4">
+        <button type="button" class="btn btn--secondary btn--block" id="xm-open-review">Review and submit</button>
+        <button type="button" class="btn btn--ghost btn--block" id="xm-seconds">Hide seconds</button>
+        <p class="text-small text-muted">Keyboard: <kbd class="kbd">Alt</kbd> + <kbd class="kbd">N</kbd> next question, <kbd class="kbd">Alt</kbd> + <kbd class="kbd">P</kbd> previous question, <kbd class="kbd">Alt</kbd> + <kbd class="kbd">T</kbd> hear the time left.</p>
+        <p class="text-small">Problem? Tell your invigilator or coordinator.</p>
+      </div>
+    </details>
+
+    <main class="exam-shell__main" id="question" tabindex="-1">
+      <p class="u-print-only">Printing is switched off during this exam.</p>
+
+      <!-- Question 1: single choice -->
+      <section data-q="1" data-type="Choose one answer" data-marks="4" aria-labelledby="q1-stem" hidden>
+        <div class="cluster"><p class="question__number">Question 1 of 6 · 4 marks</p><span class="tag tag--plain" data-marked-tag hidden><svg class="icon icon--sm" aria-hidden="true"><use href="#i-bookmark"/></svg>To come back to</span></div>
+        <h1 class="question__stem" id="q1-stem" tabindex="-1">A colleague asks to see another employee's leave record. What should happen before the record is shown?</h1>
+        <fieldset class="fieldset"><legend class="fieldset__legend">Choose one answer</legend><div class="choice-group">
+          <label class="choice"><input class="choice__input" type="radio" name="q1"><span class="choice__title">Show the record, because colleagues may see each other's leave</span></label>
+          <label class="choice"><input class="choice__input" type="radio" name="q1" checked><span class="choice__title">Write the request in the access register and get the office manager's approval</span></label>
+          <label class="choice"><input class="choice__input" type="radio" name="q1"><span class="choice__title">Refuse, because leave records may never be shown to anyone</span></label>
+          <label class="choice"><input class="choice__input" type="radio" name="q1"><span class="choice__title">Ask the colleague to send the request by email, then show the record</span></label>
+        </div></fieldset>
+      </section>
+
+      <!-- Question 2: single choice -->
+      <section data-q="2" data-type="Choose one answer" data-marks="4" aria-labelledby="q2-stem" hidden>
+        <div class="cluster"><p class="question__number">Question 2 of 6 · 4 marks</p><span class="tag tag--plain" data-marked-tag hidden><svg class="icon icon--sm" aria-hidden="true"><use href="#i-bookmark"/></svg>To come back to</span></div>
+        <h1 class="question__stem" id="q2-stem" tabindex="-1">A supplier's invoice arrives without a purchase order number. What is the correct first step?</h1>
+        <fieldset class="fieldset"><legend class="fieldset__legend">Choose one answer</legend><div class="choice-group">
+          <label class="choice"><input class="choice__input" type="radio" name="q2"><span class="choice__title">Pay the invoice so that the supplier is not kept waiting</span></label>
+          <label class="choice"><input class="choice__input" type="radio" name="q2"><span class="choice__title">File the invoice until the supplier asks about it</span></label>
+          <label class="choice"><input class="choice__input" type="radio" name="q2" checked><span class="choice__title">Record the invoice in the invoice register and ask the person who ordered for the purchase order number</span></label>
+          <label class="choice"><input class="choice__input" type="radio" name="q2"><span class="choice__title">Send the invoice back to the supplier without recording it</span></label>
+        </div></fieldset>
+      </section>
+
+      <!-- Question 3: multiple choice -->
+      <section data-q="3" data-type="Choose all that apply" data-marks="4" aria-labelledby="q3-stem">
+        <div class="cluster"><p class="question__number">Question 3 of 6 · 4 marks</p><span class="tag tag--plain" data-marked-tag hidden><svg class="icon icon--sm" aria-hidden="true"><use href="#i-bookmark"/></svg>To come back to</span></div>
+        <h1 class="question__stem" id="q3-stem" tabindex="-1">Which of these belong in the minutes of a meeting?</h1>
+        <fieldset class="fieldset"><legend class="fieldset__legend">Choose all the answers that apply</legend><div class="choice-group">
+          <label class="choice"><input class="choice__input" type="checkbox" name="q3"><span class="choice__title">The date, time and place of the meeting</span></label>
+          <label class="choice"><input class="choice__input" type="checkbox" name="q3"><span class="choice__title">The names of the people present and the apologies received</span></label>
+          <label class="choice"><input class="choice__input" type="checkbox" name="q3"><span class="choice__title">Every word that each person said</span></label>
+          <label class="choice"><input class="choice__input" type="checkbox" name="q3"><span class="choice__title">The decisions taken and who is responsible for each action</span></label>
+          <label class="choice"><input class="choice__input" type="checkbox" name="q3"><span class="choice__title">The chairperson's personal opinion of each staff member</span></label>
+        </div></fieldset>
+      </section>
+
+      <!-- Question 4: single choice -->
+      <section data-q="4" data-type="Choose one answer" data-marks="4" aria-labelledby="q4-stem" hidden>
+        <div class="cluster"><p class="question__number">Question 4 of 6 · 4 marks</p><span class="tag tag--plain" data-marked-tag hidden><svg class="icon icon--sm" aria-hidden="true"><use href="#i-bookmark"/></svg>To come back to</span></div>
+        <h1 class="question__stem" id="q4-stem" tabindex="-1">The office printer stops working one hour before the board packs must be ready. What do you do first?</h1>
+        <fieldset class="fieldset"><legend class="fieldset__legend">Choose one answer</legend><div class="choice-group">
+          <label class="choice"><input class="choice__input" type="radio" name="q4"><span class="choice__title">Wait for the technician, because only a technician may touch the printer</span></label>
+          <label class="choice"><input class="choice__input" type="radio" name="q4"><span class="choice__title">Tell your manager about the risk to the deadline and arrange another way to print</span></label>
+          <label class="choice"><input class="choice__input" type="radio" name="q4"><span class="choice__title">Cancel the board meeting</span></label>
+          <label class="choice"><input class="choice__input" type="radio" name="q4"><span class="choice__title">Email the board packs to everyone without asking</span></label>
+        </div></fieldset>
+      </section>
+
+      <!-- Question 5: short written answer -->
+      <section data-q="5" data-type="Short written answer" data-marks="6" aria-labelledby="q5-stem" hidden>
+        <div class="cluster"><p class="question__number">Question 5 of 6 · 6 marks</p><span class="tag tag--plain" data-marked-tag hidden><svg class="icon icon--sm" aria-hidden="true"><use href="#i-bookmark"/></svg>To come back to</span></div>
+        <h1 class="question__stem" id="q5-stem" tabindex="-1">Explain why an office keeps an access register for confidential records.</h1>
+        <div class="field">
+          <label class="field__label" for="q5-answer">Your answer</label>
+          <p class="field__help" id="q5-help">Write two or three sentences.</p>
+          <textarea class="textarea" id="q5-answer" name="q5" rows="5" aria-describedby="q5-help q5-count" spellcheck="true"></textarea>
+          <div class="field__footer"><span class="field__count" id="q5-count" data-count>0 words</span></div>
+        </div>
+        <p class="question__notice" role="status">Pasting is switched off during this exam.</p>
+      </section>
+
+      <!-- Question 6: long written answer -->
+      <section data-q="6" data-type="Long written answer" data-marks="20" aria-labelledby="q6-stem" hidden>
+        <div class="cluster"><p class="question__number">Question 6 of 6 · 20 marks</p><span class="tag tag--plain" data-marked-tag hidden><svg class="icon icon--sm" aria-hidden="true"><use href="#i-bookmark"/></svg>To come back to</span></div>
+        <h1 class="question__stem" id="q6-stem" tabindex="-1">Your manager asks you to arrange a one-day training workshop for 24 staff members. Describe the steps you would take, from the day you get the request to the day after the workshop.</h1>
+        <div class="field">
+          <label class="field__label" for="q6-answer">Your answer</label>
+          <p class="field__help" id="q6-help">Include the venue, catering, equipment, how you would tell people, and the records you would keep. Aim for 200 to 300 words.</p>
+          <textarea class="textarea textarea--feedback" id="q6-answer" name="q6" rows="12" aria-describedby="q6-help q6-count" spellcheck="true"></textarea>
+          <div class="field__footer"><span class="field__count" id="q6-count" data-count>0 words</span></div>
+        </div>
+        <p class="question__notice" role="status">Pasting is switched off during this exam.</p>
+      </section>
+
+      <!-- Review and submit (UX architecture 8.1 and 8.7) -->
+      <section data-view="review" aria-labelledby="xm-review-title" hidden>
+        <p class="question__number">Review and submit</p>
+        <h1 class="question__stem" id="xm-review-title" tabindex="-1">Check your answers before you submit</h1>
+        <p id="xm-review-summary">You have answered 2 of 6 questions. 4 questions have no answer. 2 questions are to come back to.</p>
+        <p class="u-mt-4">
+          <span class="status-line status-line--saved" data-review-status="saved"><svg class="icon" aria-hidden="true"><use href="#i-cloud-check"/></svg>All your answers are saved.</span>
+          <span class="status-line status-line--problem" data-review-status="local" hidden><svg class="icon" aria-hidden="true"><use href="#i-device"/></svg><span id="xm-review-local">1 answer is saved on this device only. It will be sent when you submit, or as soon as the connection is back.</span></span>
+        </p>
+        <div class="table-wrap xm-review">
+          <table class="table">
+            <caption>Your questions. Questions with no answer, and questions you marked, are listed first.</caption>
+            <thead><tr><th scope="col">Question</th><th scope="col">Type and marks</th><th scope="col">Status</th><th scope="col"><span class="u-visually-hidden">Open the question</span></th></tr></thead>
+            <tbody id="xm-review-rows"></tbody>
+          </table>
+        </div>
+        <p class="text-small text-muted u-mt-4">You may submit with questions that have no answer. They will get no marks.</p>
+      </section>
+    </main>
+
+    <div class="exam-shell__actions" id="actions" tabindex="-1" role="group" aria-label="Question actions">
+      <button type="button" class="btn btn--secondary" id="xm-prev"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-left"/></svg>Previous</button>
+      <button type="button" class="btn btn--ghost" id="xm-mark" aria-pressed="false"><svg class="icon icon--sm" aria-hidden="true" id="xm-mark-off"><use href="#i-bookmark"/></svg><svg class="icon icon--sm" aria-hidden="true" id="xm-mark-on" hidden><use href="#i-check"/></svg>Come back to this later</button>
+      <button type="button" class="btn btn--primary" id="xm-next">Next<svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></button>
+      <button type="button" class="btn btn--primary" id="xm-to-review" hidden>Review and submit<svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></button>
+      <button type="button" class="btn btn--primary" id="xm-submit" hidden>Submit exam</button>
+    </div>
+  </div>
+
+  <!-- Integrity overlay (FR-903). Says what happened, that it was noted, who will look, how to return. Never accuses,
+       never threatens an outcome, never shows the threshold. In production the button re-requests fullscreen (browsers
+       only allow that from a user action). The prototype does not call requestFullscreen. -->
+  <div class="exam-overlay" id="xm-integrity" role="alertdialog" aria-modal="true" aria-labelledby="xm-integrity-title" aria-describedby="xm-integrity-body" data-proto-state="integrity-warning">
+    <div class="exam-notice__panel exam-notice__panel--caution">
+      <h2 class="exam-notice__title" id="xm-integrity-title"><svg class="icon icon--lg" aria-hidden="true"><use href="#i-shield-warning"/></svg><span>The exam window was not in front at <span data-clock>10:42</span></span></h2>
+      <div class="exam-notice__body" id="xm-integrity-body">
+        <p>This can happen by accident, for example when another program shows a message. It has been recorded, and your assessor will decide whether it matters. It does not end your exam.</p>
+        <p>Please stay in the exam window until you submit. Select "Return to the exam" to go back to full screen and carry on.</p>
+        <p><strong>The timer is still running.</strong></p>
+      </div>
+      <p class="text-small">Problem? Tell your invigilator or coordinator.</p>
+      <p class="exam-notice__fact">Time left <span data-time-left>01:12:40</span></p>
+      <div class="exam-notice__actions"><button type="button" class="btn btn--primary btn--lg" id="xm-return">Return to the exam</button></div>
+    </div>
+  </div>
+
+  <!-- Time is up. The visible timer ended at the end of the attempt. The final answers are being sent and the attempt
+       submits by itself. The server's short acceptance window is a transport tolerance: it is never described as time. -->
+  <div class="exam-overlay" id="xm-timeup" role="alertdialog" aria-modal="true" aria-labelledby="xm-timeup-title" aria-describedby="xm-timeup-body" data-proto-state="time-up">
+    <div class="exam-notice__panel">
+      <h2 class="exam-notice__title" id="xm-timeup-title" tabindex="-1"><svg class="icon icon--lg" aria-hidden="true"><use href="#i-lock"/></svg>Time is up</h2>
+      <div class="exam-notice__body" id="xm-timeup-body">
+        <div data-timeup="sending">
+          <p>Your exam has ended and your answers can no longer be changed.</p>
+          <p>We are saving your final answers and submitting your exam for you. You do not need to do anything. Please keep this window open.</p>
+        </div>
+        <div data-timeup="done" hidden>
+          <p>Your final answers were saved and your exam was submitted automatically. Your answers are now locked.</p>
+        </div>
+      </div>
+      <p class="exam-notice__fact" data-timeup="sending"><span class="status-line"><span class="spinner" aria-hidden="true"></span>Saving your final answers</span></p>
+      <p class="exam-notice__fact" data-timeup="done" hidden><span class="status-line status-line--locked"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Submitted and locked</span></p>
+      <p class="text-small">Problem? Tell your invigilator or coordinator.</p>
+      <div class="exam-notice__actions" data-timeup="done" hidden><a class="btn btn--primary btn--lg" id="xm-to-receipt" href="exam-receipt.html#state=auto">See your receipt</a></div>
+    </div>
+  </div>
+
+  <!-- Takeover screen: a newer tab holds the editing lease. No answers are shown. There is no "Try again". -->
+  <div class="exam-notice" id="xm-takeover" role="alertdialog" aria-labelledby="xm-takeover-title" aria-describedby="xm-takeover-body" data-proto-state="lease-lost">
+    <div class="exam-notice__panel">
+      <h1 class="exam-notice__title" id="xm-takeover-title"><svg class="icon icon--lg" aria-hidden="true"><use href="#i-laptop"/></svg>This exam is now open in another tab or window</h1>
+      <div class="exam-notice__body" id="xm-takeover-body">
+        <p>You can only work in one place at a time. Answers saved before <span data-clock>10:42</span> are safe.</p>
+        <p>To carry on in this tab, select "Continue here instead". The other tab or window will then stop working. Or close this tab and carry on in the other one.</p>
+      </div>
+      <p class="text-small">Problem? Tell your invigilator or coordinator.</p>
+      <p class="exam-notice__fact">Time left <span data-time-left>01:12:40</span> · the timer is still running</p>
+      <div class="exam-notice__actions"><button type="button" class="btn btn--primary" id="xm-continue-here">Continue here instead</button><button type="button" class="btn btn--secondary" id="xm-close-tab">Close this tab</button></div>
+      <p class="text-small text-muted u-mt-4" id="xm-close-tab-note" role="status"></p>
+    </div>
+  </div>
+</div>
+
+<!-- Below 1024px: the mobile gate, shown in place of the exam (NFR-10). An attempt is already running, so the true time left is shown. -->
+<div class="exam-notice xm-gate">
+  <div class="exam-notice__panel">
+    <p class="text-overline">Khanya Skills Institute · Unit 5 summative exam</p>
+    <h1 class="exam-notice__title u-mt-2"><svg class="icon icon--lg" aria-hidden="true"><use href="#i-laptop"/></svg>You need a laptop or desktop computer to carry on with this exam</h1>
+    <div class="exam-notice__body">
+      <p>Your exam has started and the timer is still running. Phones and tablets cannot be used, because the exam needs a full-screen mode that they do not support properly.</p>
+      <p>Open the LMS on a laptop or desktop computer as soon as you can, and select "Resume exam". The answers you have saved are safe.</p>
+      <p class="xm-gate__fine">Are you on a computer? This window is narrower than the exam needs. Make the browser window wider. If you have zoomed in so that you can read more easily, you can carry on at this size.</p>
+    </div>
+    <p class="exam-notice__fact">Time left <span data-time-left>01:12:40</span> · exam open until 12:00 on Wednesday 14 October 2026</p>
+    <p class="text-small">Problem? Tell your invigilator or coordinator.</p>
+      <div class="exam-notice__actions">
+      <a class="btn btn--secondary" href="learn-exam-preflight.html#state=resume">Back to the exam information</a>
+      <button type="button" class="btn btn--ghost xm-gate__fine" id="xm-narrow-ok">Carry on at this size</button>
+    </div>
+  </div>
+</div>
+
+<!-- Row for the review table. Cloned by the page script so that every class stays in the markup. -->
+<template id="xm-review-row">
+  <tr>
+    <th scope="row" data-r="q">Question 1</th>
+    <td data-r="type">Choose one answer · 4 marks</td>
+    <td><span class="cluster"><span class="tag tag--shape-check" data-r="answered">Answered</span><span class="tag" data-r="unanswered">Not answered</span><span class="tag tag--plain" data-r="marked"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-bookmark"/></svg>Come back to</span><span class="tag tag--info tag--plain" data-r="local">On this device only</span></span></td>
+    <td class="table__actions"><button type="button" class="btn btn--secondary" data-r="go">Go to question 1</button></td>
+  </tr>
+</template>
+
+<!-- Consequence dialog: irreversible command, default focus on the safe action, explicit acknowledgement. -->
+<dialog class="modal" id="m-submit-exam" aria-labelledby="m-submit-title" data-modal-static>
+  <div class="modal__header"><h2 class="modal__title" id="m-submit-title">Submit your exam?</h2></div>
+  <div class="modal__body">
+    <p class="modal__consequence">You cannot change your answers after this. Submitting cannot be undone.</p>
+    <p>Unit 5 summative exam. You have answered <strong id="m-answered">2 of 6</strong> questions.</p>
+    <ul class="modal__list">
+      <li id="m-unanswered"><strong>4 questions have no answer:</strong> questions 3, 4, 5 and 6.</li>
+      <li id="m-marked"><strong>2 questions are to come back to:</strong> questions 2 and 5.</li>
+      <li>You still have <span class="mono" data-time-left>01:12:40</span> left, so you may go back and check first.</li>
+    </ul>
+    <label class="check"><input class="check__input" type="checkbox" id="ack-submit"><span class="check__label">I understand that I cannot change my answers after submitting.</span></label>
+  </div>
+  <div class="modal__footer"><button type="button" class="btn btn--secondary" data-modal-close autofocus>Go back</button><button type="button" class="btn btn--primary" id="m-submit-confirm" data-requires="#ack-submit">Submit exam</button></div>
+</dialog>
+
+<div class="toast-region" role="status" aria-live="polite"></div>
+<script src="assets/ui.js"></script>
+<script src="assets/proto.js"></script>
+<script>
+/* Prototype-only behaviour for the exam. Nothing here is production code: there is no server, no fullscreen request,
+   no copy or paste blocking and no focus-loss detection. It simulates what the learner would see. */
+(function () {
+  'use strict';
+  function $(s, c) { return (c || document).querySelector(s); }
+  function $$(s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); }
+  function show(el, on) { if (on) el.removeAttribute('hidden'); else el.setAttribute('hidden', ''); }
+
+  var TOTAL = 6;
+  var app = $('#xm-app'), shell = $('#exam'), main = $('#question'), announcer = $('#xm-announce');
+  var integrity = $('#xm-integrity'), timeup = $('#xm-timeup'), takeover = $('#xm-takeover'), dialog = $('#m-submit-exam');
+  var prev = $('#xm-prev'), next = $('#xm-next'), mark = $('#xm-mark'), toReview = $('#xm-to-review'), submit = $('#xm-submit');
+  var timer = $('#xm-timer'), timerLabel = $('#xm-timer-label'), timerValue = $('#xm-timer-value');
+
+  var s = {
+    current: 3, view: 'question', marked: { 2: true, 5: true }, local: {}, proto: 'default', offline: false, locked: false,
+    remaining: 4360, now: 10 * 3600 + 42 * 60 + 20, hideSeconds: false, ackTimer: null, bannerTimer: null, sendTimer: null, lastFocus: null
+  };
+
+  /* ---- helpers */
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function clock() { return pad(Math.floor(s.now / 3600) % 24) + ':' + pad(Math.floor(s.now / 60) % 60); }
+  function say(text) { announcer.textContent = ''; window.setTimeout(function () { announcer.textContent = text; }, 50); }
+  function words(n, one, many) { return n + ' ' + (n === 1 ? one : many); }
+  function list(nums) { return nums.length < 2 ? nums.join('') : nums.slice(0, -1).join(', ') + ' and ' + nums[nums.length - 1]; }
+  function section(n) { return $('[data-q="' + n + '"]', main); }
+  function isAnswered(n) {
+    var sec = section(n), text = $('textarea', sec);
+    if (text) return text.value.trim() !== '';
+    return $$('input', sec).some(function (i) { return i.checked; });
+  }
+  function answeredList() { var a = []; for (var i = 1; i <= TOTAL; i++) if (isAnswered(i)) a.push(i); return a; }
+  function interactive() { return !shell.hasAttribute('hidden') && !shell.inert && !dialog.open && !s.locked; }
+
+  /* ---- persistence status line */
+  function setStatus(kind) {
+    $$('[data-status]').forEach(function (el) { show(el, el.getAttribute('data-status') === kind); });
+    if (kind === 'saved') $('#xm-saved-time').textContent = clock();
+  }
+  function acknowledge() { /* the ten-second batch was acknowledged by the server */
+    s.local = {}; setStatus('saved'); renderNav(); if (s.view === 'review') renderReview();
+  }
+  function touched(n) { /* every edit is written to this device at once; the server copy follows */
+    s.local[n] = true; renderNav();
+    if (s.offline) { setStatus('problem'); return; }
+    setStatus('local'); window.clearTimeout(s.ackTimer); s.ackTimer = window.setTimeout(acknowledge, 2500);
+  }
+
+  /* ---- navigator */
+  function renderNav() {
+    var answered = answeredList();
+    $$('.qnav [data-go]').forEach(function (b) {
+      var n = Number(b.getAttribute('data-go')), done = answered.indexOf(n) >= 0, here = s.view === 'question' && n === s.current;
+      b.classList.toggle('is-answered', done); b.classList.toggle('is-marked', !!s.marked[n]); b.classList.toggle('is-local', !!s.local[n]);
+      if (here) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current');
+      b.setAttribute('aria-label', 'Question ' + n + ', ' + (done ? 'answered' : 'not answered') + (s.marked[n] ? ', to come back to' : '') +
+        (s.local[n] ? ', saved on this device only' : '') + (here ? ', current' : ''));
+    });
+    $('#xm-answered-count').textContent = answered.length + ' of ' + TOTAL + ' answered';
+  }
+
+  /* ---- one question per page */
+  function renderActions() {
+    var q = s.view === 'question';
+    show(prev, true); show(mark, q); show(next, q && s.current < TOTAL); show(toReview, q && s.current === TOTAL); show(submit, !q);
+    prev.disabled = q && s.current === 1;
+    prev.lastChild.textContent = q ? 'Previous' : 'Back to question ' + TOTAL;
+    var on = !!s.marked[s.current];
+    mark.setAttribute('aria-pressed', String(on)); mark.classList.toggle('btn--secondary', on); mark.classList.toggle('btn--ghost', !on);
+    show($('#xm-mark-on'), on); show($('#xm-mark-off'), !on);
+    $$('[data-marked-tag]').forEach(function (t) { show(t, !!s.marked[Number(t.closest('[data-q]').getAttribute('data-q'))]); });
+  }
+  function goTo(n, focus) {
+    s.current = Math.min(TOTAL, Math.max(1, n)); s.view = 'question';
+    $$('[data-q], [data-view]', main).forEach(function (sec) { show(sec, sec.getAttribute('data-q') === String(s.current)); });
+    $('#xm-position').textContent = 'Question ' + s.current + ' of ' + TOTAL;
+    renderNav(); renderActions();
+    if (focus) { window.scrollTo(0, 0); $('h1', section(s.current)).focus(); } /* focus moves to the question stem */
+  }
+
+  /* ---- review and submit */
+  function renderReview() {
+    var answered = answeredList(), unanswered = [], marked = [], localOnly = Object.keys(s.local).length, rows = $('#xm-review-rows'), tpl = $('#xm-review-row');
+    for (var i = 1; i <= TOTAL; i++) { if (answered.indexOf(i) < 0) unanswered.push(i); if (s.marked[i]) marked.push(i); }
+    $('#xm-review-summary').textContent = 'You have answered ' + answered.length + ' of ' + TOTAL + ' questions. ' +
+      (unanswered.length ? words(unanswered.length, 'question has', 'questions have') + ' no answer. ' : 'Every question has an answer. ') +
+      (marked.length ? words(marked.length, 'question is', 'questions are') + ' to come back to.' : 'No questions are to come back to.');
+    $$('[data-review-status]').forEach(function (el) { show(el, el.getAttribute('data-review-status') === (localOnly ? 'local' : 'saved')); });
+    $('#xm-review-local').textContent = words(localOnly, 'answer is', 'answers are') + ' saved on this device only. ' +
+      (s.offline ? 'They will be sent as soon as the connection is back. You can wait for "Saved" before you submit.' : 'They will be saved to the server in a moment.');
+    var order = []; for (var n = 1; n <= TOTAL; n++) order.push(n);
+    order.sort(function (a, b) { function rank(x) { return answered.indexOf(x) < 0 ? 0 : s.marked[x] ? 1 : 2; } return rank(a) - rank(b) || a - b; });
+    rows.textContent = '';
+    order.forEach(function (n) {
+      var tr = tpl.content.firstElementChild.cloneNode(true), sec = section(n), done = answered.indexOf(n) >= 0;
+      $('[data-r="q"]', tr).textContent = 'Question ' + n;
+      $('[data-r="type"]', tr).textContent = sec.getAttribute('data-type') + ' · ' + sec.getAttribute('data-marks') + ' marks';
+      if (done) $('[data-r="unanswered"]', tr).remove(); else $('[data-r="answered"]', tr).remove();
+      if (!s.marked[n]) $('[data-r="marked"]', tr).remove();
+      if (!s.local[n]) $('[data-r="local"]', tr).remove();
+      var go = $('[data-r="go"]', tr); go.textContent = 'Go to question ' + n; go.setAttribute('data-go', n);
+      rows.appendChild(tr);
+    });
+    /* the same numbers, in the consequence dialog */
+    $('#m-answered').textContent = answered.length + ' of ' + TOTAL;
+    $('#m-unanswered').innerHTML = unanswered.length ? '<strong>' + words(unanswered.length, 'question has', 'questions have') + ' no answer:</strong> ' + (unanswered.length === 1 ? 'question ' : 'questions ') + list(unanswered) + '.' : 'Every question has an answer.';
+    $('#m-marked').innerHTML = marked.length ? '<strong>' + words(marked.length, 'question is', 'questions are') + ' to come back to:</strong> ' + (marked.length === 1 ? 'question ' : 'questions ') + list(marked) + '.' : 'No questions are to come back to.';
+  }
+  function openReview(focus) {
+    s.view = 'review';
+    $$('[data-q], [data-view]', main).forEach(function (sec) { show(sec, sec.getAttribute('data-view') === 'review'); });
+    $('#xm-position').textContent = 'Review and submit';
+    renderReview(); renderNav(); renderActions();
+    if (focus) { window.scrollTo(0, 0); $('#xm-review-title').focus(); }
+  }
+
+  /* ---- timer: never paused, never a live region; one polite announcement at 15, 5 and 1 minute */
+  function spoken(sec) {
+    var h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60);
+    if (sec < 60) return 'less than 1 minute';
+    return (h ? words(h, 'hour', 'hours') + ' ' : '') + words(m, 'minute', 'minutes');
+  }
+  function renderTimer() {
+    var r = s.remaining, h = Math.floor(r / 3600), m = Math.floor((r % 3600) / 60), sec = r % 60, text;
+    if (s.hideSeconds) text = r < 60 && r > 0 ? 'under 1 min' : (h ? h + ' h ' : '') + m + ' min';
+    else text = (h ? pad(h) + ':' : '') + pad(m) + ':' + pad(sec);
+    var ended = r <= 0, low = !ended && r <= 900;
+    timer.classList.toggle('timer--low', low); timer.classList.toggle('timer--ended', ended);
+    show($('#xm-timer-clock'), low); show($('#xm-timer-lock'), ended);
+    timerLabel.textContent = ended ? 'Time is up' : r <= 60 ? 'Less than 1 minute left' : r <= 300 ? 'Less than 5 minutes left' : r <= 900 ? 'Less than 15 minutes left' : 'Time left';
+    timerValue.textContent = ended ? '00:00' : text;
+    var label = ended ? 'Time is up' : timerLabel.textContent + ': ' + spoken(r);
+    if (timer.getAttribute('aria-label') !== label) timer.setAttribute('aria-label', label);
+    $$('[data-time-left]').forEach(function (el) { el.textContent = (h ? pad(h) + ':' : '') + pad(m) + ':' + pad(sec); });
+    show($('#xm-offline-low'), r <= 300);
+  }
+  function tick() {
+    if (s.remaining <= 0) return;
+    s.remaining -= 1; s.now += 1;
+    if (s.remaining === 900) say('15 minutes left.');
+    if (s.remaining === 300) say('5 minutes left.');
+    if (s.remaining === 60) say('1 minute left.');
+    renderTimer();
+    if (s.remaining === 0 && s.proto !== 'time-up') location.hash = 'state=time-up';
+  }
+
+  /* ---- overlays: trap focus while open, give it back afterwards */
+  function trap(container) {
+    container.addEventListener('keydown', function (e) {
+      if (e.key !== 'Tab') return;
+      var f = $$('a[href], button:not([disabled])', container).filter(function (el) { return el.offsetParent !== null; });
+      if (!f.length) { e.preventDefault(); return; }
+      var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && (document.activeElement === first || !container.contains(document.activeElement) || document.activeElement === container)) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
+  }
+  trap(integrity); trap(timeup);
+  shell.addEventListener('focusin', function (e) { s.lastFocus = e.target; });
+  function restoreFocus() {
+    var el = s.lastFocus;
+    if (el && document.contains(el) && el.offsetParent !== null && !el.disabled) el.focus();
+    else if (s.view === 'review') $('#xm-review-title').focus(); else $('h1', section(s.current)).focus();
+  }
+  function lock(on) { s.locked = on; $$('input, textarea', main).forEach(function (el) { if (el.type === 'radio' || el.type === 'checkbox') el.disabled = on; else el.readOnly = on; }); }
+
+  /* ---- situational states from the prototype controls */
+  function applyProto(id) {
+    var from = s.proto; s.proto = id;
+    window.clearTimeout(s.bannerTimer); window.clearTimeout(s.sendTimer);
+    shell.inert = false;
+    if (dialog.open && id !== 'submit-confirm') window.TakusaniUI.closeModal(dialog);
+    if (s.locked && id !== 'time-up') { lock(false); }
+    $$('[data-clock]').forEach(function (el) { el.textContent = clock(); });
+
+    /* the simulated clock: the attempt started at 09:55 and ends at 11:55 (SAST) */
+    if (id === 'low-time') { s.remaining = 300; s.now = 11 * 3600 + 50 * 60; }
+    else if (id === 'time-up') { s.remaining = 0; s.now = 11 * 3600 + 55 * 60; }
+    else if (s.remaining <= 900) { s.remaining = 4360; s.now = 10 * 3600 + 42 * 60 + 20; }
+
+    s.offline = id === 'offline';
+    if (id === 'offline') {
+      window.clearTimeout(s.ackTimer);
+      if (!Object.keys(s.local).length) { s.local[2] = true; if (isAnswered(s.current)) s.local[s.current] = true; }
+      setStatus('problem');
+      say('No connection. Your answers are being kept on this device. The timer is still running.');
+    } else if (id === 'reconnected') {
+      s.now += 9 * 60; s.remaining = Math.max(901, s.remaining - 9 * 60); /* nine minutes offline: the timer kept running */
+      acknowledge();
+      s.bannerTimer = window.setTimeout(function () { show($('#xm-back-online'), false); }, 5000); /* replaced for five seconds */
+    } else if (id === 'time-up') {
+      setStatus('sending');
+    } else if (from === 'offline' || from === 'time-up' || !from) {
+      s.local = {}; setStatus('saved');
+    }
+
+    if (id === 'low-time') say('5 minutes left.');
+    if (id === 'integrity-warning') { shell.inert = true; $('#xm-return').focus(); }
+    if (id === 'lease-lost') { $('#xm-close-tab-note').textContent = ''; $('#xm-continue-here').focus(); }
+    if (id === 'time-up') {
+      shell.inert = true; lock(true);
+      $$('[data-timeup]').forEach(function (el) { show(el, el.getAttribute('data-timeup') === 'sending'); });
+      $('#xm-timeup-title').focus();
+      s.sendTimer = window.setTimeout(function () { /* the final batch was accepted and the attempt submitted by itself */
+        $$('[data-timeup]').forEach(function (el) { show(el, el.getAttribute('data-timeup') === 'done'); });
+        setStatus('locked'); say('Your exam was submitted automatically. Your answers are locked.');
+        $('#xm-to-receipt').focus();
+      }, 4000);
+    }
+    if (id === 'submit-confirm' && window.getComputedStyle(app).display !== 'none') {
+      if (s.view !== 'review') openReview(false);
+      openSubmit(null);
+    }
+    renderTimer(); renderNav(); if (s.view === 'review') renderReview();
+  }
+  function openSubmit(opener) {
+    renderReview();
+    var ack = $('#ack-submit'); ack.checked = false; ack.dispatchEvent(new Event('change', { bubbles: true }));
+    if (!dialog.open) window.TakusaniUI.openModal('m-submit-exam', opener || submit);
+  }
+
+  /* ---- wiring */
+  document.addEventListener('proto:state', function (e) { applyProto(e.detail.state); });
+  /* A11Y-02: in a narrow or zoomed window the question must not start below the fold */
+  if (window.matchMedia('(max-width: 63.99rem)').matches) { var nav0 = document.getElementById('navigator'); if (nav0) nav0.open = false; }
+  $$('.skip-link').forEach(function (a) { /* in-page anchors would clear the prototype state from the URL hash */
+    a.addEventListener('click', function (e) { e.preventDefault(); var t = document.getElementById(a.getAttribute('data-skip')); if (t.tagName === 'DETAILS') { t.open = true; $('[aria-current="true"], [data-go]', t).focus(); } else t.focus(); });
+  });
+  shell.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-go]'); if (b && !s.locked) goTo(Number(b.getAttribute('data-go')), true);
+  });
+  prev.addEventListener('click', function () { if (s.view === 'review') goTo(TOTAL, true); else goTo(s.current - 1, true); });
+  next.addEventListener('click', function () { goTo(s.current + 1, true); });
+  toReview.addEventListener('click', function () { openReview(true); });
+  $('#xm-open-review').addEventListener('click', function () { openReview(true); });
+  submit.addEventListener('click', function () { openSubmit(submit); });
+  mark.addEventListener('click', function () {
+    if (s.marked[s.current]) delete s.marked[s.current]; else s.marked[s.current] = true;
+    renderNav(); renderActions();
+    say('Question ' + s.current + (s.marked[s.current] ? ' is on your list to come back to.' : ' is no longer on your list to come back to.'));
+  });
+  main.addEventListener('input', function (e) {
+    var sec = e.target.closest('[data-q]'); if (!sec) return;
+    var count = $('[data-count]', sec);
+    if (count) { var t = e.target.value.trim(); count.textContent = words(t ? t.split(/\s+/).length : 0, 'word', 'words'); }
+    touched(Number(sec.getAttribute('data-q')));
+  });
+  $('#xm-seconds').addEventListener('click', function () { s.hideSeconds = !s.hideSeconds; this.textContent = s.hideSeconds ? 'Show seconds' : 'Hide seconds'; renderTimer(); });
+  $('#xm-return').addEventListener('click', function () { location.hash = 'state=default'; window.setTimeout(restoreFocus, 0); });
+  $('#xm-continue-here').addEventListener('click', function () {
+    location.hash = 'state=default';
+    window.setTimeout(function () { restoreFocus(); say('You are now working in this tab. We restored your answers. Last saved at ' + $('#xm-saved-time').textContent + '.'); }, 0);
+  });
+  $('#xm-close-tab').addEventListener('click', function () {
+    window.close(); /* browsers only close tabs that a script opened; say so instead of failing silently */
+    $('#xm-close-tab-note').textContent = 'Your browser did not let this page close itself. You can close this tab now. Nothing will be lost.';
+  });
+  dialog.addEventListener('close', function () { if (s.proto === 'submit-confirm') location.hash = 'state=default'; });
+  $('#m-submit-confirm').addEventListener('click', function () {
+    this.classList.add('is-loading'); this.setAttribute('aria-busy', 'true');
+    window.setTimeout(function () { location.href = 'exam-receipt.html'; }, 600);
+  });
+  $('#xm-narrow-ok').addEventListener('click', function () { document.body.classList.add('xm-narrow-ok'); $('h1', section(s.current)).focus(); });
+  document.addEventListener('keydown', function (e) { /* shortcuts use a modifier key (WCAG 2.1.4) */
+    if (!e.altKey || e.ctrlKey || e.metaKey) return;
+    if (e.code === 'KeyT' || (e.key || '').toLowerCase() === 't') { e.preventDefault(); say(s.remaining > 0 ? 'Time left: ' + spoken(s.remaining) + '.' : 'Time is up.'); return; }
+    if (!interactive()) return;
+    if (e.code === 'KeyN' || (e.key || '').toLowerCase() === 'n') { e.preventDefault(); if (s.view === 'question' && s.current < TOTAL) goTo(s.current + 1, true); else if (s.view === 'question') openReview(true); }
+    if (e.code === 'KeyP' || (e.key || '').toLowerCase() === 'p') { e.preventDefault(); if (s.view === 'review') goTo(TOTAL, true); else if (s.current > 1) goTo(s.current - 1, true); }
+  });
+
+  goTo(3, false);
+  s.proto = '';
+  applyProto(document.body.getAttribute('data-proto-current') || 'default'); /* proto.js has already announced the first state */
+  window.setInterval(tick, 1000);
+})();
+</script>
+</body>
+</html>

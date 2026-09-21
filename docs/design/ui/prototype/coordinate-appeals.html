@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en-ZA" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Appeals · Takusani LMS</title>
+<!-- Fonts: optional. The page is fully usable on the fallback stacks if this request fails (no web-font dependency for first paint). -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400..600&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap">
+<!-- Optional extended icon set (Phosphor Bold). Critical icons come from the inline sprite in ui.js. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/ui.css">
+<link rel="stylesheet" href="assets/proto.css">
+<link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+</head>
+<body data-proto-screen="P0-16a" data-proto-title="Appeals list" data-proto-frs="FR-604 FR-605 FR-608 FR-612" data-proto-states="default:Appeals in every state|empty:Nothing needs action">
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<div class="app-shell">
+  <header class="app-shell__topbar">
+    <a class="brand" href="index.html" aria-label="Takusani LMS, all prototype screens">
+      <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M7 0H25A7 7 0 0 1 32 7V25A7 7 0 0 1 25 32H7A7 7 0 0 1 0 25V7A7 7 0 0 1 7 0ZM7 8.5H25V12H17.75V24H14.25V12H7ZM8.25 17.5A1.75 1.75 0 1 0 11.75 17.5A1.75 1.75 0 1 0 8.25 17.5ZM20.25 17.5A1.75 1.75 0 1 0 23.75 17.5A1.75 1.75 0 1 0 20.25 17.5Z"/></svg>
+      <span class="brand__name">Takusani</span><span class="brand__suffix">LMS</span>
+    </a>
+    <span class="topbar__institution">Khanya Skills Institute</span>
+    <div class="topbar__context"><details class="menu-wrap" data-menu><summary class="context-select__button" aria-label="Cohort. Current: All my cohorts"><span class="context-select__label">Cohort</span><span class="context-select__value">All my cohorts</span><svg class="icon icon--sm" aria-hidden="true"><use href="#i-caret-down"/></svg></summary><div class="menu"><p class="menu__label">Coordinating</p><a class="menu__item" href="#main" data-toast="This screen is not part of the prototype" aria-current="true"><span class="menu__item-text">All my cohorts</span><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></a><a class="menu__item" href="coordinate-cohort-setup.html#state=active"><span class="menu__item-text">2026 Intake B<span class="menu__item-meta">Certificate in Business Administration · Active</span></span><span class="tag tag--plain">Moderated</span></a><a class="menu__item" href="#main" data-toast="This screen is not part of the prototype"><span class="menu__item-text">2026 Intake C<span class="menu__item-meta">Certificate in Business Administration · Active</span></span><span class="tag tag--plain">Not moderated</span></a><div class="menu__divider" role="separator"></div><p class="menu__label">Archived</p><a class="menu__item" href="#main" data-toast="This screen is not part of the prototype"><span class="menu__item-text">2025 Intake A<span class="menu__item-meta">Certificate in Business Administration · Archived (read-only)</span></span></a></div></details></div>
+    <span class="topbar__spacer"></span>
+    <form class="topbar__search" role="search" action="#main" method="get" onsubmit="return false"><label class="input-icon"><span class="u-visually-hidden">Search</span><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><input class="input" type="search" name="q" placeholder="Search"></label></form>
+    <div class="topbar__actions">
+      <a class="btn btn--ghost btn--icon" href="notifications.html" aria-label="Notifications, 3 unread"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg><span class="badge-count" aria-hidden="true">3</span></a>
+      <details class="menu-wrap" data-menu>
+        <summary class="btn btn--ghost btn--icon" aria-label="Account menu for Zanele Dlamini"><span class="avatar" aria-hidden="true">ZD</span></summary>
+        <div class="menu menu--end">
+          <div class="account__identity"><p class="account__name">Zanele Dlamini</p><p class="account__email">zanele.dlamini@khanya.example</p><ul class="account__roles"><li>Coordinator: Certificate in Business Administration</li></ul></div>
+          <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg>Profile</a>
+          <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg>Notification preferences</a>
+          <div class="menu__section"><fieldset class="fieldset"><legend class="fieldset__legend">Appearance</legend>
+            <div class="segmented">
+              <label class="segmented__option"><input type="radio" name="theme" value="light" data-theme-choice checked><span>Light</span></label>
+              <label class="segmented__option"><input type="radio" name="theme" value="dark" data-theme-choice><span>Dark</span></label>
+              <label class="segmented__option"><input type="radio" name="theme" value="auto" data-theme-choice><span>System</span></label>
+            </div></fieldset></div>
+          <div class="menu__divider" role="separator"></div>
+          <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-help"/></svg>Help</a>
+          <a class="menu__item" href="sign-in.html"><svg class="icon" aria-hidden="true"><use href="#i-sign-out"/></svg>Sign out</a>
+        </div>
+      </details>
+    </div>
+  </header>
+
+  <aside class="app-shell__sidenav" aria-label="Workspaces">
+    <nav class="sidenav" aria-label="Main navigation">
+      <div class="sidenav__group"><ul class="sidenav__list">
+        <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-house"/></svg><span class="sidenav__label">My work</span><span class="sidenav__short" aria-hidden="true">My work</span></a></li>
+      </ul></div>
+      <div class="sidenav__group"><h2 class="sidenav__heading">Coordinating</h2>
+        <ul class="sidenav__list">
+          <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg><span class="sidenav__label">Overview</span><span class="sidenav__short" aria-hidden="true">Overview</span></a></li>
+          <li><a class="sidenav__item" href="coordinate-cohort-setup.html#state=active"><svg class="icon" aria-hidden="true"><use href="#i-users"/></svg><span class="sidenav__label">Cohorts</span><span class="sidenav__short" aria-hidden="true">Cohorts</span></a></li>
+          <li><a class="sidenav__item" href="coordinate-appeals.html" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-scales"/></svg><span class="sidenav__label">Appeals</span><span class="sidenav__short" aria-hidden="true">Appeals</span><span class="sidenav__count" aria-label="3 appeals need your action">3</span></a></li>
+          <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-megaphone"/></svg><span class="sidenav__label">Notices</span><span class="sidenav__short" aria-hidden="true">Notices</span></a></li>
+          <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-help"/></svg><span class="sidenav__label">Queries</span><span class="sidenav__short" aria-hidden="true">Queries</span></a></li>
+          <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg><span class="sidenav__label">Logistics</span><span class="sidenav__short" aria-hidden="true">Logistics</span></a></li>
+          <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-chart"/></svg><span class="sidenav__label">Reports</span><span class="sidenav__short" aria-hidden="true">Reports</span></a></li>
+        </ul>
+      </div>
+    </nav>
+  </aside>
+
+  <main class="app-shell__main" id="main" tabindex="-1">
+    <div class="page">
+      <header class="page-header">
+        <p class="page-header__workspace">Coordinating</p>
+        <h1 class="page-header__title">Appeals</h1>
+        <p class="page-header__lead">Every appeal needs two things from you: a decision on whether it can be accepted, and for a remark, a reviewer who took no assessment decision on the work. Learners were promised a reply within 5 working days.</p>
+        <div class="page-header__meta">
+          <span class="tag tag--info" data-proto-state="default">3 need your action</span>
+          <span class="tag tag--positive" data-proto-state="empty">Nothing needs your action</span>
+          <span>All my cohorts</span><span class="text-meta">As at Fri 25 Sep 2026, 09:30 SAST</span>
+        </div>
+      </header>
+
+      <div class="grid grid--4 u-mb-6">
+        <div class="stat"><span class="stat__label">Need your action</span><span class="stat__value"><span data-proto-state="default">3</span><span data-proto-state="empty">0</span></span><span class="stat__meta"><span data-proto-state="default">1 new · 1 being checked · 1 needs a reviewer</span><span data-proto-state="empty">Every appeal has an owner</span></span></div>
+        <div class="stat"><span class="stat__label">Oldest without a reviewer</span><span class="stat__value"><span data-proto-state="default">2 <span class="stat__unit">days</span></span><span data-proto-state="empty">None</span></span><span class="stat__meta"><span data-proto-state="default">APL-2026-0029, lodged Wed 23 Sep 2026</span><span data-proto-state="empty">All accepted remarks are with a reviewer</span></span></div>
+        <div class="stat"><span class="stat__label">With a reviewer</span><span class="stat__value">2</span><span class="stat__meta">1 is past its reply day</span></div>
+        <div class="stat"><span class="stat__label">Closed in September</span><span class="stat__value">4</span><span class="stat__meta">1 upheld · 1 higher · 1 lower · 1 inadmissible</span></div>
+      </div>
+
+      <div class="table-toolbar" id="appeal-filters">
+        <label class="input-icon table-toolbar__search"><span class="u-visually-hidden">Search appeals by reference or learner</span><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><input class="input" type="search" placeholder="Reference or learner"></label>
+        <button type="button" class="filter-chip" aria-pressed="true" data-filter="action">Needs my action <span class="filter-chip__count"><span data-proto-state="default">3</span><span data-proto-state="empty">0</span></span></button>
+        <button type="button" class="filter-chip" aria-pressed="false" data-filter="review">With a reviewer <span class="filter-chip__count">2</span></button>
+        <button type="button" class="filter-chip" aria-pressed="false" data-filter="closed">Closed <span class="filter-chip__count">4</span></button>
+        <button type="button" class="filter-chip" aria-pressed="false" data-filter="all">All <span class="filter-chip__count"><span data-proto-state="default">9</span><span data-proto-state="empty">6</span></span></button>
+        <span class="table-toolbar__end"><button type="button" class="btn btn--secondary btn--sm u-hide-phone" data-toast="Export started" data-toast-meta="appeals-2026-09-25.csv"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-download"/></svg>Export</button></span>
+      </div>
+      <p class="text-small text-muted u-mb-4" role="status" id="appeal-count">Showing appeals that need your action, oldest first.</p>
+
+      <div class="card" id="appeal-empty" hidden><div class="empty"><span class="empty__icon"><svg class="icon icon--lg" aria-hidden="true"><use href="#i-scales"/></svg></span><p class="empty__title">Nothing needs your action</p><p class="empty__body">New appeals appear here as soon as a learner lodges one. The window for Task 3 closes at the end of Tuesday 29 September 2026.</p><div class="empty__actions"><button type="button" class="btn btn--secondary" data-filter-go="all">See all appeals</button></div></div></div>
+
+      <div class="table-wrap" id="appeal-wrap">
+        <table class="table table--cards" id="appeal-table">
+          <caption class="u-visually-hidden">Appeals, oldest first within each state. Times in SAST.</caption>
+          <thead><tr>
+            <th scope="col">Learner</th><th scope="col">Appeal</th><th scope="col">Item</th><th scope="col">State</th>
+            <th scope="col" aria-sort="ascending"><button type="button" class="table__sort">Lodged (SAST)</button></th>
+            <th scope="col">Reply to the learner by</th><th scope="col">Owner</th><th scope="col" class="table__actions"><span class="u-visually-hidden">Actions</span></th>
+          </tr></thead>
+          <tbody>
+            <tr data-group="action" data-proto-state="default">
+              <td class="table__primary-cell" data-label="Learner"><span class="table__primary">Thabo Molefe</span><span class="table__secondary">2026 Intake C</span></td>
+              <td data-label="Appeal"><span class="mono">APL-2026-0029</span><span class="table__secondary">Remark</span></td>
+              <td data-label="Item">Task 3: Workplace records portfolio</td>
+              <td data-label="State"><span class="tag tag--info">Accepted. Needs a reviewer</span></td>
+              <td data-label="Lodged"><time class="datetime" datetime="2026-09-23T09:12:00+02:00">23 Sep 2026, <span class="datetime__time">09:12</span></time></td>
+              <td data-label="Reply by"><span class="deadline"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-clock"/></svg>Wed 30 Sep 2026 · 4 working days left</span></td>
+              <td data-label="Owner">Zanele Dlamini (you)</td>
+              <td class="table__actions"><a class="btn btn--secondary btn--sm" href="coordinate-appeal-detail.html#state=tier3">Choose reviewer<span class="u-visually-hidden"> for APL-2026-0029, Thabo Molefe</span></a></td></tr>
+            <tr data-group="action" data-proto-state="default">
+              <td class="table__primary-cell" data-label="Learner"><span class="table__primary">Sipho Zulu</span><span class="table__secondary">2026 Intake B</span></td>
+              <td data-label="Appeal"><span class="mono">APL-2026-0030</span><span class="table__secondary">View marked script</span></td>
+              <td data-label="Item">Task 3: Workplace records portfolio</td>
+              <td data-label="State"><span class="tag tag--info tag--shape-half">Being checked</span></td>
+              <td data-label="Lodged"><time class="datetime" datetime="2026-09-23T16:40:00+02:00">23 Sep 2026, <span class="datetime__time">16:40</span></time></td>
+              <td data-label="Reply by"><span class="deadline"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-clock"/></svg>Wed 30 Sep 2026 · 4 working days left</span></td>
+              <td data-label="Owner">Zanele Dlamini (you)</td>
+              <td class="table__actions"><a class="btn btn--secondary btn--sm" href="#main" data-toast="This screen is not part of the prototype">Open<span class="u-visually-hidden"> APL-2026-0030, Sipho Zulu</span></a></td></tr>
+            <tr data-group="action" data-proto-state="default">
+              <td class="table__primary-cell" data-label="Learner"><span class="table__primary">Lerato Mokoena</span><span class="table__secondary">2026 Intake B</span></td>
+              <td data-label="Appeal"><span class="mono">APL-2026-0031</span><span class="table__secondary">Remark</span></td>
+              <td data-label="Item">Task 3: Workplace records portfolio</td>
+              <td data-label="State"><span class="tag tag--info">New. Needs admissibility check</span></td>
+              <td data-label="Lodged"><time class="datetime" datetime="2026-09-24T08:14:00+02:00">24 Sep 2026, <span class="datetime__time">08:14</span></time></td>
+              <td data-label="Reply by"><span class="deadline"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-clock"/></svg>Thu 1 Oct 2026 · 5 working days left</span></td>
+              <td data-label="Owner">Zanele Dlamini (you)</td>
+              <td class="table__actions"><a class="btn btn--secondary btn--sm" href="coordinate-appeal-detail.html">Check<span class="u-visually-hidden"> APL-2026-0031, Lerato Mokoena</span></a></td></tr>
+
+            <tr data-group="review">
+              <td class="table__primary-cell" data-label="Learner"><span class="table__primary">Naledi Khoza</span><span class="table__secondary">2026 Intake B</span></td>
+              <td data-label="Appeal"><span class="mono">APL-2026-0024</span><span class="table__secondary">Remark</span></td>
+              <td data-label="Item">Unit 2 summative exam</td>
+              <td data-label="State"><span class="tag tag--info tag--shape-half">Under review by Nomvula Mahlangu</span></td>
+              <td data-label="Lodged"><time class="datetime" datetime="2026-09-16T11:05:00+02:00">16 Sep 2026, <span class="datetime__time">11:05</span></time></td>
+              <td data-label="Reply by"><span class="deadline deadline--overdue"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-clock"/></svg>Was Wed 23 Sep 2026 · 1 working day over</span></td>
+              <td data-label="Owner">Nomvula Mahlangu</td>
+              <td class="table__actions"><a class="btn btn--secondary btn--sm" href="#main" data-toast="This screen is not part of the prototype">Open<span class="u-visually-hidden"> APL-2026-0024, Naledi Khoza</span></a></td></tr>
+            <tr data-group="review">
+              <td class="table__primary-cell" data-label="Learner"><span class="table__primary">Johan Botha</span><span class="table__secondary">2026 Intake B</span></td>
+              <td data-label="Appeal"><span class="mono">APL-2026-0027</span><span class="table__secondary">Remark</span></td>
+              <td data-label="Item">Task 3: Workplace records portfolio</td>
+              <td data-label="State"><span class="tag tag--info">Allocated to Anil Naidoo</span></td>
+              <td data-label="Lodged"><time class="datetime" datetime="2026-09-22T19:05:00+02:00">22 Sep 2026, <span class="datetime__time">19:05</span></time></td>
+              <td data-label="Reply by"><span class="deadline deadline--soon"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-clock"/></svg>Tue 29 Sep 2026 · 3 working days left</span></td>
+              <td data-label="Owner">Anil Naidoo</td>
+              <td class="table__actions"><a class="btn btn--secondary btn--sm" href="#main" data-toast="This screen is not part of the prototype">Open<span class="u-visually-hidden"> APL-2026-0027, Johan Botha</span></a></td></tr>
+
+            <tr data-group="closed">
+              <td class="table__primary-cell" data-label="Learner"><span class="table__primary">Lindiwe Mabaso</span><span class="table__secondary">2026 Intake C</span></td>
+              <td data-label="Appeal"><span class="mono">APL-2026-0019</span><span class="table__secondary">Remark</span></td>
+              <td data-label="Item">Task 2: Meeting minutes</td>
+              <td data-label="State"><span class="tag tag--shape-check">Concluded: upheld</span></td>
+              <td data-label="Lodged"><time class="datetime" datetime="2026-09-03T10:20:00+02:00">3 Sep 2026, <span class="datetime__time">10:20</span></time></td>
+              <td data-label="Reply by"><span class="deadline deadline--closed"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-lock"/></svg>Replied Wed 9 Sep 2026</span></td>
+              <td data-label="Owner">Thandiwe Nkosi</td>
+              <td class="table__actions"><a class="btn btn--secondary btn--sm" href="#main" data-toast="This screen is not part of the prototype">Open<span class="u-visually-hidden"> APL-2026-0019, Lindiwe Mabaso</span></a></td></tr>
+            <tr data-group="closed">
+              <td class="table__primary-cell" data-label="Learner"><span class="table__primary">Zinhle Ngcobo</span><span class="table__secondary">2026 Intake C</span></td>
+              <td data-label="Appeal"><span class="mono">APL-2026-0021</span><span class="table__secondary">Remark</span></td>
+              <td data-label="Item">Task 2: Meeting minutes</td>
+              <td data-label="State"><span class="tag tag--positive">Concluded: amended upward</span></td>
+              <td data-label="Lodged"><time class="datetime" datetime="2026-09-04T14:02:00+02:00">4 Sep 2026, <span class="datetime__time">14:02</span></time></td>
+              <td data-label="Reply by"><span class="deadline deadline--closed"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-lock"/></svg>Replied Thu 10 Sep 2026</span></td>
+              <td data-label="Owner">Thandiwe Nkosi</td>
+              <td class="table__actions"><a class="btn btn--secondary btn--sm" href="#main" data-toast="This screen is not part of the prototype">Open<span class="u-visually-hidden"> APL-2026-0021, Zinhle Ngcobo</span></a></td></tr>
+            <tr data-group="closed">
+              <td class="table__primary-cell" data-label="Learner"><span class="table__primary">Kagiso Tau</span><span class="table__secondary">2026 Intake C</span></td>
+              <td data-label="Appeal"><span class="mono">APL-2026-0022</span><span class="table__secondary">Remark</span></td>
+              <td data-label="Item">Task 2: Meeting minutes</td>
+              <td data-label="State"><span class="tag tag--caution">Concluded: amended downward</span></td>
+              <td data-label="Lodged"><time class="datetime" datetime="2026-09-07T08:45:00+02:00">7 Sep 2026, <span class="datetime__time">08:45</span></time></td>
+              <td data-label="Reply by"><span class="deadline deadline--closed"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-lock"/></svg>Replied Mon 14 Sep 2026</span></td>
+              <td data-label="Owner">Thandiwe Nkosi</td>
+              <td class="table__actions"><a class="btn btn--secondary btn--sm" href="#main" data-toast="This screen is not part of the prototype">Open<span class="u-visually-hidden"> APL-2026-0022, Kagiso Tau</span></a></td></tr>
+            <tr data-group="closed">
+              <td class="table__primary-cell" data-label="Learner"><span class="table__primary">Palesa Mthembu</span><span class="table__secondary">2026 Intake C</span></td>
+              <td data-label="Appeal"><span class="mono">APL-2026-0023</span><span class="table__secondary">Remark</span></td>
+              <td data-label="Item">Task 2: Meeting minutes</td>
+              <td data-label="State"><span class="tag tag--shape-square">Inadmissible</span><span class="table__secondary">Lodged after the window closed</span></td>
+              <td data-label="Lodged"><time class="datetime" datetime="2026-09-11T07:58:00+02:00">11 Sep 2026, <span class="datetime__time">07:58</span></time></td>
+              <td data-label="Reply by"><span class="deadline deadline--closed"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-lock"/></svg>Replied Fri 11 Sep 2026</span></td>
+              <td data-label="Owner">Zanele Dlamini (you)</td>
+              <td class="table__actions"><a class="btn btn--secondary btn--sm" href="#main" data-toast="This screen is not part of the prototype">Open<span class="u-visually-hidden"> APL-2026-0023, Palesa Mthembu</span></a></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <nav class="pagination u-mt-4" aria-label="Appeal pages">
+        <span id="appeal-range">Showing 3 of 9</span>
+        <ul class="pagination__list">
+          <li><a class="pagination__item" role="link" aria-disabled="true" aria-label="Previous page"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-caret-left"/></svg></a></li>
+          <li><a class="pagination__item" href="#main" aria-current="page" aria-label="Page 1, current">1</a></li>
+          <li><a class="pagination__item" role="link" aria-disabled="true" aria-label="Next page"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-caret-right"/></svg></a></li>
+        </ul>
+      </nav>
+    </div>
+  </main>
+
+  <nav class="bottom-tabs" aria-label="Coordinating, phone tabs">
+    <a class="bottom-tabs__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg>Overview</a>
+    <a class="bottom-tabs__item" href="coordinate-cohort-setup.html#state=active"><svg class="icon" aria-hidden="true"><use href="#i-users"/></svg>Cohorts</a>
+    <a class="bottom-tabs__item" href="coordinate-appeals.html" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-scales"/></svg>Appeals</a>
+    <a class="bottom-tabs__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-megaphone"/></svg>Notices</a>
+    <a class="bottom-tabs__item" href="#main" data-modal-open="m-more"><svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg>More</a>
+  </nav>
+</div>
+
+<dialog class="modal modal--sheet" id="m-more" aria-labelledby="m-more-t">
+  <div class="modal__header"><h2 class="modal__title" id="m-more-t">More in Coordinating</h2><button type="button" class="btn btn--ghost btn--icon" data-modal-close aria-label="Close"><svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+  <div class="modal__body">
+    <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-help"/></svg><span class="menu__item-text">Queries</span></a>
+    <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg><span class="menu__item-text">Logistics</span></a>
+    <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-chart"/></svg><span class="menu__item-text">Reports</span></a>
+    <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><span class="menu__item-text">Search</span></a>
+  </div>
+</dialog>
+
+
+<div class="toast-region" role="status" aria-live="polite"></div>
+<script src="assets/ui.js"></script>
+<script src="assets/proto.js"></script>
+<script>
+/* Prototype only. Keeps placeholder links and in-page anchors from replacing the state in the URL hash,
+   lets a button move the screen to another prototype state, and moves focus to a refusal when a state shows one. */
+(function () {
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest) return;
+    var a = e.target.closest('a[href^="#"]');
+    if (a && a.getAttribute('href').indexOf('#state=') !== 0) {
+      e.preventDefault();
+      var t = document.getElementById(a.getAttribute('href').slice(1));
+      if (t && !a.hasAttribute('data-toast') && !a.hasAttribute('data-modal-open')) { t.scrollIntoView(); t.focus({ preventScroll: true }); }
+    }
+    var g = e.target.closest('[data-proto-goto]');
+    if (g) location.hash = 'state=' + g.getAttribute('data-proto-goto');
+  });
+  function settle(initial) {
+    setTimeout(function () {
+      var f = Array.prototype.filter.call(document.querySelectorAll('[data-proto-focus]'), function (el) { return !el.closest('[hidden]'); })[0];
+      if (f) { f.focus(); return; }
+      if (!initial) { window.scrollTo(0, 0); document.getElementById('main').focus({ preventScroll: true }); }
+    }, 0);
+  }
+  document.addEventListener('proto:state', function () { settle(false); });
+  if (/state=/.test(location.hash)) settle(true);
+})();
+</script>
+<script>
+/* Prototype only: the filter chips show and hide rows. Without it every row is listed. */
+(function () {
+  var chips = Array.prototype.slice.call(document.querySelectorAll('[data-filter]'));
+  var rows = Array.prototype.slice.call(document.querySelectorAll('#appeal-table tbody tr'));
+  var words = { action: 'appeals that need your action', review: 'appeals that are with a reviewer', closed: 'closed appeals', all: 'all appeals' };
+  var current = 'action';
+  function apply() {
+    var state = document.body.getAttribute('data-proto-current'), shown = 0, total = 0;
+    rows.forEach(function (tr) {
+      var inState = !(tr.getAttribute('data-proto-state') === 'default' && state === 'empty');
+      var match = current === 'all' || tr.getAttribute('data-group') === current;
+      if (inState) total++;
+      tr.hidden = !(inState && match); if (!tr.hidden) shown++;
+    });
+    chips.forEach(function (c) { c.setAttribute('aria-pressed', String(c.getAttribute('data-filter') === current)); });
+    document.getElementById('appeal-empty').hidden = shown !== 0;
+    document.getElementById('appeal-wrap').hidden = shown === 0;
+    document.getElementById('appeal-range').textContent = 'Showing ' + shown + ' of ' + total;
+    document.getElementById('appeal-count').textContent = 'Showing ' + words[current] + ', oldest first.';
+  }
+  document.addEventListener('click', function (e) {
+    var c = e.target.closest('[data-filter], [data-filter-go]'); if (!c) return;
+    current = c.getAttribute('data-filter') || c.getAttribute('data-filter-go'); apply();
+  });
+  document.addEventListener('proto:state', function () { current = 'action'; apply(); });
+  apply();
+})();
+</script>
+</body>
+</html>

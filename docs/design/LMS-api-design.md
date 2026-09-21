@@ -49,7 +49,9 @@ Workflow functions return a typed result that the handler maps to a status. They
 - **Validation:** ending or narrowing an assignment is rejected while the user holds an open allocation that depends on it (FR-105): `422 open_allocations` with `details.allocations[]`.
 - **Transaction:** lock the user's `profiles` row; check overlap and open allocations; insert or end-date the assignment; append the audit event with previous value (FR-107).
 
-Role assignments express capability scope. Separation of duties is enforced in the allocation commands below, where a conflict can actually arise (FR-104).
+- **Advisory:** when the new role's scope overlaps work the user has already assessed, the assignment succeeds and the response includes `advisories[]` of type `separation_of_duties_exclusions`, naming the results the user will be excluded from moderating or reviewing. The interface shows it with the same named-conflict panel used for a refusal.
+
+Role assignments express capability scope. Separation of duties is enforced in the allocation commands below, where a conflict can actually arise (FR-104). The product owner confirmed this reading on 21 September 2026: advise at role assignment, block at allocation (decision U-01, CR-20).
 
 ### Allocation and reallocation
 
@@ -109,7 +111,11 @@ Confirms the object exists under the intent's key, reads its actual size and typ
 - **Request:** `client_attempt_id` and browser capability summary; no client timer value.
 - **Response:** attempt ID, `lease_id`, server time, `started_at`, `expires_at`, grace seconds, question manifest, integrity policy, and a notice when the window close shortens the attempt.
 - **Rate:** burst 3 and 10/hour per learner/exam; synchronized starts across the institution are expected.
-- **Transaction:** lock the enrolment row, not the exam; `INSERT ... ON CONFLICT` against the one-active-attempt index; snapshot `expires_at`, `accept_until`, and integrity configuration; append the audit event. A retry returns the existing attempt.
+- **Transaction:** lock the enrolment row, not the exam; `INSERT ... ON CONFLICT` against the one-active-attempt index; apply any accommodation to the learner's duration and close time; snapshot `expires_at`, `accept_until`, integrity configuration, and the accommodation; append the audit event. A retry returns the existing attempt.
+
+### `PUT /api/exams/{exam_id}/accommodations/{learner_id}`
+
+Coordinator in scope. Sets additional time, whether paste is permitted, an assistive-technology note, and a reason category. Rejected with `422 attempt_already_started` once the learner has an attempt on the exam. Versioned and audited. The start response then reports the learner's own duration and close time, and the snapshot appears on the attempt for the assessor (decision U-02).
 
 ### `POST /api/exam-attempts/{attempt_id}/lease`
 

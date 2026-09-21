@@ -1,0 +1,32 @@
+/* Prototype-only chrome. Deliberately unlike the product so nobody mistakes it for design. */
+.proto-panel {
+  position: fixed;
+  right: 12px;
+  bottom: 12px;
+  z-index: 2147483000;
+  max-width: 280px;
+  font: 12px/1.4 ui-monospace, "Geist Mono", Menlo, Consolas, monospace;
+  color: #1b1b1b;
+  background: #fffbe6;
+  border: 1px dashed #7a5200;
+  border-radius: 4px;
+}
+.proto-panel__summary { cursor: pointer; padding: 6px 10px; font-weight: 600; list-style: none; }
+.proto-panel__summary::-webkit-details-marker { display: none; }
+.proto-panel__summary::before { content: "+ "; }
+.proto-panel[open] > .proto-panel__summary::before { content: "- "; }
+.proto-panel__body { padding: 0 10px 10px; display: grid; gap: 6px; }
+.proto-panel__note, .proto-panel__frs { margin: 0; color: #5a4a1a; }
+.proto-panel__screen, .proto-panel__label { margin: 0; }
+.proto-panel__states { display: grid; gap: 4px; }
+.proto-panel__state {
+  font: inherit; text-align: left; padding: 6px 8px; min-height: 28px; cursor: pointer;
+  color: inherit; background: #fff; border: 1px solid #7a5200; border-radius: 3px;
+}
+.proto-panel__state[aria-pressed="true"] { background: #1b1b1b; color: #fff; border-color: #1b1b1b; }
+.proto-panel__state:focus-visible, .proto-panel__summary:focus-visible, .proto-panel__home:focus-visible { outline: 2px solid #1b1b1b; outline-offset: 2px; }
+.proto-panel__home { color: inherit; }
+@media (max-width: 47.99rem) { .proto-panel { bottom: 76px; } }
+/* keep clear of a sticky action or decision bar */
+html:has(.action-bar:not([hidden]), .decision-bar:not([hidden]), .exam-shell__actions) .proto-panel { bottom: 88px; }
+@media print { .proto-panel { display: none; } }

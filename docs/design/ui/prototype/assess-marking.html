@@ -1,0 +1,584 @@
+<!doctype html>
+<html lang="en-ZA" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mark Task 3, Lerato Mokoena · Assessing · Takusani LMS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400..600&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/ui.css">
+<link rel="stylesheet" href="assets/proto.css">
+<link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+<style>
+/* Page-level layout only (prefix pg-). Tokens only. */
+.pg-head { padding: var(--space-5) var(--space-4) var(--space-4); display: grid; gap: var(--space-4); }
+.pg-head > .page-header { margin-bottom: 0; }
+@media (min-width: 48rem) { .pg-head { padding: var(--space-8) var(--space-6) var(--space-5); } }
+ol.pg-steps { padding-left: var(--space-5); list-style: decimal; display: grid; gap: var(--space-2); max-width: var(--measure); }
+.pg-period { max-width: 10rem; }
+/* Prototype only: keep the prototype controls clear of the sticky decision bar. */
+.proto-panel { bottom: calc(var(--actionbar-height) + var(--space-3)); }
+</style>
+</head>
+<body data-proto-screen="P0-11" data-proto-title="Assessor marking workspace"
+      data-proto-frs="FR-402 FR-403 FR-404 FR-405 FR-406 FR-407 FR-408 FR-410"
+      data-proto-states="draft:Marking in progress, draft saved|error:Finalise refused: something is missing|held:Finalised, moderated cohort: held|draftnm:What if the cohort were not moderated: marking|released:What if not moderated: finalised and released|returned:Returned by the moderator for re-marking|exam:Exam item: integrity log and accommodation">
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<div class="app-shell">
+  <header class="app-shell__topbar">
+    <a class="brand" href="index.html" aria-label="Takusani LMS, all prototype screens">
+      <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M7 0H25A7 7 0 0 1 32 7V25A7 7 0 0 1 25 32H7A7 7 0 0 1 0 25V7A7 7 0 0 1 7 0ZM7 8.5H25V12H17.75V24H14.25V12H7ZM8.25 17.5A1.75 1.75 0 1 0 11.75 17.5A1.75 1.75 0 1 0 8.25 17.5ZM20.25 17.5A1.75 1.75 0 1 0 23.75 17.5A1.75 1.75 0 1 0 20.25 17.5Z"/></svg>
+      <span class="brand__name">Takusani</span><span class="brand__suffix">LMS</span>
+    </a>
+    <span class="topbar__institution">Khanya Skills Institute</span>
+    <button type="button" class="btn btn--secondary btn--sm topbar__workspace" data-modal-open="m-workspaces">Assessing<svg class="icon icon--sm" aria-hidden="true"><use href="#i-caret-down"/></svg></button>
+    <div class="topbar__context"><details class="menu-wrap" data-menu>
+      <summary class="context-select__button" aria-label="Cohort filter. Current: All my cohorts"><span class="context-select__label">Cohort</span><span class="context-select__value">All my cohorts</span><svg class="icon icon--sm" aria-hidden="true"><use href="#i-caret-down"/></svg></summary>
+      <div class="menu">
+        <p class="menu__label">Assessing</p>
+        <a class="menu__item" href="#main" aria-current="true"><span class="menu__item-text">All my cohorts</span><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></a>
+        <a class="menu__item" href="#main"><span class="menu__item-text">2026 Intake B<span class="menu__item-meta">Certificate in Business Administration · Active</span></span><span class="tag tag--plain">Moderated</span></a>
+        <p class="menu__label">Moderating</p>
+        <a class="menu__item" href="moderate-item.html"><span class="menu__item-text">2026 Intake C<span class="menu__item-meta">Certificate in Business Administration · Active</span></span><span class="tag tag--plain">Moderated</span></a>
+      </div>
+    </details></div>
+    <span class="topbar__spacer"></span>
+    <form class="topbar__search" role="search" action="#main" method="get"><label class="input-icon"><span class="u-visually-hidden">Search learners and items in your allocation</span><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><input class="input" type="search" name="q" placeholder="Search"></label></form>
+    <div class="topbar__actions">
+      <a class="btn btn--ghost btn--icon" href="notifications.html" aria-label="Notifications, 2 unread"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg><span class="badge-count" aria-hidden="true">2</span></a>
+      <details class="menu-wrap" data-menu>
+        <summary class="btn btn--ghost btn--icon" aria-label="Account menu for Thandiwe Nkosi"><span class="avatar" aria-hidden="true">TN</span></summary>
+        <div class="menu menu--end">
+          <div class="account__identity"><p class="account__name">Thandiwe Nkosi</p><p class="account__email">thandiwe.nkosi@khanya.example</p><ul class="account__roles"><li>Assessor: 2026 Intake B</li><li>Moderator: 2026 Intake C</li></ul></div>
+          <a class="menu__item" href="#main"><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg>Profile</a>
+          <a class="menu__item" href="notifications.html"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg>Notification preferences</a>
+          <div class="menu__section"><fieldset class="fieldset"><legend class="fieldset__legend">Appearance</legend>
+            <div class="segmented">
+              <label class="segmented__option"><input type="radio" name="theme" value="light" data-theme-choice checked><span>Light</span></label>
+              <label class="segmented__option"><input type="radio" name="theme" value="dark" data-theme-choice><span>Dark</span></label>
+              <label class="segmented__option"><input type="radio" name="theme" value="auto" data-theme-choice><span>System</span></label>
+            </div></fieldset></div>
+          <div class="menu__divider" role="separator"></div>
+          <a class="menu__item" href="#main"><svg class="icon" aria-hidden="true"><use href="#i-help"/></svg>Help</a>
+          <a class="menu__item" href="sign-in.html"><svg class="icon" aria-hidden="true"><use href="#i-sign-out"/></svg>Sign out</a>
+        </div>
+      </details>
+    </div>
+  </header>
+
+  <aside class="app-shell__sidenav" aria-label="Workspaces">
+    <nav class="sidenav" aria-label="Main navigation">
+      <div class="sidenav__group"><ul class="sidenav__list">
+        <li><a class="sidenav__item" href="#main"><svg class="icon" aria-hidden="true"><use href="#i-house"/></svg><span class="sidenav__label">My work</span><span class="sidenav__short" aria-hidden="true">My work</span></a></li>
+      </ul></div>
+      <div class="sidenav__group"><h2 class="sidenav__heading">Assessing</h2><ul class="sidenav__list">
+        <li><a class="sidenav__item" href="assess-marking.html" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-inbox"/></svg><span class="sidenav__label">Queue</span><span class="sidenav__short" aria-hidden="true">Queue</span><span class="sidenav__count" aria-label="12 to mark">12</span></a></li>
+        <li><a class="sidenav__item" href="assess-marking.html#state=returned"><svg class="icon" aria-hidden="true"><use href="#i-refresh"/></svg><span class="sidenav__label">Returned to me</span><span class="sidenav__short" aria-hidden="true">Returned</span><span class="sidenav__count" aria-label="1 returned">1</span></a></li>
+        <li><a class="sidenav__item" href="#main"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg><span class="sidenav__label">Cohort release status</span><span class="sidenav__short" aria-hidden="true">Status</span></a></li>
+      </ul></div>
+      <div class="sidenav__group"><h2 class="sidenav__heading">Moderating</h2><ul class="sidenav__list">
+        <li><a class="sidenav__item" href="moderate-signoff.html"><svg class="icon" aria-hidden="true"><use href="#i-scales"/></svg><span class="sidenav__label">Cycles</span><span class="sidenav__short" aria-hidden="true">Cycles</span></a></li>
+        <li><a class="sidenav__item" href="moderate-item.html"><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg><span class="sidenav__label">My sample items</span><span class="sidenav__short" aria-hidden="true">Items</span><span class="sidenav__count" aria-label="3 to review">3</span></a></li>
+      </ul></div>
+    </nav>
+  </aside>
+
+  <main class="app-shell__main" id="main" tabindex="-1">
+    <div class="pg-head">
+      <header class="page-header">
+        <nav aria-label="Breadcrumb"><ol class="breadcrumb">
+          <li><a href="#main">Queue</a></li>
+          <li><a href="#main"><span data-proto-state="!exam">Task 3</span><span data-proto-state="exam">Unit 2 summative exam</span></a></li>
+          <li aria-current="page"><span data-proto-state="!exam">Lerato Mokoena</span><span data-proto-state="exam">Sipho Zulu</span></li>
+        </ol></nav>
+        <p class="page-header__workspace">Assessing</p>
+        <h1 class="page-header__title"><span data-proto-state="!exam">Task 3: Workplace records portfolio</span><span data-proto-state="exam">Unit 2 summative exam</span></h1>
+        <div class="page-header__meta">
+          <span class="tag tag--info tag--shape-half" data-proto-state="draft error draftnm">Marking, draft saved 10:40</span>
+          <span class="tag tag--caution" data-proto-state="held">Decided 10 Sep 2026. Held</span>
+          <span class="tag tag--caution" data-proto-state="released">Not yet competent</span>
+          <span class="tag tag--caution" data-proto-state="returned">Returned to you. Re-mark by 17 Sep</span>
+          <span class="tag tag--caution" data-proto-state="exam">Integrity events to review</span>
+          <span data-proto-state="!exam">Lerato Mokoena · <span class="mono">KSI-2026-0417</span> · 2026 Intake B <span class="tag tag--plain" data-proto-state="!draftnm !released">Moderated</span><span class="tag tag--plain" data-proto-state="draftnm released">Not moderated</span></span>
+          <span data-proto-state="exam">Sipho Zulu · <span class="mono">KSI-2026-0398</span> · 2026 Intake B <span class="tag tag--plain">Moderated</span></span>
+          <span data-proto-state="!exam">Version 2 of 2, submitted 4 Sep 2026 at 17:42, Late</span>
+          <span data-proto-state="exam">Attempt 1 of 1, submitted automatically on 2 Sep 2026 at 11:00</span>
+          <span class="text-meta" data-proto-state="released">Decided 10 Sep 2026. Released 10 Sep 2026.</span>
+        </div>
+        <div class="page-header__actions">
+          <button type="button" class="btn btn--secondary u-hide-phone" data-density-toggle="#main" aria-pressed="false">Compact density</button>
+          <details class="menu-wrap" data-menu><summary class="btn btn--secondary btn--icon" aria-label="More actions"><svg class="icon" aria-hidden="true"><use href="#i-dots"/></svg></summary><div class="menu menu--end"><button type="button" class="menu__item"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>Open original files</button><a class="menu__item" href="#main"><svg class="icon" aria-hidden="true"><use href="#i-arrow-left"/></svg>Back to the queue</a></div></details>
+        </div>
+      </header>
+
+      <!-- Page banners: a state that colours the whole page. -->
+      <div class="banner banner--caution" role="status" data-proto-state="held">
+        <svg class="icon banner__icon" aria-hidden="true"><use href="#i-lock"/></svg>
+        <p class="banner__title">Decided Thu 10 Sep 2026, 11:20 SAST. Not released: waiting for moderation.</p>
+        <div class="banner__body"><p>2026 Intake B is moderated, so this result is held. Lerato cannot see it and has not been notified. It waits for a moderation cycle, and it is released when a moderator signs that cycle off.</p><p class="u-mt-2">Her 7 days to appeal and her 14 days to resubmit start on the day of release, not today. You cannot edit this decision. A moderator can return it to you for re-marking.</p></div>
+        <div class="banner__actions"><a href="#ws-decision">View the decision record</a><a href="assess-marking.html#state=draft">Next item in the queue</a></div>
+      </div>
+      <div class="banner banner--info" role="status" data-proto-state="released">
+        <svg class="icon banner__icon" aria-hidden="true"><use href="#i-info"/></svg>
+        <p class="banner__title">Decided and released Thu 10 Sep 2026, 11:20 SAST.</p>
+        <div class="banner__body"><p>This cohort is not moderated, so Lerato can see this result now. She was notified in the LMS at 11:20 and by email at 11:21 (delivered).</p><p class="u-mt-2">She can appeal until the end of Thursday 17 September 2026. She must resubmit by the end of Thursday 24 September 2026. You cannot edit this decision.</p></div>
+        <div class="banner__actions"><a href="#ws-decision">View the decision record</a><a href="assess-marking.html#state=draftnm">Next item in the queue</a></div>
+      </div>
+      <div class="banner banner--caution" role="status" data-proto-state="returned">
+        <svg class="icon banner__icon" aria-hidden="true"><use href="#i-refresh"/></svg>
+        <p class="banner__title">Returned to you for re-marking by the moderator, Anil Naidoo</p>
+        <div class="banner__body">
+          <p>Returned on Tue 15 Sep 2026, 09:48 SAST. He disagreed with the mark for AC 3.1. These corrections are required:</p>
+          <ol class="pg-steps u-mt-2">
+            <li>Re-score AC 3.1 against the descriptor. Two of the five sampled records (the 2025 leave forms, pages 3 to 4) cannot be found from the index.</li>
+            <li>Name the evidence pages for each criterion in your justification.</li>
+          </ol>
+          <p class="u-mt-2">He agreed that AC 3.2 is not yet met. Your original decision stays on record, and the result stays held while you re-mark. 2026 Intake B cannot be signed off until this item is re-marked and reviewed again.</p>
+        </div>
+      </div>
+      <p class="deadline-line deadline-line--soon" data-proto-state="returned"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg><span>Re-mark <span class="deadline-line__date">by the end of Thursday 17 September 2026</span>. <span class="deadline-line__left">1 day left</span> after today, Wednesday 16 September.</span></p>
+    </div>
+
+    <nav class="section-switcher" aria-label="Sections of this item">
+      <a class="section-switcher__item" href="#ws-evidence" aria-current="true">Evidence</a>
+      <a class="section-switcher__item" href="#ws-integrity" data-proto-state="exam">Integrity</a>
+      <a class="section-switcher__item" href="#ws-history">History</a>
+      <a class="section-switcher__item" href="#ws-rubric">Rubric</a>
+      <a class="section-switcher__item" href="#ws-feedback">Feedback</a>
+      <a class="section-switcher__item" href="#ws-decision">Decision</a>
+    </nav>
+
+    <div class="workspace">
+      <!-- =================== LEFT: evidence, integrity, history =================== -->
+      <div class="workspace__evidence">
+        <section id="ws-evidence" class="stack" aria-labelledby="ev-h" tabindex="-1">
+          <h2 class="text-subheading" id="ev-h">Evidence</h2>
+
+          <!-- Coursework item -->
+          <div class="stack" data-proto-state="!exam">
+            <div class="cluster cluster--between">
+              <label class="select"><span class="u-visually-hidden">Version to view</span><select id="ev-version"><option>Version 2 (being assessed), 4 Sep 2026, 17:42, Late</option><option>Version 1, 28 Aug 2026, 16:55 (read-only)</option></select></label>
+              <span class="cluster"><span class="tag tag--caution">Late by 42 minutes</span><span class="text-meta">3 files · 17.3 MB · SUB-2026-0904-7K2M</span></span>
+            </div>
+            <div class="tabs" data-tabs>
+              <div class="tabs__list" role="tablist" aria-label="Evidence files, by evidence requirement">
+                <button type="button" class="tabs__tab" role="tab" id="t-ev1" aria-controls="p-ev1" aria-selected="true">1. Portfolio</button>
+                <button type="button" class="tabs__tab" role="tab" id="t-ev2" aria-controls="p-ev2" aria-selected="false">2. Filing index</button>
+                <button type="button" class="tabs__tab" role="tab" id="t-ev3" aria-controls="p-ev3" aria-selected="false">3. Retention schedule</button>
+                <button type="button" class="tabs__tab" role="tab" id="t-ev4" aria-controls="p-ev4" aria-selected="false">4. Access register <span class="tabs__count">0</span></button>
+              </div>
+              <div class="tabs__panel" role="tabpanel" id="p-ev1" aria-labelledby="t-ev1" tabindex="0">
+                <div class="viewer">
+                  <div class="viewer__toolbar"><div class="cluster"><span class="text-subheading">Workplace-records-portfolio-v2.pdf</span><span class="text-meta">Page 6 of 11 · 4.2 MB</span></div><div class="cluster"><button type="button" class="btn btn--ghost btn--icon btn--sm" aria-label="Previous page"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-caret-left"/></svg></button><button type="button" class="btn btn--ghost btn--icon btn--sm" aria-label="Next page"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-caret-right"/></svg></button></div></div>
+                  <div class="viewer__body"><div class="viewer__page prose">
+                    <h3>3. Controlling access to confidential records</h3>
+                    <p>Payroll and leave records are kept in the locked cabinet in the HR office. A request to see a record is written in the access register and approved by the office manager before the cabinet is opened.</p>
+                    <p>Only the HR administrator and the office manager hold a key. When a record is taken out, the register shows who took it, why, and when it was put back.</p>
+                    <blockquote>The access register for July and August 2026 is attached as evidence for requirement 4.</blockquote>
+                    <h3>4. Keeping and destroying records</h3>
+                    <p>Payroll records are kept for five years and leave records for three years after the employee leaves. The retention schedule in requirement 3 lists each record type, where it is kept and when it may be destroyed.</p>
+                  </div></div>
+                </div>
+              </div>
+              <div class="tabs__panel" role="tabpanel" id="p-ev2" aria-labelledby="t-ev2" tabindex="0" hidden>
+                <div class="viewer">
+                  <div class="viewer__toolbar"><div class="cluster"><span class="text-subheading">Filing-index-v2.docx</span><span class="text-meta">Page 1 of 4 · 12.0 MB</span></div></div>
+                  <div class="viewer__body"><div class="viewer__page prose">
+                    <h3>Filing index: HR office, cabinet 2</h3>
+                    <p>Drawer A: payroll, by month, newest at the front. Drawer B: leave forms, by surname, then by year. Drawer C: contracts, by employee number.</p>
+                    <p>Sample used for this portfolio: five records chosen by the office manager on 24 August 2026. Each was found from this index and the time taken was written down.</p>
+                  </div></div>
+                </div>
+              </div>
+              <div class="tabs__panel" role="tabpanel" id="p-ev3" aria-labelledby="t-ev3" tabindex="0" hidden>
+                <div class="viewer">
+                  <div class="viewer__toolbar"><div class="cluster"><span class="text-subheading">Retention-schedule.xlsx</span><span class="text-meta">Sheet 1 of 1 · 1.1 MB</span></div></div>
+                  <div class="viewer__body"><div class="viewer__page prose">
+                    <h3>Retention schedule</h3>
+                    <p>Payroll records: 5 years, drawer A, shredded on site. Leave records: 3 years after the employee leaves, drawer B. Contracts: 5 years after the contract ends, drawer C.</p>
+                  </div></div>
+                </div>
+              </div>
+              <div class="tabs__panel" role="tabpanel" id="p-ev4" aria-labelledby="t-ev4" tabindex="0" hidden>
+                <div class="card"><div class="empty"><span class="empty__icon"><svg class="icon icon--lg" aria-hidden="true"><use href="#i-file"/></svg></span><p class="empty__title">No file for this requirement</p><p class="empty__body">Requirement 4, the access register, has no file in version 2 or in version 1. The portfolio refers to it on page 6.</p></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Exam item -->
+          <div class="viewer" data-proto-state="exam">
+            <div class="viewer__toolbar"><div class="cluster"><span class="text-subheading">Written answers</span><span class="text-meta">Questions 31 and 32 of 32 · receipt EXM-2026-0902-4AF1</span></div><span class="tag">To mark, Auto-submitted</span></div>
+            <div class="viewer__body"><div class="viewer__page prose">
+              <h3>Question 31 (10 marks)</h3>
+              <p class="text-muted">Explain how long payroll records must be kept and how they should be destroyed.</p>
+              <p>Payroll records must be kept for five years. After that they can be destroyed, but only by shredding, and the office manager must sign the destruction list first so there is proof of what was destroyed and when.</p>
+              <h3>Question 32 (10 marks)</h3>
+              <p class="text-muted">A colleague asks to see another employee's leave record. Describe what should happen.</p>
+              <p>The request is written in the access register with the reason. The office manager approves it or refuses it. If it is approved the record is read in the HR office and put back the same day.</p>
+              <p class="text-small text-muted">All answers were received before the time ran out. None were received in the grace period.</p>
+            </div></div>
+          </div>
+        </section>
+
+        <!-- Integrity: exams only -->
+        <section id="ws-integrity" class="stack" aria-labelledby="ig-h" tabindex="-1" data-proto-state="exam">
+          <h2 class="text-subheading" id="ig-h">Integrity record</h2>
+          <div class="banner banner--info" role="note">
+            <svg class="icon banner__icon" aria-hidden="true"><use href="#i-info"/></svg>
+            <p class="banner__title">Accommodation on this attempt</p>
+            <div class="banner__body"><p>Extra time and paste were permitted for this learner before the sitting. Sipho uses a screen reader. Screen reader shortcuts can be recorded as window switches, so read those events with that in mind.</p>
+              <dl class="dl dl--inline u-mt-2">
+                <div class="dl__row"><dt>Extra time</dt><dd>30 minutes (1 hour 30 minutes became 2 hours)</dd></div>
+                <div class="dl__row"><dt>Paste</dt><dd>Permitted</dd></div>
+                <div class="dl__row"><dt>Set by</dt><dd>Zanele Dlamini, coordinator, on 28 Aug 2026, before the attempt started</dd></div>
+              </dl></div>
+          </div>
+          <p class="text-small"><strong>This log is advisory. It cannot set the outcome.</strong> Threshold for this attempt: 2 events. Recorded: 3, plus 1 paste that was permitted. <span class="tag tag--caution">Flagged: more events than the threshold</span></p>
+          <ol class="log log--boxed" aria-label="Exam record for Sipho Zulu, oldest first. Times in SAST.">
+            <li class="log__item"><time class="log__time" datetime="2026-09-02T09:00:02+02:00">2 Sep 2026, 09:00:02</time><div class="log__event"><span class="log__actor">Sipho Zulu</span> started the attempt. Fullscreen entered.<div class="log__detail">attempt 7c41e0 · Chrome 139 · Windows · accommodation snapshot: +30 min, paste permitted</div></div></li>
+            <li class="log__item log__item--marked"><time class="log__time" datetime="2026-09-02T09:21:47+02:00">2 Sep 2026, 09:21:47</time><div class="log__event"><span class="log__actor">System</span> recorded a window switch. Away for 9 seconds, inside the grace period.</div></li>
+            <li class="log__item log__item--marked"><time class="log__time" datetime="2026-09-02T09:48:15+02:00">2 Sep 2026, 09:48:15</time><div class="log__event"><span class="log__actor">System</span> recorded a fullscreen exit. Away for 4 seconds.</div></li>
+            <li class="log__item"><time class="log__time" datetime="2026-09-02T10:12:30+02:00">2 Sep 2026, 10:12:30</time><div class="log__event"><span class="log__actor">System</span> recorded a paste into question 31. Permitted by the accommodation, so it does not count towards the threshold.</div></li>
+            <li class="log__item log__item--marked"><time class="log__time" datetime="2026-09-02T10:31:09+02:00">2 Sep 2026, 10:31:09</time><div class="log__event"><span class="log__actor">System</span> recorded a window switch. Away for 6 seconds, inside the grace period.</div></li>
+            <li class="log__item"><time class="log__time" datetime="2026-09-02T11:00:00+02:00">2 Sep 2026, 11:00:00</time><div class="log__event"><span class="log__actor">System</span> submitted the attempt automatically when time ran out.<div class="log__detail">receipt EXM-2026-0902-4AF1</div></div></li>
+            <li class="log__item"><time class="log__time" datetime="2026-09-03T08:40:26+02:00">3 Sep 2026, 08:40:26</time><div class="log__event"><span class="log__actor">Thandiwe Nkosi</span> recorded a judgement: the events are not material to the assessment.</div></li>
+          </ol>
+          <form class="card" onsubmit="return false" aria-labelledby="jd-h">
+            <div class="card__header"><h3 class="card__title" id="jd-h">Your judgement on these events</h3><span class="status-line status-line--saved" role="status"><svg class="icon" aria-hidden="true"><use href="#i-cloud-check"/></svg>Judgement recorded <span class="status-line__time">3 Sep 2026, 08:40</span></span></div>
+            <div class="card__body stack">
+              <fieldset class="fieldset">
+                <legend class="fieldset__legend">Are these events material to this assessment? <span class="field__required">(required)</span></legend>
+                <div class="choice-group choice-group--2">
+                  <label class="choice"><input class="choice__input" type="radio" name="material" checked><span class="choice__title">Not material</span><span class="choice__desc">The events do not change how you read the answers.</span></label>
+                  <label class="choice"><input class="choice__input" type="radio" name="material"><span class="choice__title">Material</span><span class="choice__desc">The events affect how far the answers can be relied on. Say how.</span></label>
+                </div>
+              </fieldset>
+              <div class="field"><label class="field__label" for="jd-reasons">Reasons <span class="field__required">(required)</span></label><p class="field__help" id="jd-reasons-h">Kept with the attempt for moderation and audit. The learner does not see it.</p><textarea class="textarea" id="jd-reasons" rows="3" aria-describedby="jd-reasons-h">Three short absences of 4 to 9 seconds, all inside the grace period and consistent with screen reader use noted in the accommodation. The paste was permitted. The written answers are in the learner's own words.</textarea></div>
+              <p class="text-small text-muted">A judgement is never edited. Recording again adds a new judgement and keeps this one. Your outcome is a separate decision: nothing in this log chooses it for you.</p>
+              <div class="form__actions"><button type="button" class="btn btn--secondary" data-toast="Judgement recorded" data-toast-meta="Added to the exam record">Record a new judgement</button></div>
+            </div>
+          </form>
+        </section>
+
+        <!-- History: versions and decisions -->
+        <section id="ws-history" class="stack" aria-labelledby="hs-h" tabindex="-1">
+          <h2 class="text-subheading" id="hs-h">History</h2>
+          <ol class="history-list" aria-label="Submission versions, newest first" data-proto-state="!exam">
+            <li class="history-list__item is-current"><span class="history-list__badge">v2</span><span class="history-list__title">Version 2, resubmitted before marking <span class="tag tag--caution">Late</span></span><span class="history-list__meta">4 Sep 2026, 17:42 · 42 minutes after the due time of 17:00 · 3 files · 17.3 MB</span><span class="history-list__actions"><span class="tag tag--plain">Being assessed</span></span></li>
+            <li class="history-list__item"><span class="history-list__badge">v1</span><span class="history-list__title">Version 1 <span class="tag tag--shape-square">In version history</span></span><span class="history-list__meta">28 Aug 2026, 16:55 · on time · 2 files · 9.8 MB · replaced by version 2, kept on record</span><span class="history-list__actions"><a class="btn btn--ghost btn--sm" href="#ws-evidence">View<span class="u-visually-hidden"> version 1, read-only</span></a></span></li>
+          </ol>
+          <ol class="history-list" aria-label="Exam attempts" data-proto-state="exam">
+            <li class="history-list__item is-current"><span class="history-list__badge">1</span><span class="history-list__title">Attempt 1 <span class="tag">Auto-submitted</span></span><span class="history-list__meta">2 Sep 2026, 09:00 to 11:00 · 1 attempt allowed</span><span class="history-list__actions"><span class="tag tag--plain">Being assessed</span></span></li>
+          </ol>
+
+          <h3 class="text-small text-muted">Decisions on this result</h3>
+          <p class="text-small" data-proto-state="draft error draftnm exam">No decision has been recorded yet. Your marks and comments are a draft until you finalise.</p>
+          <ol class="history-list" aria-label="Decisions, newest first" data-proto-state="held">
+            <li class="history-list__item is-current"><span class="history-list__badge">1</span><span class="history-list__title">Not yet competent · 5 of 8</span><span class="history-list__meta">Decided 10 Sep 2026, 11:20 · assessor Thandiwe Nkosi · Released: not yet, held for moderation</span><span class="history-list__actions"><span class="tag tag--plain">Current</span></span></li>
+          </ol>
+          <ol class="history-list" aria-label="Decisions, newest first" data-proto-state="released">
+            <li class="history-list__item is-current"><span class="history-list__badge">1</span><span class="history-list__title">Not yet competent · 5 of 8</span><span class="history-list__meta">Decided 10 Sep 2026, 11:20 · Released 10 Sep 2026, 11:20 · assessor Thandiwe Nkosi</span><span class="history-list__actions"><span class="tag tag--plain">Current</span></span></li>
+          </ol>
+          <ol class="history-list" aria-label="Decisions, newest first" data-proto-state="returned">
+            <li class="history-list__item"><span class="history-list__badge">2</span><span class="history-list__title">Your re-mark <span class="tag tag--info tag--shape-half">Draft</span></span><span class="history-list__meta">Not recorded yet. When you finalise, it becomes decision 2 and replaces decision 1 as the current decision.</span></li>
+            <li class="history-list__item is-current"><span class="history-list__badge">1</span><span class="history-list__title">Not yet competent · 5 of 8 (original)</span><span class="history-list__meta">Decided 10 Sep 2026, 11:20 · assessor Thandiwe Nkosi · returned by moderator Anil Naidoo on 15 Sep 2026 · stays on record</span><span class="history-list__actions"><span class="tag tag--plain">Current until re-marked</span></span></li>
+          </ol>
+        </section>
+      </div>
+
+      <!-- =================== RIGHT: rubric, feedback, decision =================== -->
+      <div class="workspace__panel">
+        <div class="error-summary" id="error-summary" role="alert" tabindex="-1" data-proto-state="error">
+          <p class="error-summary__title">This decision was not finalised. There are 2 things to fix</p>
+          <ul><li><a href="#c32e-levels">Score AC 3.2: Controls access to confidential records</a></li><li><a href="#d-just">Write the justification for your decision</a></li></ul>
+          <p class="text-small text-muted u-mt-2">Nothing was recorded. Your draft is safe.</p>
+        </div>
+
+        <!-- Re-mark: the original decision stays visible beside the new form -->
+        <section class="card" aria-labelledby="orig-h" data-proto-state="returned">
+          <div class="card__header"><h2 class="card__title" id="orig-h">Original decision</h2><span class="tag tag--shape-square">Kept on record</span></div>
+          <div class="card__body"><dl class="dl">
+            <div class="dl__row"><dt>Outcome</dt><dd><span class="tag tag--caution">Not yet competent</span> <span class="mono">5 of 8</span> · AC 3.1 Meets (3) · AC 3.2 Partly (2)</dd></div>
+            <div class="dl__row"><dt>Decided</dt><dd>Thu 10 Sep 2026, 11:20 SAST, by you as the assessor</dd></div>
+            <div class="dl__row"><dt>Released</dt><dd>Not yet. Held in the cycle "Term 3 tasks"</dd></div>
+            <div class="dl__row"><dt>Justification</dt><dd>AC 3.1 is met: every sampled record was found from the filing index. AC 3.2 is not yet met: the access register is described on page 6 but is not among the evidence files.</dd></div>
+            <div class="dl__row"><dt>Moderator's finding</dt><dd>Disagree, Anil Naidoo, 15 Sep 2026. Returned with 2 required corrections, listed at the top of this page.</dd></div>
+          </dl>
+          <p class="text-small text-muted u-mt-4">The form below starts from your original marks. What you finalise is recorded as a new decision. Nothing above is changed.</p></div>
+        </section>
+
+        <form class="rubric" id="ws-rubric" onsubmit="return false" aria-labelledby="rb-h" tabindex="-1">
+          <h2 class="text-subheading" id="rb-h"><span data-proto-state="!exam">Rubric for Unit 3</span><span data-proto-state="exam">Marks for the Unit 2 summative exam</span></h2>
+
+          <div class="rubric" data-proto-state="!exam">
+            <fieldset class="rubric__row">
+              <legend class="rubric__head"><span><span class="rubric__id">AC 3.1</span> <span class="rubric__title" id="c31-t">Maintains a filing index that others can use</span></span><span class="rubric__score">3 / 4</span></legend>
+              <p class="rubric__desc">Records in the sample can be found from the index without help.</p>
+              <div class="rubric__levels" role="radiogroup" aria-labelledby="c31-t">
+                <label class="choice"><input class="choice__input" type="radio" name="c31" value="0"><span class="choice__title">Not shown</span><span class="choice__meta">0</span></label>
+                <label class="choice"><input class="choice__input" type="radio" name="c31" value="2"><span class="choice__title">Partly</span><span class="choice__meta">2</span></label>
+                <label class="choice"><input class="choice__input" type="radio" name="c31" value="3" checked><span class="choice__title">Meets</span><span class="choice__meta">3</span></label>
+                <label class="choice"><input class="choice__input" type="radio" name="c31" value="4"><span class="choice__title">Exceeds</span><span class="choice__meta">4</span></label>
+              </div>
+              <div class="field"><label class="field__label" for="c31-c">Comment for AC 3.1 <span class="field__optional">(optional)</span></label><textarea class="textarea" id="c31-c" rows="2">Every sampled record was found from the index (filing index, page 1).</textarea></div>
+            </fieldset>
+
+            <fieldset class="rubric__row" data-proto-state="!error">
+              <legend class="rubric__head"><span><span class="rubric__id">AC 3.2</span> <span class="rubric__title" id="c32-t">Controls access to confidential records</span></span><span class="rubric__score">2 / 4</span></legend>
+              <p class="rubric__desc">Evidence that access is requested, approved and recorded.</p>
+              <div class="rubric__levels" role="radiogroup" aria-labelledby="c32-t">
+                <label class="choice"><input class="choice__input" type="radio" name="c32" value="0"><span class="choice__title">Not shown</span><span class="choice__meta">0</span></label>
+                <label class="choice"><input class="choice__input" type="radio" name="c32" value="2" checked><span class="choice__title">Partly</span><span class="choice__meta">2</span></label>
+                <label class="choice"><input class="choice__input" type="radio" name="c32" value="3"><span class="choice__title">Meets</span><span class="choice__meta">3</span></label>
+                <label class="choice"><input class="choice__input" type="radio" name="c32" value="4"><span class="choice__title">Exceeds</span><span class="choice__meta">4</span></label>
+              </div>
+              <div class="field"><label class="field__label" for="c32-c">Comment for AC 3.2 <span class="field__optional">(optional)</span></label><textarea class="textarea" id="c32-c" rows="2">The process is described on page 6, but the access register itself is not among the files.</textarea></div>
+            </fieldset>
+
+            <fieldset class="rubric__row is-unscored" data-proto-state="error">
+              <legend class="rubric__head"><span><span class="rubric__id">AC 3.2</span> <span class="rubric__title" id="c32e-t">Controls access to confidential records</span></span><span class="rubric__score">Not scored</span></legend>
+              <p class="rubric__desc">Evidence that access is requested, approved and recorded.</p>
+              <div class="rubric__levels" id="c32e-levels" role="radiogroup" aria-labelledby="c32e-t" aria-describedby="c32e-err" aria-invalid="true" aria-required="true" tabindex="-1">
+                <label class="choice"><input class="choice__input" type="radio" name="c32e" value="0"><span class="choice__title">Not shown</span><span class="choice__meta">0</span></label>
+                <label class="choice"><input class="choice__input" type="radio" name="c32e" value="2"><span class="choice__title">Partly</span><span class="choice__meta">2</span></label>
+                <label class="choice"><input class="choice__input" type="radio" name="c32e" value="3"><span class="choice__title">Meets</span><span class="choice__meta">3</span></label>
+                <label class="choice"><input class="choice__input" type="radio" name="c32e" value="4"><span class="choice__title">Exceeds</span><span class="choice__meta">4</span></label>
+              </div>
+              <p class="field__error" id="c32e-err"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert-circle"/></svg>Choose a level for AC 3.2. Every criterion needs a score before you can finalise.</p>
+              <div class="field u-mt-4"><label class="field__label" for="c32e-c">Comment for AC 3.2 <span class="field__optional">(optional)</span></label><textarea class="textarea" id="c32e-c" rows="2"></textarea></div>
+            </fieldset>
+          </div>
+
+          <div class="rubric" data-proto-state="exam">
+            <div class="rubric__total"><span>Section A: 30 multiple-choice questions <span class="text-muted">(marked automatically)</span></span><span class="rubric__score">24 / 30</span></div>
+            <fieldset class="rubric__row">
+              <legend class="rubric__head"><span><span class="rubric__id">Q31</span> <span class="rubric__title">Keeping and destroying payroll records</span></span><span class="rubric__score">8 / 10</span></legend>
+              <p class="rubric__desc">States the retention period, the method of destruction and who authorises it.</p>
+              <div class="field"><label class="field__label" for="q31-m">Marks for question 31, out of 10</label><input class="input pg-period" id="q31-m" type="number" min="0" max="10" value="8" inputmode="numeric"></div>
+              <div class="field u-mt-4"><label class="field__label" for="q31-c">Comment for question 31 <span class="field__optional">(optional)</span></label><textarea class="textarea" id="q31-c" rows="2">Period, method and authorisation are all correct. The destruction list could say where it is kept.</textarea></div>
+            </fieldset>
+            <fieldset class="rubric__row">
+              <legend class="rubric__head"><span><span class="rubric__id">Q32</span> <span class="rubric__title">Handling a request to see a confidential record</span></span><span class="rubric__score">8 / 10</span></legend>
+              <p class="rubric__desc">Request recorded, approval by the right person, supervised access, return recorded.</p>
+              <div class="field"><label class="field__label" for="q32-m">Marks for question 32, out of 10</label><input class="input pg-period" id="q32-m" type="number" min="0" max="10" value="8" inputmode="numeric"></div>
+              <div class="field u-mt-4"><label class="field__label" for="q32-c">Comment for question 32 <span class="field__optional">(optional)</span></label><textarea class="textarea" id="q32-c" rows="2">Request, approval and return are covered. Supervised access is implied but not stated.</textarea></div>
+            </fieldset>
+          </div>
+
+          <div class="rubric__total">
+            <span data-proto-state="!error !exam">Total <span class="text-muted">(2 of 2 criteria scored)</span></span>
+            <span data-proto-state="error">Total so far <span class="text-muted">(1 of 2 criteria scored)</span></span>
+            <span data-proto-state="exam">Total <span class="text-muted">(all questions marked)</span></span>
+            <span class="rubric__total-value"><span data-proto-state="!error !exam">5 / 8</span><span data-proto-state="error">3 / 8</span><span data-proto-state="exam">40 / 50</span></span>
+          </div>
+        </form>
+
+        <form id="ws-feedback" class="stack" onsubmit="return false" aria-labelledby="fb-h" tabindex="-1">
+          <h2 class="text-subheading" id="fb-h">Feedback</h2>
+          <div class="field"><label class="field__label" for="fb-text">Overall feedback for the learner <span class="field__optional">(optional)</span></label><p class="field__help" id="fb-text-h">Shown to the learner as "Feedback from your assessor, Thandiwe Nkosi" when the result is released.</p>
+            <textarea class="textarea textarea--feedback" id="fb-text" aria-describedby="fb-text-h">Lerato, your filing index is clear and every record in the sample can be found from it. The retention schedule is correct for payroll and leave records. To meet criterion 3.2 you still need to show how access to confidential records is controlled: add the access register you describe on page 6 and explain who approves a request.</textarea></div>
+        </form>
+
+        <!-- Decision: editable form -->
+        <form class="decision" id="ws-decision" onsubmit="return false" aria-labelledby="decision-title" tabindex="-1" data-proto-state="draft error draftnm returned exam">
+          <div class="decision__header"><h2 class="decision__title" id="decision-title"><span data-proto-state="!returned">Competency decision</span><span data-proto-state="returned">New decision (re-mark)</span></h2><p class="text-small text-muted">A decision is never edited. A later change is recorded as a new decision and the earlier one stays on record.</p></div>
+          <div class="decision__body">
+            <fieldset class="fieldset">
+              <legend class="fieldset__legend">Outcome <span class="field__required">(required)</span></legend>
+              <div class="choice-group choice-group--2">
+                <label class="choice choice--positive"><input class="choice__input" type="radio" name="outcome" value="c"><span class="choice__title">Competent</span><span class="choice__desc">All assessment criteria for the unit are met.</span></label>
+                <label class="choice choice--caution"><input class="choice__input" type="radio" name="outcome" value="nyc" checked><span class="choice__title">Not yet competent</span><span class="choice__desc">One or more criteria are not yet met. The learner resubmits.</span></label>
+              </div>
+            </fieldset>
+            <div class="field">
+              <label class="field__label" for="d-just">Justification <span class="field__required">(required)</span></label>
+              <p class="field__help" id="d-just-h">The learner and the moderator read this. Say which criteria were met, which were not, and why.</p>
+              <textarea class="textarea textarea--feedback" id="d-just" required aria-describedby="d-just-h">AC 3.1 is met: every sampled record was found from the filing index. AC 3.2 is not yet met: the access register is described on page 6 but is not among the evidence files, so there is no evidence that access is requested, approved and recorded.</textarea>
+              <p class="field__error" id="d-just-err" data-proto-state="error"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert-circle"/></svg>Write your justification. A decision cannot be finalised without it.</p>
+            </div>
+            <div class="decision__remediation" id="d-remediation">
+              <p class="text-subheading">Needed for a Not yet competent outcome</p>
+              <div class="field"><label class="field__label" for="d-rem">What the learner must do <span class="field__required">(required)</span></label><textarea class="textarea" id="d-rem" rows="3" required>Upload the access register for July and August 2026, and add one paragraph on who approves a request.</textarea></div>
+              <div class="field">
+                <label class="field__label" for="d-period">Resubmission period, in days from release <span class="field__required">(required)</span></label>
+                <p class="field__help" id="d-period-h">A period, not a date. It starts on the day the result is released, so time spent held for moderation does not use any of it up.
+                  <span data-proto-state="!draftnm">The date is set when the result is released.</span>
+                  <span data-proto-state="draftnm">If you finalise today, Lerato must resubmit by the end of Thursday 24 September 2026.</span></p>
+                <input class="input pg-period" id="d-period" type="number" min="1" max="90" value="14" inputmode="numeric" required aria-describedby="d-period-h">
+              </div>
+            </div>
+            <div class="banner banner--info banner--compact" role="note" data-proto-state="draft error exam"><svg class="icon banner__icon" aria-hidden="true"><use href="#i-lock"/></svg><p class="banner__body">2026 Intake B is moderated. When you finalise, this result will be <strong>held</strong>. The learner will not see it until a moderator signs off.</p></div>
+            <div class="banner banner--caution banner--compact" role="note" data-proto-state="draftnm"><svg class="icon banner__icon" aria-hidden="true"><use href="#i-info"/></svg><p class="banner__body">This cohort is not moderated. When you finalise, this result is <strong>released to Lerato straight away</strong> and her 7 days to appeal start.</p></div>
+            <div class="banner banner--info banner--compact" role="note" data-proto-state="returned"><svg class="icon banner__icon" aria-hidden="true"><use href="#i-lock"/></svg><p class="banner__body">Finalising records a new decision. The original stays on record. The result stays <strong>held</strong>, and Anil Naidoo reviews it again.</p></div>
+          </div>
+          <div class="decision__footer"><span class="decision__attribution">You are deciding as the assessor: Thandiwe Nkosi</span><span class="status-line status-line--saved" role="status"><svg class="icon" aria-hidden="true"><use href="#i-cloud-check"/></svg>Draft saved <span class="status-line__time">10:40</span></span></div>
+        </form>
+
+        <!-- Decision: read-only record after finalise -->
+        <section class="decision" id="ws-decision-record" aria-labelledby="record-title" tabindex="-1" data-proto-state="held released">
+          <div class="decision__header"><h2 class="decision__title" id="record-title">Competency decision</h2><p class="text-small text-muted">This is a record. It cannot be edited. A later change is recorded as a new decision and this one stays on record.</p></div>
+          <div class="decision__body">
+            <dl class="dl">
+              <div class="dl__row"><dt>Outcome</dt><dd><span class="tag tag--caution">Not yet competent</span> <span class="mono">5 of 8</span></dd></div>
+              <div class="dl__row"><dt>Decided</dt><dd><time datetime="2026-09-10T11:20:00+02:00">Thu 10 Sep 2026, 11:20 SAST</time></dd></div>
+              <div class="dl__row" data-proto-state="held"><dt>Released</dt><dd>Not yet. Waiting for a moderation cycle for 2026 Intake B</dd></div>
+              <div class="dl__row" data-proto-state="released"><dt>Released</dt><dd><time datetime="2026-09-10T11:20:00+02:00">Thu 10 Sep 2026, 11:20 SAST</time>. Lerato was notified at 11:20</dd></div>
+              <div class="dl__row" data-proto-state="released"><dt>Time to appeal</dt><dd>Until the end of Thursday 17 September 2026</dd></div>
+              <div class="dl__row"><dt>Justification</dt><dd>AC 3.1 is met: every sampled record was found from the filing index. AC 3.2 is not yet met: the access register is described on page 6 but is not among the evidence files, so there is no evidence that access is requested, approved and recorded.</dd></div>
+              <div class="dl__row"><dt>What the learner must do</dt><dd>Upload the access register for July and August 2026, and add one paragraph on who approves a request.</dd></div>
+              <div class="dl__row" data-proto-state="held"><dt>Resubmission period</dt><dd>14 days from release. The date is set when the result is released.</dd></div>
+              <div class="dl__row" data-proto-state="released"><dt>Resubmission period</dt><dd>14 days from release: by the end of Thursday 24 September 2026</dd></div>
+            </dl>
+          </div>
+          <div class="decision__footer"><span class="decision__attribution">Decided by the assessor: Thandiwe Nkosi</span><span class="status-line status-line--locked"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Finalised and locked</span></div>
+        </section>
+      </div>
+    </div>
+
+    <div class="decision-bar" role="region" aria-label="Decision">
+      <div class="decision-bar__summary" data-proto-state="draft draftnm"><strong>Not yet competent · 5 / 8</strong>All criteria scored. Draft saved 10:40</div>
+      <div class="decision-bar__summary" data-proto-state="error"><strong>Not yet competent · 3 / 8</strong>1 criterion is not scored and the justification is missing</div>
+      <div class="decision-bar__summary" data-proto-state="returned"><strong>Re-mark: Not yet competent · 5 / 8</strong>Due by the end of Thu 17 Sep 2026. Draft saved 10:40</div>
+      <div class="decision-bar__summary" data-proto-state="exam"><strong>No outcome yet · 40 / 50</strong><span id="exam-blocked">To finalise, choose an outcome and write your justification.</span></div>
+      <div class="decision-bar__summary" data-proto-state="held"><strong>Decided 10 Sep 2026 · Not released</strong>Held: waiting for moderation</div>
+      <div class="decision-bar__summary" data-proto-state="released"><strong>Decided 10 Sep 2026 · Released 10 Sep 2026</strong>Time to appeal ends at the end of Thu 17 Sep 2026</div>
+
+      <div class="decision-bar__actions" data-proto-state="draft"><button type="button" class="btn btn--secondary">Save draft</button><button type="button" class="btn btn--primary" data-modal-open="m-finalise-held">Finalise decision</button></div>
+      <div class="decision-bar__actions" data-proto-state="draftnm"><button type="button" class="btn btn--secondary">Save draft</button><button type="button" class="btn btn--primary" data-modal-open="m-finalise-release">Finalise decision</button></div>
+      <div class="decision-bar__actions" data-proto-state="error"><button type="button" class="btn btn--secondary">Save draft</button><button type="button" class="btn btn--primary" data-pg-focus="error-summary">Finalise decision</button></div>
+      <div class="decision-bar__actions" data-proto-state="returned"><button type="button" class="btn btn--secondary">Save draft</button><button type="button" class="btn btn--primary" data-modal-open="m-finalise-remark">Finalise re-mark</button></div>
+      <div class="decision-bar__actions" data-proto-state="exam"><button type="button" class="btn btn--secondary">Save draft</button><button type="button" class="btn btn--primary" disabled aria-describedby="exam-blocked">Finalise decision</button></div>
+      <div class="decision-bar__actions" data-proto-state="held"><a class="btn btn--secondary" href="assess-marking.html#state=draft">Next item in the queue</a></div>
+      <div class="decision-bar__actions" data-proto-state="released"><a class="btn btn--secondary" href="assess-marking.html#state=draftnm">Next item in the queue</a></div>
+
+      <button type="button" class="btn btn--primary decision-bar__open" data-modal-open="m-decision-sheet" data-proto-state="draft error draftnm returned exam">Decision</button>
+      <a class="btn btn--secondary decision-bar__open" href="assess-marking.html#state=draft" data-proto-state="held released">Next item in the queue</a>
+    </div>
+  </main>
+
+  <nav class="bottom-tabs" aria-label="Assessing">
+    <a class="bottom-tabs__item" href="assess-marking.html" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-inbox"/></svg>Queue</a>
+    <a class="bottom-tabs__item" href="assess-marking.html#state=returned"><svg class="icon" aria-hidden="true"><use href="#i-refresh"/></svg>Returned</a>
+    <a class="bottom-tabs__item" href="#main"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Status</a>
+  </nav>
+</div>
+
+<!-- ============================== DIALOGS AND SHEETS ============================== -->
+<dialog class="modal" id="m-finalise-held" aria-labelledby="mfh-t" data-modal-static>
+  <div class="modal__header"><h2 class="modal__title" id="mfh-t">Finalise this decision?</h2></div>
+  <div class="modal__body">
+    <p class="modal__consequence">This result will be HELD, not released. Lerato will not see it, and will not be told, until a moderator signs off 2026 Intake B. 1 learner is affected.</p>
+    <p>Lerato Mokoena · Task 3 · version 2 · <span class="tag tag--caution">Not yet competent</span> <span class="mono">5 of 8</span></p>
+    <ul class="modal__list">
+      <li>The decision is kept permanently. You cannot edit it. A moderator can return it to you for re-marking.</li>
+      <li>Every Not yet competent decision is included in the moderation sample.</li>
+      <li>Her 7 days to appeal and her 14 days to resubmit start on the day of release, not today.</li>
+      <li>You are finalising this decision as the assessor: Thandiwe Nkosi.</li>
+    </ul>
+    <label class="check"><input class="check__input" type="checkbox" id="ack-held"><span class="check__label">I understand that this decision cannot be edited after I finalise it.</span></label>
+  </div>
+  <div class="modal__footer"><button type="button" class="btn btn--secondary" data-modal-close autofocus>Keep editing</button><button type="button" class="btn btn--primary" data-requires="#ack-held" data-modal-close data-pg-next="held">Finalise and hold the result</button></div>
+</dialog>
+
+<dialog class="modal" id="m-finalise-release" aria-labelledby="mfr-t" data-modal-static>
+  <div class="modal__header"><h2 class="modal__title" id="mfr-t">Finalise and release this result?</h2></div>
+  <div class="modal__body">
+    <p class="modal__consequence">This result will be RELEASED to Lerato now. She is notified straight away, and her 7 days to appeal start today. 1 learner is affected.</p>
+    <p>Lerato Mokoena · Task 3 · version 2 · <span class="tag tag--caution">Not yet competent</span> <span class="mono">5 of 8</span></p>
+    <ul class="modal__list">
+      <li>This cohort is not moderated, so no one checks the result before she sees it.</li>
+      <li>She can appeal until the end of Thursday 17 September 2026.</li>
+      <li>Her 14 days to resubmit start today. She must resubmit by the end of Thursday 24 September 2026.</li>
+      <li>The decision is kept permanently. You cannot edit it, and a released result cannot be taken back.</li>
+      <li>You are finalising this decision as the assessor: Thandiwe Nkosi.</li>
+    </ul>
+    <label class="check"><input class="check__input" type="checkbox" id="ack-release"><span class="check__label">I understand that Lerato will see this result now and that I cannot edit it.</span></label>
+  </div>
+  <div class="modal__footer"><button type="button" class="btn btn--secondary" data-modal-close autofocus>Keep editing</button><button type="button" class="btn btn--primary" data-requires="#ack-release" data-modal-close data-pg-next="released">Finalise and release the result</button></div>
+</dialog>
+
+<dialog class="modal" id="m-finalise-remark" aria-labelledby="mfm-t" data-modal-static>
+  <div class="modal__header"><h2 class="modal__title" id="mfm-t">Finalise this re-mark?</h2></div>
+  <div class="modal__body">
+    <p class="modal__consequence">This records a new decision. Your original decision of 10 Sep 2026 stays on record, marked as replaced. The result stays HELD: Lerato still cannot see it. 1 learner is affected.</p>
+    <ul class="modal__list">
+      <li>Anil Naidoo (moderator) and Zanele Dlamini (coordinator) are notified.</li>
+      <li>Anil reviews the item again. "Term 3 tasks" cannot be signed off until he has.</li>
+      <li>You are finalising this re-mark as the assessor: Thandiwe Nkosi.</li>
+    </ul>
+    <label class="check"><input class="check__input" type="checkbox" id="ack-remark"><span class="check__label">I have dealt with both required corrections.</span></label>
+  </div>
+  <div class="modal__footer"><button type="button" class="btn btn--secondary" data-modal-close autofocus>Keep editing</button><button type="button" class="btn btn--primary" data-requires="#ack-remark" data-modal-close>Finalise re-mark</button></div>
+</dialog>
+
+<dialog class="modal modal--sheet modal--full" id="m-decision-sheet" aria-labelledby="mds-t">
+  <div class="modal__header"><h2 class="modal__title" id="mds-t">Decision</h2><button type="button" class="btn btn--ghost btn--icon" data-modal-close aria-label="Close"><svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+  <div class="modal__body">
+    <p class="text-small text-muted">Lerato Mokoena · Task 3 · version 2 · rubric 5 / 8</p>
+    <fieldset class="fieldset"><legend class="fieldset__legend">Outcome <span class="field__required">(required)</span></legend><div class="choice-group">
+      <label class="choice choice--positive"><input class="choice__input" type="radio" name="outcome-sheet"><span class="choice__title">Competent</span></label>
+      <label class="choice choice--caution"><input class="choice__input" type="radio" name="outcome-sheet" checked><span class="choice__title">Not yet competent</span></label></div></fieldset>
+    <div class="field"><label class="field__label" for="ds-just">Justification <span class="field__required">(required)</span></label><textarea class="textarea" id="ds-just" rows="5" required>AC 3.1 is met. AC 3.2 is not yet met: the access register is described on page 6 but is not among the evidence files.</textarea></div>
+    <div class="field"><label class="field__label" for="ds-rem">What the learner must do <span class="field__required">(required)</span></label><textarea class="textarea" id="ds-rem" rows="3" required>Upload the access register for July and August 2026, and add one paragraph on who approves a request.</textarea></div>
+    <div class="field"><label class="field__label" for="ds-period">Resubmission period, in days from release <span class="field__required">(required)</span></label><p class="field__help" id="ds-period-h">A period, not a date. It starts on the day of release, so a hold does not use any of it up.</p><input class="input pg-period" id="ds-period" type="number" min="1" max="90" value="14" inputmode="numeric" required aria-describedby="ds-period-h"></div>
+    <p class="text-small text-muted">You are deciding as the assessor: Thandiwe Nkosi. Finalising asks you to confirm what happens to the result.</p>
+  </div>
+  <div class="modal__footer"><button type="button" class="btn btn--secondary" data-modal-close>Save draft</button><button type="button" class="btn btn--primary" data-modal-close data-pg-finalise>Finalise decision</button></div>
+</dialog>
+
+<dialog class="modal modal--sheet" id="m-workspaces" aria-labelledby="mws-t">
+  <div class="modal__header"><h2 class="modal__title" id="mws-t">Your workspaces</h2><button type="button" class="btn btn--ghost btn--icon" data-modal-close aria-label="Close"><svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+  <div class="modal__body">
+    <a class="menu__item" href="#main" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-house"/></svg><span class="menu__item-text">My work<span class="menu__item-meta">Everything waiting for you, across workspaces</span></span></a>
+    <a class="menu__item" href="assess-marking.html" aria-current="true" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-inbox"/></svg><span class="menu__item-text">Assessing<span class="menu__item-meta">2026 Intake B · 12 to mark · 1 returned to you</span></span><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></a>
+    <a class="menu__item" href="moderate-item.html" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-scales"/></svg><span class="menu__item-text">Moderating<span class="menu__item-meta">2026 Intake C · 3 sample items to review</span></span></a>
+  </div>
+</dialog>
+
+<div class="toast-region" role="status" aria-live="polite"></div>
+<script src="assets/ui.js"></script>
+<script src="assets/proto.js"></script>
+<script>
+/* Prototype only. Keeps in-page links from overwriting the #state= hash, and adjusts form values per prototype state. */
+(function () {
+  var $ = function (s, c) { return (c || document).querySelector(s); };
+  var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
+  function go(id) { var t = document.getElementById(id); if (!t) return; t.scrollIntoView(); t.focus({ preventScroll: true }); }
+
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('a[href^="#"]');
+    if (a) {
+      e.preventDefault(); go(a.getAttribute('href').slice(1));
+      if (a.classList.contains('section-switcher__item')) $$('.section-switcher__item').forEach(function (i) { if (i === a) i.setAttribute('aria-current', 'true'); else i.removeAttribute('aria-current'); });
+      return;
+    }
+    var b = e.target.closest('[data-pg-focus]'); if (b) { go(b.getAttribute('data-pg-focus')); return; }
+    b = e.target.closest('[data-pg-next]'); if (b) { location.hash = 'state=' + b.getAttribute('data-pg-next'); window.scrollTo(0, 0); return; }
+    b = e.target.closest('[data-pg-finalise]');
+    if (b) { var s = document.body.getAttribute('data-proto-current'); var id = { draft: 'm-finalise-held', draftnm: 'm-finalise-release', returned: 'm-finalise-remark' }[s]; if (id) TakusaniUI.openModal(id); else if (s === 'error') go('error-summary'); }
+  });
+
+  var forms = ['ws-rubric', 'ws-feedback', 'ws-decision'].map(function (id) { return document.getElementById(id); });
+  function syncRemediation() { var nyc = $('input[name="outcome"][value="nyc"]'); $('#d-remediation').hidden = !nyc.checked; }
+  $$('input[name="outcome"]').forEach(function (r) { r.addEventListener('change', syncRemediation); });
+
+  function apply(state) {
+    forms.forEach(function (f) { f.reset(); });
+    var just = $('#d-just'), readOnly = state === 'held' || state === 'released';
+    if (state === 'error') { just.value = ''; just.setAttribute('aria-invalid', 'true'); just.setAttribute('aria-describedby', 'd-just-h d-just-err'); }
+    else { just.removeAttribute('aria-invalid'); just.setAttribute('aria-describedby', 'd-just-h'); }
+    if (state === 'exam') { $$('input[name="outcome"]').forEach(function (r) { r.checked = false; }); just.value = ''; $('#d-rem').value = ''; $('#fb-text').value = ''; }
+    $('#ws-rubric').classList.toggle('rubric--readonly', readOnly);
+    $$('#ws-rubric input, #ws-rubric textarea, #ws-feedback textarea').forEach(function (el) { el.disabled = readOnly; });
+    syncRemediation();
+  }
+  document.addEventListener('proto:state', function (e) { apply(e.detail.state); });
+  apply(document.body.getAttribute('data-proto-current') || 'draft');
+})();
+</script>
+</body>
+</html>

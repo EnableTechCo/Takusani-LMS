@@ -34,6 +34,8 @@ This document maps every identified business rule, functional requirement, non-f
 | CR-17 | The SRS does not say when an attempt started near the window close expires | The earlier of start plus duration and window close, stated at start | ADR-023 |
 | CR-18 | The SRS gives no administrative route to correct a wrongly released outcome; in an unmoderated cohort release is immediate | `correction` decision under dual control, original retained (BR-03) | Correction route; compensating ledger entries |
 | CR-19 | FR-511 says sign-off releases "every result in the cohort", which would release decisions that were never eligible for the sample | Sign-off releases exactly the frozen population; later decisions wait for the next cycle | ADR-019; archival requires no pending or held result |
+| CR-20 | FR-104 says the system shall reject a role assignment that would place one user as Assessor and Moderator on the same assessment instance, but roles are assigned by scope, not per instance, and BR-01 expressly allows one person to assess some work and moderate other work | Product owner decision, 21 September 2026: advise at role assignment, reject at allocation, naming the conflict in both | Assignment returns `advisories[]`; allocation returns `422 separation_of_duties_conflict` (U-01) |
+| CR-21 | FR-313 and NFR-07 require a server-authoritative timer, while WCAG 2.2.1 requires time limits to be adjustable unless essential; the SRS has no accommodation mechanism | Product owner decision, 21 September 2026: per-learner accommodations granted before the sitting | `exam_accommodations`, snapshotted on the attempt (U-02) |
 
 ## Business rules
 
@@ -159,7 +161,7 @@ The matrix above traces each requirement to its owning component. The requiremen
 | Requirement | What it specifically needs | Design element | Validation |
 |---|---|---|---|
 | FR-103 | Bulk intake import with replay safety | `import_batches`, `import_rows`; capacity scenario 5 | Bulk import load test; idempotency replay test |
-| FR-104 | Reject a conflicting allocation and name the conflict | Allocation commands; `422 separation_of_duties_conflict` with `conflicts[]`; allocation lives only on the work item | Transaction test 16 |
+| FR-104 | Reject a conflicting allocation and name the conflict; advise at role assignment (CR-20) | Allocation commands; `422 separation_of_duties_conflict` with `conflicts[]`; assignment `advisories[]`; allocation lives only on the work item | Transaction test 16 |
 | FR-105 | Reject a role change that breaches BR-01/BR-02 on active work | Role change and deactivation refused while open allocations exist; reallocation commands | Transaction tests 9 and 21 |
 | FR-106 | Lock on failed sign-ins; administrator unlock and reset; notify | `sign_in_failures`; sign-in-only, self-expiring lock (ADR-026); unlock route | Transaction test 20 |
 | FR-204 | Tag material to a module | `modules` | LEARN-204 |
@@ -242,5 +244,5 @@ UC-SA01–UC-SA06, UC-F08, UC-A06, UC-M05–UC-M06, UC-C07, UC-L10–UC-L13, and
 
 The matrix contains all five business rules, every functional requirement from FR-101 through FR-1007 (100 rows), and NFR-01 through NFR-11. No supplied use case is omitted. Requirements whose source use-case definitions are missing are explicitly identified in CR-05.
 
-A requirement-by-requirement review against SRS version 1.0 found that component-level tracing had hidden requirements with no specific design element. Those are now listed under "Requirement-specific coverage". The independent architecture review of 18 September 2026 then found defects in how several of them, and parts of the original design, were met; the corrections are recorded in ADR-019 to ADR-027 and indexed in the [fixes and decisions register](LMS-design-fixes-and-decisions.md). CR-09 through CR-19 record the SRS ambiguities the two reviews exposed. SRS assumptions AS-01 through AS-07 are inputs rather than requirements: AS-02, AS-03, and AS-04 shape the appeal and credit design, and AS-06 is a go-live gate.
+A requirement-by-requirement review against SRS version 1.0 found that component-level tracing had hidden requirements with no specific design element. Those are now listed under "Requirement-specific coverage". The independent architecture review of 18 September 2026 then found defects in how several of them, and parts of the original design, were met; the corrections are recorded in ADR-019 to ADR-027 and indexed in the [fixes and decisions register](LMS-design-fixes-and-decisions.md). CR-09 through CR-19 record the SRS ambiguities the two reviews exposed, and CR-20 and CR-21 those raised by the UI design work. SRS assumptions AS-01 through AS-07 are inputs rather than requirements: AS-02, AS-03, and AS-04 shape the appeal and credit design, and AS-06 is a go-live gate.
 

@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="en-ZA" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Appeal detail · Takusani LMS</title>
+<!-- Fonts: optional. The page is fully usable on the fallback stacks if this request fails (no web-font dependency for first paint). -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400..600&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap">
+<!-- Optional extended icon set (Phosphor Bold). Critical icons come from the inline sprite in ui.js. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/ui.css">
+<link rel="stylesheet" href="assets/proto.css">
+<link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+<style>
+/* Page-specific layout only. Tokens only. Not part of the component library. */
+.notice-preview { padding: var(--space-4); border: 1px dashed var(--color-border-strong); border-radius: var(--radius-md); background: var(--color-surface-subtle); font-size: var(--text-sm); }
+.notice-preview > * + * { margin-top: var(--space-2); }
+</style>
+</head>
+<body data-proto-screen="P0-16b" data-proto-title="Appeal detail" data-proto-frs="FR-604 FR-605 FR-608 FR-610 FR-611 BR-02 AS-02" data-proto-states="lodged:Awaiting admissibility|admitted:Admitted, choosing a reviewer|allocated:Allocated, under review|concluded:Concluded|refused:Other appeal: allocation refused|tier3:Other appeal: moderator excluded, tier 3 used">
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<div class="app-shell">
+  <header class="app-shell__topbar">
+    <a class="brand" href="index.html" aria-label="Takusani LMS, all prototype screens">
+      <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M7 0H25A7 7 0 0 1 32 7V25A7 7 0 0 1 25 32H7A7 7 0 0 1 0 25V7A7 7 0 0 1 7 0ZM7 8.5H25V12H17.75V24H14.25V12H7ZM8.25 17.5A1.75 1.75 0 1 0 11.75 17.5A1.75 1.75 0 1 0 8.25 17.5ZM20.25 17.5A1.75 1.75 0 1 0 23.75 17.5A1.75 1.75 0 1 0 20.25 17.5Z"/></svg>
+      <span class="brand__name">Takusani</span><span class="brand__suffix">LMS</span>
+    </a>
+    <span class="topbar__institution">Khanya Skills Institute</span>
+    <div class="topbar__context"><details class="menu-wrap" data-menu><summary class="context-select__button" aria-label="Cohort. Current: All my cohorts"><span class="context-select__label">Cohort</span><span class="context-select__value">All my cohorts</span><svg class="icon icon--sm" aria-hidden="true"><use href="#i-caret-down"/></svg></summary><div class="menu"><p class="menu__label">Coordinating</p><a class="menu__item" href="#main" data-toast="This screen is not part of the prototype" aria-current="true"><span class="menu__item-text">All my cohorts</span><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></a><a class="menu__item" href="coordinate-cohort-setup.html#state=active"><span class="menu__item-text">2026 Intake B<span class="menu__item-meta">Certificate in Business Administration · Active</span></span><span class="tag tag--plain">Moderated</span></a><a class="menu__item" href="#main" data-toast="This screen is not part of the prototype"><span class="menu__item-text">2026 Intake C<span class="menu__item-meta">Certificate in Business Administration · Active</span></span><span class="tag tag--plain">Not moderated</span></a><div class="menu__divider" role="separator"></div><p class="menu__label">Archived</p><a class="menu__item" href="#main" data-toast="This screen is not part of the prototype"><span class="menu__item-text">2025 Intake A<span class="menu__item-meta">Certificate in Business Administration · Archived (read-only)</span></span></a></div></details></div>
+    <span class="topbar__spacer"></span>
+    <form class="topbar__search" role="search" action="#main" method="get" onsubmit="return false"><label class="input-icon"><span class="u-visually-hidden">Search</span><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><input class="input" type="search" name="q" placeholder="Search"></label></form>
+    <div class="topbar__actions">
+      <a class="btn btn--ghost btn--icon" href="notifications.html" aria-label="Notifications, 3 unread"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg><span class="badge-count" aria-hidden="true">3</span></a>
+      <details class="menu-wrap" data-menu>
+        <summary class="btn btn--ghost btn--icon" aria-label="Account menu for Zanele Dlamini"><span class="avatar" aria-hidden="true">ZD</span></summary>
+        <div class="menu menu--end">
+          <div class="account__identity"><p class="account__name">Zanele Dlamini</p><p class="account__email">zanele.dlamini@khanya.example</p><ul class="account__roles"><li>Coordinator: Certificate in Business Administration</li></ul></div>
+          <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg>Profile</a>
+          <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg>Notification preferences</a>
+          <div class="menu__section"><fieldset class="fieldset"><legend class="fieldset__legend">Appearance</legend>
+            <div class="segmented">
+              <label class="segmented__option"><input type="radio" name="theme" value="light" data-theme-choice checked><span>Light</span></label>
+              <label class="segmented__option"><input type="radio" name="theme" value="dark" data-theme-choice><span>Dark</span></label>
+              <label class="segmented__option"><input type="radio" name="theme" value="auto" data-theme-choice><span>System</span></label>
+            </div></fieldset></div>
+          <div class="menu__divider" role="separator"></div>
+          <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-help"/></svg>Help</a>
+          <a class="menu__item" href="sign-in.html"><svg class="icon" aria-hidden="true"><use href="#i-sign-out"/></svg>Sign out</a>
+        </div>
+      </details>
+    </div>
+  </header>
+
+  <aside class="app-shell__sidenav" aria-label="Workspaces">
+    <nav class="sidenav" aria-label="Main navigation">
+      <div class="sidenav__group"><ul class="sidenav__list">
+        <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-house"/></svg><span class="sidenav__label">My work</span><span class="sidenav__short" aria-hidden="true">My work</span></a></li>
+      </ul></div>
+      <div class="sidenav__group"><h2 class="sidenav__heading">Coordinating</h2>
+        <ul class="sidenav__list">
+          <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg><span class="sidenav__label">Overview</span><span class="sidenav__short" aria-hidden="true">Overview</span></a></li>
+          <li><a class="sidenav__item" href="coordinate-cohort-setup.html#state=active"><svg class="icon" aria-hidden="true"><use href="#i-users"/></svg><span class="sidenav__label">Cohorts</span><span class="sidenav__short" aria-hidden="true">Cohorts</span></a></li>
+          <li><a class="sidenav__item" href="coordinate-appeals.html" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-scales"/></svg><span class="sidenav__label">Appeals</span><span class="sidenav__short" aria-hidden="true">Appeals</span><span class="sidenav__count" aria-label="3 appeals need your action">3</span></a></li>
+          <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-megaphone"/></svg><span class="sidenav__label">Notices</span><span class="sidenav__short" aria-hidden="true">Notices</span></a></li>
+          <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-help"/></svg><span class="sidenav__label">Queries</span><span class="sidenav__short" aria-hidden="true">Queries</span></a></li>
+          <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg><span class="sidenav__label">Logistics</span><span class="sidenav__short" aria-hidden="true">Logistics</span></a></li>
+          <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-chart"/></svg><span class="sidenav__label">Reports</span><span class="sidenav__short" aria-hidden="true">Reports</span></a></li>
+        </ul>
+      </div>
+    </nav>
+  </aside>
+
+  <main class="app-shell__main" id="main" tabindex="-1">
+    <div class="page">
+      <header class="page-header">
+        <nav aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="coordinate-appeals.html">Appeals</a></li><li aria-current="page"><span data-proto-state="!refused !tier3">APL-2026-0031</span><span data-proto-state="refused tier3">APL-2026-0029</span></li></ol></nav>
+        <p class="page-header__workspace">Coordinating</p>
+        <h1 class="page-header__title">Appeal <span data-proto-state="!refused !tier3">APL-2026-0031</span><span data-proto-state="refused tier3">APL-2026-0029</span></h1>
+        <div class="page-header__meta">
+          <span class="tag tag--info" data-proto-state="lodged">New. Needs admissibility check</span>
+          <span class="tag tag--info" data-proto-state="admitted refused tier3">Accepted. Needs a reviewer</span>
+          <span class="tag tag--info tag--shape-half" data-proto-state="allocated">Under review by Anil Naidoo</span>
+          <span class="tag tag--positive" data-proto-state="concluded">Concluded: amended upward</span>
+          <span data-proto-state="!refused !tier3">Lerato Mokoena · Task 3 · 2026 Intake B <span class="tag tag--plain">Moderated</span></span>
+          <span data-proto-state="refused tier3">Thabo Molefe · Task 3 · 2026 Intake C <span class="tag tag--plain">Not moderated</span></span>
+          <span>Remark request</span>
+        </div>
+      </header>
+
+      <div class="page-layout">
+        <div class="page-layout__main stack">
+
+          <!-- turnaround -->
+          <p class="deadline-line" data-proto-state="lodged admitted"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg><span>Lerato was promised a reply within 5 working days: <span class="deadline-line__date">by the end of Thursday 1 October 2026</span>. <span class="deadline-line__left">5 working days left</span>. Heritage Day, Thu 24 Sep, is not a working day.</span></p>
+          <p class="deadline-line deadline-line--soon" data-proto-state="allocated"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg><span>Reply due <span class="deadline-line__date">by the end of Thursday 1 October 2026</span>. <span class="deadline-line__left">2 working days left</span>. Anil Naidoo opened the review on Mon 28 Sep 2026.</span></p>
+          <p class="deadline-line deadline-line--closed" data-proto-state="concluded"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg><span>Concluded on Monday 5 October 2026, 2 working days after the promised day. This decision is final. There is no further appeal.</span></p>
+          <p class="deadline-line" data-proto-state="refused tier3"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg><span>Thabo was promised a reply <span class="deadline-line__date">by the end of Wednesday 30 September 2026</span>. <span class="deadline-line__left">4 working days left</span>. Accepted 2 days ago and still without a reviewer.</span></p>
+
+          <!-- ================= Lerato: grounds and result ================= -->
+          <section class="card" aria-labelledby="grounds-h" data-proto-state="!refused !tier3">
+            <div class="card__header"><h2 class="card__title" id="grounds-h">What Lerato asked for</h2><span class="text-meta">Lodged Thu 24 Sep 2026, 08:14 SAST</span></div>
+            <div class="card__body stack">
+              <dl class="dl dl--inline">
+                <div class="dl__row"><dt>Request</dt><dd>A remark. She ticked "I understand my mark can go down as well as up."</dd></div>
+                <div class="dl__row"><dt>Inside the window?</dt><dd>Yes. Released Tue 22 Sep 2026, 14:05 SAST. The window runs to the end of Tue 29 Sep 2026. Lodged on day 2 of 7.</dd></div>
+                <div class="dl__row"><dt>Earlier remark on this result?</dt><dd>None. Only one remark is allowed for each result.</dd></div>
+              </dl>
+              <div><p class="text-subheading">Her grounds, as she wrote them</p>
+                <div class="prose u-mt-2"><blockquote><p>Criterion 3.2 was marked as partly met because the access register was missing. The register for July and August is in my version 2 upload as the third file, Access-register.pdf, and page 6 of my portfolio refers to it. I think the third file was not opened. I am asking for my work to be marked again with all three files.</p></blockquote></div></div>
+            </div>
+          </section>
+
+          <section class="card" aria-labelledby="result-h" data-proto-state="!refused !tier3">
+            <div class="card__header"><h2 class="card__title" id="result-h">The result being appealed</h2><a class="btn btn--secondary btn--sm" href="assess-marking.html#state=held">Open the marked work</a></div>
+            <div class="card__body stack">
+              <dl class="dl dl--inline">
+                <div class="dl__row"><dt>Item</dt><dd>Task 3: Workplace records portfolio · Unit 3 (8 credits) · version 2, submitted Fri 4 Sep 2026, 17:42, Late</dd></div>
+                <div class="dl__row"><dt>Moderation</dt><dd>Sampled as item 7 of "Term 3 tasks". Anil Naidoo returned it on 15 Sep 2026 and agreed with the re-mark on 18 Sep 2026. <a href="moderate-item.html">View the moderation record</a></dd></div>
+                <div class="dl__row"><dt>Decided and released</dt><dd>Decided 16 Sep 2026. Released 22 Sep 2026, 14:05 SAST, when "Term 3 tasks" was signed off.</dd></div>
+              </dl>
+              <ol class="history-list" aria-label="Decisions on this result, newest first">
+                <li class="history-list__item is-current" data-proto-state="concluded"><span class="history-list__badge">3</span><span class="history-list__title">Appeal decision: Competent · 7 of 8</span><span class="history-list__meta">5 Oct 2026, 15:40 · amended upward · reviewer Anil Naidoo · replaces decision 2</span><span class="history-list__actions"><span class="tag tag--plain">Current</span></span></li>
+                <li class="history-list__item" data-proto-state="concluded"><span class="history-list__badge">2</span><span class="history-list__title">Re-mark: Not yet competent · 5 of 8</span><span class="history-list__meta">16 Sep 2026, 10:05 · assessor Thandiwe Nkosi · kept on record</span></li>
+                <li class="history-list__item is-current" data-proto-state="!concluded"><span class="history-list__badge">2</span><span class="history-list__title">Re-mark: Not yet competent · 5 of 8</span><span class="history-list__meta">16 Sep 2026, 10:05 · assessor Thandiwe Nkosi · after moderation returned it</span><span class="history-list__actions"><span class="tag tag--plain">Current</span></span></li>
+                <li class="history-list__item"><span class="history-list__badge">1</span><span class="history-list__title">Not yet competent · 5 of 8 (original)</span><span class="history-list__meta">10 Sep 2026, 11:20 · assessor Thandiwe Nkosi · kept on record</span></li>
+              </ol>
+            </div>
+          </section>
+
+          <!-- ================= lodged: admissibility ================= -->
+          <section class="card" aria-labelledby="adm-h" data-proto-state="lodged">
+            <div class="card__header"><h2 class="card__title" id="adm-h">Admissibility decision</h2></div>
+            <div class="card__body">
+              <form class="form" id="adm-form" novalidate onsubmit="return false">
+                <div class="error-summary" role="alert" tabindex="-1" id="adm-errors" hidden>
+                  <p class="error-summary__title">There is 1 thing to fix</p>
+                  <ul><li><a href="#adm-reason" id="adm-error-link">Enter the reason this appeal cannot be accepted</a></li></ul>
+                </div>
+                <fieldset class="fieldset" id="adm-choice">
+                  <legend class="fieldset__legend">Can this appeal be accepted? <span class="field__required">(required)</span></legend>
+                  <div class="choice-group choice-group--2">
+                    <label class="choice"><input class="choice__input" type="radio" name="adm" value="admit" checked><span class="choice__title">Admit</span><span class="choice__desc">Lerato is told today that her appeal was accepted. You then choose a reviewer who took no assessment decision on this work.</span></label>
+                    <label class="choice choice--caution"><input class="choice__input" type="radio" name="adm" value="inadmissible"><span class="choice__title">Record as inadmissible</span><span class="choice__desc">The appeal ends here. Lerato is told, with your reason, in the LMS and by email. This cannot be reversed.</span></label>
+                  </div>
+                </fieldset>
+                <div class="field">
+                  <label class="field__label" for="adm-reason">Reason, if inadmissible <span class="field__required">(required when inadmissible)</span></label>
+                  <p class="field__help" id="adm-reason-help">Lerato reads this word for word. Say which rule the appeal does not meet. Do not comment on her work.</p>
+                  <textarea class="textarea" id="adm-reason" rows="3" aria-describedby="adm-reason-help"></textarea>
+                  <p class="field__error" id="adm-reason-err" hidden><svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert-circle"/></svg>Enter a reason. An appeal cannot be recorded as inadmissible without one, because the learner must be told why.</p>
+                </div>
+                <div>
+                  <p class="text-subheading u-mb-4">What Lerato will be sent</p>
+                  <div class="notice-preview" aria-live="polite">
+                    <p><strong id="adm-preview-title">Your appeal APL-2026-0031 was accepted</strong></p>
+                    <p id="adm-preview-body">A reviewer who did not mark your work will mark Task 3 again. The mark can stay the same, go up or go down. That decision is final. We expect to reply by the end of Thursday 1 October 2026.</p>
+                    <p class="text-meta">In the LMS and by email to lerato.mokoena@example.org · cannot be switched off</p>
+                  </div>
+                </div>
+                <div class="form__actions"><button type="submit" class="btn btn--primary" id="adm-submit">Record decision</button><a class="btn btn--ghost" href="coordinate-appeals.html">Back to appeals</a></div>
+              </form>
+            </div>
+          </section>
+
+          <!-- ================= admitted: choose a reviewer (Lerato) ================= -->
+          <section class="card" aria-labelledby="alloc-h" data-proto-state="admitted">
+            <div class="card__header"><h2 class="card__title" id="alloc-h">Choose a reviewer</h2><span class="text-meta">List loaded Fri 25 Sep 2026, 10:04</span></div>
+            <div class="card__body">
+              <form class="form" onsubmit="return false">
+                <p class="text-small text-muted u-measure">People are listed in the order set by the appeals policy. Choose from the first group that has someone available. Anyone who took an assessment decision on this work is shown, but cannot be chosen.</p>
+                <fieldset class="candidate-list">
+                  <legend class="fieldset__legend">Reviewer for appeal APL-2026-0031 (Lerato Mokoena, Task 3)</legend>
+                  <div class="candidate-list__tier"><h3 class="candidate-list__tier-title">Tier 1: independent qualified internal reviewers</h3><p class="candidate-list__empty">No one available for Unit 3.</p></div>
+                  <div class="candidate-list__tier"><h3 class="candidate-list__tier-title">Tier 2: cohort moderator</h3>
+                    <label class="candidate"><input class="candidate__input" type="radio" name="reviewer" checked><span class="candidate__name">Anil Naidoo</span><span class="tag tag--plain">Moderator, Intake B</span><span class="candidate__meta">1 open review</span><span class="candidate__note">Moderated this item: returned it on 15 Sep 2026, agreed on 18 Sep 2026. He did not assess it, so he may review.</span></label></div>
+                  <div class="candidate-list__tier"><h3 class="candidate-list__tier-title">Tier 3: qualified assessors from other cohorts</h3>
+                    <label class="candidate"><input class="candidate__input" type="radio" name="reviewer" id="rv-nomvula"><span class="candidate__name">Nomvula Mahlangu</span><span class="tag tag--plain">Assessor, Intake C</span><span class="candidate__meta">1 open review</span><span class="candidate__note">Will be given access to this appeal only.</span></label></div>
+                  <div class="candidate-list__tier"><h3 class="candidate-list__tier-title">Cannot be chosen</h3>
+                    <div class="candidate is-excluded"><input class="candidate__input" type="radio" name="reviewer" disabled aria-label="Thandiwe Nkosi, cannot be chosen" aria-describedby="ex-1"><span class="candidate__name">Thandiwe Nkosi</span><span class="tag tag--plain">Assessor, Intake B</span><span class="candidate__reason" id="ex-1">Marked this work on 10 Sep 2026. Re-marked this work on 16 Sep 2026, after moderation returned it. Anyone who took an assessment decision on the work cannot review an appeal against it. Rule BR-02.</span></div>
+                    <div class="candidate is-excluded"><input class="candidate__input" type="radio" name="reviewer" disabled aria-label="Bongani Sithole, cannot be chosen" aria-describedby="ex-2"><span class="candidate__name">Bongani Sithole</span><span class="tag tag--plain">Assessor, Intake B</span><span class="candidate__reason" id="ex-2">Assesses in the same cohort, so he is not an independent reviewer, and he is not from another cohort. He took no decision on this work.</span></div></div>
+                </fieldset>
+                <div class="field">
+                  <label class="field__label" for="skip-reason">Reason for passing over an earlier group <span class="field__optional">(needed only if you choose Nomvula Mahlangu while Anil Naidoo is available)</span></label>
+                  <textarea class="textarea" id="skip-reason" rows="2"></textarea>
+                </div>
+                <div class="form__actions"><button type="button" class="btn btn--primary" data-modal-open="m-allocate">Allocate reviewer</button></div>
+              </form>
+            </div>
+          </section>
+
+          <!-- ================= allocated / under review ================= -->
+          <section class="card" aria-labelledby="rev-h" data-proto-state="allocated">
+            <div class="card__header"><h2 class="card__title" id="rev-h">Reviewer</h2><span class="tag tag--info tag--shape-half">Under review</span></div>
+            <div class="card__body stack">
+              <dl class="dl dl--inline">
+                <div class="dl__row"><dt>Reviewer</dt><dd>Anil Naidoo · Moderator, Intake B · tier 2 (cohort moderator who took no assessment decision on this work)</dd></div>
+                <div class="dl__row"><dt>Allocated</dt><dd>Fri 25 Sep 2026, 10:20 SAST by Zanele Dlamini. He was notified at 10:20.</dd></div>
+                <div class="dl__row"><dt>Opened</dt><dd>Mon 28 Sep 2026, 09:02 SAST</dd></div>
+                <div class="dl__row"><dt>He will record one of</dt><dd><span class="cluster"><span class="tag tag--shape-check">Concluded: upheld</span><span class="tag tag--positive">Concluded: amended upward</span><span class="tag tag--caution">Concluded: amended downward</span></span></dd></div>
+              </dl>
+              <div class="cluster"><button type="button" class="btn btn--secondary" data-toast="Reminder sent to Anil Naidoo" data-toast-meta="Tue 29 Sep 2026, 08:50">Send a reminder</button><button type="button" class="btn btn--secondary" data-proto-goto="admitted">Reallocate reviewer</button></div>
+              <p class="text-small text-muted u-measure">You cannot see the reviewer's working notes. While this review is open, Anil Naidoo's Moderator role cannot be ended: reallocate first.</p>
+            </div>
+          </section>
+
+          <!-- ================= concluded ================= -->
+          <section class="card" aria-labelledby="out-h" data-proto-state="concluded">
+            <div class="card__header"><h2 class="card__title" id="out-h">Outcome</h2><span class="tag tag--positive tag--lg">Concluded: amended upward</span></div>
+            <div class="card__body stack">
+              <dl class="dl dl--inline">
+                <div class="dl__row"><dt>New decision</dt><dd>Competent · 7 of 8. It was Not yet competent · 5 of 8.</dd></div>
+                <div class="dl__row"><dt>Recorded</dt><dd>Mon 5 Oct 2026, 15:40 SAST by Anil Naidoo, as the appeal reviewer</dd></div>
+                <div class="dl__row"><dt>What changed on the record</dt><dd>The appeal decision is decision 3 and is now the current one. Decisions 1 and 2 are retained and can still be read. Nothing was edited or deleted.</dd></div>
+                <div class="dl__row"><dt>Release</dt><dd>Released at once, 5 Oct 2026, 15:40. Appeal decisions are never held for moderation.</dd></div>
+                <div class="dl__row"><dt>Credits</dt><dd>Unit 3 was evaluated again. 8 credits awarded on 5 Oct 2026 (new ledger entry). Lerato's resubmission deadline of Tue 6 Oct 2026 no longer applies.</dd></div>
+              </dl>
+              <div><p class="text-subheading">The reviewer's reasons</p>
+                <p class="prose u-mt-2">I marked version 2 again with all three files. The access register for July and August is the third file and shows each request, the approval by the office manager and the date. Criterion 3.2 is met. Criterion 3.1 stays at Meets. Total 7 of 8, all criteria met: Competent.</p></div>
+              <details class="delivery-evidence" open>
+                <summary>Who was told</summary>
+                <ul class="delivery-evidence__list">
+                  <li class="delivery-evidence__row"><span class="delivery-evidence__channel">Lerato Mokoena: in the LMS, and email delivered</span><time class="delivery-evidence__time" datetime="2026-10-05T15:41:00+02:00">5 Oct 2026, 15:41</time></li>
+                  <li class="delivery-evidence__row"><span class="delivery-evidence__channel">Thandiwe Nkosi (assessor): in the LMS</span><time class="delivery-evidence__time" datetime="2026-10-05T15:40:00+02:00">5 Oct 2026, 15:40</time></li>
+                  <li class="delivery-evidence__row"><span class="delivery-evidence__channel">Zanele Dlamini (coordinator): in the LMS</span><time class="delivery-evidence__time" datetime="2026-10-05T15:40:00+02:00">5 Oct 2026, 15:40</time></li>
+                </ul>
+              </details>
+              <p class="text-small text-muted">This decision is final. No one can lodge an appeal against an appeal decision.</p>
+            </div>
+          </section>
+
+          <!-- ================= Other appeal (Thabo Molefe): refused and tier 3 ================= -->
+          <section class="card" aria-labelledby="g2-h" data-proto-state="refused tier3">
+            <div class="card__header"><h2 class="card__title" id="g2-h">What Thabo asked for, and the result</h2><span class="text-meta">Lodged Wed 23 Sep 2026, 09:12 SAST</span></div>
+            <div class="card__body stack">
+              <dl class="dl dl--inline">
+                <div class="dl__row"><dt>Request</dt><dd>A remark of Task 3: Workplace records portfolio. Accepted by Zanele Dlamini on Wed 23 Sep 2026, 14:30.</dd></div>
+                <div class="dl__row"><dt>Inside the window?</dt><dd>Yes. Intake C is not moderated, so the result was released when it was decided: Fri 18 Sep 2026, 16:10 SAST. Window to the end of Fri 25 Sep 2026.</dd></div>
+              </dl>
+              <div class="prose"><blockquote><p>My resubmission added the retention schedule that was asked for. The feedback says it is still missing. Please mark version 2 again.</p></blockquote></div>
+              <ol class="history-list" aria-label="Decisions on this result, newest first">
+                <li class="history-list__item is-current"><span class="history-list__badge">2</span><span class="history-list__title">Not yet competent · 5 of 8 (version 2)</span><span class="history-list__meta">18 Sep 2026, 16:10 · assessor Thandiwe Nkosi, marking for Intake C while Nomvula Mahlangu was on leave</span><span class="history-list__actions"><span class="tag tag--plain">Current</span></span></li>
+                <li class="history-list__item"><span class="history-list__badge">1</span><span class="history-list__title">Not yet competent · 4 of 8 (version 1)</span><span class="history-list__meta">28 Aug 2026, 12:30 · assessor Nomvula Mahlangu · kept on record</span></li>
+              </ol>
+            </div>
+          </section>
+
+          <section class="card" aria-labelledby="alloc2-h" data-proto-state="refused tier3">
+            <div class="card__header"><h2 class="card__title" id="alloc2-h">Choose a reviewer</h2><span class="text-meta"><span data-proto-state="refused">List reloaded Fri 25 Sep 2026, 09:48</span><span data-proto-state="tier3">List loaded Fri 25 Sep 2026, 09:48</span></span></div>
+            <div class="card__body">
+              <form class="form" onsubmit="return false">
+
+                <div class="conflict" role="alert" aria-labelledby="sod-h" data-proto-state="refused">
+                  <h3 class="conflict__title" id="sod-h" tabindex="-1" data-proto-focus><svg class="icon" aria-hidden="true"><use href="#i-scales"/></svg>This would break separation of duties</h3>
+                  <p class="conflict__body">Thandiwe Nkosi cannot review this appeal because she marked this work. The appeal was not allocated and nothing was changed. The list on your screen was out of date. It has been reloaded below, and she is now shown under Cannot be chosen.</p>
+                  <dl class="conflict__evidence dl">
+                    <div class="dl__row"><dt>Conflicting decision</dt><dd><a href="assess-marking.html#state=held">Not yet competent · 5 of 8, 18 Sep 2026</a>, Thabo Molefe, Task 3, version 2</dd></div>
+                    <div class="dl__row"><dt>Her role in that decision</dt><dd>Assessor, allocated to this one item in 2026 Intake C</dd></div>
+                    <div class="dl__row"><dt>Allocation refused</dt><dd>Reviewer of appeal APL-2026-0029</dd></div>
+                  </dl>
+                  <p class="conflict__rule">BR-02 · separation_of_duties_conflict · Reference 8f41c2e0 · Fri 25 Sep 2026, 09:48 SAST</p>
+                  <div class="conflict__actions"><a class="btn btn--primary" href="#rv2-bongani">Choose another reviewer</a><a class="btn btn--ghost" href="assess-marking.html#state=held">View the decision</a></div>
+                </div>
+
+                <p class="text-small text-muted u-measure">People are listed in the order set by the appeals policy. Choose from the first group that has someone available. Anyone who took an assessment decision on this work is shown, but cannot be chosen.</p>
+                <fieldset class="candidate-list">
+                  <legend class="fieldset__legend">Reviewer for appeal APL-2026-0029 (Thabo Molefe, Task 3)</legend>
+                  <div class="candidate-list__tier"><h3 class="candidate-list__tier-title">Tier 1: independent qualified internal reviewers</h3><p class="candidate-list__empty">No one available for Unit 3.</p></div>
+                  <div class="candidate-list__tier"><h3 class="candidate-list__tier-title">Tier 2: cohort moderator</h3><p class="candidate-list__empty">No one available. The cohort moderator, Thandiwe Nkosi, marked this work. She is listed under Cannot be chosen.</p></div>
+                  <div class="candidate-list__tier"><h3 class="candidate-list__tier-title">Tier 3: qualified assessors from other cohorts</h3>
+                    <label class="candidate"><input class="candidate__input" type="radio" name="reviewer2" id="rv2-bongani" checked><span class="candidate__name">Bongani Sithole</span><span class="tag tag--plain">Assessor, Intake B</span><span class="candidate__meta">0 open reviews</span><span class="candidate__note">Took no decision on this work. Will be given access to this appeal only, not to the rest of Intake C.</span></label></div>
+                  <div class="candidate-list__tier"><h3 class="candidate-list__tier-title">Cannot be chosen</h3>
+                    <div class="candidate is-excluded"><input class="candidate__input" type="radio" name="reviewer2" disabled aria-label="Thandiwe Nkosi, cannot be chosen" aria-describedby="ex2-1"><span class="candidate__name">Thandiwe Nkosi</span><span class="tag tag--plain">Moderator, Intake C</span><span class="candidate__reason" id="ex2-1">Marked this work on 18 Sep 2026 (version 2), while Nomvula Mahlangu was on leave. Anyone who took an assessment decision on the work cannot review an appeal against it. Rule BR-02.</span></div>
+                    <div class="candidate is-excluded"><input class="candidate__input" type="radio" name="reviewer2" disabled aria-label="Nomvula Mahlangu, cannot be chosen" aria-describedby="ex2-2"><span class="candidate__name">Nomvula Mahlangu</span><span class="tag tag--plain">Assessor, Intake C</span><span class="candidate__reason" id="ex2-2">Marked this work on 28 Aug 2026 (version 1). Every assessor of any version is excluded, not only the latest one.</span></div></div>
+                </fieldset>
+                <div class="form__actions"><button type="button" class="btn btn--primary" data-modal-open="m-allocate2">Allocate reviewer</button></div>
+              </form>
+            </div>
+          </section>
+        </div>
+
+        <!-- ================= Aside ================= -->
+        <aside class="page-layout__aside stack" aria-label="Timeline and records">
+          <section aria-labelledby="tl-h" data-proto-state="!refused !tier3">
+            <h2 class="text-subheading u-mb-4" id="tl-h">Timeline</h2>
+            <ol class="stepper" id="appeal-steps" aria-label="Progress of appeal APL-2026-0031">
+              <li class="stepper__step"><span class="stepper__label">Lodged<span class="u-visually-hidden" data-step-text></span></span><span class="stepper__meta">24 Sep 2026, 08:14</span><span class="stepper__body">Remark of Task 3. Receipt sent to Lerato.</span></li>
+              <li class="stepper__step"><span class="stepper__label">Admissibility check<span class="u-visually-hidden" data-step-text></span></span><span class="stepper__meta" data-proto-state="!lodged">25 Sep 2026, 10:02 · admitted</span><span class="stepper__body" data-proto-state="lodged">Waiting for you.</span><span class="stepper__body" data-proto-state="!lodged">Admitted by Zanele Dlamini. Lerato notified.</span></li>
+              <li class="stepper__step"><span class="stepper__label">Reviewer allocated<span class="u-visually-hidden" data-step-text></span></span><span class="stepper__meta" data-proto-state="allocated concluded">25 Sep 2026, 10:20</span><span class="stepper__body" data-proto-state="allocated concluded">Anil Naidoo, tier 2.</span></li>
+              <li class="stepper__step"><span class="stepper__label">Under review<span class="u-visually-hidden" data-step-text></span></span><span class="stepper__meta" data-proto-state="allocated concluded">Opened 28 Sep 2026, 09:02</span></li>
+              <li class="stepper__step"><span class="stepper__label">Concluded<span class="u-visually-hidden" data-step-text></span></span><span class="stepper__meta" data-proto-state="concluded">5 Oct 2026, 15:40 · amended upward</span><span class="stepper__body" data-proto-state="!concluded">Upheld, amended upward or amended downward. Final.</span></li>
+            </ol>
+          </section>
+
+          <details class="delivery-evidence" open data-proto-state="!refused !tier3">
+            <summary>How Lerato was told of the result</summary>
+            <ul class="delivery-evidence__list">
+              <li class="delivery-evidence__row"><span class="delivery-evidence__channel">In the LMS</span><time class="delivery-evidence__time" datetime="2026-09-22T14:05:00+02:00">22 Sep 2026, 14:05</time></li>
+              <li class="delivery-evidence__row"><span class="delivery-evidence__channel">Email: delivered</span><time class="delivery-evidence__time" datetime="2026-09-22T14:06:00+02:00">22 Sep 2026, 14:06</time></li>
+              <li class="delivery-evidence__row"><span class="delivery-evidence__channel">First opened by her</span><time class="delivery-evidence__time" datetime="2026-09-22T18:31:00+02:00">22 Sep 2026, 18:31</time></li>
+            </ul>
+          </details>
+
+          <section aria-labelledby="log-h">
+            <h2 class="text-subheading u-mb-4" id="log-h">Appeal record</h2>
+            <ol class="log log--boxed" aria-label="Appeal record, oldest first. Times in SAST.">
+              <li class="log__item" data-proto-state="!refused !tier3"><time class="log__time" datetime="2026-09-24T08:14:00+02:00">24 Sep 2026, 08:14</time><div class="log__event"><span class="log__actor">Lerato Mokoena</span> lodged a remark request. Window snapshot: closes at the end of 29 Sep 2026.</div></li>
+              <li class="log__item" data-proto-state="admitted allocated concluded"><time class="log__time" datetime="2026-09-25T10:02:00+02:00">25 Sep 2026, 10:02</time><div class="log__event"><span class="log__actor">Zanele Dlamini</span> admitted the appeal. Lerato notified.</div></li>
+              <li class="log__item" data-proto-state="allocated concluded"><time class="log__time" datetime="2026-09-25T10:20:00+02:00">25 Sep 2026, 10:20</time><div class="log__event"><span class="log__actor">Zanele Dlamini</span> allocated Anil Naidoo as reviewer (tier 2). No conflicts found.</div></li>
+              <li class="log__item" data-proto-state="allocated concluded"><time class="log__time" datetime="2026-09-28T09:02:00+02:00">28 Sep 2026, 09:02</time><div class="log__event"><span class="log__actor">Anil Naidoo</span> opened the review.</div></li>
+              <li class="log__item" data-proto-state="concluded"><time class="log__time" datetime="2026-10-05T15:40:00+02:00">5 Oct 2026, 15:40</time><div class="log__event"><span class="log__actor">Anil Naidoo</span> concluded the appeal: amended upward. Decision 3 replaces decision 2 as current. Decisions 1 and 2 retained.</div></li>
+              <li class="log__item" data-proto-state="refused tier3"><time class="log__time" datetime="2026-09-23T09:12:00+02:00">23 Sep 2026, 09:12</time><div class="log__event"><span class="log__actor">Thabo Molefe</span> lodged a remark request.</div></li>
+              <li class="log__item" data-proto-state="refused tier3"><time class="log__time" datetime="2026-09-23T14:30:00+02:00">23 Sep 2026, 14:30</time><div class="log__event"><span class="log__actor">Zanele Dlamini</span> admitted the appeal. Thabo notified.</div></li>
+              <li class="log__item log__item--marked" data-proto-state="refused"><time class="log__time" datetime="2026-09-25T09:48:00+02:00">25 Sep 2026, 09:48</time><div class="log__event"><span class="log__actor">Zanele Dlamini</span> tried to allocate Thandiwe Nkosi as reviewer. Refused: she marked this work on 18 Sep 2026.<div class="log__detail">separation_of_duties_conflict · 8f41c2e0</div></div></li>
+            </ol>
+          </section>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <nav class="bottom-tabs" aria-label="Coordinating, phone tabs">
+    <a class="bottom-tabs__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg>Overview</a>
+    <a class="bottom-tabs__item" href="coordinate-cohort-setup.html#state=active"><svg class="icon" aria-hidden="true"><use href="#i-users"/></svg>Cohorts</a>
+    <a class="bottom-tabs__item" href="coordinate-appeals.html" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-scales"/></svg>Appeals</a>
+    <a class="bottom-tabs__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-megaphone"/></svg>Notices</a>
+    <a class="bottom-tabs__item" href="#main" data-modal-open="m-more"><svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg>More</a>
+  </nav>
+</div>
+
+<dialog class="modal modal--sheet" id="m-more" aria-labelledby="m-more-t">
+  <div class="modal__header"><h2 class="modal__title" id="m-more-t">More in Coordinating</h2><button type="button" class="btn btn--ghost btn--icon" data-modal-close aria-label="Close"><svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+  <div class="modal__body">
+    <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-help"/></svg><span class="menu__item-text">Queries</span></a>
+    <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg><span class="menu__item-text">Logistics</span></a>
+    <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-chart"/></svg><span class="menu__item-text">Reports</span></a>
+    <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><span class="menu__item-text">Search</span></a>
+  </div>
+</dialog>
+<dialog class="modal" id="m-admit" aria-labelledby="m-ad-t" data-modal-static>
+  <div class="modal__header"><h2 class="modal__title" id="m-ad-t">Admit appeal APL-2026-0031?</h2></div>
+  <div class="modal__body">
+    <p class="modal__consequence">Lerato Mokoena will be told now, in the LMS and by email, that her appeal was accepted. Her one remark for this result is then used.</p>
+    <ul class="modal__list"><li>You choose the reviewer next. The appeal shows as "Accepted. Needs a reviewer" until you do.</li><li>You are deciding this as the coordinator: Zanele Dlamini.</li></ul>
+  </div>
+  <div class="modal__footer"><button type="button" class="btn btn--secondary" data-modal-close autofocus>Go back</button><button type="button" class="btn btn--primary" data-modal-close data-proto-goto="admitted">Admit and notify Lerato</button></div>
+</dialog>
+
+<dialog class="modal" id="m-inadmissible" aria-labelledby="m-in-t" data-modal-static>
+  <div class="modal__header"><h2 class="modal__title" id="m-in-t">Record APL-2026-0031 as inadmissible?</h2></div>
+  <div class="modal__body">
+    <p class="modal__consequence">This ends the appeal and cannot be reversed. Lerato Mokoena will be told now, in the LMS and by email, with your reason word for word.</p>
+    <div class="notice-preview"><p><strong>Your reason</strong></p><p id="m-in-reason"></p></div>
+    <label class="check"><input class="check__input" type="checkbox" id="ack-in"><span class="check__label">I have checked the reason. It names the rule and does not comment on her work.</span></label>
+  </div>
+  <div class="modal__footer"><button type="button" class="btn btn--secondary" data-modal-close autofocus>Go back</button><button type="button" class="btn btn--primary" data-requires="#ack-in" data-modal-close data-toast="Recorded as inadmissible. Lerato Mokoena notified" data-toast-meta="APL-2026-0031">Record as inadmissible</button></div>
+</dialog>
+
+<dialog class="modal" id="m-allocate" aria-labelledby="m-al-t" data-modal-static>
+  <div class="modal__header"><h2 class="modal__title" id="m-al-t">Allocate this remark to Anil Naidoo?</h2></div>
+  <div class="modal__body">
+    <p class="modal__consequence">Anil Naidoo will be notified and will mark Lerato Mokoena's Task 3 again. His decision is final and can move the mark up or down.</p>
+    <ul class="modal__list"><li>The LMS checks again, at this moment, that he took no assessment decision on this work. If he did, the allocation is refused and nothing changes.</li><li>You can reallocate later if he becomes unavailable.</li></ul>
+  </div>
+  <div class="modal__footer"><button type="button" class="btn btn--secondary" data-modal-close autofocus>Go back</button><button type="button" class="btn btn--primary" data-modal-close data-proto-goto="allocated">Allocate and notify him</button></div>
+</dialog>
+
+<dialog class="modal" id="m-allocate2" aria-labelledby="m-al2-t" data-modal-static>
+  <div class="modal__header"><h2 class="modal__title" id="m-al2-t">Allocate this remark to Bongani Sithole?</h2></div>
+  <div class="modal__body">
+    <p class="modal__consequence">Bongani Sithole will be notified and given access to this one appeal in 2026 Intake C. He will mark Thabo Molefe's Task 3 again. His decision is final and can move the mark up or down.</p>
+    <ul class="modal__list"><li>He is a tier 3 reviewer: tiers 1 and 2 have no one who can review this appeal.</li><li>His access ends when the appeal is concluded.</li></ul>
+  </div>
+  <div class="modal__footer"><button type="button" class="btn btn--secondary" data-modal-close autofocus>Go back</button><button type="button" class="btn btn--primary" data-modal-close data-toast="Allocated to Bongani Sithole. He has been notified" data-toast-meta="APL-2026-0029 · tier 3">Allocate and notify him</button></div>
+</dialog>
+
+<div class="toast-region" role="status" aria-live="polite"></div>
+<script src="assets/ui.js"></script>
+<script src="assets/proto.js"></script>
+<script>
+/* Prototype only. Keeps placeholder links and in-page anchors from replacing the state in the URL hash,
+   lets a button move the screen to another prototype state, and moves focus to a refusal when a state shows one. */
+(function () {
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest) return;
+    var a = e.target.closest('a[href^="#"]');
+    if (a && a.getAttribute('href').indexOf('#state=') !== 0) {
+      e.preventDefault();
+      var t = document.getElementById(a.getAttribute('href').slice(1));
+      if (t && !a.hasAttribute('data-toast') && !a.hasAttribute('data-modal-open')) { t.scrollIntoView(); t.focus({ preventScroll: true }); }
+    }
+    var g = e.target.closest('[data-proto-goto]');
+    if (g) location.hash = 'state=' + g.getAttribute('data-proto-goto');
+  });
+  function settle(initial) {
+    setTimeout(function () {
+      var f = Array.prototype.filter.call(document.querySelectorAll('[data-proto-focus]'), function (el) { return !el.closest('[hidden]'); })[0];
+      if (f) { f.focus(); return; }
+      if (!initial) { window.scrollTo(0, 0); document.getElementById('main').focus({ preventScroll: true }); }
+    }, 0);
+  }
+  document.addEventListener('proto:state', function () { settle(false); });
+  if (/state=/.test(location.hash)) settle(true);
+})();
+</script>
+<script>
+/* Prototype only: timeline classes for each state, and the admissibility form's validation and preview. */
+(function () {
+  var current = { lodged: 1, admitted: 2, allocated: 3, concluded: 5 };
+  function steps() {
+    var cur = current[document.body.getAttribute('data-proto-current')]; if (cur === undefined) return;
+    Array.prototype.forEach.call(document.querySelectorAll('#appeal-steps > li'), function (li, i) {
+      var done = i < cur, now = i === cur;
+      li.classList.toggle('is-complete', done); li.classList.toggle('is-current', now);
+      if (now) li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current');
+      li.querySelector('[data-step-text]').textContent = done ? ' (done)' : now ? ' (current step)' : ' (not yet)';
+    });
+  }
+  document.addEventListener('proto:state', steps); steps();
+
+  var form = document.getElementById('adm-form'), reason = document.getElementById('adm-reason');
+  var summary = document.getElementById('adm-errors'), err = document.getElementById('adm-reason-err');
+  function choice() { return form.querySelector('input[name="adm"]:checked').value; }
+  function clearError() { summary.hidden = true; err.hidden = true; reason.removeAttribute('aria-invalid'); reason.setAttribute('aria-describedby', 'adm-reason-help'); }
+  function preview() {
+    var inadm = choice() === 'inadmissible';
+    document.getElementById('adm-preview-title').textContent = inadm ? 'Your appeal APL-2026-0031 was not accepted' : 'Your appeal APL-2026-0031 was accepted';
+    document.getElementById('adm-preview-body').textContent = inadm
+      ? 'Reason from your coordinator: ' + (reason.value.trim() || '[your reason appears here]') + ' Your result for Task 3 stays as it is. You can still resubmit until the end of Tuesday 6 October 2026.'
+      : 'A reviewer who did not mark your work will mark Task 3 again. The mark can stay the same, go up or go down. That decision is final. We expect to reply by the end of Thursday 1 October 2026.';
+  }
+  form.addEventListener('change', function () { clearError(); preview(); });
+  reason.addEventListener('input', function () { if (reason.value.trim()) clearError(); preview(); });
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (choice() === 'admit') { window.TakusaniUI.openModal('m-admit', document.getElementById('adm-submit')); return; }
+    if (!reason.value.trim()) {
+      summary.hidden = false; err.hidden = false; reason.setAttribute('aria-invalid', 'true');
+      reason.setAttribute('aria-describedby', 'adm-reason-help adm-reason-err'); summary.focus(); return;
+    }
+    document.getElementById('m-in-reason').textContent = reason.value.trim();
+    window.TakusaniUI.openModal('m-inadmissible', document.getElementById('adm-submit'));
+  });
+})();
+</script>
+</body>
+</html>

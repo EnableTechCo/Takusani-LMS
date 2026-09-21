@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en-ZA" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sign off: Unit 3 portfolios · Moderating · Takusani LMS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400..600&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/ui.css">
+<link rel="stylesheet" href="assets/proto.css">
+<link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+<style>
+/* Page-level layout only (prefix pg-). Tokens only. */
+ul.pg-list { padding-left: var(--space-5); list-style: disc; display: grid; gap: var(--space-2); max-width: var(--measure); }
+.pg-signoff { max-width: var(--width-form); }
+</style>
+</head>
+<body data-proto-screen="P0-13" data-proto-title="Cycle sign-off"
+      data-proto-frs="FR-510 FR-511 (FR-505 FR-508)"
+      data-proto-states="blocked:Blocked by outstanding returns|ready:Ready to sign off|signed:Signed off (read-only)">
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<div class="app-shell">
+  <header class="app-shell__topbar">
+    <a class="brand" href="index.html" aria-label="Takusani LMS, all prototype screens">
+      <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M7 0H25A7 7 0 0 1 32 7V25A7 7 0 0 1 25 32H7A7 7 0 0 1 0 25V7A7 7 0 0 1 7 0ZM7 8.5H25V12H17.75V24H14.25V12H7ZM8.25 17.5A1.75 1.75 0 1 0 11.75 17.5A1.75 1.75 0 1 0 8.25 17.5ZM20.25 17.5A1.75 1.75 0 1 0 23.75 17.5A1.75 1.75 0 1 0 20.25 17.5Z"/></svg>
+      <span class="brand__name">Takusani</span><span class="brand__suffix">LMS</span>
+    </a>
+    <span class="topbar__institution">Khanya Skills Institute</span>
+    <button type="button" class="btn btn--secondary btn--sm topbar__workspace" data-modal-open="m-workspaces">Moderating<svg class="icon icon--sm" aria-hidden="true"><use href="#i-caret-down"/></svg></button>
+    <div class="topbar__context"><details class="menu-wrap" data-menu>
+      <summary class="context-select__button" aria-label="Cohort filter. Current: All my cohorts"><span class="context-select__label">Cohort</span><span class="context-select__value">All my cohorts</span><svg class="icon icon--sm" aria-hidden="true"><use href="#i-caret-down"/></svg></summary>
+      <div class="menu">
+        <p class="menu__label">Assessing</p>
+        <a class="menu__item" href="assess-marking.html"><span class="menu__item-text">2026 Intake B<span class="menu__item-meta">Certificate in Business Administration · Active</span></span><span class="tag tag--plain">Moderated</span></a>
+        <p class="menu__label">Moderating</p>
+        <a class="menu__item" href="#main" aria-current="true"><span class="menu__item-text">All my cohorts</span><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></a>
+        <a class="menu__item" href="#main"><span class="menu__item-text">2026 Intake C<span class="menu__item-meta">Certificate in Business Administration · Active</span></span><span class="tag tag--plain">Moderated</span></a>
+      </div>
+    </details></div>
+    <span class="topbar__spacer"></span>
+    <form class="topbar__search" role="search" action="#main" method="get"><label class="input-icon"><span class="u-visually-hidden">Search learners and items in your allocation</span><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><input class="input" type="search" name="q" placeholder="Search"></label></form>
+    <div class="topbar__actions">
+      <a class="btn btn--ghost btn--icon" href="notifications.html" aria-label="Notifications, 2 unread"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg><span class="badge-count" aria-hidden="true">2</span></a>
+      <details class="menu-wrap" data-menu>
+        <summary class="btn btn--ghost btn--icon" aria-label="Account menu for Thandiwe Nkosi"><span class="avatar" aria-hidden="true">TN</span></summary>
+        <div class="menu menu--end">
+          <div class="account__identity"><p class="account__name">Thandiwe Nkosi</p><p class="account__email">thandiwe.nkosi@khanya.example</p><ul class="account__roles"><li>Assessor: 2026 Intake B</li><li>Moderator: 2026 Intake C</li></ul></div>
+          <a class="menu__item" href="#main"><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg>Profile</a>
+          <a class="menu__item" href="notifications.html"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg>Notification preferences</a>
+          <div class="menu__section"><fieldset class="fieldset"><legend class="fieldset__legend">Appearance</legend>
+            <div class="segmented">
+              <label class="segmented__option"><input type="radio" name="theme" value="light" data-theme-choice checked><span>Light</span></label>
+              <label class="segmented__option"><input type="radio" name="theme" value="dark" data-theme-choice><span>Dark</span></label>
+              <label class="segmented__option"><input type="radio" name="theme" value="auto" data-theme-choice><span>System</span></label>
+            </div></fieldset></div>
+          <div class="menu__divider" role="separator"></div>
+          <a class="menu__item" href="#main"><svg class="icon" aria-hidden="true"><use href="#i-help"/></svg>Help</a>
+          <a class="menu__item" href="sign-in.html"><svg class="icon" aria-hidden="true"><use href="#i-sign-out"/></svg>Sign out</a>
+        </div>
+      </details>
+    </div>
+  </header>
+
+  <aside class="app-shell__sidenav" aria-label="Workspaces">
+    <nav class="sidenav" aria-label="Main navigation">
+      <div class="sidenav__group"><ul class="sidenav__list">
+        <li><a class="sidenav__item" href="#main"><svg class="icon" aria-hidden="true"><use href="#i-house"/></svg><span class="sidenav__label">My work</span><span class="sidenav__short" aria-hidden="true">My work</span></a></li>
+      </ul></div>
+      <div class="sidenav__group"><h2 class="sidenav__heading">Assessing</h2><ul class="sidenav__list">
+        <li><a class="sidenav__item" href="assess-marking.html"><svg class="icon" aria-hidden="true"><use href="#i-inbox"/></svg><span class="sidenav__label">Queue</span><span class="sidenav__short" aria-hidden="true">Queue</span><span class="sidenav__count" aria-label="12 to mark">12</span></a></li>
+        <li><a class="sidenav__item" href="assess-marking.html#state=returned"><svg class="icon" aria-hidden="true"><use href="#i-refresh"/></svg><span class="sidenav__label">Returned to me</span><span class="sidenav__short" aria-hidden="true">Returned</span><span class="sidenav__count" aria-label="1 returned">1</span></a></li>
+        <li><a class="sidenav__item" href="#main"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg><span class="sidenav__label">Cohort release status</span><span class="sidenav__short" aria-hidden="true">Status</span></a></li>
+      </ul></div>
+      <div class="sidenav__group"><h2 class="sidenav__heading">Moderating</h2><ul class="sidenav__list">
+        <li><a class="sidenav__item" href="moderate-signoff.html" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-scales"/></svg><span class="sidenav__label">Cycles</span><span class="sidenav__short" aria-hidden="true">Cycles</span></a></li>
+        <li><a class="sidenav__item" href="moderate-item.html"><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg><span class="sidenav__label">My sample items</span><span class="sidenav__short" aria-hidden="true">Items</span><span class="sidenav__count" aria-label="3 to review">3</span></a></li>
+      </ul></div>
+    </nav>
+  </aside>
+
+  <main class="app-shell__main" id="main" tabindex="-1">
+    <div class="page">
+      <header class="page-header">
+        <nav aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="#main">Cycles</a></li><li><a href="#main">Unit 3 portfolios</a></li><li aria-current="page">Sign-off</li></ol></nav>
+        <p class="page-header__workspace">Moderating</p>
+        <h1 class="page-header__title">Sign off: Unit 3 portfolios</h1>
+        <p class="page-header__lead">Sign-off releases the results that were frozen into this cycle. It is the only way a result in a moderated cohort reaches its learner.</p>
+        <div class="page-header__meta">
+          <span class="tag tag--caution" data-proto-state="blocked">Waiting for re-marks (2 outstanding)</span>
+          <span class="tag tag--info tag--shape-half" data-proto-state="ready">In review (18 of 18 done)</span>
+          <span class="tag tag--positive" data-proto-state="signed">Signed off. 64 results released</span>
+          <span>2026 Intake C <span class="tag tag--plain">Moderated</span></span>
+          <span class="text-meta">Cycle MC-2026-C-02</span>
+        </div>
+      </header>
+
+      <div class="banner banner--caution" role="alert" data-proto-state="blocked">
+        <svg class="icon banner__icon" aria-hidden="true"><use href="#i-info"/></svg>
+        <p class="banner__title">You cannot sign off yet: 2 returned items are still open</p>
+        <p class="banner__body">Both are listed below with who must act next and by when. Nothing is released, and no learner is told anything, until they are concluded.</p>
+        <div class="banner__actions"><a href="#outstanding">See the 2 open items</a></div>
+      </div>
+      <div class="banner banner--positive" role="status" data-proto-state="signed">
+        <svg class="icon banner__icon" aria-hidden="true"><use href="#i-check-circle"/></svg>
+        <p class="banner__title">Signed off on Mon 28 Sep 2026, 10:40 SAST</p>
+        <p class="banner__body">64 results released. 64 notifications created. Each learner can appeal until the end of Monday 5 October 2026. 7 newer decisions were not released and are waiting for the next cycle. This page is now a read-only record.</p>
+      </div>
+
+      <!-- Cycle progress -->
+      <section class="section" aria-labelledby="prog-h">
+        <div class="section__header"><h2 class="text-heading" id="prog-h">Cycle progress</h2></div>
+        <ol class="stepper stepper--horizontal" aria-label="Unit 3 portfolios: moderation cycle progress" data-proto-state="blocked">
+          <li class="stepper__step is-complete"><span class="stepper__label">Planned<span class="u-visually-hidden"> (done)</span></span><span class="stepper__meta">Zanele Dlamini, 14 Sep</span></li>
+          <li class="stepper__step is-complete"><span class="stepper__label">Sampled<span class="u-visually-hidden"> (done)</span></span><span class="stepper__meta">18 Sep · 18 of 64 · rule-v4</span></li>
+          <li class="stepper__step is-complete"><span class="stepper__label">In review<span class="u-visually-hidden"> (done)</span></span><span class="stepper__meta">16 agreed, 2 returned</span></li>
+          <li class="stepper__step is-blocked" aria-current="step"><span class="stepper__label">Waiting for re-marks<span class="u-visually-hidden"> (blocked)</span></span><span class="stepper__body">2 returned items are open.</span></li>
+          <li class="stepper__step"><span class="stepper__label">Signed off<span class="u-visually-hidden"> (not yet)</span></span><span class="stepper__body">Releases 64 results.</span></li>
+        </ol>
+        <ol class="stepper stepper--horizontal" aria-label="Unit 3 portfolios: moderation cycle progress" data-proto-state="ready">
+          <li class="stepper__step is-complete"><span class="stepper__label">Planned<span class="u-visually-hidden"> (done)</span></span><span class="stepper__meta">Zanele Dlamini, 14 Sep</span></li>
+          <li class="stepper__step is-complete"><span class="stepper__label">Sampled<span class="u-visually-hidden"> (done)</span></span><span class="stepper__meta">18 Sep · 18 of 64 · rule-v4</span></li>
+          <li class="stepper__step is-complete"><span class="stepper__label">In review<span class="u-visually-hidden"> (done)</span></span><span class="stepper__meta">18 agreed</span></li>
+          <li class="stepper__step is-complete"><span class="stepper__label">Re-marks<span class="u-visually-hidden"> (done)</span></span><span class="stepper__meta">2 returned, 2 re-marked, 2 agreed</span></li>
+          <li class="stepper__step is-current" aria-current="step"><span class="stepper__label">Sign-off<span class="u-visually-hidden"> (current step)</span></span><span class="stepper__body">Ready. Releases 64 results.</span></li>
+        </ol>
+        <ol class="stepper stepper--horizontal" aria-label="Unit 3 portfolios: moderation cycle progress" data-proto-state="signed">
+          <li class="stepper__step is-complete"><span class="stepper__label">Planned<span class="u-visually-hidden"> (done)</span></span><span class="stepper__meta">Zanele Dlamini, 14 Sep</span></li>
+          <li class="stepper__step is-complete"><span class="stepper__label">Sampled<span class="u-visually-hidden"> (done)</span></span><span class="stepper__meta">18 Sep · 18 of 64 · rule-v4</span></li>
+          <li class="stepper__step is-complete"><span class="stepper__label">In review<span class="u-visually-hidden"> (done)</span></span><span class="stepper__meta">18 agreed</span></li>
+          <li class="stepper__step is-complete"><span class="stepper__label">Re-marks<span class="u-visually-hidden"> (done)</span></span><span class="stepper__meta">2 returned, 2 re-marked, 2 agreed</span></li>
+          <li class="stepper__step is-complete"><span class="stepper__label">Signed off<span class="u-visually-hidden"> (done)</span></span><span class="stepper__meta">Thandiwe Nkosi, 28 Sep, 10:40</span></li>
+        </ol>
+
+        <div class="grid grid--4 u-mt-6">
+          <div class="stat"><span class="stat__label">Frozen population</span><span class="stat__value">64 <span class="stat__unit">results</span></span><span class="stat__meta">Exactly these are released at sign-off</span></div>
+          <div class="stat"><span class="stat__label">Sample</span><span class="stat__value">18 <span class="stat__unit">items</span></span><span class="stat__meta">10 random, 8 mandatory · all allocated to you</span></div>
+          <div class="stat"><span class="stat__label">Items concluded</span><span class="stat__value"><span data-proto-state="blocked">16</span><span data-proto-state="ready signed">18</span> <span class="stat__unit">of 18</span></span><span class="stat__meta"><span data-proto-state="blocked">2 returned and still open</span><span data-proto-state="ready signed">18 agreed, 2 of them after a re-mark</span></span></div>
+          <div class="stat"><span class="stat__label">Finalised after the freeze</span><span class="stat__value">7 <span class="stat__unit">results</span></span><span class="stat__meta">Not in this cycle. They wait for the next one</span></div>
+        </div>
+        <div class="progress progress--lg u-mt-4" role="progressbar" aria-label="Sample items concluded" aria-valuemin="0" aria-valuemax="18" aria-valuenow="16" data-proto-state="blocked"><div class="progress__bar" style="--value:88.9%"></div></div>
+        <div class="progress progress--lg progress--positive u-mt-4" role="progressbar" aria-label="Sample items concluded" aria-valuemin="0" aria-valuemax="18" aria-valuenow="18" data-proto-state="ready signed"><div class="progress__bar" style="--value:100%"></div></div>
+      </section>
+
+      <!-- Readiness checklist -->
+      <section class="section" aria-labelledby="chk-h" data-proto-state="blocked ready">
+        <div class="section__header"><h2 class="text-heading" id="chk-h">Before you can sign off</h2></div>
+        <ul class="checklist" aria-label="Sign-off conditions">
+          <li class="checklist__item checklist__item--problem" data-proto-state="blocked"><svg class="icon checklist__icon" aria-hidden="true"><use href="#i-info"/></svg><span class="checklist__title">All sample items concluded</span><span class="tag tag--caution">16 of 18</span><span class="checklist__detail">2 items are not concluded. They are the returned items listed below.</span></li>
+          <li class="checklist__item checklist__item--problem" data-proto-state="blocked"><svg class="icon checklist__icon" aria-hidden="true"><use href="#i-info"/></svg><span class="checklist__title">No returned items outstanding</span><span class="tag tag--caution">2 outstanding</span><span class="checklist__detail">1 is waiting for the assessor. 1 is re-marked and waiting for your review.</span></li>
+          <li class="checklist__item checklist__item--pass" data-proto-state="ready"><svg class="icon checklist__icon" aria-hidden="true"><use href="#i-check-circle"/></svg><span class="checklist__title">All sample items concluded</span><span class="tag tag--positive">18 of 18</span></li>
+          <li class="checklist__item checklist__item--pass" data-proto-state="ready"><svg class="icon checklist__icon" aria-hidden="true"><use href="#i-check-circle"/></svg><span class="checklist__title">No returned items outstanding</span><span class="tag tag--positive">None</span></li>
+          <li class="checklist__item checklist__item--pass"><svg class="icon checklist__icon" aria-hidden="true"><use href="#i-check-circle"/></svg><span class="checklist__title">You are eligible to sign off this cycle</span><span class="tag tag--positive">Yes</span><span class="checklist__detail">You took no assessment decision on any sampled result.</span></li>
+          <li class="checklist__item checklist__item--pass"><svg class="icon checklist__icon" aria-hidden="true"><use href="#i-check-circle"/></svg><span class="checklist__title">Cohort observations recorded</span><span class="tag tag--positive">1 recorded</span><span class="checklist__detail">Optional. You can add more below until you sign off.</span></li>
+        </ul>
+      </section>
+
+      <!-- Outstanding returns: FR-510 -->
+      <section class="section" id="outstanding" aria-labelledby="out-h" tabindex="-1" data-proto-state="blocked">
+        <div class="section__header"><h2 class="text-heading" id="out-h">Returned items still open (2)</h2><span class="text-small text-muted">As at Tue 22 Sep 2026, 16:10 SAST</span></div>
+        <div class="table-wrap">
+          <table class="table table--cards">
+            <caption class="u-visually-hidden">Returned sample items that block sign-off, with who must act next and the re-mark deadline</caption>
+            <thead><tr><th scope="col">Learner and item</th><th scope="col">Who must act next</th><th scope="col">Returned (SAST)</th><th scope="col">Re-mark due</th><th scope="col">State</th><th scope="col" class="table__actions"><span class="u-visually-hidden">Actions</span></th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="table__primary-cell" data-label="Learner and item"><span class="table__primary">Naledi Khoza</span><span class="table__secondary">Item 7 of 18 · Task 3: Workplace records portfolio</span></td>
+                <td data-label="Who acts next">Nomvula Mahlangu<span class="table__secondary">Assessor: must re-mark</span></td>
+                <td data-label="Returned"><time class="datetime" datetime="2026-09-21T11:05:00+02:00">21 Sep 2026, <span class="datetime__time">11:05</span></time></td>
+                <td data-label="Re-mark due"><span class="deadline"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-clock"/></svg>End of Fri 25 Sep 2026 · in 3 days</span></td>
+                <td data-label="State"><span class="tag tag--caution">Waiting for assessor</span></td>
+                <td class="table__actions"><a class="btn btn--secondary btn--sm" href="moderate-item.html#state=returned">Open item<span class="u-visually-hidden"> 7, Naledi Khoza</span></a></td>
+              </tr>
+              <tr>
+                <td class="table__primary-cell" data-label="Learner and item"><span class="table__primary">Kagiso Molefe</span><span class="table__secondary">Item 15 of 18 · Task 3: Workplace records portfolio</span></td>
+                <td data-label="Who acts next">You<span class="table__secondary">Moderator: review the re-mark by Nomvula Mahlangu</span></td>
+                <td data-label="Returned"><time class="datetime" datetime="2026-09-18T15:30:00+02:00">18 Sep 2026, <span class="datetime__time">15:30</span></time></td>
+                <td data-label="Re-mark due"><span class="deadline deadline--closed"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg>Re-marked 22 Sep 2026, before the end of 23 Sep</span></td>
+                <td data-label="State"><span class="tag tag--info">Re-marked. Review again</span></td>
+                <td class="table__actions"><a class="btn btn--secondary btn--sm" href="moderate-item.html#state=remarked">Review again<span class="u-visually-hidden">: item 15, Kagiso Molefe</span></a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="text-small text-muted u-mt-2">If a deadline passes, the item shows as overdue to you, the assessor and the coordinator. Nothing is released automatically. Zanele Dlamini can reallocate the assessor.</p>
+      </section>
+
+      <!-- Cycle summary: scope, population, sample, audit values -->
+      <section class="section" aria-labelledby="sum-h">
+        <div class="section__header"><h2 class="text-heading" id="sum-h">Cycle summary</h2></div>
+        <div class="grid grid--2">
+          <div class="card"><div class="card__header"><h3 class="card__title">Scope and population</h3></div><div class="card__body"><dl class="dl">
+            <div class="dl__row"><dt>Scope</dt><dd>Task 3: Workplace records portfolio, Unit 3 (8 credits)</dd></div>
+            <div class="dl__row"><dt>Cohort</dt><dd>2026 Intake C · Certificate in Business Administration</dd></div>
+            <div class="dl__row"><dt>Planned by</dt><dd>Zanele Dlamini, coordinator, Mon 14 Sep 2026</dd></div>
+            <div class="dl__row"><dt>Frozen and sampled</dt><dd><time datetime="2026-09-18T09:00:00+02:00">Fri 18 Sep 2026, 09:00 SAST</time>, automatically, as scheduled</dd></div>
+            <div class="dl__row"><dt>Frozen population</dt><dd>64 results: every decision in scope that was finalised and waiting at the freeze. 59 Competent, 5 Not yet competent.</dd></div>
+            <div class="dl__row"><dt>Moderator</dt><dd>Thandiwe Nkosi, all 18 items. No item needed another moderator.</dd></div>
+          </dl></div></div>
+          <div class="card"><div class="card__header"><h3 class="card__title">Sample record, for audit</h3><button type="button" class="btn btn--ghost btn--sm" data-toast="Sample record copied" data-toast-meta="rule-v4 · seed 5520913"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-copy"/></svg>Copy</button></div><div class="card__body"><dl class="dl">
+            <div class="dl__row"><dt>Sample size</dt><dd>18 of 64 (28%)</dd></div>
+            <div class="dl__row"><dt>Mandatory inclusions</dt><dd>5 Not yet competent decisions · 3 first-time assessor decisions (Nomvula Mahlangu)</dd></div>
+            <div class="dl__row"><dt>Random within strata</dt><dd>10 (15% of 64, rounded up)</dd></div>
+            <div class="dl__row"><dt>Rule version</dt><dd><code class="mono">rule-v4</code></dd></div>
+            <div class="dl__row"><dt>Seed</dt><dd><code class="mono">5520913</code> (generated by the server)</dd></div>
+            <div class="dl__row"><dt>Population digest</dt><dd><code class="mono">sha256:9f2c41d7a06be3185c7d…e44b</code></dd></div>
+          </dl></div></div>
+        </div>
+
+        <div class="table-wrap u-mt-4" tabindex="0" role="region" aria-labelledby="strata-cap">
+          <table class="table table--compact">
+            <caption class="u-visually-hidden" id="strata-cap">Sampling strata: population and sample counts. Scrolls sideways on small screens.</caption>
+            <thead><tr><th scope="col">Stratum (assessor · outcome · unit)</th><th scope="col" class="table__num">Population</th><th scope="col" class="table__num">Mandatory</th><th scope="col" class="table__num">Random</th><th scope="col" class="table__num">Sampled</th><th scope="col" class="table__num">Concluded</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">N. Mahlangu · Competent · Unit 3</th><td class="table__num">59</td><td class="table__num">3 <span class="table__secondary">first-time assessor</span></td><td class="table__num">10</td><td class="table__num">13</td><td class="table__num"><span data-proto-state="blocked">12</span><span data-proto-state="ready signed">13</span></td></tr>
+              <tr><th scope="row">N. Mahlangu · Not yet competent · Unit 3</th><td class="table__num">5</td><td class="table__num">5 <span class="table__secondary">every NYC decision</span></td><td class="table__num">0</td><td class="table__num">5</td><td class="table__num"><span data-proto-state="blocked">4</span><span data-proto-state="ready signed">5</span></td></tr>
+              <tr><th scope="row">Total</th><td class="table__num">64</td><td class="table__num">8</td><td class="table__num">10</td><td class="table__num">18</td><td class="table__num"><span data-proto-state="blocked">16</span><span data-proto-state="ready signed">18</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="text-small text-muted u-mt-2"><abbr title="Not yet competent">NYC</abbr> means Not yet competent. The sample cannot be redrawn.</p>
+      </section>
+
+      <!-- Observations for the coordinator: FR-508 -->
+      <section class="section" aria-labelledby="obs-h">
+        <div class="section__header"><h2 class="text-heading" id="obs-h">Observations about the cohort, for the coordinator</h2></div>
+        <ol class="log log--boxed" aria-label="Observations recorded in this cycle, oldest first. Times in SAST.">
+          <li class="log__item"><time class="log__time" datetime="2026-09-22T15:02:00+02:00">22 Sep 2026, 15:02</time><div class="log__event"><span class="log__actor">Thandiwe Nkosi</span> recorded an observation. AC 3.2 (controlling access) is the most common gap: 4 of the 5 Not yet competent decisions turn on an access register with no approval column. The task brief could show an example register. Marking of AC 3.1 was cautious in two items; both were corrected on re-mark.</div></li>
+          <li class="log__item" data-proto-state="signed"><time class="log__time" datetime="2026-09-28T10:31:00+02:00">28 Sep 2026, 10:31</time><div class="log__event"><span class="log__actor">Thandiwe Nkosi</span> recorded an observation. Justifications improved through the cycle and now name evidence pages. Suggest a short calibration session with Nomvula Mahlangu before Task 4.</div></li>
+        </ol>
+        <form class="form u-mt-4 pg-signoff" onsubmit="return false" data-proto-state="blocked ready">
+          <div class="field"><label class="field__label" for="obs-text">Add an observation <span class="field__optional">(optional)</span></label><p class="field__help" id="obs-text-h">About the cohort or the marking as a whole, not about one learner. Zanele Dlamini reads these on the cycle page. Observations are added to the record and are not edited.</p><textarea class="textarea" id="obs-text" rows="4" aria-describedby="obs-text-h"></textarea></div>
+          <div class="form__actions"><button type="button" class="btn btn--secondary" data-toast="Observation recorded" data-toast-meta="Visible to Zanele Dlamini on the cycle page">Record observation</button></div>
+        </form>
+      </section>
+
+      <!-- What sign-off will do -->
+      <section class="section" aria-labelledby="do-h" data-proto-state="blocked ready">
+        <div class="section__header"><h2 class="text-heading" id="do-h">What sign-off will do</h2></div>
+        <div class="card"><div class="card__body stack">
+          <ul class="pg-list">
+            <li><strong>Release exactly 64 results</strong> to learners in 2026 Intake C: the population frozen on Fri 18 Sep 2026. Sampled or not, all 64 are released together.</li>
+            <li><strong>Start each learner's seven-day appeal window</strong> <span data-proto-state="blocked">on the day you sign off. It is 7 calendar days, including weekends and public holidays.</span><span data-proto-state="ready">today. The last full day to appeal is Monday 5 October 2026. It is 7 calendar days, including weekends and public holidays.</span></li>
+            <li><strong>Start the resubmission period</strong> for the 5 Not yet competent results. <span data-proto-state="blocked">Each period runs from the day of release, so the time held has not used any of it.</span><span data-proto-state="ready">Each is 14 days from release: by the end of Monday 12 October 2026. The time held has not used any of it.</span></li>
+            <li><strong>Award credits.</strong> Credit is evaluated for the 59 Competent results. A learner who has now completed Unit 3 is awarded its 8 credits.</li>
+            <li><strong>Notify 64 learners</strong>, in the LMS and by email: "Your result for Task 3 is ready".</li>
+          </ul>
+          <div class="banner banner--info banner--compact" role="note"><svg class="icon banner__icon" aria-hidden="true"><use href="#i-lock"/></svg><p class="banner__body"><strong>Not released: 7 results finalised after the freeze.</strong> They were never eligible for this sample, so they stay held and wait for the next cycle. Zanele Dlamini sees them in the pending pool.</p></div>
+          <p class="text-small"><strong>Sign-off cannot be undone.</strong> A released result cannot be taken back.</p>
+        </div></div>
+      </section>
+
+      <!-- Sign-off: blocked -->
+      <section class="section" aria-labelledby="sob-h" data-proto-state="blocked">
+        <div class="section__header"><h2 class="text-heading" id="sob-h">Sign off and release</h2></div>
+        <form class="form pg-signoff" onsubmit="return false">
+          <div class="field"><label class="field__label" for="sob-statement">Sign-off statement <span class="field__required">(required)</span></label><textarea class="textarea" id="sob-statement" rows="4" disabled aria-describedby="so-blocked"></textarea></div>
+          <label class="check"><input class="check__input" type="checkbox" id="sob-ack" disabled aria-describedby="so-blocked"><span class="check__label">I did not assess any item that I moderated in this cycle.</span></label>
+          <div class="form__actions"><button type="button" class="btn btn--primary" disabled aria-describedby="so-blocked">Sign off and release 64 results</button></div>
+          <p class="blocked-reason" id="so-blocked"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg><span>You cannot sign off yet: 2 returned items are still open. Item 7 (Naledi Khoza) is with Nomvula Mahlangu, due by the end of Fri 25 Sep 2026. Item 15 (Kagiso Molefe) is waiting for your review. <a href="#outstanding">See both items</a></span></p>
+        </form>
+      </section>
+
+      <!-- Sign-off: ready -->
+      <section class="section" aria-labelledby="sor-h" data-proto-state="ready">
+        <div class="section__header"><h2 class="text-heading" id="sor-h">Sign off and release</h2></div>
+        <form class="form pg-signoff" onsubmit="return false">
+          <div class="field"><label class="field__label" for="so-statement">Sign-off statement <span class="field__required">(required)</span></label><p class="field__help" id="so-statement-h">Kept permanently with the cycle for audit. Say what you reviewed and what you found.</p><textarea class="textarea" id="so-statement" rows="4" required aria-describedby="so-statement-h">I reviewed all 18 sampled items for Task 3 in 2026 Intake C. 16 were agreed on first review. 2 were returned, re-marked and then agreed. I am satisfied that the assessment decisions in this cycle are consistent with the Unit 3 criteria.</textarea></div>
+          <label class="check"><input class="check__input" type="checkbox" id="so-ack"><span class="check__label">I did not assess any item that I moderated in this cycle.</span><span class="check__help">The LMS has checked this too: you took no assessment decision on any sampled result.</span></label>
+          <div class="form__actions"><button type="button" class="btn btn--primary" data-requires="#so-ack, #so-statement" data-modal-open="m-signoff" aria-describedby="so-hint">Sign off and release 64 results</button></div>
+          <p class="text-small text-muted" id="so-hint">The button is available when the statement is written and the box is ticked. You will be asked to confirm before anything is released.</p>
+        </form>
+      </section>
+
+      <!-- Signed off: read-only record -->
+      <section class="section" aria-labelledby="rec-h" data-proto-state="signed">
+        <div class="section__header"><h2 class="text-heading" id="rec-h">Sign-off record</h2><span class="status-line status-line--locked"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Signed off and locked</span></div>
+        <div class="card"><div class="card__body"><dl class="dl dl--inline">
+          <div class="dl__row"><dt>Signed off</dt><dd><time datetime="2026-09-28T10:40:00+02:00">Mon 28 Sep 2026, 10:40 SAST</time></dd></div>
+          <div class="dl__row"><dt>Signed off by</dt><dd>Thandiwe Nkosi, as the moderator. She took no assessment decision on any sampled result.</dd></div>
+          <div class="dl__row"><dt>Results released</dt><dd>64 (59 Competent, 5 Not yet competent). Each result now shows staff both dates: Decided and Released 28 Sep 2026.</dd></div>
+          <div class="dl__row"><dt>Notifications created</dt><dd>64 in the LMS. Email: 62 delivered, 2 sending</dd></div>
+          <div class="dl__row"><dt>Time to appeal</dt><dd>Until the end of Monday 5 October 2026, for every learner</dd></div>
+          <div class="dl__row"><dt>Resubmission</dt><dd>5 learners, by the end of Monday 12 October 2026 (14 days from release)</dd></div>
+          <div class="dl__row"><dt>Credits</dt><dd>Evaluated for 59 Competent results. 41 learners completed Unit 3 and were awarded 8 credits each.</dd></div>
+          <div class="dl__row"><dt>Not released</dt><dd>7 newer decisions are waiting for the next cycle.</dd></div>
+          <div class="dl__row"><dt>Sign-off statement</dt><dd>I reviewed all 18 sampled items for Task 3 in 2026 Intake C. 16 were agreed on first review. 2 were returned, re-marked and then agreed. I am satisfied that the assessment decisions in this cycle are consistent with the Unit 3 criteria.</dd></div>
+          <div class="dl__row"><dt>Reference</dt><dd><code class="mono">MC-2026-C-02 · rule-v4 · seed 5520913</code></dd></div>
+        </dl></div></div>
+        <p class="u-mt-4"><a class="link link--standalone" href="moderate-item.html#state=agreed">View the sample items (read-only) <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></a></p>
+      </section>
+    </div>
+  </main>
+
+  <nav class="bottom-tabs" aria-label="Moderating">
+    <a class="bottom-tabs__item" href="moderate-signoff.html" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-scales"/></svg>Cycles</a>
+    <a class="bottom-tabs__item" href="moderate-item.html"><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg>Items</a>
+  </nav>
+</div>
+
+<!-- ============================== DIALOGS AND SHEETS ============================== -->
+<dialog class="modal" id="m-signoff" aria-labelledby="mso-t" data-modal-static>
+  <div class="modal__header"><h2 class="modal__title" id="mso-t">Sign off "Unit 3 portfolios"?</h2></div>
+  <div class="modal__body">
+    <p class="modal__consequence">64 learners in 2026 Intake C will see their results straight away. Each learner's 7 days to appeal start today and end at the end of Monday 5 October 2026.</p>
+    <ul class="modal__list">
+      <li>Exactly the 64 frozen results are released. 7 results finalised after the freeze are not released and wait for the next cycle.</li>
+      <li>18 sampled items: 18 agreed, 0 open.</li>
+      <li>Credits are awarded where a Competent result completes Unit 3. 64 learners are notified.</li>
+      <li>Sign-off cannot be undone. You are signing off as the moderator: Thandiwe Nkosi.</li>
+    </ul>
+    <label class="check"><input class="check__input" type="checkbox" id="ack-so"><span class="check__label">I understand that 64 results are released now and that this cannot be undone.</span></label>
+  </div>
+  <div class="modal__footer"><button type="button" class="btn btn--secondary" data-modal-close autofocus>Not yet</button><button type="button" class="btn btn--primary" data-requires="#ack-so" data-modal-close data-pg-next="signed">Sign off and release 64 results</button></div>
+</dialog>
+
+<dialog class="modal modal--sheet" id="m-workspaces" aria-labelledby="mws-t">
+  <div class="modal__header"><h2 class="modal__title" id="mws-t">Your workspaces</h2><button type="button" class="btn btn--ghost btn--icon" data-modal-close aria-label="Close"><svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+  <div class="modal__body">
+    <a class="menu__item" href="#main" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-house"/></svg><span class="menu__item-text">My work<span class="menu__item-meta">Everything waiting for you, across workspaces</span></span></a>
+    <a class="menu__item" href="assess-marking.html" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-inbox"/></svg><span class="menu__item-text">Assessing<span class="menu__item-meta">2026 Intake B · 12 to mark · 1 returned to you</span></span></a>
+    <a class="menu__item" href="moderate-item.html" aria-current="true" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-scales"/></svg><span class="menu__item-text">Moderating<span class="menu__item-meta">2026 Intake C · 3 sample items to review</span></span><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></a>
+  </div>
+</dialog>
+
+<div class="toast-region" role="status" aria-live="polite"></div>
+<script src="assets/ui.js"></script>
+<script src="assets/proto.js"></script>
+<script>
+/* Prototype only. Keeps in-page links from overwriting the #state= hash; moves to the signed-off state after confirming. */
+(function () {
+  function go(id) { var t = document.getElementById(id); if (!t) return; t.scrollIntoView(); t.focus({ preventScroll: true }); }
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('a[href^="#"]');
+    if (a) { e.preventDefault(); go(a.getAttribute('href').slice(1)); return; }
+    var b = e.target.closest('[data-pg-next]'); if (b) { location.hash = 'state=' + b.getAttribute('data-pg-next'); window.scrollTo(0, 0); }
+  });
+})();
+</script>
+</body>
+</html>

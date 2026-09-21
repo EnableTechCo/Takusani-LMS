@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en-ZA" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Submissions · Teaching · Takusani LMS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400..600&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/ui.css">
+<link rel="stylesheet" href="assets/proto.css">
+<link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+<style>
+/* Page-level layout only (prefix pg-). Tokens only. */
+.pg-task { flex: 1 1 16rem; max-width: 26rem; }
+.pg-preview { padding: var(--space-3) var(--space-4); background: var(--color-surface-sunken); border-radius: var(--radius-sm); font-size: var(--text-sm); }
+</style>
+</head>
+<body data-proto-screen="P0-10" data-proto-title="Facilitator submission dashboard"
+      data-proto-frs="FR-210 FR-211 FR-212"
+      data-proto-states="default:After the due date, all learners|selected:Outstanding only, rows selected|empty:Nothing outstanding (Task 2)">
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<div class="app-shell">
+  <header class="app-shell__topbar">
+    <a class="brand" href="index.html" aria-label="Takusani LMS, all prototype screens">
+      <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M7 0H25A7 7 0 0 1 32 7V25A7 7 0 0 1 25 32H7A7 7 0 0 1 0 25V7A7 7 0 0 1 7 0ZM7 8.5H25V12H17.75V24H14.25V12H7ZM8.25 17.5A1.75 1.75 0 1 0 11.75 17.5A1.75 1.75 0 1 0 8.25 17.5ZM20.25 17.5A1.75 1.75 0 1 0 23.75 17.5A1.75 1.75 0 1 0 20.25 17.5Z"/></svg>
+      <span class="brand__name">Takusani</span><span class="brand__suffix">LMS</span>
+    </a>
+    <span class="topbar__institution">Khanya Skills Institute</span>
+    <div class="topbar__context"><details class="menu-wrap" data-menu>
+      <summary class="context-select__button" aria-label="Cohort filter. Current: 2026 Intake B"><span class="context-select__label">Cohort</span><span class="context-select__value">2026 Intake B</span><svg class="icon icon--sm" aria-hidden="true"><use href="#i-caret-down"/></svg></summary>
+      <div class="menu">
+        <p class="menu__label">Teaching</p>
+        <a class="menu__item" href="#main"><span class="menu__item-text">All my cohorts</span></a>
+        <a class="menu__item" href="#main" aria-current="true"><span class="menu__item-text">2026 Intake B<span class="menu__item-meta">Certificate in Business Administration · Active · 96 learners</span></span><span class="tag tag--plain">Moderated</span><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></a>
+      </div>
+    </details></div>
+    <span class="topbar__spacer"></span>
+    <form class="topbar__search" role="search" action="#main" method="get"><label class="input-icon"><span class="u-visually-hidden">Search your tasks, materials, sessions and learners</span><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><input class="input" type="search" name="q" placeholder="Search"></label></form>
+    <div class="topbar__actions">
+      <a class="btn btn--ghost btn--icon" href="notifications.html" aria-label="Notifications, 1 unread"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg><span class="badge-count" aria-hidden="true">1</span></a>
+      <details class="menu-wrap" data-menu>
+        <summary class="btn btn--ghost btn--icon" aria-label="Account menu for Pieter van Wyk"><span class="avatar" aria-hidden="true">PW</span></summary>
+        <div class="menu menu--end">
+          <div class="account__identity"><p class="account__name">Pieter van Wyk</p><p class="account__email">pieter.vanwyk@khanya.example</p><ul class="account__roles"><li>Facilitator: 2026 Intake B</li></ul></div>
+          <a class="menu__item" href="#main"><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg>Profile</a>
+          <a class="menu__item" href="notifications.html"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg>Notification preferences</a>
+          <div class="menu__section"><fieldset class="fieldset"><legend class="fieldset__legend">Appearance</legend>
+            <div class="segmented">
+              <label class="segmented__option"><input type="radio" name="theme" value="light" data-theme-choice checked><span>Light</span></label>
+              <label class="segmented__option"><input type="radio" name="theme" value="dark" data-theme-choice><span>Dark</span></label>
+              <label class="segmented__option"><input type="radio" name="theme" value="auto" data-theme-choice><span>System</span></label>
+            </div></fieldset></div>
+          <div class="menu__divider" role="separator"></div>
+          <a class="menu__item" href="#main"><svg class="icon" aria-hidden="true"><use href="#i-help"/></svg>Help</a>
+          <a class="menu__item" href="sign-in.html"><svg class="icon" aria-hidden="true"><use href="#i-sign-out"/></svg>Sign out</a>
+        </div>
+      </details>
+    </div>
+  </header>
+
+  <!-- Single-role user: a flat list with no group heading, and no workspace picker on phones. -->
+  <aside class="app-shell__sidenav" aria-label="Workspaces">
+    <nav class="sidenav" aria-label="Main navigation">
+      <div class="sidenav__group"><ul class="sidenav__list">
+        <li><a class="sidenav__item" href="#main"><svg class="icon" aria-hidden="true"><use href="#i-house"/></svg><span class="sidenav__label">Overview</span><span class="sidenav__short" aria-hidden="true">Overview</span></a></li>
+        <li><a class="sidenav__item" href="#main"><svg class="icon" aria-hidden="true"><use href="#i-clipboard"/></svg><span class="sidenav__label">Tasks</span><span class="sidenav__short" aria-hidden="true">Tasks</span></a></li>
+        <li><a class="sidenav__item" href="#main"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg><span class="sidenav__label">Materials</span><span class="sidenav__short" aria-hidden="true">Materials</span></a></li>
+        <li><a class="sidenav__item" href="#main"><svg class="icon" aria-hidden="true"><use href="#i-pencil"/></svg><span class="sidenav__label">Quizzes</span><span class="sidenav__short" aria-hidden="true">Quizzes</span></a></li>
+        <li><a class="sidenav__item" href="#main"><svg class="icon" aria-hidden="true"><use href="#i-video"/></svg><span class="sidenav__label">Sessions</span><span class="sidenav__short" aria-hidden="true">Sessions</span></a></li>
+        <li><a class="sidenav__item" href="teach-submissions.html" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-inbox"/></svg><span class="sidenav__label">Submissions</span><span class="sidenav__short" aria-hidden="true">Submitted</span><span class="sidenav__count" aria-label="23 outstanding for Task 3">23</span></a></li>
+      </ul></div>
+    </nav>
+  </aside>
+
+  <main class="app-shell__main" id="main" tabindex="-1">
+    <div class="page">
+      <header class="page-header">
+        <nav aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="#main">Teaching</a></li><li aria-current="page">Submissions</li></ol></nav>
+        <p class="page-header__workspace">Teaching</p>
+        <h1 class="page-header__title">Submissions</h1>
+        <p class="page-header__lead">Who has submitted, who has not, and who was late. You see submission status only: outcomes and marks are not shown to facilitators.</p>
+        <div class="page-header__meta"><span>2026 Intake B <span class="tag tag--plain">Moderated</span> · 96 learners</span><span class="text-meta">As at Mon 7 Sep 2026, 08:40 SAST</span></div>
+        <div class="page-header__actions"><button type="button" class="btn btn--secondary" data-toast="Export ready: task-submissions-2026-intake-b.csv" data-toast-meta="Rows for the current filter · 7 Sep 2026, 08:40"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-download"/></svg>Export CSV</button></div>
+      </header>
+
+      <!-- Per task: submitted / late / outstanding -->
+      <section aria-labelledby="tasks-h">
+        <div class="section__header"><h2 class="text-heading" id="tasks-h">By task</h2><span class="text-small text-muted">Submitted means on time. Late work is counted separately.</span></div>
+        <div class="table-wrap">
+          <table class="table table--cards">
+            <caption class="u-visually-hidden">Submission counts for each task in 2026 Intake B</caption>
+            <thead><tr><th scope="col">Task</th><th scope="col">Due (SAST)</th><th scope="col" class="table__num">Submitted</th><th scope="col" class="table__num">Late</th><th scope="col" class="table__num">Outstanding</th><th scope="col" class="table__actions"><span class="u-visually-hidden">Actions</span></th></tr></thead>
+            <tbody>
+              <tr><td class="table__primary-cell" data-label="Task"><span class="table__primary">Task 4: Office administration plan</span><span class="table__secondary">Unit 5</span></td>
+                <td data-label="Due"><span class="deadline"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-clock"/></svg>Fri 2 Oct 2026, 17:00 · in 25 days</span></td>
+                <td class="table__num" data-label="Submitted">4</td><td class="table__num" data-label="Late">0</td><td class="table__num" data-label="Outstanding">92</td>
+                <td class="table__actions"><a class="btn btn--secondary btn--sm" href="#learners">View learners<span class="u-visually-hidden"> for Task 4</span></a></td></tr>
+              <tr class="is-selected" data-proto-state="!empty"><td class="table__primary-cell" data-label="Task"><span class="table__primary">Task 3: Workplace records portfolio</span><span class="table__secondary">Unit 3 · shown below</span></td>
+                <td data-label="Due"><span class="deadline deadline--closed"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-clock"/></svg>Fri 4 Sep 2026, 17:00 · 3 days ago</span></td>
+                <td class="table__num" data-label="Submitted">67</td><td class="table__num" data-label="Late">6</td><td class="table__num" data-label="Outstanding">23 <span class="table__secondary">overdue</span></td>
+                <td class="table__actions"><a class="btn btn--secondary btn--sm" href="#learners">View learners<span class="u-visually-hidden"> for Task 3</span></a></td></tr>
+              <tr data-proto-state="empty"><td class="table__primary-cell" data-label="Task"><span class="table__primary">Task 3: Workplace records portfolio</span><span class="table__secondary">Unit 3</span></td>
+                <td data-label="Due"><span class="deadline deadline--closed"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-clock"/></svg>Fri 4 Sep 2026, 17:00 · 3 days ago</span></td>
+                <td class="table__num" data-label="Submitted">67</td><td class="table__num" data-label="Late">6</td><td class="table__num" data-label="Outstanding">23 <span class="table__secondary">overdue</span></td>
+                <td class="table__actions"><a class="btn btn--secondary btn--sm" href="teach-submissions.html#state=default">View learners<span class="u-visually-hidden"> for Task 3</span></a></td></tr>
+              <tr data-proto-state="!empty"><td class="table__primary-cell" data-label="Task"><span class="table__primary">Task 2: Business letters</span><span class="table__secondary">Unit 4</span></td>
+                <td data-label="Due"><span class="deadline deadline--closed"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-clock"/></svg>Fri 14 Aug 2026, 17:00</span></td>
+                <td class="table__num" data-label="Submitted">93</td><td class="table__num" data-label="Late">3</td><td class="table__num" data-label="Outstanding">0</td>
+                <td class="table__actions"><a class="btn btn--secondary btn--sm" href="teach-submissions.html#state=empty">View learners<span class="u-visually-hidden"> for Task 2</span></a></td></tr>
+              <tr class="is-selected" data-proto-state="empty"><td class="table__primary-cell" data-label="Task"><span class="table__primary">Task 2: Business letters</span><span class="table__secondary">Unit 4 · shown below</span></td>
+                <td data-label="Due"><span class="deadline deadline--closed"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-clock"/></svg>Fri 14 Aug 2026, 17:00</span></td>
+                <td class="table__num" data-label="Submitted">93</td><td class="table__num" data-label="Late">3</td><td class="table__num" data-label="Outstanding">0</td>
+                <td class="table__actions"><a class="btn btn--secondary btn--sm" href="#learners">View learners<span class="u-visually-hidden"> for Task 2</span></a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Learners for one task -->
+      <section class="section" id="learners" aria-labelledby="learners-h" tabindex="-1">
+        <div class="section__header">
+          <h2 class="text-heading" id="learners-h"><span data-proto-state="!empty">Task 3: Workplace records portfolio</span><span data-proto-state="empty">Task 2: Business letters</span></h2>
+          <span class="text-small text-muted"><span data-proto-state="!empty">Due Friday 4 September 2026 at 17:00 (SAST). Late work is still accepted and is marked as late.</span><span data-proto-state="empty">Due Friday 14 August 2026 at 17:00 (SAST).</span></span>
+        </div>
+
+        <div class="table-toolbar">
+          <label class="select pg-task"><span class="u-visually-hidden">Task</span><select id="f-task">
+            <option>Task 4: Office administration plan</option>
+            <option selected>Task 3: Workplace records portfolio</option>
+            <option>Task 2: Business letters</option>
+          </select></label>
+          <label class="input-icon table-toolbar__search"><span class="u-visually-hidden">Search by learner name or learner number</span><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><input class="input" type="search" id="f-learner" placeholder="Learner name or number"></label>
+          <span class="table-toolbar__end"><button type="button" class="btn btn--secondary table__select-mode" data-select-mode="#subs-wrap" aria-pressed="false">Select</button><button type="button" class="btn btn--secondary btn--sm u-hide-phone" data-density-toggle="#subs-wrap" aria-pressed="false">Compact density</button></span>
+        </div>
+        <div class="table-toolbar" role="group" aria-label="Filter by status">
+          <button type="button" class="filter-chip" data-pg-filter="all" aria-pressed="true">All <span class="filter-chip__count">96</span></button>
+          <button type="button" class="filter-chip" data-pg-filter="outstanding" aria-pressed="false">Outstanding <span class="filter-chip__count"><span data-proto-state="!empty">23</span><span data-proto-state="empty">0</span></span></button>
+          <button type="button" class="filter-chip" data-pg-filter="submitted" aria-pressed="false">Submitted <span class="filter-chip__count"><span data-proto-state="!empty">67</span><span data-proto-state="empty">93</span></span></button>
+          <button type="button" class="filter-chip" data-pg-filter="late" aria-pressed="false">Late <span class="filter-chip__count"><span data-proto-state="!empty">6</span><span data-proto-state="empty">3</span></span></button>
+        </div>
+
+        <!-- Empty: nothing outstanding -->
+        <div class="card" data-proto-state="empty"><div class="empty"><span class="empty__icon"><svg class="icon icon--lg" aria-hidden="true"><use href="#i-check-circle"/></svg></span><p class="empty__title">No one is outstanding for Task 2</p><p class="empty__body">All 96 learners in 2026 Intake B have submitted Task 2: 93 on time and 3 late. There is no one to remind.</p><div class="empty__actions"><a class="btn btn--secondary" href="teach-submissions.html#state=default">See who is outstanding for Task 3</a></div></div></div>
+
+        <div data-proto-state="!empty">
+          <div class="table-wrap table-wrap--sticky" id="subs-wrap">
+            <table class="table table--cards" id="subs-table">
+              <caption class="u-visually-hidden">Learners in 2026 Intake B and their submission status for Task 3, outstanding first</caption>
+              <thead><tr>
+                <th scope="col" class="table__check"><label class="check check--bare"><input class="check__input" type="checkbox" data-select-all="#subs-table"><span class="u-visually-hidden">Select all rows shown</span></label></th>
+                <th scope="col" aria-sort="none"><button type="button" class="table__sort">Learner</button></th>
+                <th scope="col" aria-sort="ascending"><button type="button" class="table__sort">Status</button></th>
+                <th scope="col" aria-sort="none"><button type="button" class="table__sort">Submitted (SAST)</button></th>
+                <th scope="col" class="table__num">Version</th>
+                <th scope="col">Last reminder (SAST)</th>
+                <th scope="col" class="table__actions"><span class="u-visually-hidden">Actions</span></th>
+              </tr></thead>
+              <tbody>
+                <tr data-status="outstanding" data-name="Sipho Zulu"><td class="table__check"><label class="check check--bare"><input class="check__input" type="checkbox" data-select-row><span class="u-visually-hidden">Select Sipho Zulu</span></label></td>
+                  <td class="table__primary-cell" data-label="Learner"><span class="table__primary">Sipho Zulu</span><span class="table__secondary mono">KSI-2026-0398</span></td>
+                  <td data-label="Status"><span class="tag tag--caution">Outstanding (overdue)</span></td>
+                  <td data-label="Submitted">Not submitted</td><td class="table__num" data-label="Version">None</td>
+                  <td data-label="Last reminder" data-pg-reminder>3 Sep 2026, 08:00<span class="table__secondary">Automatic, 1 day before due</span></td>
+                  <td class="table__actions"><button type="button" class="btn btn--secondary btn--sm" data-pg-history>History<span class="u-visually-hidden"> for Sipho Zulu</span></button></td></tr>
+                <tr data-status="outstanding" data-name="Zinhle Ngcobo"><td class="table__check"><label class="check check--bare"><input class="check__input" type="checkbox" data-select-row><span class="u-visually-hidden">Select Zinhle Ngcobo</span></label></td>
+                  <td class="table__primary-cell" data-label="Learner"><span class="table__primary">Zinhle Ngcobo</span><span class="table__secondary mono">KSI-2026-0402</span></td>
+                  <td data-label="Status"><span class="tag tag--caution">Outstanding (overdue)</span></td>
+                  <td data-label="Submitted">Not submitted</td><td class="table__num" data-label="Version">None</td>
+                  <td data-label="Last reminder" data-pg-reminder>3 Sep 2026, 08:00<span class="table__secondary">Automatic, 1 day before due</span></td>
+                  <td class="table__actions"><button type="button" class="btn btn--secondary btn--sm" data-pg-history>History<span class="u-visually-hidden"> for Zinhle Ngcobo</span></button></td></tr>
+                <tr data-status="outstanding" data-name="Ruan Pretorius"><td class="table__check"><label class="check check--bare"><input class="check__input" type="checkbox" data-select-row><span class="u-visually-hidden">Select Ruan Pretorius</span></label></td>
+                  <td class="table__primary-cell" data-label="Learner"><span class="table__primary">Ruan Pretorius</span><span class="table__secondary mono">KSI-2026-0445</span></td>
+                  <td data-label="Status"><span class="tag tag--caution">Outstanding (overdue)</span><span class="table__secondary">Files uploaded, not yet submitted</span></td>
+                  <td data-label="Submitted">Not submitted</td><td class="table__num" data-label="Version">None</td>
+                  <td data-label="Last reminder" data-pg-reminder>3 Sep 2026, 08:00<span class="table__secondary">Automatic, 1 day before due</span></td>
+                  <td class="table__actions"><button type="button" class="btn btn--secondary btn--sm" data-pg-history>History<span class="u-visually-hidden"> for Ruan Pretorius</span></button></td></tr>
+                <tr data-status="outstanding" data-name="Palesa Mofokeng"><td class="table__check"><label class="check check--bare"><input class="check__input" type="checkbox" data-select-row><span class="u-visually-hidden">Select Palesa Mofokeng</span></label></td>
+                  <td class="table__primary-cell" data-label="Learner"><span class="table__primary">Palesa Mofokeng</span><span class="table__secondary mono">KSI-2026-0409</span></td>
+                  <td data-label="Status"><span class="tag tag--caution">Outstanding (overdue)</span></td>
+                  <td data-label="Submitted">Not submitted</td><td class="table__num" data-label="Version">None</td>
+                  <td data-label="Last reminder" data-pg-reminder>3 Sep 2026, 08:00<span class="table__secondary">Automatic, 1 day before due</span></td>
+                  <td class="table__actions"><button type="button" class="btn btn--secondary btn--sm" data-pg-history>History<span class="u-visually-hidden"> for Palesa Mofokeng</span></button></td></tr>
+                <tr data-status="outstanding" data-name="Imraan Davids"><td class="table__check"><label class="check check--bare"><input class="check__input" type="checkbox" data-select-row><span class="u-visually-hidden">Select Imraan Davids</span></label></td>
+                  <td class="table__primary-cell" data-label="Learner"><span class="table__primary">Imraan Davids</span><span class="table__secondary mono">KSI-2026-0437</span></td>
+                  <td data-label="Status"><span class="tag tag--caution">Outstanding (overdue)</span></td>
+                  <td data-label="Submitted">Not submitted</td><td class="table__num" data-label="Version">None</td>
+                  <td data-label="Last reminder" data-pg-reminder>3 Sep 2026, 08:00<span class="table__secondary">Automatic, 1 day before due</span></td>
+                  <td class="table__actions"><button type="button" class="btn btn--secondary btn--sm" data-pg-history>History<span class="u-visually-hidden"> for Imraan Davids</span></button></td></tr>
+                <tr data-status="late" data-name="Lerato Mokoena"><td class="table__check"><label class="check check--bare"><input class="check__input" type="checkbox" data-select-row><span class="u-visually-hidden">Select Lerato Mokoena</span></label></td>
+                  <td class="table__primary-cell" data-label="Learner"><span class="table__primary">Lerato Mokoena</span><span class="table__secondary mono">KSI-2026-0417</span></td>
+                  <td data-label="Status"><span class="tag tag--caution">Late</span><span class="table__secondary">By 42 minutes</span></td>
+                  <td data-label="Submitted"><time class="datetime" datetime="2026-09-04T17:42:00+02:00">4 Sep 2026, <span class="datetime__time">17:42</span></time></td><td class="table__num" data-label="Version">2</td>
+                  <td data-label="Last reminder" data-pg-reminder>3 Sep 2026, 08:00<span class="table__secondary">Automatic, 1 day before due</span></td>
+                  <td class="table__actions"><button type="button" class="btn btn--secondary btn--sm" data-pg-history>History<span class="u-visually-hidden"> for Lerato Mokoena</span></button></td></tr>
+                <tr data-status="submitted" data-name="Ayesha Patel"><td class="table__check"><label class="check check--bare"><input class="check__input" type="checkbox" data-select-row><span class="u-visually-hidden">Select Ayesha Patel</span></label></td>
+                  <td class="table__primary-cell" data-label="Learner"><span class="table__primary">Ayesha Patel</span><span class="table__secondary mono">KSI-2026-0422</span></td>
+                  <td data-label="Status"><span class="tag tag--positive">Submitted</span></td>
+                  <td data-label="Submitted"><time class="datetime" datetime="2026-09-04T09:15:00+02:00">4 Sep 2026, <span class="datetime__time">09:15</span></time></td><td class="table__num" data-label="Version">1</td>
+                  <td data-label="Last reminder" data-pg-reminder>3 Sep 2026, 08:00<span class="table__secondary">Automatic, 1 day before due</span></td>
+                  <td class="table__actions"><button type="button" class="btn btn--secondary btn--sm" data-pg-history>History<span class="u-visually-hidden"> for Ayesha Patel</span></button></td></tr>
+                <tr data-status="submitted" data-name="Johan Botha"><td class="table__check"><label class="check check--bare"><input class="check__input" type="checkbox" data-select-row><span class="u-visually-hidden">Select Johan Botha</span></label></td>
+                  <td class="table__primary-cell" data-label="Learner"><span class="table__primary">Johan Botha</span><span class="table__secondary mono">KSI-2026-0431</span></td>
+                  <td data-label="Status"><span class="tag tag--positive">Submitted</span></td>
+                  <td data-label="Submitted"><time class="datetime" datetime="2026-09-03T14:05:00+02:00">3 Sep 2026, <span class="datetime__time">14:05</span></time></td><td class="table__num" data-label="Version">1</td>
+                  <td data-label="Last reminder" data-pg-reminder>None sent</td>
+                  <td class="table__actions"><button type="button" class="btn btn--secondary btn--sm" data-pg-history>History<span class="u-visually-hidden"> for Johan Botha</span></button></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="bulk-bar" data-bulk-bar role="region" aria-label="Bulk actions" hidden>
+            <span class="bulk-bar__count"><span data-selected-count>0</span> selected</span>
+            <button type="button" class="btn btn--secondary" id="btn-remind" data-modal-open="m-reminder"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-megaphone"/></svg>Send reminder</button>
+            <button type="button" class="btn btn--secondary" data-toast="Export ready: selected learners" data-toast-meta="CSV · 7 Sep 2026, 08:45">Export selected</button>
+          </div>
+          <nav class="pagination u-mt-4" aria-label="Learner pages">
+            <span id="pg-showing">Showing 1 to 8 of 96</span>
+            <ul class="pagination__list">
+              <li><a class="pagination__item" role="link" aria-disabled="true" aria-label="Previous page"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-caret-left"/></svg></a></li>
+              <li><a class="pagination__item" href="#learners" aria-current="page" aria-label="Page 1, current">1</a></li>
+              <li><a class="pagination__item" href="#learners" aria-label="Page 2">2</a></li>
+              <li><a class="pagination__item" href="#learners" aria-label="Page 3">3</a></li>
+              <li><a class="pagination__item" href="#learners" aria-label="Next page"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-caret-right"/></svg></a></li>
+            </ul>
+          </nav>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <nav class="bottom-tabs" aria-label="Teaching">
+    <a class="bottom-tabs__item" href="#main"><svg class="icon" aria-hidden="true"><use href="#i-house"/></svg>Overview</a>
+    <a class="bottom-tabs__item" href="#main"><svg class="icon" aria-hidden="true"><use href="#i-clipboard"/></svg>Tasks</a>
+    <a class="bottom-tabs__item" href="#main"><svg class="icon" aria-hidden="true"><use href="#i-video"/></svg>Sessions</a>
+    <a class="bottom-tabs__item" href="teach-submissions.html" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-inbox"/></svg>Submissions</a>
+    <a class="bottom-tabs__item" href="#main"><svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg>More</a>
+  </nav>
+</div>
+
+<!-- ============================== DIALOGS AND SHEETS ============================== -->
+<dialog class="modal" id="m-reminder" aria-labelledby="mrm-t" data-modal-static>
+  <div class="modal__header"><h2 class="modal__title" id="mrm-t">Send a reminder?</h2></div>
+  <div class="modal__body">
+    <p class="modal__consequence"><span id="rem-count">0</span> <span id="rem-noun">learners</span> in 2026 Intake B who have not submitted Task 3 will get this message now, in the LMS and by email. It is logged on each learner's record.</p>
+    <p class="text-small" id="rem-skipped" hidden></p>
+    <div class="pg-preview"><p><strong>Reminder: Task 3: Workplace records portfolio</strong></p><p class="u-mt-2">Task 3 was due on Friday 4 September 2026 at 17:00. We do not have your work yet. You can still submit. Your work will be marked as late.</p></div>
+    <div class="field"><label class="field__label" for="rem-note">Add a note from you <span class="field__optional">(optional)</span></label><textarea class="textarea" id="rem-note" rows="3">If something is stopping you from submitting, reply to this message or speak to me after Tuesday's session.</textarea></div>
+    <p class="text-small text-muted">You are sending this as the facilitator: Pieter van Wyk. A reminder cannot be recalled once it is sent.</p>
+  </div>
+  <div class="modal__footer"><button type="button" class="btn btn--secondary" data-modal-close autofocus>Cancel</button><button type="button" class="btn btn--primary" id="rem-send" data-modal-close>Send reminder</button></div>
+</dialog>
+
+<dialog class="modal modal--sheet" id="m-history" aria-labelledby="mh-t">
+  <div class="modal__header"><h2 class="modal__title" id="mh-t">Learner history</h2><button type="button" class="btn btn--ghost btn--icon" data-modal-close aria-label="Close"><svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+  <div class="modal__body">
+    <p class="text-small text-muted">Task 3: Workplace records portfolio · 2026 Intake B. Submission status only.</p>
+    <dl class="dl dl--inline" id="mh-facts"></dl>
+    <p class="text-small">The full history lists every task, version and reminder for this learner.</p>
+  </div>
+  <div class="modal__footer"><button type="button" class="btn btn--secondary" data-modal-close>Close</button><a class="btn btn--primary" href="#main" data-modal-close>Open full history</a></div>
+</dialog>
+
+<div class="toast-region" role="status" aria-live="polite"></div>
+<script src="assets/ui.js"></script>
+<script src="assets/proto.js"></script>
+<script>
+/* Prototype only: status filter, learner search, the reminder flow and the history sheet.
+   Row selection, the bulk bar, Select mode, density, dialogs and toasts come from ui.js. */
+(function () {
+  var $ = function (s, c) { return (c || document).querySelector(s); };
+  var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
+  var table = $('#subs-table'), tbody = $('tbody', table), rows = $$('tr', tbody), selectAll = $('[data-select-all]');
+  var totals = { all: 96, outstanding: 23, submitted: 67, late: 6 }, filter = 'all';
+
+  function resync() { selectAll.checked = false; selectAll.dispatchEvent(new Event('change', { bubbles: true })); }
+  function render() {
+    var q = $('#f-learner').value.trim().toLowerCase();
+    var shown = rows.filter(function (r) {
+      return (filter === 'all' || r.getAttribute('data-status') === filter) && (!q || r.textContent.toLowerCase().indexOf(q) >= 0);
+    });
+    while (tbody.firstChild) tbody.removeChild(tbody.firstChild);   /* rows not shown leave the table, so "select all" means all rows shown */
+    shown.forEach(function (r) { tbody.appendChild(r); });
+    $$('[data-pg-filter]').forEach(function (c) { c.setAttribute('aria-pressed', String(c.getAttribute('data-pg-filter') === filter)); });
+    $('#pg-showing').textContent = shown.length ? 'Showing 1 to ' + shown.length + ' of ' + (q ? shown.length : totals[filter]) : 'No learners match this search';
+    resync();
+  }
+  function selectMode(on) {
+    var wrap = $('#subs-wrap'), btn = $('[data-select-mode]');
+    wrap.classList.toggle('is-selecting', on); btn.setAttribute('aria-pressed', String(on)); btn.textContent = on ? 'Done selecting' : 'Select';
+  }
+
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('a[href^="#"]');
+    if (a) { e.preventDefault(); var t = document.getElementById(a.getAttribute('href').slice(1)); if (t) { t.scrollIntoView(); t.focus({ preventScroll: true }); } return; }
+    var c = e.target.closest('[data-pg-filter]'); if (c) { filter = c.getAttribute('data-pg-filter'); render(); return; }
+    var h = e.target.closest('[data-pg-history]');
+    if (h) {
+      var cells = $$('td[data-label]', h.closest('tr')), dl = $('#mh-facts'); dl.innerHTML = '';
+      $('#mh-t').textContent = 'History: ' + h.closest('tr').getAttribute('data-name');
+      cells.slice(1).forEach(function (td) {
+        var row = document.createElement('div'), dt = document.createElement('dt'), dd = document.createElement('dd');
+        row.className = 'dl__row'; dt.textContent = td.getAttribute('data-label'); dd.textContent = td.textContent.replace(/\s+/g, ' ').trim();
+        row.appendChild(dt); row.appendChild(dd); dl.appendChild(row);
+      });
+      TakusaniUI.openModal('m-history', h); return;
+    }
+    if (e.target.closest('#btn-remind')) {
+      var picked = $$('[data-select-row]:checked', table).map(function (cb) { return cb.closest('tr'); });
+      var due = picked.filter(function (r) { return r.getAttribute('data-status') === 'outstanding'; }), skipped = picked.length - due.length;
+      $('#rem-count').textContent = due.length; $('#rem-noun').textContent = due.length === 1 ? 'learner' : 'learners';
+      $('#rem-skipped').hidden = !skipped;
+      $('#rem-skipped').textContent = skipped ? skipped + ' of the learners you selected ' + (skipped === 1 ? 'has' : 'have') + ' already submitted and will not get a reminder.' : '';
+      $('#rem-send').disabled = due.length === 0; return;
+    }
+    if (e.target.closest('#rem-send')) {
+      var n = 0;
+      $$('[data-select-row]:checked', table).forEach(function (cb) {
+        var r = cb.closest('tr'); if (r.getAttribute('data-status') !== 'outstanding') return; n++;
+        $('[data-pg-reminder]', r).innerHTML = '7 Sep 2026, 08:45<span class="table__secondary">Sent by you</span>';
+      });
+      resync(); selectMode(false);
+      TakusaniUI.toast({ title: 'Reminder sent', body: 'to ' + n + (n === 1 ? ' learner' : ' learners') + ' and logged on each learner\'s record', meta: '7 Sep 2026, 08:45' });
+    }
+  });
+  $('#f-learner').addEventListener('input', render);
+  $('#f-task').addEventListener('change', function () { location.hash = 'state=' + (this.selectedIndex === 2 ? 'empty' : 'default'); });
+
+  function apply(state) {
+    $('#f-task').selectedIndex = state === 'empty' ? 2 : 1;
+    $('#f-learner').value = '';
+    filter = state === 'default' ? 'all' : 'outstanding';
+    render();
+    if (state === 'selected') {
+      $$('[data-select-row]', tbody).slice(0, 3).forEach(function (cb) { cb.checked = true; });
+      tbody.querySelector('[data-select-row]').dispatchEvent(new Event('change', { bubbles: true }));
+    }
+    selectMode(state === 'selected');
+  }
+  document.addEventListener('proto:state', function (e) { apply(e.detail.state); });
+  apply(document.body.getAttribute('data-proto-current') || 'default');
+})();
+</script>
+</body>
+</html>
