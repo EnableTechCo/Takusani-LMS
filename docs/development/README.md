@@ -77,7 +77,7 @@ Because Vercel deploys on merge and migrations run after CI, the new code can be
 
 **Production (later)** does not use Vercel's Git integration. The workflow builds and deploys it itself (`deploy_app: true`) after migrations, so the order is always migrations first.
 
-The function region is `lhr1` (London), matching Supabase `eu-west-2`. That is the planning default for decision P-16 (ADR-027), pending the latency spike. To change it, create the Supabase project in the chosen region and change `regions` in `vercel.json`; the deploy stops if the two disagree.
+The function region is `cdg1` (Paris), matching the staging Supabase project "Takusani - LMS" (`mfgaoqabgboegovodklq`) in `eu-west-3`. This settles the region for decision P-16 in practice (ADR-027); production must be created in the same region. To change region, create the Supabase project in the new region and change `regions` in `vercel.json`; the deploy stops if the two disagree.
 
 ### Setting up staging (now)
 
@@ -85,7 +85,7 @@ Deployment stays off until the repository variable `CD_ENABLED` is `true`. Befor
 
 | Where | What |
 |---|---|
-| Supabase | Create the staging project in `eu-west-2` (or change `vercel.json` to match its region) |
+| Supabase | Done: the staging project is "Takusani - LMS" (`mfgaoqabgboegovodklq`, `eu-west-3`). Its ref goes in the `SUPABASE_PROJECT_ID` secret |
 | Vercel | In the existing project, set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` for the Production target (the staging site) |
 | GitHub | Create an environment named `staging` with secrets `SUPABASE_ACCESS_TOKEN`, `SUPABASE_DB_PASSWORD`, `SUPABASE_PROJECT_ID`, optionally `VERCEL_AUTOMATION_BYPASS_SECRET`, and variable `SITE_URL` (the staging site's address). No Vercel token is needed: Vercel deploys staging itself |
 
