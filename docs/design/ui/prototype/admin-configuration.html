@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en-ZA" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Configuration · Takusani LMS</title>
+<!-- Fonts: optional. The page is fully usable on the fallback stacks if this request fails (no web-font dependency for first paint). -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400..600&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap">
+<!-- Optional extended icon set (Phosphor Bold). Critical icons come from the inline sprite in ui.js. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/ui.css">
+<link rel="stylesheet" href="assets/proto.css">
+<link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+</head>
+<body data-proto-screen="P0-18a" data-proto-title="Configuration" data-proto-frs="FR-108" data-proto-states="default:Current settings|scheduled:A change is scheduled">
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<div class="app-shell">
+  <header class="app-shell__topbar">
+    <a class="brand" href="index.html" aria-label="Takusani LMS, all prototype screens">
+      <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M7 0H25A7 7 0 0 1 32 7V25A7 7 0 0 1 25 32H7A7 7 0 0 1 0 25V7A7 7 0 0 1 7 0ZM7 8.5H25V12H17.75V24H14.25V12H7ZM8.25 17.5A1.75 1.75 0 1 0 11.75 17.5A1.75 1.75 0 1 0 8.25 17.5ZM20.25 17.5A1.75 1.75 0 1 0 23.75 17.5A1.75 1.75 0 1 0 20.25 17.5Z"/></svg>
+      <span class="brand__name">Takusani</span><span class="brand__suffix">LMS</span>
+    </a>
+    <span class="topbar__institution">Khanya Skills Institute</span>
+    
+    <span class="topbar__spacer"></span>
+    <form class="topbar__search" role="search" action="#main" method="get" onsubmit="return false"><label class="input-icon"><span class="u-visually-hidden">Search</span><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><input class="input" type="search" name="q" placeholder="Search"></label></form>
+    <div class="topbar__actions">
+      <a class="btn btn--ghost btn--icon" href="notifications.html" aria-label="Notifications, 1 unread"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg><span class="badge-count" aria-hidden="true">1</span></a>
+      <details class="menu-wrap" data-menu>
+        <summary class="btn btn--ghost btn--icon" aria-label="Account menu for Sibusiso Khumalo"><span class="avatar" aria-hidden="true">SK</span></summary>
+        <div class="menu menu--end">
+          <div class="account__identity"><p class="account__name">Sibusiso Khumalo</p><p class="account__email">sibusiso.khumalo@khanya.example</p><ul class="account__roles"><li>System Administrator: Khanya Skills Institute</li></ul></div>
+          <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg>Profile</a>
+          <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg>Notification preferences</a>
+          <div class="menu__section"><fieldset class="fieldset"><legend class="fieldset__legend">Appearance</legend>
+            <div class="segmented">
+              <label class="segmented__option"><input type="radio" name="theme" value="light" data-theme-choice checked><span>Light</span></label>
+              <label class="segmented__option"><input type="radio" name="theme" value="dark" data-theme-choice><span>Dark</span></label>
+              <label class="segmented__option"><input type="radio" name="theme" value="auto" data-theme-choice><span>System</span></label>
+            </div></fieldset></div>
+          <div class="menu__divider" role="separator"></div>
+          <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-help"/></svg>Help</a>
+          <a class="menu__item" href="sign-in.html"><svg class="icon" aria-hidden="true"><use href="#i-sign-out"/></svg>Sign out</a>
+        </div>
+      </details>
+    </div>
+  </header>
+
+  <aside class="app-shell__sidenav" aria-label="Workspaces">
+    <nav class="sidenav" aria-label="Main navigation">
+      <div class="sidenav__group"><ul class="sidenav__list">
+        <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-house"/></svg><span class="sidenav__label">My work</span><span class="sidenav__short" aria-hidden="true">My work</span></a></li>
+      </ul></div>
+      <div class="sidenav__group"><h2 class="sidenav__heading">Administration</h2>
+        <ul class="sidenav__list">
+          <li><a class="sidenav__item" href="admin-roles.html"><svg class="icon" aria-hidden="true"><use href="#i-users"/></svg><span class="sidenav__label">Accounts</span><span class="sidenav__short" aria-hidden="true">Accounts</span></a></li>
+          <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-upload"/></svg><span class="sidenav__label">Imports</span><span class="sidenav__short" aria-hidden="true">Imports</span></a></li>
+          <li><a class="sidenav__item" href="admin-configuration.html" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-sliders"/></svg><span class="sidenav__label">Configuration</span><span class="sidenav__short" aria-hidden="true">Config</span></a></li>
+          <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-external"/></svg><span class="sidenav__label">Department integration</span><span class="sidenav__short" aria-hidden="true">Dept API</span></a></li>
+          <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-clipboard"/></svg><span class="sidenav__label">Audit log</span><span class="sidenav__short" aria-hidden="true">Audit</span></a></li>
+          <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-archive"/></svg><span class="sidenav__label">Cohort archive</span><span class="sidenav__short" aria-hidden="true">Archive</span></a></li>
+        </ul>
+      </div>
+    </nav>
+  </aside>
+
+  <main class="app-shell__main" id="main" tabindex="-1">
+    <div class="page">
+      <header class="page-header">
+        <p class="page-header__workspace">Administration</p>
+        <h1 class="page-header__title">Configuration</h1>
+        <p class="page-header__lead">Settings that apply to the whole institution. A setting is never edited: a change is recorded as a new version with the day it takes effect, and every earlier version stays on record with who changed it.</p>
+        <div class="page-header__meta">
+          <span class="tag" data-proto-state="default">No changes scheduled</span>
+          <span class="tag tag--info" data-proto-state="scheduled">1 change scheduled</span>
+          <span>5 groups of settings</span><span class="text-meta">As at Mon 21 Sep 2026, 11:30 SAST</span>
+        </div>
+      </header>
+
+      <div class="banner banner--info u-mb-6" role="note"><svg class="icon banner__icon" aria-hidden="true"><use href="#i-info"/></svg><p class="banner__title">A change never reaches back</p><p class="banner__body">A moderation cycle keeps the sampling rule it was frozen with. An exam attempt keeps the integrity settings it started with. A released result keeps the appeal closing day it was given. Credits already awarded keep their value.</p></div>
+
+      <div class="stack stack--lg">
+
+        <section aria-labelledby="g-mod">
+          <div class="section__header"><h2 class="text-heading" id="g-mod">Moderation sampling</h2></div>
+          <div class="table-wrap"><table class="table table--cards">
+            <caption class="u-visually-hidden">Moderation sampling settings</caption>
+            <thead><tr><th scope="col">Setting</th><th scope="col">Current value</th><th scope="col">In force from</th><th scope="col">Last changed by</th><th scope="col" class="table__actions"><span class="u-visually-hidden">Actions</span></th></tr></thead>
+            <tbody>
+              <tr><td class="table__primary-cell" data-label="Setting"><span class="table__primary">Sampling rule</span><span class="table__secondary mono">moderation.sampling.rule</span></td><td data-label="Value">rule-v4: by mark band, largest remainder</td><td data-label="In force from">Wed 1 Jul 2026</td><td data-label="Changed by">Sibusiso Khumalo (you)</td><td class="table__actions"><a class="btn btn--secondary btn--sm" href="#main" data-toast="This screen is not part of the prototype">Open<span class="u-visually-hidden"> Sampling rule</span></a></td></tr>
+              <tr><td class="table__primary-cell" data-label="Setting"><span class="table__primary">Sampling percentage</span><span class="table__secondary mono">moderation.sampling.percentage</span></td><td data-label="Value"><span>15% <span class="tag tag--info" data-proto-state="scheduled">Scheduled change: 20% from Thu 1 Oct 2026</span></span></td><td data-label="In force from">Wed 1 Jul 2026</td><td data-label="Changed by">Sibusiso Khumalo (you)</td><td class="table__actions"><a class="btn btn--secondary btn--sm" href="admin-configuration-key.html" data-proto-state="default">Open<span class="u-visually-hidden"> Sampling percentage</span></a><a class="btn btn--secondary btn--sm" href="admin-configuration-key.html#state=scheduled" data-proto-state="scheduled">Open<span class="u-visually-hidden"> Sampling percentage</span></a></td></tr>
+              <tr><td class="table__primary-cell" data-label="Setting"><span class="table__primary">Mandatory inclusions</span><span class="table__secondary mono">moderation.sampling.mandatory</span></td><td data-label="Value">Every Not yet competent decision. Every decision by a first-time assessor.</td><td data-label="In force from">Mon 12 Jan 2026</td><td data-label="Changed by">Sibusiso Khumalo (you)</td><td class="table__actions"><a class="btn btn--secondary btn--sm" href="#main" data-toast="This screen is not part of the prototype">Open<span class="u-visually-hidden"> Mandatory inclusions</span></a></td></tr>
+              <tr><td class="table__primary-cell" data-label="Setting"><span class="table__primary">Maximum hold before an alert</span><span class="table__secondary mono">moderation.hold.max_days</span></td><td data-label="Value">21 days</td><td data-label="In force from">Mon 12 Jan 2026</td><td data-label="Changed by">Sibusiso Khumalo (you)</td><td class="table__actions"><a class="btn btn--secondary btn--sm" href="#main" data-toast="This screen is not part of the prototype">Open<span class="u-visually-hidden"> Maximum hold</span></a></td></tr>
+            </tbody></table></div>
+        </section>
+
+        <section aria-labelledby="g-exam">
+          <div class="section__header"><h2 class="text-heading" id="g-exam">Exam integrity</h2></div>
+          <div class="table-wrap"><table class="table table--cards">
+            <caption class="u-visually-hidden">Exam integrity settings</caption>
+            <thead><tr><th scope="col">Setting</th><th scope="col">Current value</th><th scope="col">In force from</th><th scope="col">Last changed by</th><th scope="col" class="table__actions"><span class="u-visually-hidden">Actions</span></th></tr></thead>
+            <tbody>
+              <tr><td class="table__primary-cell" data-label="Setting"><span class="table__primary">Events before an attempt is marked for review</span><span class="table__secondary mono">exam.integrity.threshold</span></td><td data-label="Value">3 events. Never shown to learners.</td><td data-label="In force from">Mon 12 Jan 2026</td><td data-label="Changed by">Sibusiso Khumalo (you)</td><td class="table__actions"><a class="btn btn--secondary btn--sm" href="#main" data-toast="This screen is not part of the prototype">Open<span class="u-visually-hidden"> Integrity threshold</span></a></td></tr>
+              <tr><td class="table__primary-cell" data-label="Setting"><span class="table__primary">Grace before leaving the window is recorded</span><span class="table__secondary mono">exam.integrity.return_grace_s</span></td><td data-label="Value">10 seconds</td><td data-label="In force from">Mon 4 May 2026</td><td data-label="Changed by">Sibusiso Khumalo (you)</td><td class="table__actions"><a class="btn btn--secondary btn--sm" href="#main" data-toast="This screen is not part of the prototype">Open<span class="u-visually-hidden"> Return grace</span></a></td></tr>
+              <tr><td class="table__primary-cell" data-label="Setting"><span class="table__primary">Grace for answers that arrive after time is up</span><span class="table__secondary mono">exam.accept_grace_s</span></td><td data-label="Value">30 seconds</td><td data-label="In force from">Mon 12 Jan 2026</td><td data-label="Changed by">Sibusiso Khumalo (you)</td><td class="table__actions"><a class="btn btn--secondary btn--sm" href="#main" data-toast="This screen is not part of the prototype">Open<span class="u-visually-hidden"> Acceptance grace</span></a></td></tr>
+            </tbody></table></div>
+        </section>
+
+        <section aria-labelledby="g-appeal">
+          <div class="section__header"><h2 class="text-heading" id="g-appeal">Appeals and late work</h2></div>
+          <div class="table-wrap"><table class="table table--cards">
+            <caption class="u-visually-hidden">Appeal window and late submission settings</caption>
+            <thead><tr><th scope="col">Setting</th><th scope="col">Current value</th><th scope="col">In force from</th><th scope="col">Last changed by</th><th scope="col" class="table__actions"><span class="u-visually-hidden">Actions</span></th></tr></thead>
+            <tbody>
+              <tr><td class="table__primary-cell" data-label="Setting"><span class="table__primary">Appeal window</span><span class="table__secondary mono">appeal.window_days</span></td><td data-label="Value">7 calendar days from release, to the end of the last day</td><td data-label="In force from">Mon 12 Jan 2026</td><td data-label="Changed by">Sibusiso Khumalo (you)</td><td class="table__actions"><a class="btn btn--secondary btn--sm" href="#main" data-toast="This screen is not part of the prototype">Open<span class="u-visually-hidden"> Appeal window</span></a></td></tr>
+              <tr><td class="table__primary-cell" data-label="Setting"><span class="table__primary">Late submission policy</span><span class="table__secondary mono">submission.late_policy</span></td><td data-label="Value">Accept late work and mark it Late. No change to the mark. The assessor sees how late it was.</td><td data-label="In force from">Mon 12 Jan 2026</td><td data-label="Changed by">Sibusiso Khumalo (you)</td><td class="table__actions"><a class="btn btn--secondary btn--sm" href="#main" data-toast="This screen is not part of the prototype">Open<span class="u-visually-hidden"> Late submission policy</span></a></td></tr>
+              <tr><td class="table__primary-cell" data-label="Setting"><span class="table__primary">Resubmission period</span><span class="table__secondary mono">submission.resubmit_days</span></td><td data-label="Value">14 days from release, to the end of the last day</td><td data-label="In force from">Mon 12 Jan 2026</td><td data-label="Changed by">Sibusiso Khumalo (you)</td><td class="table__actions"><a class="btn btn--secondary btn--sm" href="#main" data-toast="This screen is not part of the prototype">Open<span class="u-visually-hidden"> Resubmission period</span></a></td></tr>
+            </tbody></table></div>
+        </section>
+
+        <section aria-labelledby="g-credit">
+          <div class="section__header"><h2 class="text-heading" id="g-credit">Credit values per unit</h2><span class="text-small text-muted">Certificate in Business Administration, NQF Level 4 · 140 credits</span></div>
+          <div class="table-wrap"><table class="table table--cards">
+            <caption class="u-visually-hidden">Credit values per unit</caption>
+            <thead><tr><th scope="col">Setting</th><th scope="col">Current value</th><th scope="col">In force from</th><th scope="col">Last changed by</th><th scope="col" class="table__actions"><span class="u-visually-hidden">Actions</span></th></tr></thead>
+            <tbody>
+              <tr><td class="table__primary-cell" data-label="Setting"><span class="table__primary">Unit 3: Workplace records</span><span class="table__secondary mono">credits.unit.3</span></td><td data-label="Value">8 credits</td><td data-label="In force from">Mon 12 Jan 2026</td><td data-label="Changed by">Sibusiso Khumalo (you)</td><td class="table__actions"><a class="btn btn--secondary btn--sm" href="#main" data-toast="This screen is not part of the prototype">Open<span class="u-visually-hidden"> Unit 3 credits</span></a></td></tr>
+              <tr><td class="table__primary-cell" data-label="Setting"><span class="table__primary">Unit 4: Business communication</span><span class="table__secondary mono">credits.unit.4</span></td><td data-label="Value">10 credits</td><td data-label="In force from">Mon 12 Jan 2026</td><td data-label="Changed by">Sibusiso Khumalo (you)</td><td class="table__actions"><a class="btn btn--secondary btn--sm" href="#main" data-toast="This screen is not part of the prototype">Open<span class="u-visually-hidden"> Unit 4 credits</span></a></td></tr>
+              <tr><td class="table__primary-cell" data-label="Setting"><span class="table__primary">12 more units</span></td><td data-label="Value">122 credits in all</td><td data-label="In force from">Mon 12 Jan 2026</td><td data-label="Changed by">Sibusiso Khumalo (you)</td><td class="table__actions"><a class="btn btn--secondary btn--sm" href="#main" data-toast="This screen is not part of the prototype">See all units</a></td></tr>
+            </tbody></table></div>
+        </section>
+
+        <section aria-labelledby="g-file">
+          <div class="section__header"><h2 class="text-heading" id="g-file">File upload limits</h2></div>
+          <div class="table-wrap"><table class="table table--cards">
+            <caption class="u-visually-hidden">File upload limits</caption>
+            <thead><tr><th scope="col">Setting</th><th scope="col">Current value</th><th scope="col">In force from</th><th scope="col">Last changed by</th><th scope="col" class="table__actions"><span class="u-visually-hidden">Actions</span></th></tr></thead>
+            <tbody>
+              <tr><td class="table__primary-cell" data-label="Setting"><span class="table__primary">Accepted file types</span><span class="table__secondary mono">upload.types</span></td><td data-label="Value">PDF, DOCX, XLSX, JPG, PNG</td><td data-label="In force from">Mon 12 Jan 2026</td><td data-label="Changed by">Sibusiso Khumalo (you)</td><td class="table__actions"><a class="btn btn--secondary btn--sm" href="#main" data-toast="This screen is not part of the prototype">Open<span class="u-visually-hidden"> Accepted file types</span></a></td></tr>
+              <tr><td class="table__primary-cell" data-label="Setting"><span class="table__primary">Largest file</span><span class="table__secondary mono">upload.max_mb</span></td><td data-label="Value">25 MB each</td><td data-label="In force from">Mon 2 Mar 2026</td><td data-label="Changed by">Sibusiso Khumalo (you)</td><td class="table__actions"><a class="btn btn--secondary btn--sm" href="#main" data-toast="This screen is not part of the prototype">Open<span class="u-visually-hidden"> Largest file</span></a></td></tr>
+            </tbody></table></div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <nav class="bottom-tabs" aria-label="Administration, phone tabs">
+    <a class="bottom-tabs__item" href="admin-roles.html"><svg class="icon" aria-hidden="true"><use href="#i-users"/></svg>Accounts</a>
+    <a class="bottom-tabs__item" href="admin-configuration.html" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-sliders"/></svg>Config</a>
+    <a class="bottom-tabs__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-clipboard"/></svg>Audit log</a>
+    <a class="bottom-tabs__item" href="#main" data-modal-open="m-more"><svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg>More</a>
+  </nav>
+</div>
+
+<dialog class="modal modal--sheet" id="m-more" aria-labelledby="m-more-t">
+  <div class="modal__header"><h2 class="modal__title" id="m-more-t">More in Administration</h2><button type="button" class="btn btn--ghost btn--icon" data-modal-close aria-label="Close"><svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+  <div class="modal__body">
+    <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-upload"/></svg><span class="menu__item-text">Imports</span></a>
+    <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-external"/></svg><span class="menu__item-text">Department integration</span></a>
+    <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-archive"/></svg><span class="menu__item-text">Cohort archive</span></a>
+    <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><span class="menu__item-text">Search</span></a>
+  </div>
+</dialog>
+
+
+<div class="toast-region" role="status" aria-live="polite"></div>
+<script src="assets/ui.js"></script>
+<script src="assets/proto.js"></script>
+<script>
+/* Prototype only. Keeps placeholder links and in-page anchors from replacing the state in the URL hash,
+   lets a button move the screen to another prototype state, and moves focus to a refusal when a state shows one. */
+(function () {
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest) return;
+    var a = e.target.closest('a[href^="#"]');
+    if (a && a.getAttribute('href').indexOf('#state=') !== 0) {
+      e.preventDefault();
+      var t = document.getElementById(a.getAttribute('href').slice(1));
+      if (t && !a.hasAttribute('data-toast') && !a.hasAttribute('data-modal-open')) { t.scrollIntoView(); t.focus({ preventScroll: true }); }
+    }
+    var g = e.target.closest('[data-proto-goto]');
+    if (g) location.hash = 'state=' + g.getAttribute('data-proto-goto');
+  });
+  function settle(initial) {
+    setTimeout(function () {
+      var f = Array.prototype.filter.call(document.querySelectorAll('[data-proto-focus]'), function (el) { return !el.closest('[hidden]'); })[0];
+      if (f) { f.focus(); return; }
+      if (!initial) { window.scrollTo(0, 0); document.getElementById('main').focus({ preventScroll: true }); }
+    }, 0);
+  }
+  document.addEventListener('proto:state', function () { settle(false); });
+  if (/state=/.test(location.hash)) settle(true);
+})();
+</script>
+
+</body>
+</html>

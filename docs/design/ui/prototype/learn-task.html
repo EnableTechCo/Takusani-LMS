@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en-ZA" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Task 3: Workplace records portfolio · Takusani LMS</title>
+<!-- Fonts: optional. The page is fully usable on the fallback stacks if this request fails (no web-font dependency for first paint). -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400..600&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap">
+<!-- Optional extended icon set (Phosphor Bold). Critical icons come from the inline sprite in ui.js. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/ui.css">
+<link rel="stylesheet" href="assets/proto.css">
+<link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+</head>
+<body data-proto-screen="P0-04" data-proto-title="Task detail and submission" data-proto-frs="FR-308 FR-309 FR-310 FR-311 FR-317" data-proto-states="default:Not yet submitted|uploading:Upload interrupted, resuming (after the due time)|submitted:Submitted on time|late:Late submission accepted|returned:Not yet competent, resubmission open">
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<div class="app-shell">
+  <header class="app-shell__topbar">
+    <a class="brand" href="learn-home.html" aria-label="Takusani LMS, go to your home page">
+      <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M7 0H25A7 7 0 0 1 32 7V25A7 7 0 0 1 25 32H7A7 7 0 0 1 0 25V7A7 7 0 0 1 7 0ZM7 8.5H25V12H17.75V24H14.25V12H7ZM8.25 17.5A1.75 1.75 0 1 0 11.75 17.5A1.75 1.75 0 1 0 8.25 17.5ZM20.25 17.5A1.75 1.75 0 1 0 23.75 17.5A1.75 1.75 0 1 0 20.25 17.5Z"/></svg>
+      <span class="brand__name">Takusani</span><span class="brand__suffix">LMS</span>
+    </a>
+    <span class="topbar__institution">Khanya Skills Institute</span>
+    <span class="topbar__spacer"></span>
+    <form class="topbar__search" role="search" action="index.html" method="get"><label class="input-icon"><span class="u-visually-hidden">Search materials, tasks, sessions and exams</span><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><input class="input" type="search" name="q" placeholder="Search"></label></form>
+    <div class="topbar__actions">
+      <a class="btn btn--ghost btn--icon" href="notifications.html" aria-label="Notifications, 2 unread"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg><span class="badge-count" aria-hidden="true">2</span></a>
+      <details class="menu-wrap" data-menu>
+        <summary class="btn btn--ghost btn--icon" aria-label="Account menu for Lerato Mokoena"><span class="avatar" aria-hidden="true">LM</span></summary>
+        <div class="menu menu--end">
+          <div class="account__identity"><p class="account__name">Lerato Mokoena</p><p class="account__email">l.mokoena@example.org</p><ul class="account__roles"><li>Learner: 2026 Intake B</li><li>Learner number KSI-2026-0417</li></ul></div>
+          <a class="menu__item" href="index.html"><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg>Profile</a>
+          <a class="menu__item" href="index.html"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg>Notification preferences</a>
+          <a class="menu__item" href="index.html"><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg>Subscribe to your calendar</a>
+          <div class="menu__section"><fieldset class="fieldset"><legend class="fieldset__legend">Appearance</legend>
+            <div class="segmented">
+              <label class="segmented__option"><input type="radio" name="theme" value="light" data-theme-choice checked><span>Light</span></label>
+              <label class="segmented__option"><input type="radio" name="theme" value="dark" data-theme-choice><span>Dark</span></label>
+              <label class="segmented__option"><input type="radio" name="theme" value="auto" data-theme-choice><span>System</span></label>
+            </div></fieldset></div>
+          <div class="menu__divider" role="separator"></div>
+          <a class="menu__item" href="index.html"><svg class="icon" aria-hidden="true"><use href="#i-help"/></svg>Help</a>
+          <a class="menu__item" href="sign-in.html"><svg class="icon" aria-hidden="true"><use href="#i-sign-out"/></svg>Sign out</a>
+        </div>
+      </details>
+    </div>
+  </header>
+
+  <aside class="app-shell__sidenav" aria-label="Main navigation">
+    <nav class="sidenav" aria-label="Learning">
+      <div class="sidenav__group">
+        <ul class="sidenav__list">
+          <li><a class="sidenav__item" href="learn-home.html"><svg class="icon" aria-hidden="true"><use href="#i-house"/></svg><span class="sidenav__label">Home</span><span class="sidenav__short" aria-hidden="true">Home</span></a></li>
+          <li><a class="sidenav__item" href="learn-task.html" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-clipboard"/></svg><span class="sidenav__label">Tasks</span><span class="sidenav__short" aria-hidden="true">Tasks</span></a></li>
+          <li><a class="sidenav__item" href="learn-exam-preflight.html"><svg class="icon" aria-hidden="true"><use href="#i-laptop"/></svg><span class="sidenav__label">Exams</span><span class="sidenav__short" aria-hidden="true">Exams</span></a></li>
+          <li><a class="sidenav__item" href="index.html"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg><span class="sidenav__label">Materials</span><span class="sidenav__short" aria-hidden="true">Materials</span></a></li>
+          <li><a class="sidenav__item" href="index.html"><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg><span class="sidenav__label">Calendar</span><span class="sidenav__short" aria-hidden="true">Calendar</span></a></li>
+          <li><a class="sidenav__item" href="learn-result.html"><svg class="icon" aria-hidden="true"><use href="#i-check-circle"/></svg><span class="sidenav__label">Results</span><span class="sidenav__short" aria-hidden="true">Results</span></a></li>
+          <li><a class="sidenav__item" href="learn-credits.html"><svg class="icon" aria-hidden="true"><use href="#i-chart"/></svg><span class="sidenav__label">Credits</span><span class="sidenav__short" aria-hidden="true">Credits</span></a></li>
+          <li><a class="sidenav__item" href="index.html"><svg class="icon" aria-hidden="true"><use href="#i-note"/></svg><span class="sidenav__label">Notes</span><span class="sidenav__short" aria-hidden="true">Notes</span></a></li>
+        </ul>
+      </div>
+    </nav>
+  </aside>
+
+  <main class="app-shell__main" id="main" tabindex="-1">
+    <div class="page">
+      <header class="page-header">
+        <nav aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="learn-home.html">Home</a></li><li><a href="learn-task.html">Tasks</a></li><li aria-current="page">Task 3</li></ol></nav>
+        <h1 class="page-header__title">Task 3: Workplace records portfolio</h1>
+        <div class="page-header__meta">
+          <span class="tag" data-proto-state="default">Not started</span>
+          <span class="tag tag--info tag--shape-half" data-proto-state="uploading">Upload in progress</span>
+          <span class="tag tag--positive" data-proto-state="submitted">Submitted, version 1</span>
+          <span class="tag tag--caution" data-proto-state="late">Submitted, version 2, Late</span>
+          <span class="tag tag--caution" data-proto-state="returned">Resubmission open</span>
+          <span>Unit 3: Workplace records · 8 credits</span>
+          <span>Set by Pieter van Wyk</span>
+        </div>
+      </header>
+
+      <div class="page-layout">
+        <div class="page-layout__main stack stack--lg">
+
+          <!-- ============ Due date line and the state of this task, always first ============ -->
+          <div class="stack">
+            <p class="deadline-line" data-proto-state="default"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg><span>Due <span class="deadline-line__date">Friday 4 September 2026 at 17:00</span> (SAST), <span class="deadline-line__left">in 8 days</span>. Work submitted after 17:00 is marked as late.</span></p>
+
+            <div class="banner banner--caution" role="status" data-proto-state="uploading">
+              <svg class="icon banner__icon" aria-hidden="true"><use href="#i-clock"/></svg>
+              <p class="banner__title">The due date has passed. You can still submit</p>
+              <div class="banner__body stack stack--sm">
+                <p>This task was due on Friday 4 September 2026 at 17:00 (SAST). Version 2 will be marked as late. Version 1, which you submitted on time, stays on record.</p>
+                <p>Late policy for this programme: late work is assessed in the normal way, and the late flag is shown to your assessor and kept on your record.</p>
+              </div>
+            </div>
+
+            <div class="banner banner--info" role="status" data-proto-state="submitted late">
+              <svg class="icon banner__icon" aria-hidden="true"><use href="#i-info"/></svg>
+              <p class="banner__title">We have your work</p>
+              <p class="banner__body">In this programme, results are checked by a second person (a moderator) before anyone sees them, and everyone's results for the same task are released together. You will get a message here and by email when your result is ready. Your 7 days to appeal, and any time you are given to resubmit, only start on the day your result is released.</p>
+            </div>
+            <p class="deadline-line" data-proto-state="submitted"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg><span>Due <span class="deadline-line__date">Friday 4 September 2026 at 17:00</span> (SAST), <span class="deadline-line__left">in 7 days</span>. You can still improve your work: <a href="#state=uploading">submit a new version</a>. Version 1 will stay on record.</span></p>
+            <p class="deadline-line deadline-line--closed" data-proto-state="late"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg><span>This task was due on Friday 4 September 2026 at 17:00 (SAST). Version 2 arrived at 17:42 and is marked as late.</span></p>
+
+            <div class="banner banner--caution" data-proto-state="returned">
+              <svg class="icon banner__icon" aria-hidden="true"><use href="#i-refresh"/></svg>
+              <p class="banner__title">Not yet competent. Here is what to do next</p>
+              <div class="banner__body">
+                <p>Your assessor, Thandiwe Nkosi, asks you to add two things. <strong>You can resubmit until the end of Tuesday 6 October 2026.</strong> <span class="mono">13 days left</span></p>
+                <ul class="prose">
+                  <li>Upload the access register for July and August.</li>
+                  <li>Add one paragraph on who approves a request to see a confidential record.</li>
+                </ul>
+              </div>
+              <div class="banner__actions"><a href="learn-result.html">Read your result and all the feedback</a></div>
+            </div>
+          </div>
+
+          <!-- ============ Receipt (after submitting; also reachable later from the version history) ============ -->
+          <section aria-labelledby="receipt-h" data-proto-state="submitted late">
+            <h2 class="u-visually-hidden" id="receipt-h">Your receipt</h2>
+            <div class="receipt" data-proto-state="submitted">
+              <p class="receipt__title"><svg class="icon" aria-hidden="true"><use href="#i-check-circle"/></svg>We have your work</p>
+              <code class="receipt__id">SUB-2026-0828-3F9Q</code>
+              <dl class="receipt__rows">
+                <div class="receipt__row"><dt>Learner</dt><dd>Lerato Mokoena · KSI-2026-0417</dd></div>
+                <div class="receipt__row"><dt>Task</dt><dd>Task 3: Workplace records portfolio</dd></div>
+                <div class="receipt__row"><dt>Version</dt><dd>1 (2 files, 9.8 MB)</dd></div>
+                <div class="receipt__row"><dt>Received</dt><dd><time datetime="2026-08-28T16:55:00+02:00">Friday 28 August 2026 at 16:55 (SAST)</time></dd></div>
+                <div class="receipt__row"><dt>On time?</dt><dd>Yes. 7 days before the due date.</dd></div>
+              </dl>
+              <p class="receipt__note">What happens next: your work will be assessed. You will get a message here and by email when your result is ready. Keep this reference in case you need to ask about this submission.</p>
+              <div class="receipt__actions"><button type="button" class="btn btn--secondary" onclick="window.print()"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-printer"/></svg>Print</button><button type="button" class="btn btn--ghost" data-toast="Reference copied" data-toast-meta="SUB-2026-0828-3F9Q"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-copy"/></svg>Copy reference</button></div>
+            </div>
+            <div class="receipt" data-proto-state="late">
+              <p class="receipt__title"><svg class="icon" aria-hidden="true"><use href="#i-check-circle"/></svg>We have your work</p>
+              <code class="receipt__id">SUB-2026-0904-7K2M</code>
+              <dl class="receipt__rows">
+                <div class="receipt__row"><dt>Learner</dt><dd>Lerato Mokoena · KSI-2026-0417</dd></div>
+                <div class="receipt__row"><dt>Task</dt><dd>Task 3: Workplace records portfolio</dd></div>
+                <div class="receipt__row"><dt>Version</dt><dd>2 (3 files, 17.3 MB)</dd></div>
+                <div class="receipt__row"><dt>Received</dt><dd><time datetime="2026-09-04T17:42:00+02:00">Friday 4 September 2026 at 17:42 (SAST)</time></dd></div>
+                <div class="receipt__row"><dt>On time?</dt><dd>Late by 42 minutes. The late policy applies.</dd></div>
+              </dl>
+              <p class="receipt__note">What happens next: your work will be assessed in the normal way. Your assessor will see that version 2 was late. You will get a message here and by email when your result is ready. Keep this reference in case you need to ask about this submission.</p>
+              <div class="receipt__actions"><button type="button" class="btn btn--secondary" onclick="window.print()"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-printer"/></svg>Print</button><button type="button" class="btn btn--ghost" data-toast="Reference copied" data-toast-meta="SUB-2026-0904-7K2M"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-copy"/></svg>Copy reference</button></div>
+            </div>
+          </section>
+
+          <!-- ============ Brief ============ -->
+          <section aria-labelledby="brief-h">
+            <h2 class="text-heading u-mb-4" id="brief-h">What to do</h2>
+            <div class="prose">
+              <p>Choose one set of records that your workplace, or the practice office at the training centre, keeps. Good examples are leave records, payroll records or supplier invoices. Build a short portfolio that shows how those records are filed, how long they are kept, and who may see them.</p>
+              <ol>
+                <li>Draw up a filing index for the records, and test it: another person must be able to find five records from your index without your help.</li>
+                <li>Write a retention schedule that says how long each type of record is kept, and why.</li>
+                <li>Describe how access to confidential records is controlled. Include evidence that requests are written down and approved.</li>
+              </ol>
+              <p>Remove or cover personal details such as identity numbers and bank account numbers before you upload anything.</p>
+            </div>
+          </section>
+
+          <!-- ============ Criteria (read-only) ============ -->
+          <section aria-labelledby="criteria-h">
+            <h2 class="text-heading u-mb-4" id="criteria-h">How your work is assessed</h2>
+            <div class="table-wrap">
+              <table class="table table--cards">
+                <caption class="u-visually-hidden">Assessment criteria for Task 3. Each criterion is marked out of 4.</caption>
+                <thead><tr><th scope="col">Criterion</th><th scope="col">What your assessor looks for</th><th scope="col" class="table__num">Marks</th></tr></thead>
+                <tbody>
+                  <tr><td class="table__primary-cell" data-label="Criterion"><span class="table__primary">Maintains a filing index that others can use</span><span class="table__secondary mono">AC 3.1</span></td><td data-label="Looks for">Records in the sample can be found from the index without help.</td><td class="table__num" data-label="Marks">4</td></tr>
+                  <tr><td class="table__primary-cell" data-label="Criterion"><span class="table__primary">Controls access to confidential records</span><span class="table__secondary mono">AC 3.2</span></td><td data-label="Looks for">Evidence that access is requested, approved and recorded.</td><td class="table__num" data-label="Marks">4</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="text-small text-muted u-mt-2">The outcome is Competent or Not yet competent. If the outcome is Not yet competent, your assessor tells you what to add, and you get time to resubmit.</p>
+          </section>
+
+          <!-- ============ Evidence requirements and upload ============ -->
+          <section aria-labelledby="submit-h" data-proto-state="default uploading returned">
+            <div class="section__header">
+              <h2 class="text-heading" id="submit-h"><span data-proto-state="default">Submit your work</span><span data-proto-state="uploading">Submit a new version</span><span data-proto-state="returned">Resubmit your work</span></h2>
+              <span class="status-line" role="status" data-proto-state="uploading"><span class="spinner" aria-hidden="true"></span>2 of 5 files uploaded. Keep this page open.</span>
+            </div>
+
+            <div class="stack stack--lg">
+              <!-- Requirement 1 -->
+              <div class="upload">
+                <div class="upload__drop" data-proto-state="default returned">
+                  <svg class="icon icon--xl" aria-hidden="true"><use href="#i-upload"/></svg>
+                  <p class="upload__title"><span data-proto-state="default">Add evidence for requirement 1: portfolio document</span><span data-proto-state="returned">Requirement 1: portfolio document, with your new paragraph</span></p>
+                  <p>One PDF or DOCX file, up to 25 MB. This requirement must be met before you can submit.</p>
+                  <input class="upload__input" type="file" id="up-req1" accept=".pdf,.docx">
+                  <label class="btn btn--secondary" for="up-req1">Choose a file</label>
+                </div>
+                <p class="text-subheading" data-proto-state="uploading">Requirement 1: portfolio document</p>
+                <ul class="upload__list" aria-label="Files for requirement 1" data-proto-state="uploading">
+                  <li class="upload-row upload-row--uploaded"><svg class="icon upload-row__icon" aria-hidden="true"><use href="#i-file"/></svg><span class="upload-row__name">Workplace-records-portfolio-v2.pdf</span><span class="upload-row__status">Uploaded · 4.2 MB</span><span class="upload-row__actions"><button type="button" class="btn btn--ghost btn--icon" aria-label="Remove Workplace-records-portfolio-v2.pdf"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-trash"/></svg></button></span></li>
+                </ul>
+                <ul class="upload__list" aria-label="Files for requirement 1" data-proto-state="returned">
+                  <li class="upload-row upload-row--waiting"><svg class="icon upload-row__icon" aria-hidden="true"><use href="#i-file"/></svg><span class="upload-row__name">Workplace-records-portfolio-v3.pdf</span><span class="upload-row__status">Waiting · 4.4 MB</span><span class="upload-row__actions"><button type="button" class="btn btn--ghost btn--icon" aria-label="Remove Workplace-records-portfolio-v3.pdf"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-x"/></svg></button></span></li>
+                </ul>
+              </div>
+
+              <!-- Requirement 2 -->
+              <div class="upload">
+                <div class="upload__drop">
+                  <svg class="icon icon--xl" aria-hidden="true"><use href="#i-upload"/></svg>
+                  <p class="upload__title"><span data-proto-state="default uploading">Add evidence for requirement 2: supporting records</span><span data-proto-state="returned">Add evidence for requirement 2: access register</span></p>
+                  <p data-proto-state="default uploading">Your filing index, your retention schedule, and proof of how access is controlled. PDF, DOCX, XLSX, JPG or PNG. Up to 25 MB each. If your connection drops, the upload carries on from where it stopped.</p>
+                  <p data-proto-state="returned">The access register for July and August 2026. A clear photo of each page is fine. PDF, XLSX, JPG or PNG. Up to 25 MB each. If your connection drops, the upload carries on from where it stopped.</p>
+                  <input class="upload__input" type="file" id="up-req2" multiple accept=".pdf,.docx,.xlsx,.jpg,.jpeg,.png">
+                  <label class="btn btn--secondary" for="up-req2">Choose files</label>
+                </div>
+                <ul class="upload__list" aria-label="Files for requirement 2" data-proto-state="uploading">
+                  <li class="upload-row upload-row--uploaded"><svg class="icon upload-row__icon" aria-hidden="true"><use href="#i-file"/></svg><span class="upload-row__name">Retention-schedule.xlsx</span><span class="upload-row__status">Uploaded · 1.1 MB</span><span class="upload-row__actions"><button type="button" class="btn btn--ghost btn--icon" aria-label="Remove Retention-schedule.xlsx"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-trash"/></svg></button></span></li>
+                  <li class="upload-row upload-row--resuming"><svg class="icon upload-row__icon" aria-hidden="true"><use href="#i-file"/></svg><span class="upload-row__name">Filing-index-v2.docx</span><span class="upload-row__status"><span class="spinner" aria-hidden="true"></span> Resuming from 67% · 8.0 of 12.0 MB</span><div class="progress" role="progressbar" aria-label="Filing-index-v2.docx upload, resuming" aria-valuemin="0" aria-valuemax="100" aria-valuenow="67"><div class="progress__bar" style="--value:67%"></div></div></li>
+                  <li class="upload-row upload-row--paused"><svg class="icon upload-row__icon" aria-hidden="true"><use href="#i-file"/></svg><span class="upload-row__name">Office-photos.pdf</span><span class="upload-row__status">Paused at 31%, no connection. It will carry on by itself when you are back online.</span><span class="upload-row__actions"><button type="button" class="btn btn--secondary btn--sm">Try now</button></span><div class="progress progress--caution" role="progressbar" aria-label="Office-photos.pdf upload, paused" aria-valuemin="0" aria-valuemax="100" aria-valuenow="31"><div class="progress__bar" style="--value:31%"></div></div></li>
+                  <li class="upload-row upload-row--checking"><svg class="icon upload-row__icon" aria-hidden="true"><use href="#i-file"/></svg><span class="upload-row__name">Leave-records-sample.pdf</span><span class="upload-row__status">Checking file</span><div class="progress progress--indeterminate" role="progressbar" aria-label="Checking Leave-records-sample.pdf"><div class="progress__bar"></div></div></li>
+                  <li class="upload-row upload-row--rejected"><svg class="icon upload-row__icon" aria-hidden="true"><use href="#i-file"/></svg><span class="upload-row__name">Office-walkthrough.mov</span><span class="upload-row__status">Not accepted. This file is 48 MB and is a video. The limit is 25 MB, and videos cannot be uploaded. Save the key moments as images or a PDF instead.</span><span class="upload-row__actions"><button type="button" class="btn btn--ghost btn--icon" aria-label="Dismiss Office-walkthrough.mov"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-x"/></svg></button></span></li>
+                  <li class="upload-row upload-row--expired"><svg class="icon upload-row__icon" aria-hidden="true"><use href="#i-file"/></svg><span class="upload-row__name">Payroll-extract.xlsx</span><span class="upload-row__status">Expired. This upload was paused for too long. Choose the file again.</span><span class="upload-row__actions"><button type="button" class="btn btn--secondary btn--sm">Choose again</button></span></li>
+                </ul>
+                <ul class="upload__list" aria-label="Files for requirement 2" data-proto-state="returned">
+                  <li class="upload-row upload-row--uploading"><svg class="icon upload-row__icon" aria-hidden="true"><use href="#i-file"/></svg><span class="upload-row__name">Access-register-Jul-Aug.pdf</span><span class="upload-row__status">Uploading 42% · 1.3 of 3.1 MB</span><span class="upload-row__actions"><button type="button" class="btn btn--ghost btn--icon" aria-label="Pause upload of Access-register-Jul-Aug.pdf"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-pause"/></svg></button></span><div class="progress" role="progressbar" aria-label="Access-register-Jul-Aug.pdf upload" aria-valuemin="0" aria-valuemax="100" aria-valuenow="42"><div class="progress__bar" style="--value:42%"></div></div></li>
+                </ul>
+              </div>
+
+              <!-- Review and submit -->
+              <div class="card card--sunken">
+                <div class="card__body stack">
+                  <p class="text-subheading" data-proto-state="default">This will be version 1.</p>
+                  <p class="text-subheading" data-proto-state="uploading">This will be version 2. Version 1 stays on record.</p>
+                  <p class="text-subheading" data-proto-state="returned">This will be version 3. Versions 1 and 2 stay on record.</p>
+                  <p class="text-small text-muted" data-proto-state="default">You can submit a new version at any time before your work is assessed. Every version you submit is kept.</p>
+                  <p class="text-small text-muted" data-proto-state="uploading">About 17 MB in total. You are on mobile data: the two files still to finish are about 12 MB.</p>
+                  <p class="text-small text-muted" data-proto-state="returned">Files from version 2 that you do not replace are carried over: Filing-index-v2.docx and Retention-schedule.xlsx.</p>
+                  <div class="cluster">
+                    <button type="button" class="btn btn--primary" disabled aria-describedby="submit-blocked" data-proto-state="default">Submit version 1</button>
+                    <button type="button" class="btn btn--primary" disabled aria-describedby="submit-blocked" data-proto-state="uploading">Submit version 2</button>
+                    <button type="button" class="btn btn--primary" disabled aria-describedby="submit-blocked" data-proto-state="returned">Submit version 3</button>
+                    <p class="blocked-reason" id="submit-blocked"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg><span data-proto-state="default">You cannot submit yet: add your portfolio document for requirement 1.</span><span data-proto-state="uploading">You cannot submit yet: 3 files are still uploading or being checked. Files that were not accepted or that expired are left out.</span><span data-proto-state="returned">You cannot submit yet: 1 file is still uploading and 1 is waiting.</span></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- ============ Aside: facts and version history ============ -->
+        <aside class="page-layout__aside stack" aria-label="Task facts and version history">
+          <div class="card">
+            <div class="card__header"><h2 class="card__title">About this task</h2></div>
+            <div class="card__body">
+              <dl class="dl">
+                <div class="dl__row"><dt>Due</dt><dd><time datetime="2026-09-04T17:00:00+02:00">Friday 4 September 2026 at 17:00 (SAST)</time></dd></div>
+                <div class="dl__row" data-proto-state="returned"><dt>Resubmit by</dt><dd>The end of Tuesday 6 October 2026</dd></div>
+                <div class="dl__row"><dt>Counts towards</dt><dd>Unit 3: Workplace records, 8 credits</dd></div>
+                <div class="dl__row"><dt>Evidence needed</dt><dd>1. Portfolio document (PDF or DOCX). 2. Supporting records (PDF, DOCX, XLSX, JPG or PNG). Up to 25 MB for each file. Videos cannot be uploaded.</dd></div>
+                <div class="dl__row"><dt>If you submit late</dt><dd>You can still submit. Your work is marked as late and is assessed in the normal way.</dd></div>
+                <div class="dl__row"><dt>Questions about this task</dt><dd><a href="index.html">Ask Pieter van Wyk</a></dd></div>
+              </dl>
+            </div>
+          </div>
+
+          <section aria-labelledby="versions-h">
+            <h2 class="text-subheading u-mb-4" id="versions-h">Version history</h2>
+            <p class="text-small text-muted" data-proto-state="default">You have not submitted anything yet. Each version you submit will be listed here with its receipt, and none is ever removed.</p>
+            <ol class="history-list" aria-label="Submission versions, newest first" data-proto-state="uploading submitted">
+              <li class="history-list__item is-current"><span class="history-list__badge">v1</span><span class="history-list__title">Version 1</span><span class="history-list__meta">28 Aug 2026, 16:55 · on time · 2 files · 9.8 MB · receipt SUB-2026-0828-3F9Q</span><span class="history-list__actions"><span class="tag tag--plain">Current</span></span></li>
+            </ol>
+            <ol class="history-list" aria-label="Submission versions, newest first" data-proto-state="late returned">
+              <li class="history-list__item is-current"><span class="history-list__badge">v2</span><span class="history-list__title">Version 2 <span class="tag tag--caution">Late</span></span><span class="history-list__meta">4 Sep 2026, 17:42 · 3 files · 17.3 MB · receipt SUB-2026-0904-7K2M<span data-proto-state="returned"> · assessed: Not yet competent, released 22 Sep 2026</span></span><span class="history-list__actions"><span class="tag tag--plain">Current</span></span></li>
+              <li class="history-list__item"><span class="history-list__badge">v1</span><span class="history-list__title">Version 1</span><span class="history-list__meta">28 Aug 2026, 16:55 · on time · 2 files · 9.8 MB · replaced by version 2, kept on record</span><span class="history-list__actions"><a class="btn btn--ghost btn--sm" href="learn-task.html#state=submitted">View<span class="u-visually-hidden"> version 1 and its receipt</span></a></span></li>
+            </ol>
+          </section>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <nav class="bottom-tabs" aria-label="Learning, main destinations">
+    <a class="bottom-tabs__item" href="learn-home.html"><svg class="icon" aria-hidden="true"><use href="#i-house"/></svg>Home</a>
+    <a class="bottom-tabs__item" href="learn-task.html" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-clipboard"/></svg>Tasks</a>
+    <a class="bottom-tabs__item" href="index.html"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg>Materials</a>
+    <a class="bottom-tabs__item" href="learn-result.html"><svg class="icon" aria-hidden="true"><use href="#i-check-circle"/></svg>Results</a>
+    <a class="bottom-tabs__item" href="index.html"><svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg>More</a>
+  </nav>
+</div>
+
+<div class="toast-region" role="status" aria-live="polite"></div>
+<script src="assets/ui.js"></script>
+<script src="assets/proto.js"></script>
+</body>
+</html>

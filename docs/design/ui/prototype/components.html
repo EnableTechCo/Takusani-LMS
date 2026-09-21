@@ -1,0 +1,1162 @@
+<!doctype html>
+<html lang="en-ZA" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Takusani LMS — component gallery</title>
+<!-- Fonts: optional. The page is fully usable on the fallback stacks if this request fails (no web-font dependency for first paint). -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400..600&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap">
+<!-- Optional extended icon set (Phosphor Bold). Critical icons come from the inline sprite in ui.js. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/ui.css">
+<link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+<style>
+/* Page-specific layout for the style guide only (prefix sg-). Not part of the component library. */
+.sg-section { padding-top: var(--space-10); margin-top: var(--space-10); border-top: var(--border); }
+.sg-section:first-of-type { border-top: 0; margin-top: 0; padding-top: 0; }
+.sg-section > .text-title { margin-bottom: var(--space-2); }
+.sg-section > .text-muted { max-width: var(--measure); margin-bottom: var(--space-6); }
+.sg-h { margin: var(--space-8) 0 var(--space-3); }
+.sg-note { margin-bottom: var(--space-4); max-width: var(--measure); }
+.sg-specimen { padding: var(--space-5); background: var(--color-surface); border: var(--border); border-radius: var(--radius-md); }
+.sg-specimen--canvas { background: var(--color-canvas); }
+.sg-swatches { display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fill, minmax(13.5rem, 1fr)); }
+.sg-swatch { border: var(--border); border-radius: var(--radius-md); overflow: hidden; background: var(--color-surface); font-size: var(--text-xs); }
+.sg-swatch__chip { display: flex; align-items: flex-end; min-height: 4.5rem; padding: var(--space-3); font-size: var(--text-sm); font-weight: var(--weight-semibold); border-bottom: var(--border); }
+.sg-swatch__meta { padding: var(--space-2) var(--space-3); display: grid; gap: 2px; }
+.sg-swatch__meta code, .sg-code { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-text-secondary); }
+.sg-ratio { font-family: var(--font-mono); font-weight: var(--weight-semibold); color: var(--color-text-strong); }
+.sg-type-row { display: grid; gap: var(--space-1) var(--space-5); padding: var(--space-4) 0; border-bottom: var(--border); }
+@media (min-width: 48rem) { .sg-type-row { grid-template-columns: 15rem minmax(0, 1fr); align-items: baseline; } }
+.sg-scale { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--space-4); }
+.sg-scale__box { background: var(--color-text-strong); height: 1.5rem; }
+.sg-radius { width: 5rem; height: 3.5rem; border: var(--border-control); background: var(--color-surface); display: grid; place-items: center; }
+/* Frames neutralise fixed/sticky positioning and full-height shells so that shells can be shown as specimens. */
+.sg-frame { position: relative; border: var(--border-control); border-radius: var(--radius-lg); overflow: hidden; background: var(--color-canvas); }
+.sg-frame--phone { max-width: 24rem; }
+.sg-frame .bottom-tabs, .sg-frame .app-shell__topbar, .sg-frame .exam-shell__bar, .sg-frame .exam-shell__actions, .sg-frame .decision-bar, .sg-frame .action-bar, .sg-frame .section-switcher, .sg-frame .exam-overlay { position: static; }
+.sg-frame .bottom-tabs { display: grid !important; height: var(--bottomtabs-height); }
+.sg-frame .section-switcher { display: flex !important; }
+.sg-frame .exam-shell, .sg-frame .auth-shell, .sg-frame .exam-notice, .sg-frame .app-shell { min-height: 0; }
+.sg-frame .app-shell__sidenav { display: block; position: static; height: auto; border-right: 0; }
+.sg-frame--sidenav { max-width: 16rem; }
+.sg-frame--sidenav .sidenav__heading { position: static; width: auto; height: auto; clip-path: none; }
+.sg-frame--sidenav .sidenav__item { flex-direction: row; justify-content: flex-start; gap: var(--space-3); min-height: 2.75rem; padding: var(--space-2) var(--space-3); text-align: left; }
+.sg-frame--sidenav .sidenav__label { position: static; width: auto; height: auto; clip-path: none; }
+.sg-frame--sidenav .sidenav__short { display: none; }
+.sg-frame--sidenav .sidenav__count { position: static; }
+.sg-frame--phone .topbar__workspace { display: inline-flex; }
+/* The specimens below contain sticky bars; stop them inflating this page's own scroll padding. */
+html:has(.sg-frame) { --sticky-top: var(--topbar-height); --sticky-bottom: 0px; }
+.sg-static .toast-region { position: static; width: auto; max-width: 24rem; }
+.sg-icons { display: grid; grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr)); gap: var(--space-2); }
+.sg-icons > li { display: flex; align-items: center; gap: var(--space-2); padding: var(--space-2) var(--space-3); border: var(--border); border-radius: var(--radius-sm); background: var(--color-surface); font-family: var(--font-mono); font-size: var(--text-xs); }
+.sg-vocab td:first-child { white-space: nowrap; font-weight: var(--weight-semibold); }
+.sg-vocab td { vertical-align: top; }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<div class="app-shell">
+  <header class="app-shell__topbar">
+    <a class="brand" href="#brand" aria-label="Takusani LMS component gallery">
+      <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M7 0H25A7 7 0 0 1 32 7V25A7 7 0 0 1 25 32H7A7 7 0 0 1 0 25V7A7 7 0 0 1 7 0ZM7 8.5H25V12H17.75V24H14.25V12H7ZM8.25 17.5A1.75 1.75 0 1 0 11.75 17.5A1.75 1.75 0 1 0 8.25 17.5ZM20.25 17.5A1.75 1.75 0 1 0 23.75 17.5A1.75 1.75 0 1 0 20.25 17.5Z"/></svg>
+      <span class="brand__name">Takusani</span><span class="brand__suffix">LMS</span>
+    </a>
+    <span class="topbar__institution">Khanya Skills Institute</span>
+    <button type="button" class="btn btn--secondary btn--sm topbar__workspace" data-modal-open="m-sections"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-grid"/></svg>Sections</button>
+    <div class="topbar__context"><details class="menu-wrap" data-menu>
+      <summary class="context-select__button" aria-label="Cohort filter. Current: All my cohorts"><span class="context-select__label">Cohort</span><span class="context-select__value">All my cohorts</span><svg class="icon icon--sm" aria-hidden="true"><use href="#i-caret-down"/></svg></summary>
+      <div class="menu"><p class="menu__label">Assessing</p><a class="menu__item" href="#shell" aria-current="true"><span class="menu__item-text">All my cohorts</span><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></a><a class="menu__item" href="#shell"><span class="menu__item-text">2026 Intake B<span class="menu__item-meta">Certificate in Business Administration · Active</span></span><span class="tag tag--plain">Moderated</span></a><p class="menu__label">Moderating</p><a class="menu__item" href="#shell"><span class="menu__item-text">2026 Intake C<span class="menu__item-meta">Certificate in Business Administration · Active</span></span><span class="tag tag--plain">Not moderated</span></a></div>
+    </details></div>
+    <span class="topbar__spacer"></span>
+    <form class="topbar__search" role="search" action="#main" method="get"><label class="input-icon"><span class="u-visually-hidden">Search</span><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><input class="input" type="search" name="q" placeholder="Search"></label></form>
+    <div class="topbar__actions">
+      <a class="btn btn--ghost btn--icon" href="#calendar" aria-label="Notifications, 2 unread"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg><span class="badge-count" aria-hidden="true">2</span></a>
+      <details class="menu-wrap" data-menu>
+        <summary class="btn btn--ghost btn--icon" aria-label="Account menu for Thandiwe Nkosi"><span class="avatar" aria-hidden="true">TN</span></summary>
+        <div class="menu menu--end">
+          <div class="account__identity"><p class="account__name">Thandiwe Nkosi</p><p class="account__email">thandiwe.nkosi@khanya.example</p><ul class="account__roles"><li>Assessor: 2026 Intake B</li><li>Moderator: 2026 Intake C</li></ul></div>
+          <a class="menu__item" href="#shell"><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg>Profile</a>
+          <a class="menu__item" href="#shell"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg>Notification preferences</a>
+          <div class="menu__section"><fieldset class="fieldset"><legend class="fieldset__legend">Appearance</legend>
+            <div class="segmented">
+              <label class="segmented__option"><input type="radio" name="theme" value="light" data-theme-choice checked><span>Light</span></label>
+              <label class="segmented__option"><input type="radio" name="theme" value="dark" data-theme-choice><span>Dark</span></label>
+              <label class="segmented__option"><input type="radio" name="theme" value="auto" data-theme-choice><span>System</span></label>
+            </div></fieldset></div>
+          <div class="menu__divider" role="separator"></div>
+          <a class="menu__item" href="#shell"><svg class="icon" aria-hidden="true"><use href="#i-help"/></svg>Help</a>
+          <a class="menu__item" href="#shell"><svg class="icon" aria-hidden="true"><use href="#i-sign-out"/></svg>Sign out</a>
+        </div>
+      </details>
+    </div>
+  </header>
+
+  <aside class="app-shell__sidenav" aria-label="Gallery sections">
+    <nav class="sidenav" aria-label="Gallery sections">
+      <div class="sidenav__group">
+        <h2 class="sidenav__heading">Foundations</h2>
+        <ul class="sidenav__list">
+          <li><a class="sidenav__item" href="#brand" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-scales"/></svg><span class="sidenav__label">Brand</span><span class="sidenav__short" aria-hidden="true">Brand</span></a></li>
+          <li><a class="sidenav__item" href="#colour"><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg><span class="sidenav__label">Colour and contrast</span><span class="sidenav__short" aria-hidden="true">Colour</span></a></li>
+          <li><a class="sidenav__item" href="#type"><svg class="icon" aria-hidden="true"><use href="#i-pencil"/></svg><span class="sidenav__label">Typography</span><span class="sidenav__short" aria-hidden="true">Type</span></a></li>
+          <li><a class="sidenav__item" href="#space"><svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg><span class="sidenav__label">Space, radius, icons</span><span class="sidenav__short" aria-hidden="true">Space</span></a></li>
+        </ul>
+      </div>
+      <div class="sidenav__group">
+        <h2 class="sidenav__heading">Components</h2>
+        <ul class="sidenav__list">
+          <li><a class="sidenav__item" href="#shell"><svg class="icon" aria-hidden="true"><use href="#i-house"/></svg><span class="sidenav__label">Shells and navigation</span><span class="sidenav__short" aria-hidden="true">Shells</span></a></li>
+          <li><a class="sidenav__item" href="#actions"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg><span class="sidenav__label">Buttons and links</span><span class="sidenav__short" aria-hidden="true">Buttons</span></a></li>
+          <li><a class="sidenav__item" href="#forms"><svg class="icon" aria-hidden="true"><use href="#i-clipboard"/></svg><span class="sidenav__label">Forms and upload</span><span class="sidenav__short" aria-hidden="true">Forms</span></a></li>
+          <li><a class="sidenav__item" href="#tables"><svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg><span class="sidenav__label">Tables</span><span class="sidenav__short" aria-hidden="true">Tables</span></a></li>
+          <li><a class="sidenav__item" href="#status"><svg class="icon" aria-hidden="true"><use href="#i-check-circle"/></svg><span class="sidenav__label">Status vocabulary</span><span class="sidenav__short" aria-hidden="true">Status</span></a></li>
+          <li><a class="sidenav__item" href="#process"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg><span class="sidenav__label">Steps and deadlines</span><span class="sidenav__short" aria-hidden="true">Time</span></a></li>
+          <li><a class="sidenav__item" href="#assessment"><svg class="icon" aria-hidden="true"><use href="#i-inbox"/></svg><span class="sidenav__label">Marking workspace</span><span class="sidenav__short" aria-hidden="true">Marking</span></a></li>
+          <li><a class="sidenav__item" href="#records"><svg class="icon" aria-hidden="true"><use href="#i-file"/></svg><span class="sidenav__label">Receipts, history, logs</span><span class="sidenav__short" aria-hidden="true">Records</span></a></li>
+          <li><a class="sidenav__item" href="#feedback"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg><span class="sidenav__label">Banners and dialogs</span><span class="sidenav__short" aria-hidden="true">Feedback</span></a></li>
+          <li><a class="sidenav__item" href="#exam"><svg class="icon" aria-hidden="true"><use href="#i-laptop"/></svg><span class="sidenav__label">Exam shell</span><span class="sidenav__short" aria-hidden="true">Exam</span></a></li>
+          <li><a class="sidenav__item" href="#calendar"><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg><span class="sidenav__label">Calendar, notifications</span><span class="sidenav__short" aria-hidden="true">Calendar</span></a></li>
+          <li><a class="sidenav__item" href="#figures"><svg class="icon" aria-hidden="true"><use href="#i-chart"/></svg><span class="sidenav__label">Figures and charts</span><span class="sidenav__short" aria-hidden="true">Figures</span></a></li>
+        </ul>
+      </div>
+    </nav>
+  </aside>
+
+  <main class="app-shell__main" id="main" tabindex="-1">
+    <div class="page">
+      <header class="page-header">
+        <nav aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="#brand">Design system</a></li><li aria-current="page">Component gallery</li></ol></nav>
+        <p class="page-header__workspace">Design system</p>
+        <h1 class="page-header__title">Component gallery</h1>
+        <p class="page-header__lead">Every token and component in the Takusani LMS design system, in every state, using the shared example data from the UX architecture. Screens are built from these classes only.</p>
+        <div class="page-header__meta"><span class="tag tag--info tag--shape-half">Version 0.2, for review</span><span class="text-meta">21 Sep 2026</span></div>
+        <div class="page-header__actions"><button type="button" class="btn btn--secondary" data-density-toggle="#main" aria-pressed="false">Compact density</button></div>
+      </header>
+
+      <!-- ============================== BRAND ============================== -->
+      <section class="sg-section" id="brand" aria-labelledby="brand-h">
+        <h2 class="text-title" id="brand-h">Brand</h2>
+        <p class="text-muted">Trustworthy, calm, fair. The mark is a letter T whose crossbar carries two equal weights: a level balance. It is one colour and inherits the text colour. The institution's name sits beside the product name; the product never outranks the institution.</p>
+        <div class="grid grid--3">
+          <div class="sg-specimen"><img src="assets/logo.svg" alt="Takusani LMS logo" width="176" height="32"><p class="chart-caption">logo.svg as an image (the serif falls back if Newsreader is not installed)</p></div>
+          <div class="sg-specimen">
+            <span class="brand"><svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M7 0H25A7 7 0 0 1 32 7V25A7 7 0 0 1 25 32H7A7 7 0 0 1 0 25V7A7 7 0 0 1 7 0ZM7 8.5H25V12H17.75V24H14.25V12H7ZM8.25 17.5A1.75 1.75 0 1 0 11.75 17.5A1.75 1.75 0 1 0 8.25 17.5ZM20.25 17.5A1.75 1.75 0 1 0 23.75 17.5A1.75 1.75 0 1 0 20.25 17.5Z"/></svg><span class="brand__name">Takusani</span><span class="brand__suffix">LMS</span></span>
+            <p class="chart-caption">.brand lockup in HTML (preferred in the app: uses the loaded font)</p>
+          </div>
+          <div class="sg-specimen cluster">
+            <img src="assets/mark.svg" alt="Takusani mark, 48 pixels" width="48" height="48">
+            <img src="assets/mark.svg" alt="Takusani mark, 32 pixels" width="32" height="32">
+            <img src="assets/mark.svg" alt="Takusani mark, 16 pixels" width="16" height="16">
+            <p class="chart-caption u-full">mark.svg at 48, 32 and 16 px</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================== COLOUR ============================== -->
+      <section class="sg-section" id="colour" aria-labelledby="colour-h">
+        <h2 class="text-title" id="colour-h">Colour and contrast</h2>
+        <p class="text-muted">Each swatch shows a foreground token on a background token with its WCAG contrast ratio. The ratio is recomputed in your browser from the live token values, so it stays correct in the dark theme (account menu, Appearance). Body text needs 4.5:1. Control boundaries, tag borders, focus rings and chart marks need 3:1.</p>
+        <h3 class="text-heading sg-h">Text on surfaces</h3>
+        <div class="sg-swatches" id="swatches-text"></div>
+        <h3 class="text-heading sg-h">Ink, accent and focus</h3>
+        <div class="sg-swatches" id="swatches-accent"></div>
+        <h3 class="text-heading sg-h">Status tones: text on background</h3>
+        <div class="sg-swatches" id="swatches-tones"></div>
+        <h3 class="text-heading sg-h">Non-text: boundaries, tag borders, focus ring (3:1 required)</h3>
+        <div class="sg-swatches" id="swatches-graphic"></div>
+        <noscript><p class="banner banner--info">Swatches are generated by a small inline script. The full table of ratios is in LMS-design-system.md.</p></noscript>
+      </section>
+
+      <!-- ============================== TYPE ============================== -->
+      <section class="sg-section" id="type" aria-labelledby="type-h">
+        <h2 class="text-title" id="type-h">Typography</h2>
+        <p class="text-muted">Newsreader (serif) for page titles and key figures. Instrument Sans for everything interactive. Geist Mono for references, timestamps and receipts.</p>
+        <div class="sg-specimen">
+          <div class="sg-type-row"><span class="sg-code">.text-display · serif 30/36px · 500 · -0.02em</span><p class="text-display">Your result for Task 3</p></div>
+          <div class="sg-type-row"><span class="sg-code">.text-title / .page-header__title · serif 24/30px</span><p class="text-title">Term 3 tasks: moderation cycle</p></div>
+          <div class="sg-type-row"><span class="sg-code">.text-heading · sans 20px · 600</span><p class="text-heading">Evidence requirements</p></div>
+          <div class="sg-type-row"><span class="sg-code">.text-subheading · sans 16px · 600</span><p class="text-subheading">Feedback from your assessor, Thandiwe Nkosi</p></div>
+          <div class="sg-type-row"><span class="sg-code">.text-lead · sans 18px</span><p class="text-lead">Submit your portfolio before the due date. You can replace files until you submit.</p></div>
+          <div class="sg-type-row"><span class="sg-code">.prose · sans 16px / 1.6 · about 70 characters (38rem), max 720px</span>
+            <div class="prose"><p>Lerato, your filing index is clear and every record in the sample can be found from it. The retention schedule is correct for payroll and leave records. To meet criterion 3.2 you still need to show how access to confidential records is controlled: add the access register you describe on page 6 and explain who approves a request.</p></div></div>
+          <div class="sg-type-row"><span class="sg-code">.text-small · sans 14px</span><p class="text-small">Accepted file types: PDF, DOCX, XLSX, JPG, PNG. Up to 25 MB each.</p></div>
+          <div class="sg-type-row"><span class="sg-code">.text-overline · 12px · 600 · caps</span><p class="text-overline">Time to appeal</p></div>
+          <div class="sg-type-row"><span class="sg-code">.text-meta / .mono · mono 13px</span><p class="text-meta">SUB-2026-0904-7K2M · 4 Sep 2026, 17:42</p></div>
+          <div class="sg-type-row"><span class="sg-code">.text-figure · serif 36px · tabular</span><p class="text-figure">52 <span class="stat__unit">of 140 credits</span></p></div>
+          <div class="sg-type-row"><span class="sg-code">.kbd</span><p>Press <kbd class="kbd">Esc</kbd> to close a dialog. In an exam, <kbd class="kbd">Alt</kbd> + <kbd class="kbd">N</kbd> goes to the next question.</p></div>
+        </div>
+      </section>
+
+      <!-- ============================== SPACE / RADIUS / ICONS ============================== -->
+      <section class="sg-section" id="space" aria-labelledby="space-h">
+        <h2 class="text-title" id="space-h">Space, radius and icons</h2>
+        <p class="text-muted">A 4px base scale. Radii stop at 12px; pills are for tags and chips only. Surfaces are flat with a 1px border. Breakpoints: 320 base, 768 md, 1024 lg, 1280 xl, 1440 2xl.</p>
+        <div class="grid grid--2">
+          <div class="sg-specimen">
+            <p class="text-subheading u-mb-4">Spacing scale</p>
+            <div class="sg-scale" aria-hidden="true">
+              <div><div class="sg-scale__box" style="width:4px"></div><span class="sg-code">1·4</span></div>
+              <div><div class="sg-scale__box" style="width:8px"></div><span class="sg-code">2·8</span></div>
+              <div><div class="sg-scale__box" style="width:12px"></div><span class="sg-code">3·12</span></div>
+              <div><div class="sg-scale__box" style="width:16px"></div><span class="sg-code">4·16</span></div>
+              <div><div class="sg-scale__box" style="width:20px"></div><span class="sg-code">5·20</span></div>
+              <div><div class="sg-scale__box" style="width:24px"></div><span class="sg-code">6·24</span></div>
+              <div><div class="sg-scale__box" style="width:32px"></div><span class="sg-code">8·32</span></div>
+              <div><div class="sg-scale__box" style="width:40px"></div><span class="sg-code">10·40</span></div>
+              <div><div class="sg-scale__box" style="width:48px"></div><span class="sg-code">12·48</span></div>
+              <div><div class="sg-scale__box" style="width:64px"></div><span class="sg-code">16·64</span></div>
+            </div>
+            <p class="u-visually-hidden">Spacing tokens: 4, 8, 12, 16, 20, 24, 32, 40, 48 and 64 pixels.</p>
+          </div>
+          <div class="sg-specimen">
+            <p class="text-subheading u-mb-4">Radii</p>
+            <div class="cluster">
+              <div class="sg-radius sg-code" style="border-radius:var(--radius-xs)">xs 4</div>
+              <div class="sg-radius sg-code" style="border-radius:var(--radius-sm)">sm 6</div>
+              <div class="sg-radius sg-code" style="border-radius:var(--radius-md)">md 8</div>
+              <div class="sg-radius sg-code" style="border-radius:var(--radius-lg)">lg 12</div>
+              <div class="sg-radius sg-code" style="border-radius:var(--radius-pill)">pill</div>
+            </div>
+          </div>
+        </div>
+        <h3 class="text-heading sg-h">Icon sprite (inline SVG, no network)</h3>
+        <ul class="sg-icons" id="icon-list"></ul>
+        <h3 class="text-heading sg-h">Optional extended set: Phosphor Bold from CDN</h3>
+        <p class="text-small text-muted sg-note">If the CDN is unreachable these glyphs do not render; the labels next to them still do. Never ship an icon without a label or an aria-label.</p>
+        <div class="cluster">
+          <span class="cluster"><i class="ph-bold ph-graduation-cap" aria-hidden="true"></i> Qualification</span>
+          <span class="cluster"><i class="ph-bold ph-certificate" aria-hidden="true"></i> Credits</span>
+          <span class="cluster"><i class="ph-bold ph-microsoft-teams-logo" aria-hidden="true"></i> Teams session</span>
+          <span class="cluster"><i class="ph-bold ph-fork-knife" aria-hidden="true"></i> Catering</span>
+        </div>
+      </section>
+
+      <!-- ============================== SHELLS ============================== -->
+      <section class="sg-section" id="shell" aria-labelledby="shell-h">
+        <h2 class="text-title" id="shell-h">Shells and navigation</h2>
+        <p class="text-muted">Three shells. This page is built on the AppShell: fixed top bar, a 256px side navigation from 1024px, a 72px icon rail from 768px, and nothing but bottom tabs on phones. Resize the window to see the rail. There is no role switcher: navigation is one list grouped by workspace, and a group appears only if the person holds that role.</p>
+
+        <h3 class="text-heading sg-h">SideNav: a person who assesses Intake B and moderates Intake C</h3>
+        <div class="sg-frame sg-frame--sidenav">
+          <div class="app-shell__sidenav">
+            <nav class="sidenav" aria-label="Main navigation (specimen)">
+              <div class="sidenav__group"><ul class="sidenav__list">
+                <li><a class="sidenav__item" href="#shell"><svg class="icon" aria-hidden="true"><use href="#i-house"/></svg><span class="sidenav__label">My work</span><span class="sidenav__short" aria-hidden="true">My work</span></a></li>
+              </ul></div>
+              <div class="sidenav__group"><h4 class="sidenav__heading">Assessing</h4><ul class="sidenav__list">
+                <li><a class="sidenav__item" href="#shell" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-inbox"/></svg><span class="sidenav__label">Queue</span><span class="sidenav__short" aria-hidden="true">Queue</span><span class="sidenav__count" aria-label="12 to mark">12</span></a></li>
+                <li><a class="sidenav__item" href="#shell"><svg class="icon" aria-hidden="true"><use href="#i-refresh"/></svg><span class="sidenav__label">Returned to me</span><span class="sidenav__short" aria-hidden="true">Returned</span><span class="sidenav__count" aria-label="1 returned">1</span></a></li>
+                <li><a class="sidenav__item" href="#shell"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg><span class="sidenav__label">Cohort release status</span><span class="sidenav__short" aria-hidden="true">Status</span></a></li>
+              </ul></div>
+              <div class="sidenav__group"><h4 class="sidenav__heading">Moderating</h4><ul class="sidenav__list">
+                <li><a class="sidenav__item" href="#shell"><svg class="icon" aria-hidden="true"><use href="#i-scales"/></svg><span class="sidenav__label">Cycles</span><span class="sidenav__short" aria-hidden="true">Cycles</span></a></li>
+                <li><a class="sidenav__item" href="#shell"><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg><span class="sidenav__label">My sample items</span><span class="sidenav__short" aria-hidden="true">Items</span><span class="sidenav__count" aria-label="3 to review">3</span></a></li>
+              </ul></div>
+            </nav>
+          </div>
+        </div>
+        <p class="chart-caption">A single-role user gets the same list with no group heading. Counts are never shown for anything a learner must not infer.</p>
+
+        <h3 class="text-heading sg-h">TopBar: cohort and programme context selector</h3>
+        <div class="sg-specimen">
+          <details class="menu-wrap" data-menu>
+            <summary class="context-select__button" aria-label="Cohort filter. Current: 2026 Intake B"><span class="context-select__label">Cohort</span><span class="context-select__value">2026 Intake B</span><svg class="icon icon--sm" aria-hidden="true"><use href="#i-caret-down"/></svg></summary>
+            <div class="menu">
+              <p class="menu__label">Assessing</p>
+              <a class="menu__item" href="#shell"><span class="menu__item-text">All my cohorts</span></a>
+              <a class="menu__item" href="#shell" aria-current="true"><span class="menu__item-text">2026 Intake B<span class="menu__item-meta">Certificate in Business Administration · Active</span></span><span class="tag tag--plain">Moderated</span><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></a>
+              <div class="menu__divider" role="separator"></div>
+              <p class="menu__label">Archived</p>
+              <a class="menu__item" href="#shell"><span class="menu__item-text">2025 Intake A<span class="menu__item-meta">Certificate in Business Administration · Archived (read-only)</span></span></a>
+            </div>
+          </details>
+          <p class="chart-caption">A convenience filter, never an authorisation input. The account menu (top right of this page) holds the identity block, the read-only list of roles, and Appearance: Light, Dark, System.</p>
+        </div>
+
+        <h3 class="text-heading sg-h">Phones: top bar with workspace picker, bottom tabs (maximum five)</h3>
+        <div class="grid grid--2">
+          <div class="sg-frame sg-frame--phone">
+            <div class="app-shell__topbar">
+              <span class="brand"><svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M7 0H25A7 7 0 0 1 32 7V25A7 7 0 0 1 25 32H7A7 7 0 0 1 0 25V7A7 7 0 0 1 7 0ZM7 8.5H25V12H17.75V24H14.25V12H7ZM8.25 17.5A1.75 1.75 0 1 0 11.75 17.5A1.75 1.75 0 1 0 8.25 17.5ZM20.25 17.5A1.75 1.75 0 1 0 23.75 17.5A1.75 1.75 0 1 0 20.25 17.5Z"/></svg><span class="u-visually-hidden">Takusani LMS</span></span>
+              <button type="button" class="btn btn--secondary btn--sm topbar__workspace" data-modal-open="m-workspaces">Assessing<svg class="icon icon--sm" aria-hidden="true"><use href="#i-caret-down"/></svg></button>
+              <span class="topbar__spacer"></span>
+              <div class="topbar__actions"><button type="button" class="btn btn--ghost btn--icon" aria-label="Notifications, 2 unread"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg><span class="badge-count" aria-hidden="true">2</span></button><button type="button" class="btn btn--ghost btn--icon" aria-label="Account menu"><span class="avatar" aria-hidden="true">TN</span></button></div>
+            </div>
+            <div class="page"><p class="page-header__workspace">Assessing</p><p class="text-title u-mt-2">Queue</p><p class="text-muted u-mt-2">12 items to mark in 2026 Intake B.</p></div>
+            <nav class="bottom-tabs" aria-label="Assessing (specimen)">
+              <a class="bottom-tabs__item" href="#shell" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-inbox"/></svg>Queue</a>
+              <a class="bottom-tabs__item" href="#shell"><svg class="icon" aria-hidden="true"><use href="#i-refresh"/></svg>Returned</a>
+              <a class="bottom-tabs__item" href="#shell"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Status</a>
+            </nav>
+          </div>
+          <div class="sg-frame sg-frame--phone">
+            <div class="app-shell__topbar">
+              <span class="brand"><svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M7 0H25A7 7 0 0 1 32 7V25A7 7 0 0 1 25 32H7A7 7 0 0 1 0 25V7A7 7 0 0 1 7 0ZM7 8.5H25V12H17.75V24H14.25V12H7ZM8.25 17.5A1.75 1.75 0 1 0 11.75 17.5A1.75 1.75 0 1 0 8.25 17.5ZM20.25 17.5A1.75 1.75 0 1 0 23.75 17.5A1.75 1.75 0 1 0 20.25 17.5Z"/></svg><span class="brand__name">Takusani</span></span>
+              <span class="topbar__spacer"></span>
+              <div class="topbar__actions"><button type="button" class="btn btn--ghost btn--icon" aria-label="Notifications, 1 unread"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg><span class="badge-count" aria-hidden="true">1</span></button><button type="button" class="btn btn--ghost btn--icon" aria-label="Account menu"><span class="avatar" aria-hidden="true">LM</span></button></div>
+            </div>
+            <div class="page"><p class="text-overline">Wednesday 23 September</p><p class="text-title u-mt-2">Good morning, Lerato</p><p class="text-muted u-mt-2">Your result for Task 3 is ready. A single-role learner has no workspace picker.</p></div>
+            <nav class="bottom-tabs" aria-label="Learning (specimen)">
+              <a class="bottom-tabs__item" href="#shell" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-house"/></svg>Home</a>
+              <a class="bottom-tabs__item" href="#shell"><svg class="icon" aria-hidden="true"><use href="#i-clipboard"/></svg>Tasks</a>
+              <a class="bottom-tabs__item" href="#shell"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg>Materials</a>
+              <a class="bottom-tabs__item" href="#shell"><svg class="icon" aria-hidden="true"><use href="#i-check-circle"/></svg>Results</a>
+              <a class="bottom-tabs__item" href="#shell"><svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg>More</a>
+            </nav>
+          </div>
+        </div>
+        <p class="chart-caption">The workspace picker is a bottom sheet (open it with the "Assessing" button). It is navigation, not a mode: nothing is stored, and deep links ignore it.</p>
+
+        <h3 class="text-heading sg-h">PageHeader: workspace label, one status tag, at most one primary action</h3>
+        <div class="sg-specimen sg-specimen--canvas">
+          <header class="page-header">
+            <nav aria-label="Breadcrumb (specimen)"><ol class="breadcrumb"><li><a href="#shell">Queue</a></li><li><a href="#shell">Task 3</a></li><li aria-current="page">Lerato Mokoena</li></ol></nav>
+            <p class="page-header__workspace">Assessing</p>
+            <h3 class="page-header__title">Task 3: Workplace records portfolio</h3>
+            <div class="page-header__meta"><span class="tag tag--caution">To mark, Late</span><span>Lerato Mokoena · 2026 Intake B <span class="tag tag--plain">Moderated</span></span><span class="text-meta">Version 2</span></div>
+            <div class="page-header__actions"><button type="button" class="btn btn--primary">Finalise decision</button>
+              <details class="menu-wrap" data-menu><summary class="btn btn--secondary btn--icon" aria-label="More actions"><svg class="icon" aria-hidden="true"><use href="#i-dots"/></svg></summary><div class="menu menu--end"><button type="button" class="menu__item">Save draft</button><button type="button" class="menu__item">Open original files</button></div></details></div>
+          </header>
+        </div>
+
+        <h3 class="text-heading sg-h">AuthShell: sign-in</h3>
+        <div class="sg-frame">
+          <div class="auth-shell">
+            <header class="auth-shell__header"><p class="auth-shell__institution">Khanya Skills Institute</p><span class="brand"><svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M7 0H25A7 7 0 0 1 32 7V25A7 7 0 0 1 25 32H7A7 7 0 0 1 0 25V7A7 7 0 0 1 7 0ZM7 8.5H25V12H17.75V24H14.25V12H7ZM8.25 17.5A1.75 1.75 0 1 0 11.75 17.5A1.75 1.75 0 1 0 8.25 17.5ZM20.25 17.5A1.75 1.75 0 1 0 23.75 17.5A1.75 1.75 0 1 0 20.25 17.5Z"/></svg><span class="brand__name">Takusani</span><span class="brand__suffix">LMS</span></span></header>
+            <div class="auth-shell__main"><form class="auth-shell__card form" onsubmit="return false">
+              <h3 class="text-title">Sign in</h3>
+              <div class="field"><label class="field__label" for="a-email">Email address</label><input class="input" id="a-email" type="email" autocomplete="username" placeholder="name@example.org"></div>
+              <div class="field"><label class="field__label" for="a-pw">Password</label><input class="input" id="a-pw" type="password" autocomplete="current-password"></div>
+              <button type="submit" class="btn btn--primary btn--block">Sign in</button>
+              <p class="text-small"><a href="#shell">Forgot your password?</a></p>
+            </form></div>
+            <footer class="auth-shell__footer"><a href="#shell">Help with signing in</a>
+              <fieldset class="fieldset"><legend class="u-visually-hidden">Appearance</legend><div class="segmented">
+                <label class="segmented__option"><input type="radio" name="theme-auth" value="light" data-theme-choice checked><span>Light</span></label>
+                <label class="segmented__option"><input type="radio" name="theme-auth" value="dark" data-theme-choice><span>Dark</span></label>
+                <label class="segmented__option"><input type="radio" name="theme-auth" value="auto" data-theme-choice><span>System</span></label>
+              </div></fieldset></footer>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================== ACTIONS ============================== -->
+      <section class="sg-section" id="actions" aria-labelledby="actions-h">
+        <h2 class="text-title" id="actions-h">Buttons and links</h2>
+        <p class="text-muted">One primary action per view. Default height is 44px; the small size (36px) is for dense desktop toolbars only and never for navigation or sticky bars.</p>
+        <div class="sg-specimen stack">
+          <div class="cluster"><button type="button" class="btn btn--primary">Submit for assessment</button><button type="button" class="btn btn--secondary">Save draft</button><button type="button" class="btn btn--ghost">Cancel</button><button type="button" class="btn btn--destructive">Void attempt</button><button type="button" class="btn btn--destructive-quiet">Remove file</button></div>
+          <div class="cluster"><button type="button" class="btn btn--primary" disabled>Submit for assessment</button><button type="button" class="btn btn--secondary" disabled>Save draft</button><button type="button" class="btn btn--primary is-loading" aria-busy="true" aria-label="Checking whether your work went through">Submitting</button><button type="button" class="btn btn--secondary is-loading" aria-busy="true" aria-label="Saving, please wait">Saving</button></div>
+          <div class="cluster"><button type="button" class="btn btn--primary btn--lg"><svg class="icon" aria-hidden="true"><use href="#i-upload"/></svg>Upload evidence</button><button type="button" class="btn btn--secondary btn--sm"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-download"/></svg>Export CSV</button><button type="button" class="btn btn--ghost btn--icon" aria-label="More actions"><svg class="icon" aria-hidden="true"><use href="#i-dots"/></svg></button><button type="button" class="btn btn--secondary btn--icon btn--sm" aria-label="Print receipt"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-printer"/></svg></button></div>
+          <div class="cluster"><button type="button" class="btn btn--primary" disabled aria-describedby="blocked-1">Sign off and release</button><p class="blocked-reason" id="blocked-1"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg>You cannot sign off yet: 1 returned item is still open. It is listed below.</p></div>
+          <div class="btn-group btn-group--stack-mobile"><button type="button" class="btn btn--ghost">Back</button><button type="button" class="btn btn--primary">Continue</button></div>
+          <p>Inline link: read the <a href="#actions">late submission policy</a> before you submit. Quiet link: <a class="link link--quiet" href="#actions">view version 1</a>. Button styled as a link: <button type="button" class="link">show the integrity record</button>.</p>
+          <p><a class="link link--standalone" href="#actions">Join the session in Microsoft Teams <svg class="icon icon--sm" aria-hidden="true"><use href="#i-external"/></svg><span class="u-visually-hidden">(opens Microsoft Teams)</span></a></p>
+        </div>
+        <h3 class="text-heading sg-h">Sticky action bar (phones)</h3>
+        <div class="sg-frame sg-frame--phone"><div class="page"><p class="text-muted">On phones a page's one primary action sits in a sticky bar. While it is present the bottom tabs are hidden, and scroll padding keeps the focused field clear of it.</p></div><div class="action-bar"><button type="button" class="btn btn--primary">Submit for assessment</button></div></div>
+      </section>
+
+      <!-- ============================== FORMS ============================== -->
+      <section class="sg-section" id="forms" aria-labelledby="forms-h">
+        <h2 class="text-title" id="forms-h">Forms and upload</h2>
+        <p class="text-muted">Single column, 720px at most. Labels above controls, help before the control, the error after it. Errors say what happened and what to do, and are linked with aria-describedby. On submit, focus moves to the error summary.</p>
+        <div class="grid grid--2">
+          <form class="sg-specimen form" onsubmit="return false" novalidate>
+            <div class="error-summary" role="alert" tabindex="-1">
+              <p class="error-summary__title">There are 2 things to fix</p>
+              <ul><li><a href="#f-grounds">Tell us why the mark does not reflect your work</a></li><li><a href="#f-deadline">Choose a resubmission day in the future</a></li></ul>
+            </div>
+            <div class="field">
+              <label class="field__label" for="f-name">Task title</label>
+              <input class="input" id="f-name" type="text" value="Task 3: Workplace records portfolio">
+            </div>
+            <div class="field">
+              <label class="field__label" for="f-grounds">Why does the mark not reflect the work you submitted? <span class="field__required">(required)</span></label>
+              <p class="field__help" id="f-grounds-help">Refer to the criteria and to the pages of your submission. A remark can move your mark up or down.</p>
+              <textarea class="textarea" id="f-grounds" aria-invalid="true" aria-describedby="f-grounds-help f-grounds-err" rows="4"></textarea>
+              <div class="field__footer"><p class="field__error" id="f-grounds-err"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert-circle"/></svg>Enter your reasons. We cannot review an appeal without them.</p><span class="field__count">0 / 2000</span></div>
+            </div>
+            <div class="form__row form__row--2">
+              <div class="field">
+                <label class="field__label" for="f-deadline">Corrections due by the end of</label>
+                <p class="field__help" id="f-deadline-help">The learner has the whole of this day.</p>
+                <input class="input" id="f-deadline" type="date" value="2026-09-14" aria-invalid="true" aria-describedby="f-deadline-help f-deadline-err">
+                <p class="field__error" id="f-deadline-err"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert-circle"/></svg>14 Sep 2026 has passed. Choose a later day.</p>
+              </div>
+              <div class="field">
+                <label class="field__label" for="f-unit">Unit</label>
+                <span class="select"><select id="f-unit"><option>Unit 3: Workplace records</option><option>Unit 4: Business communication</option><option>Unit 5: Office administration</option></select></span>
+                <p class="field__valid"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg>8 credits at NQF level 4</p>
+              </div>
+            </div>
+            <div class="field">
+              <label class="field__label" for="f-search">Search learners <span class="field__optional">(optional)</span></label>
+              <span class="input-icon"><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><input class="input" id="f-search" type="search" placeholder="Name or learner number"></span>
+            </div>
+            <div class="form__row form__row--2">
+              <div class="field"><label class="field__label" for="f-dis">Learner number</label><input class="input input--mono" id="f-dis" value="KSI-2026-0417" disabled></div>
+              <div class="field"><label class="field__label" for="f-ro">Sampling rule and seed</label><input class="input input--mono" id="f-ro" value="rule-v4 · seed 8841207" readonly></div>
+            </div>
+            <div class="form__actions"><button type="submit" class="btn btn--primary">Lodge appeal</button><button type="button" class="btn btn--ghost">Cancel</button></div>
+          </form>
+
+          <div class="stack">
+            <div class="sg-specimen">
+              <fieldset class="fieldset">
+                <legend class="fieldset__legend">Send this notice to</legend>
+                <label class="check"><input class="check__input" type="checkbox" checked><span class="check__label">Learners in 2026 Intake B</span><span class="check__help">96 people</span></label>
+                <label class="check"><input class="check__input" type="checkbox"><span class="check__label">Facilitators and assessors</span></label>
+                <label class="check"><input class="check__input" type="checkbox" disabled aria-describedby="chk-doe"><span class="check__label">Department of Education</span><span class="check__help" id="chk-doe">Not a notice recipient. The Department reads records through the API.</span></label>
+              </fieldset>
+              <hr>
+              <fieldset class="fieldset">
+                <legend class="fieldset__legend">When should it go out?</legend>
+                <label class="check"><input class="check__input" type="radio" name="when" checked><span class="check__label">Now</span></label>
+                <label class="check"><input class="check__input" type="radio" name="when"><span class="check__label">At a scheduled time</span></label>
+              </fieldset>
+            </div>
+            <div class="sg-specimen">
+              <fieldset class="fieldset">
+                <legend class="fieldset__legend">What are you asking for?</legend>
+                <div class="choice-group choice-group--2">
+                  <label class="choice"><input class="choice__input" type="radio" name="appeal-type" checked><span class="choice__title">View my marked script</span><span class="choice__desc">See your submission with the marks for each criterion and your assessor's feedback.</span></label>
+                  <label class="choice"><input class="choice__input" type="radio" name="appeal-type"><span class="choice__title">Request a remark</span><span class="choice__desc">A different reviewer marks your work again. The mark can go up or down. That decision is final.</span></label>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="text-heading sg-h">Candidate list grouped by tier, with excluded people and their reasons</h3>
+        <div class="sg-specimen">
+          <fieldset class="candidate-list">
+            <legend class="fieldset__legend">Choose a reviewer for appeal APL-2026-0031 (Lerato Mokoena, Task 3)</legend>
+            <div class="candidate-list__tier"><h4 class="candidate-list__tier-title">Tier 1: independent qualified internal reviewers</h4><p class="candidate-list__empty">No one available for this unit.</p></div>
+            <div class="candidate-list__tier"><h4 class="candidate-list__tier-title">Tier 2: cohort moderator</h4>
+              <label class="candidate"><input class="candidate__input" type="radio" name="reviewer" checked><span class="candidate__name">Anil Naidoo</span><span class="tag tag--plain">Moderator, Intake B</span><span class="candidate__note">Moderated this item on 18 Sep 2026 (agreed). He did not assess it, so he may review.</span></label></div>
+            <div class="candidate-list__tier"><h4 class="candidate-list__tier-title">Tier 3: qualified assessors from other cohorts</h4>
+              <label class="candidate"><input class="candidate__input" type="radio" name="reviewer"><span class="candidate__name">Nomvula Mahlangu</span><span class="tag tag--plain">Assessor, Intake C</span><span class="candidate__note">Will be given access to this appeal only.</span></label></div>
+            <div class="candidate-list__tier"><h4 class="candidate-list__tier-title">Cannot be chosen</h4>
+              <div class="candidate is-excluded"><input class="candidate__input" type="radio" name="reviewer" disabled aria-label="Thandiwe Nkosi, cannot be chosen" aria-describedby="ex-1"><span class="candidate__name">Thandiwe Nkosi</span><span class="tag tag--plain">Assessor, Intake B</span><span class="candidate__reason" id="ex-1">She assessed this work (decision of 10 Sep 2026). The original assessor cannot review an appeal. Rule BR-02.</span></div>
+              <div class="candidate is-excluded"><input class="candidate__input" type="radio" name="reviewer" disabled aria-label="Bongani Sithole, cannot be chosen" aria-describedby="ex-2"><span class="candidate__name">Bongani Sithole</span><span class="tag tag--plain">Assessor, Intake B</span><span class="candidate__reason" id="ex-2">Assesses in the same cohort, so he is not an independent reviewer, and he is not from another cohort. He took no decision on this work.</span></div></div>
+          </fieldset>
+        </div>
+
+        <h3 class="text-heading sg-h" id="upload">Upload rows: every state</h3>
+        <div class="sg-specimen">
+          <div class="upload">
+            <div class="upload__drop">
+              <svg class="icon icon--xl" aria-hidden="true"><use href="#i-upload"/></svg>
+              <p class="upload__title">Add evidence for requirement 2: access register</p>
+              <p>PDF, DOCX, XLSX, JPG or PNG. Up to 25 MB each. If your connection drops, the upload carries on from where it stopped.</p>
+              <input class="upload__input" type="file" id="up-1" multiple>
+              <label class="btn btn--secondary" for="up-1">Choose files</label>
+            </div>
+            <ul class="upload__list" aria-label="Files for requirement 2">
+              <li class="upload-row upload-row--waiting"><svg class="icon upload-row__icon" aria-hidden="true"><use href="#i-file"/></svg><span class="upload-row__name">Retention-schedule.xlsx</span><span class="upload-row__status">Waiting · 1.1 MB</span><span class="upload-row__actions"><button type="button" class="btn btn--ghost btn--icon" aria-label="Remove Retention-schedule.xlsx"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-x"/></svg></button></span></li>
+              <li class="upload-row upload-row--uploading"><svg class="icon upload-row__icon" aria-hidden="true"><use href="#i-file"/></svg><span class="upload-row__name">Filing-index-v2.docx</span><span class="upload-row__status">Uploading 42% · 5.0 of 12.0 MB</span><span class="upload-row__actions"><button type="button" class="btn btn--ghost btn--icon" aria-label="Pause upload of Filing-index-v2.docx"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-pause"/></svg></button></span><div class="progress" role="progressbar" aria-label="Filing-index-v2.docx upload" aria-valuemin="0" aria-valuemax="100" aria-valuenow="42"><div class="progress__bar" style="--value:42%"></div></div></li>
+              <li class="upload-row upload-row--paused"><svg class="icon upload-row__icon" aria-hidden="true"><use href="#i-file"/></svg><span class="upload-row__name">Office-photos.pdf</span><span class="upload-row__status">Paused at 31%, no connection. It will carry on by itself when you are back online.</span><span class="upload-row__actions"><button type="button" class="btn btn--secondary btn--sm">Try now</button></span><div class="progress progress--caution" role="progressbar" aria-label="Office-photos.pdf upload, paused" aria-valuemin="0" aria-valuemax="100" aria-valuenow="31"><div class="progress__bar" style="--value:31%"></div></div></li>
+              <li class="upload-row upload-row--resuming"><svg class="icon upload-row__icon" aria-hidden="true"><use href="#i-file"/></svg><span class="upload-row__name">Access-register.pdf</span><span class="upload-row__status"><span class="spinner" aria-hidden="true"></span> Resuming from 67%</span><div class="progress" role="progressbar" aria-label="Access-register.pdf upload, resuming" aria-valuemin="0" aria-valuemax="100" aria-valuenow="67"><div class="progress__bar" style="--value:67%"></div></div></li>
+              <li class="upload-row upload-row--checking"><svg class="icon upload-row__icon" aria-hidden="true"><use href="#i-file"/></svg><span class="upload-row__name">Leave-records-sample.pdf</span><span class="upload-row__status">Checking file</span><div class="progress progress--indeterminate" role="progressbar" aria-label="Checking Leave-records-sample.pdf"><div class="progress__bar"></div></div></li>
+              <li class="upload-row upload-row--uploaded"><svg class="icon upload-row__icon" aria-hidden="true"><use href="#i-file"/></svg><span class="upload-row__name">Workplace-records-portfolio-v2.pdf</span><span class="upload-row__status">Uploaded · 4.2 MB</span><span class="upload-row__actions"><button type="button" class="btn btn--ghost btn--icon" aria-label="Remove Workplace-records-portfolio-v2.pdf"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-trash"/></svg></button></span></li>
+              <li class="upload-row upload-row--rejected"><svg class="icon upload-row__icon" aria-hidden="true"><use href="#i-file"/></svg><span class="upload-row__name">Office-walkthrough.mov</span><span class="upload-row__status">Not accepted. This file is 48 MB and is a video. The limit is 25 MB, and videos cannot be uploaded. Save the key moments as images or a PDF instead.</span><span class="upload-row__actions"><button type="button" class="btn btn--ghost btn--icon" aria-label="Dismiss Office-walkthrough.mov"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-x"/></svg></button></span></li>
+              <li class="upload-row upload-row--expired"><svg class="icon upload-row__icon" aria-hidden="true"><use href="#i-file"/></svg><span class="upload-row__name">Payroll-extract.xlsx</span><span class="upload-row__status">Expired. This upload was paused for too long. Choose the file again.</span><span class="upload-row__actions"><button type="button" class="btn btn--secondary btn--sm">Choose again</button></span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================== TABLES ============================== -->
+      <section class="sg-section" id="tables" aria-labelledby="tables-h">
+        <h2 class="text-title" id="tables-h">Tables</h2>
+        <p class="text-muted">Sortable headers, removable filter chips, row selection, sticky header, pagination. Below 768px a <code class="sg-code">.table--cards</code> table becomes a list of cards, and bulk selection is an explicit Select mode (no long-press). Resize the window to see it. Column headers carry "(SAST)" so the cells do not have to.</p>
+        <div class="table-toolbar">
+          <label class="input-icon table-toolbar__search"><span class="u-visually-hidden">Search the queue</span><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><input class="input" type="search" placeholder="Search learner or task"></label>
+          <button type="button" class="filter-chip" aria-pressed="true">To mark <span class="filter-chip__count">12</span></button>
+          <button type="button" class="filter-chip" aria-pressed="false">Late <span class="filter-chip__count">3</span></button>
+          <button type="button" class="filter-chip" aria-pressed="false">Integrity events to review <span class="filter-chip__count">1</span></button>
+          <span class="table-toolbar__end"><button type="button" class="btn btn--secondary table__select-mode" data-select-mode="#queue-wrap" aria-pressed="false">Select</button><button type="button" class="btn btn--secondary btn--sm u-hide-phone"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-download"/></svg>Export</button></span>
+        </div>
+        <div class="table-wrap table-wrap--sticky" id="queue-wrap">
+          <table class="table table--cards" id="queue-table">
+            <caption class="u-visually-hidden">Marking queue for 2026 Intake B, sorted by submitted time, oldest first</caption>
+            <thead><tr>
+              <th scope="col" class="table__check"><label class="check check--bare"><input class="check__input" type="checkbox" data-select-all="#queue-table"><span class="u-visually-hidden">Select all rows</span></label></th>
+              <th scope="col" aria-sort="none"><button type="button" class="table__sort">Learner</button></th>
+              <th scope="col">Item</th>
+              <th scope="col" aria-sort="ascending"><button type="button" class="table__sort">Submitted (SAST)</button></th>
+              <th scope="col">Status</th>
+              <th scope="col" class="table__num" aria-sort="none"><button type="button" class="table__sort">Version</button></th>
+              <th scope="col" class="table__actions"><span class="u-visually-hidden">Actions</span></th>
+            </tr></thead>
+            <tbody>
+              <tr><td class="table__check"><label class="check check--bare"><input class="check__input" type="checkbox" data-select-row checked><span class="u-visually-hidden">Select Lerato Mokoena</span></label></td>
+                <td class="table__primary-cell" data-label="Learner"><span class="table__primary">Lerato Mokoena</span><span class="table__secondary mono">KSI-2026-0417</span></td>
+                <td data-label="Item">Task 3: Workplace records portfolio<span class="table__secondary">Unit 3</span></td>
+                <td data-label="Submitted"><time class="datetime" datetime="2026-09-04T17:42:00+02:00">4 Sep 2026, <span class="datetime__time">17:42</span></time></td>
+                <td data-label="Status"><span class="tag tag--caution">To mark, Late</span></td>
+                <td class="table__num" data-label="Version">2</td>
+                <td class="table__actions"><a class="btn btn--secondary btn--sm" href="#tables">Mark<span class="u-visually-hidden"> Lerato Mokoena, Task 3</span></a></td></tr>
+              <tr><td class="table__check"><label class="check check--bare"><input class="check__input" type="checkbox" data-select-row><span class="u-visually-hidden">Select Sipho Zulu</span></label></td>
+                <td class="table__primary-cell" data-label="Learner"><span class="table__primary">Sipho Zulu</span><span class="table__secondary mono">KSI-2026-0398</span></td>
+                <td data-label="Item">Unit 2 summative exam<span class="table__secondary">Unit 2 · auto-submitted</span></td>
+                <td data-label="Submitted"><time class="datetime" datetime="2026-09-02T11:00:00+02:00">2 Sep 2026, <span class="datetime__time">11:00</span></time></td>
+                <td data-label="Status"><span class="tag tag--caution">Integrity events to review</span></td>
+                <td class="table__num" data-label="Version">1</td>
+                <td class="table__actions"><a class="btn btn--secondary btn--sm" href="#tables">Mark<span class="u-visually-hidden"> Sipho Zulu, Unit 2 summative exam</span></a></td></tr>
+              <tr><td class="table__check"><label class="check check--bare"><input class="check__input" type="checkbox" data-select-row><span class="u-visually-hidden">Select Ayesha Patel</span></label></td>
+                <td class="table__primary-cell" data-label="Learner"><span class="table__primary">Ayesha Patel</span><span class="table__secondary mono">KSI-2026-0422</span></td>
+                <td data-label="Item">Task 3: Workplace records portfolio<span class="table__secondary">Unit 3</span></td>
+                <td data-label="Submitted"><time class="datetime" datetime="2026-09-04T09:15:00+02:00">4 Sep 2026, <span class="datetime__time">09:15</span></time></td>
+                <td data-label="Status"><span class="tag">To mark</span></td>
+                <td class="table__num" data-label="Version">1</td>
+                <td class="table__actions"><a class="btn btn--secondary btn--sm" href="#tables">Mark<span class="u-visually-hidden"> Ayesha Patel, Task 3</span></a></td></tr>
+              <tr><td class="table__check"><label class="check check--bare"><input class="check__input" type="checkbox" data-select-row><span class="u-visually-hidden">Select Johan Botha</span></label></td>
+                <td class="table__primary-cell" data-label="Learner"><span class="table__primary">Johan Botha</span><span class="table__secondary mono">KSI-2026-0431</span></td>
+                <td data-label="Item">Task 3: Workplace records portfolio<span class="table__secondary">Unit 3</span></td>
+                <td data-label="Submitted"><time class="datetime" datetime="2026-09-03T14:05:00+02:00">3 Sep 2026, <span class="datetime__time">14:05</span></time></td>
+                <td data-label="Status"><span class="tag tag--info tag--shape-half">Marking, draft saved 10:40</span></td>
+                <td class="table__num" data-label="Version">1</td>
+                <td class="table__actions"><a class="btn btn--secondary btn--sm" href="#tables">Continue<span class="u-visually-hidden"> marking Johan Botha, Task 3</span></a></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bulk-bar" data-bulk-bar role="region" aria-label="Bulk actions"><span class="bulk-bar__count"><span data-selected-count>1</span> selected</span><button type="button" class="btn btn--secondary">Reallocate</button><button type="button" class="btn btn--secondary">Export selected</button></div>
+        <nav class="pagination u-mt-4" aria-label="Queue pages">
+          <span>Showing 1 to 4 of 12</span>
+          <ul class="pagination__list">
+            <li><a class="pagination__item" role="link" aria-disabled="true" aria-label="Previous page"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-caret-left"/></svg></a></li>
+            <li><a class="pagination__item" href="#tables" aria-current="page" aria-label="Page 1, current">1</a></li>
+            <li><a class="pagination__item" href="#tables" aria-label="Page 2">2</a></li>
+            <li><a class="pagination__item" href="#tables" aria-label="Page 3">3</a></li>
+            <li><a class="pagination__item" href="#tables" aria-label="Next page"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-caret-right"/></svg></a></li>
+          </ul>
+        </nav>
+
+        <h3 class="text-heading sg-h">Loading and empty</h3>
+        <div class="grid grid--2">
+          <div class="card" aria-busy="true"><div class="card__header"><span class="skeleton skeleton--title"></span><span class="skeleton skeleton--tag"></span></div><div class="card__body"><span class="u-visually-hidden">Loading the queue</span><span class="skeleton skeleton--text"></span><span class="skeleton skeleton--text" style="width:82%"></span><span class="skeleton skeleton--text" style="width:64%"></span><span class="skeleton skeleton--block u-mt-4"></span></div></div>
+          <div class="card"><div class="empty"><span class="empty__icon"><svg class="icon icon--lg" aria-hidden="true"><use href="#i-inbox"/></svg></span><p class="empty__title">Nothing to mark right now</p><p class="empty__body">New submissions from 2026 Intake B will appear here. The next task is due on Friday 2 October 2026 at 17:00.</p><div class="empty__actions"><a class="btn btn--secondary" href="#tables">See cohort release status</a></div></div></div>
+        </div>
+      </section>
+
+      <!-- ============================== STATUS ============================== -->
+      <section class="sg-section" id="status" aria-labelledby="status-h">
+        <h2 class="text-title" id="status-h">Status vocabulary</h2>
+        <p class="text-muted">Five tones: neutral, info, positive, caution, critical. Every status is text first; tone and shape support it. Late, Held, Not yet competent, Returned and Amended: lower are all caution. Critical is reserved for system faults, blocking validation and destructive confirmation. It is never used for a learner's outcome.</p>
+        <div class="sg-specimen stack">
+          <p class="text-subheading">Tones and shapes</p>
+          <div class="cluster"><span class="tag">Neutral · ring</span><span class="tag tag--info">Info · dot</span><span class="tag tag--info tag--shape-half">Info, in progress · half</span><span class="tag tag--positive">Positive · check</span><span class="tag tag--caution">Caution · diamond</span><span class="tag tag--critical">Critical · cross</span><span class="tag tag--shape-square">Neutral, final · square</span><span class="tag tag--plain">Plain, no shape</span></div>
+          <div class="cluster"><span class="tag tag--positive tag--lg">Competent</span><span class="tag tag--caution tag--lg">Not yet competent</span><span class="tag tag--info tag--shape-half tag--lg">Being assessed</span></div>
+        </div>
+        <div class="banner banner--info u-mt-4" role="note"><svg class="icon banner__icon" aria-hidden="true"><use href="#i-info"/></svg><p class="banner__title">One label for the learner while a result is held</p><p class="banner__body">From the moment work is accepted until the result is released, the learner sees only "Being assessed". Staff screens show both facts: "Decided 10 Sep 2026. Released 22 Sep 2026."</p></div>
+        <div class="table-wrap u-mt-4" tabindex="0" role="region" aria-label="Status vocabulary table, scrolls horizontally on small screens">
+          <table class="table sg-vocab">
+            <caption class="u-visually-hidden">Domain status vocabulary by data-model state, audience and tone</caption>
+            <thead><tr><th scope="col">Object</th><th scope="col">Data-model state</th><th scope="col">Learner sees</th><th scope="col">Staff see</th><th scope="col">Tone</th></tr></thead>
+            <tbody>
+              <tr><td rowspan="8">Submission</td><td class="mono">no version, before due</td><td><span class="tag">Not started</span></td><td><span class="tag">Outstanding</span></td><td class="mono">neutral</td></tr>
+              <tr><td class="mono">no version, after due</td><td><span class="tag tag--caution">Overdue. You can still submit</span></td><td><span class="tag tag--caution">Outstanding (overdue)</span></td><td class="mono">caution</td></tr>
+              <tr><td class="mono">upload_pending</td><td><span class="tag tag--info tag--shape-half">Upload in progress</span></td><td><span class="tag">Outstanding</span></td><td class="mono">info</td></tr>
+              <tr><td class="mono">finalised (draft)</td><td><span class="tag tag--info">Ready to submit</span></td><td><span class="tag">Outstanding</span></td><td class="mono">info</td></tr>
+              <tr><td class="mono">submitted, on time</td><td><span class="tag tag--positive">Submitted, version 1</span></td><td><span class="tag">To mark</span></td><td class="mono">positive / neutral</td></tr>
+              <tr><td class="mono">submitted, late flag</td><td><span class="tag tag--caution">Submitted, version 2, Late</span></td><td><span class="tag tag--caution">To mark, Late</span></td><td class="mono">caution</td></tr>
+              <tr><td class="mono">released NYC, resubmission open (returned)</td><td><span class="tag tag--caution">Resubmission open</span></td><td><span class="tag tag--caution">Waiting for resubmission</span></td><td class="mono">caution</td></tr>
+              <tr><td class="mono">submitted, version &gt; 1 (resubmitted); older version</td><td><span class="tag tag--positive">Submitted, version 2</span> <span class="tag tag--shape-square">Replaced by version 2</span></td><td><span class="tag">To mark</span> <span class="tag tag--shape-square">In version history</span></td><td class="mono">positive / neutral</td></tr>
+
+              <tr><td rowspan="4">Exam attempt</td><td class="mono">active</td><td><span class="tag tag--info tag--shape-half">In progress. Time left 01:12</span></td><td><span class="tag tag--info tag--shape-half">In progress, last save 10:42</span></td><td class="mono">info</td></tr>
+              <tr><td class="mono">submitted</td><td><span class="tag tag--positive">Submitted 10:58</span></td><td><span class="tag">To mark</span></td><td class="mono">positive</td></tr>
+              <tr><td class="mono">expired (auto-submitted)</td><td><span class="tag tag--positive">Submitted automatically when time ran out</span></td><td><span class="tag">To mark, Auto-submitted</span></td><td class="mono">positive</td></tr>
+              <tr><td class="mono">voided</td><td><span class="tag tag--shape-square">Attempt cancelled by your coordinator</span></td><td><span class="tag tag--shape-square">Voided by Zanele Dlamini</span></td><td class="mono">neutral</td></tr>
+
+              <tr><td rowspan="6">Answer persistence</td><td class="mono">request outstanding &gt; 2 s</td><td colspan="2"><span class="status-line"><span class="spinner" aria-hidden="true"></span>Saving</span></td><td class="mono">neutral</td></tr>
+              <tr><td class="mono">local (IndexedDB only)</td><td colspan="2"><span class="status-line status-line--local"><svg class="icon" aria-hidden="true"><use href="#i-device"/></svg>Saved on this device</span></td><td class="mono">info</td></tr>
+              <tr><td class="mono">persisted (server acknowledged)</td><td colspan="2"><span class="status-line status-line--saved"><svg class="icon" aria-hidden="true"><use href="#i-cloud-check"/></svg>Saved <span class="status-line__time">10:42</span></span></td><td class="mono">positive</td></tr>
+              <tr><td class="mono">submitted (terminal)</td><td colspan="2"><span class="status-line status-line--locked"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Submitted and locked</span></td><td class="mono">neutral</td></tr>
+              <tr><td class="mono">problem: offline</td><td colspan="2"><span class="status-line status-line--problem"><svg class="icon" aria-hidden="true"><use href="#i-offline"/></svg>Not saved to the server. Your answers are being kept on this device.</span></td><td class="mono">caution</td></tr>
+              <tr><td class="mono">problem: no safety copy</td><td colspan="2"><span class="status-line status-line--critical"><svg class="icon" aria-hidden="true"><use href="#i-warning"/></svg>This device cannot keep a safety copy. Only "Saved" answers are safe.</span></td><td class="mono">critical</td></tr>
+
+              <tr><td rowspan="5">Result</td><td class="mono">queued / marking</td><td><span class="tag tag--info tag--shape-half">Being assessed</span></td><td><span class="tag">To mark</span> <span class="tag tag--info tag--shape-half">Marking, draft saved 10:40</span></td><td class="mono">info</td></tr>
+              <tr><td class="mono">held (any sub-state)</td><td><span class="tag tag--info tag--shape-half">Being assessed</span></td><td><span class="tag tag--caution">Decided 10 Sep 2026. Held</span></td><td class="mono">info / caution</td></tr>
+              <tr><td class="mono">released, Competent</td><td><span class="tag tag--positive">Competent</span></td><td><span class="tag tag--positive">Competent</span> <span class="text-meta">Decided 10 Sep. Released 22 Sep.</span></td><td class="mono">positive</td></tr>
+              <tr><td class="mono">released, Not yet competent</td><td><span class="tag tag--caution">Not yet competent</span></td><td><span class="tag tag--caution">Not yet competent</span> <span class="text-meta">Decided 10 Sep. Released 22 Sep.</span></td><td class="mono">caution</td></tr>
+              <tr><td class="mono">released, superseded</td><td><span class="tag tag--plain">Changed after appeal on 5 Oct 2026</span></td><td><span class="tag tag--plain">Amended on appeal 5 Oct 2026</span></td><td class="mono">neutral</td></tr>
+
+              <tr><td rowspan="6">Moderation cycle</td><td class="mono">planned</td><td rowspan="5"><span class="tag tag--info tag--shape-half">Being assessed</span></td><td><span class="tag">Planned</span></td><td class="mono">neutral</td></tr>
+              <tr><td class="mono">frozen_and_sampled</td><td><span class="tag tag--info">Sampled. Ready for review (22 items)</span></td><td class="mono">info</td></tr>
+              <tr><td class="mono">in_review</td><td><span class="tag tag--info tag--shape-half">In review (14 of 22 done)</span></td><td class="mono">info</td></tr>
+              <tr><td class="mono">corrections_pending</td><td><span class="tag tag--caution">Waiting for re-marks (1 outstanding)</span></td><td class="mono">caution</td></tr>
+              <tr><td class="mono">cancelled</td><td><span class="tag tag--shape-square">Cancelled. Results still waiting</span></td><td class="mono">neutral</td></tr>
+              <tr><td class="mono">signed_off</td><td><span class="tag tag--positive">Result ready</span></td><td><span class="tag tag--positive">Signed off. 96 results released</span></td><td class="mono">positive</td></tr>
+
+              <tr><td rowspan="6">Sample item</td><td class="mono">allocated</td><td rowspan="6">Not shown</td><td><span class="tag">To review</span></td><td class="mono">neutral</td></tr>
+              <tr><td class="mono">in_review</td><td><span class="tag tag--info tag--shape-half">In review</span></td><td class="mono">info</td></tr>
+              <tr><td class="mono">agreed</td><td><span class="tag tag--positive">Agreed</span></td><td class="mono">positive</td></tr>
+              <tr><td class="mono">returned</td><td><span class="tag tag--caution">Returned to assessor, due 17 Sep</span></td><td class="mono">caution</td></tr>
+              <tr><td class="mono">remarked</td><td><span class="tag tag--info">Re-marked. Review again</span></td><td class="mono">info</td></tr>
+              <tr><td class="mono">reallocated</td><td><span class="tag tag--shape-square">Reallocated to Anil Naidoo</span></td><td class="mono">neutral</td></tr>
+
+              <tr><td rowspan="9">Appeal</td><td class="mono">lodged</td><td><span class="tag tag--info">Received</span></td><td><span class="tag tag--info">New. Needs admissibility check</span></td><td class="mono">info</td></tr>
+              <tr><td class="mono">admissibility_review</td><td><span class="tag tag--info tag--shape-half">Being checked</span></td><td><span class="tag tag--info tag--shape-half">Being checked</span></td><td class="mono">info</td></tr>
+              <tr><td class="mono">admitted</td><td><span class="tag tag--info">Accepted</span></td><td><span class="tag tag--info">Accepted. Needs a reviewer</span></td><td class="mono">info</td></tr>
+              <tr><td class="mono">inadmissible</td><td><span class="tag tag--shape-square">Not accepted</span> with the reason</td><td><span class="tag tag--shape-square">Inadmissible</span></td><td class="mono">neutral</td></tr>
+              <tr><td class="mono">allocated</td><td><span class="tag tag--info">With a reviewer</span></td><td><span class="tag tag--info">Allocated to Anil Naidoo</span></td><td class="mono">info</td></tr>
+              <tr><td class="mono">under_review</td><td><span class="tag tag--info tag--shape-half">Being reviewed</span></td><td><span class="tag tag--info tag--shape-half">Under review</span></td><td class="mono">info</td></tr>
+              <tr><td class="mono">concluded: upheld</td><td><span class="tag tag--shape-check">Decided: mark upheld</span></td><td><span class="tag tag--shape-check">Concluded: upheld</span></td><td class="mono">neutral</td></tr>
+              <tr><td class="mono">concluded: amended_up</td><td><span class="tag tag--positive">Decided: mark changed (higher)</span></td><td><span class="tag tag--positive">Concluded: amended upward</span></td><td class="mono">positive</td></tr>
+              <tr><td class="mono">concluded: amended_down</td><td><span class="tag tag--caution">Decided: mark changed (lower)</span></td><td><span class="tag tag--caution">Concluded: amended downward</span></td><td class="mono">caution</td></tr>
+
+              <tr><td rowspan="4">Notification delivery</td><td class="mono">pending / queued</td><td><span class="tag tag--shape-half">Email: sending</span></td><td><span class="tag tag--shape-half">Queued</span></td><td class="mono">neutral</td></tr>
+              <tr><td class="mono">accepted</td><td><span class="tag tag--info">Email: sent 14:06</span></td><td><span class="tag tag--info">Accepted by mail provider</span></td><td class="mono">info</td></tr>
+              <tr><td class="mono">delivered</td><td><span class="tag tag--positive">Email: delivered 14:06</span></td><td><span class="tag tag--positive">Delivered</span></td><td class="mono">positive</td></tr>
+              <tr><td class="mono">failed</td><td><span class="tag tag--critical">Email could not be delivered</span></td><td><span class="tag tag--critical">Failed</span></td><td class="mono">critical (system fault)</td></tr>
+
+              <tr><td rowspan="5">Cohort</td><td class="mono">active</td><td rowspan="5">Not shown</td><td><span class="tag tag--positive tag--shape-dot">Active</span></td><td class="mono">positive</td></tr>
+              <tr><td class="mono">completion_review</td><td><span class="tag tag--info tag--shape-half">Completion review</span></td><td class="mono">info</td></tr>
+              <tr><td class="mono">archivable</td><td><span class="tag">Ready to archive</span></td><td class="mono">neutral</td></tr>
+              <tr><td class="mono">archived</td><td><span class="tag tag--shape-square">Archived (read-only)</span></td><td class="mono">neutral</td></tr>
+              <tr><td class="mono">moderation_policy</td><td><span class="tag tag--plain">Moderated</span> <span class="tag tag--plain">Not moderated</span></td><td class="mono">neutral</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============================== PROCESS ============================== -->
+      <section class="sg-section" id="process" aria-labelledby="process-h">
+        <h2 class="text-title" id="process-h">Tabs, steps and deadlines</h2>
+        <p class="text-muted">Tabs switch views of one object. The stepper is the appeal timeline and the moderation progress. Deadlines are written as the last full day, never as midnight, and a relative time only ever accompanies the date.</p>
+
+        <div class="sg-specimen">
+          <div class="tabs" data-tabs>
+            <div class="tabs__list" role="tablist" aria-label="Marking panel">
+              <button type="button" class="tabs__tab" role="tab" id="t1" aria-controls="p1" aria-selected="true">Rubric</button>
+              <button type="button" class="tabs__tab" role="tab" id="t2" aria-controls="p2" aria-selected="false">Feedback</button>
+              <button type="button" class="tabs__tab" role="tab" id="t3" aria-controls="p3" aria-selected="false">Integrity <span class="tabs__count">2</span></button>
+              <button type="button" class="tabs__tab" role="tab" id="t4" aria-controls="p4" aria-selected="false">History <span class="tabs__count">2</span></button>
+            </div>
+            <div class="tabs__panel" role="tabpanel" id="p1" aria-labelledby="t1" tabindex="0"><p>The rubric rows for Unit 3 appear here.</p></div>
+            <div class="tabs__panel" role="tabpanel" id="p2" aria-labelledby="t2" tabindex="0" hidden><p>Overall feedback, written for the learner.</p></div>
+            <div class="tabs__panel" role="tabpanel" id="p3" aria-labelledby="t3" tabindex="0" hidden><p>Integrity is shown for exams only.</p></div>
+            <div class="tabs__panel" role="tabpanel" id="p4" aria-labelledby="t4" tabindex="0" hidden><p>Version 2 is current. Version 1 is kept on record.</p></div>
+          </div>
+        </div>
+
+        <h3 class="text-heading sg-h">Appeal timeline (learner view)</h3>
+        <div class="sg-specimen">
+          <ol class="stepper" aria-label="Progress of your appeal APL-2026-0031">
+            <li class="stepper__step is-complete"><span class="stepper__label">Received<span class="u-visually-hidden"> (done)</span></span><span class="stepper__meta">24 Sep 2026, 08:14</span><span class="stepper__body">You asked for a remark of Task 3.</span></li>
+            <li class="stepper__step is-complete"><span class="stepper__label">Accepted<span class="u-visually-hidden"> (done)</span></span><span class="stepper__meta">25 Sep 2026, 10:02</span></li>
+            <li class="stepper__step is-current" aria-current="step"><span class="stepper__label">Being reviewed<span class="u-visually-hidden"> (current step)</span></span><span class="stepper__meta">With a reviewer since 25 Sep 2026</span><span class="stepper__body">A reviewer who did not assess your work is marking it again. We expect a decision within 5 working days.</span></li>
+            <li class="stepper__step"><span class="stepper__label">Decided<span class="u-visually-hidden"> (not yet)</span></span><span class="stepper__body">The decision is final. The mark can stay the same, go up or go down.</span></li>
+          </ol>
+        </div>
+        <h3 class="text-heading sg-h">Moderation cycle progress, blocked before sign-off (horizontal from 768px)</h3>
+        <div class="sg-specimen">
+          <ol class="stepper stepper--horizontal" aria-label="Term 3 tasks: moderation cycle progress">
+            <li class="stepper__step is-complete"><span class="stepper__label">Planned<span class="u-visually-hidden"> (done)</span></span><span class="stepper__meta">Zanele Dlamini, 7 Sep</span></li>
+            <li class="stepper__step is-complete"><span class="stepper__label">Sampled<span class="u-visually-hidden"> (done)</span></span><span class="stepper__meta">14 Sep · 22 of 96 · rule-v4</span></li>
+            <li class="stepper__step is-complete"><span class="stepper__label">In review<span class="u-visually-hidden"> (done)</span></span><span class="stepper__meta">21 agreed, 1 returned</span></li>
+            <li class="stepper__step is-blocked" aria-current="step"><span class="stepper__label">Waiting for re-marks<span class="u-visually-hidden"> (blocked)</span></span><span class="stepper__body">1 returned item is with Thandiwe Nkosi, due 17 Sep.</span></li>
+            <li class="stepper__step"><span class="stepper__label">Signed off<span class="u-visually-hidden"> (not yet)</span></span><span class="stepper__body">Releases all 96 results.</span></li>
+          </ol>
+        </div>
+
+        <h3 class="text-heading sg-h">Deadline line, deadline chips and date-time</h3>
+        <div class="sg-specimen stack">
+          <p class="deadline-line"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg><span>You can appeal this result <span class="deadline-line__date">until the end of Tuesday 29 September 2026</span>. <span class="deadline-line__left">6 days left</span>, including weekends and public holidays.</span></p>
+          <p class="deadline-line deadline-line--soon"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg><span><span class="deadline-line__date">Today is the last day to appeal.</span> You have until the end of today, Tuesday 29 September 2026.</span></p>
+          <p class="deadline-line deadline-line--closed"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg><span>The time to appeal closed at the end of Tuesday 29 September 2026.</span></p>
+          <div class="cluster">
+            <span class="deadline"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-clock"/></svg>Due Fri 2 Oct 2026, 17:00 · in 9 days</span>
+            <span class="deadline deadline--soon"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-clock"/></svg>Due tomorrow, Thu 24 Sep, 17:00</span>
+            <span class="deadline deadline--overdue"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-clock"/></svg>Overdue since Fri 4 Sep, 17:00. You can still submit</span>
+            <span class="deadline deadline--closed"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-lock"/></svg>Closed at the end of Tue 29 Sep 2026</span>
+          </div>
+          <p>Inline: <time class="datetime" datetime="2026-09-22T14:05:00+02:00">22 Sep 2026, <span class="datetime__time">14:05</span> <span class="datetime__zone">SAST</span></time> · Stacked: <time class="datetime datetime--stacked" datetime="2026-10-14T09:00:00+02:00"><span>Wed 14 Oct 2026</span><span class="datetime__time">09:00 to 12:00</span></time> · In a sentence: "Friday 4 September 2026 at 17:00 (SAST)".</p>
+        </div>
+
+        <h3 class="text-heading sg-h">Checklist: device check before an exam</h3>
+        <ul class="checklist" aria-label="Device check">
+          <li class="checklist__item checklist__item--pass"><svg class="icon checklist__icon" aria-hidden="true"><use href="#i-check-circle"/></svg><span class="checklist__title">Laptop or desktop browser</span><span class="tag tag--positive">Pass</span></li>
+          <li class="checklist__item checklist__item--pass"><svg class="icon checklist__icon" aria-hidden="true"><use href="#i-check-circle"/></svg><span class="checklist__title">Full-screen mode is available</span><span class="tag tag--positive">Pass</span></li>
+          <li class="checklist__item checklist__item--problem"><svg class="icon checklist__icon" aria-hidden="true"><use href="#i-info"/></svg><span class="checklist__title">This device can keep a safety copy</span><span class="tag tag--caution">Problem</span><span class="checklist__detail">Your browser is in private mode. Open the LMS in a normal window and run the check again.</span></li>
+          <li class="checklist__item"><span class="spinner checklist__icon" aria-hidden="true"></span><span class="checklist__title">Connection to the LMS</span><span class="tag tag--shape-half">Checking</span></li>
+        </ul>
+      </section>
+
+      <!-- ============================== ASSESSMENT ============================== -->
+      <section class="sg-section" id="assessment" aria-labelledby="assessment-h">
+        <h2 class="text-title" id="assessment-h">Marking workspace, decision and result</h2>
+        <p class="text-muted">Evidence and panel sit side by side only from 1280px. Below that, the sections stack under a sticky section switcher and the decision bar stays sticky at the bottom; on phones the decision bar is one button that opens the decision sheet. Sticky regions reserve scroll padding so that a focused control is never hidden behind them.</p>
+        <div class="sg-frame">
+          <nav class="section-switcher" aria-label="Sections of this item"><a class="section-switcher__item" href="#ws-evidence" aria-current="true">Evidence</a><a class="section-switcher__item" href="#ws-rubric">Rubric</a><a class="section-switcher__item" href="#ws-decision">Decision</a><a class="section-switcher__item" href="#records">History</a></nav>
+          <div class="workspace">
+            <div class="workspace__evidence" id="ws-evidence">
+              <div class="viewer">
+                <div class="viewer__toolbar"><div class="cluster"><span class="text-subheading">Workplace-records-portfolio-v2.pdf</span><span class="text-meta">Page 6 of 11</span></div><label class="select"><span class="u-visually-hidden">Version</span><select><option>Version 2 (current), 4 Sep 2026, 17:42, Late</option><option>Version 1, 28 Aug 2026, 16:55</option></select></label></div>
+                <div class="viewer__body"><div class="viewer__page prose">
+                  <h3>3. Controlling access to confidential records</h3>
+                  <p>Payroll and leave records are kept in the locked cabinet in the HR office. A request to see a record is written in the access register and approved by the office manager before the cabinet is opened.</p>
+                  <blockquote>The access register for July and August 2026 is attached as evidence for requirement 2.</blockquote>
+                </div></div>
+              </div>
+            </div>
+            <div class="workspace__panel">
+              <form class="rubric" id="ws-rubric" onsubmit="return false" aria-label="Rubric for Unit 3">
+                <fieldset class="rubric__row">
+                  <legend class="rubric__head"><span><span class="rubric__id">AC 3.1</span> <span class="rubric__title">Maintains a filing index that others can use</span></span><span class="rubric__score">3 / 4</span></legend>
+                  <p class="rubric__desc">Records in the sample can be found from the index without help.</p>
+                  <div class="rubric__levels">
+                    <label class="choice"><input class="choice__input" type="radio" name="c31"><span class="choice__title">Not shown</span><span class="choice__meta">0</span></label>
+                    <label class="choice"><input class="choice__input" type="radio" name="c31"><span class="choice__title">Partly</span><span class="choice__meta">2</span></label>
+                    <label class="choice"><input class="choice__input" type="radio" name="c31" checked><span class="choice__title">Meets</span><span class="choice__meta">3</span></label>
+                    <label class="choice"><input class="choice__input" type="radio" name="c31"><span class="choice__title">Exceeds</span><span class="choice__meta">4</span></label>
+                  </div>
+                  <div class="field"><label class="field__label" for="c31-c">Comment for AC 3.1 <span class="field__optional">(optional)</span></label><textarea class="textarea" id="c31-c" rows="2">Every sampled record was found from the index.</textarea></div>
+                </fieldset>
+                <fieldset class="rubric__row is-unscored">
+                  <legend class="rubric__head"><span><span class="rubric__id">AC 3.2</span> <span class="rubric__title">Controls access to confidential records</span></span><span class="rubric__score">Not scored</span></legend>
+                  <p class="rubric__desc">Evidence that access is requested, approved and recorded.</p>
+                  <div class="rubric__levels">
+                    <label class="choice"><input class="choice__input" type="radio" name="c32"><span class="choice__title">Not shown</span><span class="choice__meta">0</span></label>
+                    <label class="choice"><input class="choice__input" type="radio" name="c32"><span class="choice__title">Partly</span><span class="choice__meta">2</span></label>
+                    <label class="choice"><input class="choice__input" type="radio" name="c32"><span class="choice__title">Meets</span><span class="choice__meta">3</span></label>
+                    <label class="choice"><input class="choice__input" type="radio" name="c32"><span class="choice__title">Exceeds</span><span class="choice__meta">4</span></label>
+                  </div>
+                </fieldset>
+                <div class="rubric__total"><span>Total so far <span class="text-muted">(1 of 2 criteria scored)</span></span><span class="rubric__total-value">3 / 8</span></div>
+              </form>
+
+              <form class="decision" id="ws-decision" onsubmit="return false" aria-labelledby="decision-title">
+                <div class="decision__header"><h3 class="decision__title" id="decision-title">Competency decision</h3><p class="text-small text-muted">A decision is never edited. A later change is recorded as a new decision and this one stays on record.</p></div>
+                <div class="decision__body">
+                  <fieldset class="fieldset">
+                    <legend class="fieldset__legend">Outcome <span class="field__required">(required)</span></legend>
+                    <div class="choice-group choice-group--2">
+                      <label class="choice choice--positive"><input class="choice__input" type="radio" name="outcome"><span class="choice__title">Competent</span><span class="choice__desc">All assessment criteria for the unit are met.</span></label>
+                      <label class="choice choice--caution"><input class="choice__input" type="radio" name="outcome" checked><span class="choice__title">Not yet competent</span><span class="choice__desc">One or more criteria are not yet met. The learner resubmits.</span></label>
+                    </div>
+                  </fieldset>
+                  <div class="field"><label class="field__label" for="d-just">Justification <span class="field__required">(required)</span></label><p class="field__help" id="d-just-h">The learner reads this. Say which criteria were met, which were not, and why.</p><textarea class="textarea textarea--feedback" id="d-just" aria-describedby="d-just-h">AC 3.1 is met. AC 3.2 is not yet met: the access register is described on page 6 but is not among the evidence files.</textarea></div>
+                  <div class="decision__remediation">
+                    <p class="text-subheading">Needed for a Not yet competent outcome</p>
+                    <div class="field"><label class="field__label" for="d-rem">What the learner must do</label><textarea class="textarea" id="d-rem" rows="3">Upload the access register for July and August, and add one paragraph on who approves a request.</textarea></div>
+                    <div class="field"><label class="field__label" for="d-dl">Days to resubmit</label><p class="field__help" id="d-dl-help">Counted from the day the result is released to the learner, not from today. Time spent waiting for moderation does not use it up.</p><input class="input input--mono u-measure" id="d-dl" type="number" inputmode="numeric" min="1" max="90" value="14" aria-describedby="d-dl-help" style="max-width:8rem"></div>
+                  </div>
+                  <div class="banner banner--info banner--compact" role="status"><svg class="icon banner__icon" aria-hidden="true"><use href="#i-lock"/></svg><p class="banner__body">2026 Intake B is moderated. This result will be held, and Lerato will not see it until the moderator signs off.</p></div>
+                </div>
+                <div class="decision__footer"><span class="decision__attribution">You are deciding as the assessor: Thandiwe Nkosi</span><span class="status-line status-line--saved" role="status"><svg class="icon" aria-hidden="true"><use href="#i-cloud-check"/></svg>Draft saved <span class="status-line__time">10:40</span></span></div>
+              </form>
+            </div>
+          </div>
+          <div class="decision-bar" role="region" aria-label="Decision">
+            <div class="decision-bar__summary"><strong>Not yet competent · 3 / 8</strong>1 criterion is not scored yet</div>
+            <div class="decision-bar__actions"><button type="button" class="btn btn--secondary">Save draft</button><button type="button" class="btn btn--primary" data-modal-open="m-finalise">Finalise decision</button></div>
+            <button type="button" class="btn btn--primary decision-bar__open" data-modal-open="m-decision-sheet">Decision</button>
+          </div>
+        </div>
+        <p class="chart-caption">In this specimen the sticky parts are held still. Below 768px the two buttons collapse into one "Decision" button that opens a full-height sheet.</p>
+
+        <h3 class="text-heading sg-h">Learner result view</h3>
+        <p class="text-small text-muted sg-note">Outcome in words, the next step and both clocks are in the first screenful. "Not yet competent" is always followed by what to do next and by when. Marks never appear without the outcome.</p>
+        <div class="page-layout">
+          <div class="page-layout__main stack">
+            <article class="result" aria-labelledby="r2-h">
+              <div class="result__head"><div class="result__outcome"><p class="text-overline" id="r2-h">Task 3: Workplace records portfolio · Unit 3</p><span class="tag tag--caution tag--lg">Not yet competent</span></div><div class="result__marks"><p class="text-figure">5<span class="stat__unit"> of 8</span></p><p class="text-small text-muted">Not yet competent</p></div></div>
+              <div class="result__body">
+                <div class="banner banner--caution"><svg class="icon banner__icon" aria-hidden="true"><use href="#i-refresh"/></svg><p class="banner__title">Here is what to do next</p><div class="banner__body"><p>Some criteria still need evidence. You can resubmit until the end of Tuesday 6 October 2026.</p><ul class="prose"><li>Upload the access register for July and August.</li><li>Add one paragraph on who approves a request.</li></ul></div><div class="banner__actions"><a class="btn btn--primary" href="#assessment">Start your resubmission</a></div></div>
+                <p class="deadline-line"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg><span>You can appeal this result <span class="deadline-line__date">until the end of Tuesday 29 September 2026</span>. <span class="deadline-line__left">6 days left</span>. <a href="#assessment">Appeal this result</a></span></p>
+                <div><p class="text-subheading">Feedback from your assessor, Thandiwe Nkosi</p><p class="prose u-mt-2">Your filing index is clear and every record in the sample can be found from it. To meet criterion 3.2, add the access register you describe on page 6 and explain who approves a request.</p></div>
+              </div>
+              <div class="result__footer">Released on 22 September 2026 at 14:05 (SAST). You were notified in the LMS at 14:05 and by email at 14:06 (delivered).</div>
+            </article>
+            <article class="result" aria-labelledby="r1-h">
+              <div class="result__head"><div class="result__outcome"><p class="text-overline" id="r1-h">Task 2: Business letters · Unit 4</p><span class="tag tag--positive tag--lg">Competent</span></div><div class="result__marks"><p class="text-figure">82<span class="stat__unit">%</span></p><p class="text-small text-muted">Competent</p></div></div>
+              <div class="result__body"><p>This counts towards Unit 4. Unit 4 needs one more assessment before its 10 credits are awarded.</p>
+                <p class="deadline-line deadline-line--closed"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg><span>The time to appeal closed at the end of Friday 28 August 2026.</span></p></div>
+            </article>
+          </div>
+          <aside class="page-layout__aside stack" aria-label="History and notification record">
+            <details class="delivery-evidence" open>
+              <summary>How you were told</summary>
+              <ul class="delivery-evidence__list">
+                <li class="delivery-evidence__row"><span class="delivery-evidence__channel">In the LMS</span><time class="delivery-evidence__time" datetime="2026-09-22T14:05:00+02:00">22 Sep 2026, 14:05</time></li>
+                <li class="delivery-evidence__row"><span class="delivery-evidence__channel">Email: delivered</span><time class="delivery-evidence__time" datetime="2026-09-22T14:06:00+02:00">22 Sep 2026, 14:06</time></li>
+                <li class="delivery-evidence__row"><span class="delivery-evidence__channel">First opened by you</span><time class="delivery-evidence__time" datetime="2026-09-22T18:31:00+02:00">22 Sep 2026, 18:31</time></li>
+              </ul>
+            </details>
+            <details class="delivery-evidence">
+              <summary>How you were told (when an email fails)</summary>
+              <ul class="delivery-evidence__list">
+                <li class="delivery-evidence__row"><span class="delivery-evidence__channel">In the LMS</span><time class="delivery-evidence__time" datetime="2026-09-22T14:05:00+02:00">22 Sep 2026, 14:05</time></li>
+                <li class="delivery-evidence__row delivery-evidence__row--failed"><span class="delivery-evidence__channel">Email could not be delivered. <a href="#assessment">Check your email address</a></span><time class="delivery-evidence__time" datetime="2026-09-22T14:06:00+02:00">22 Sep 2026, 14:06</time></li>
+              </ul>
+            </details>
+            <ol class="history-list" aria-label="Decision history, newest first">
+              <li class="history-list__item is-current"><span class="history-list__badge">2</span><span class="history-list__title">Appeal decision: Competent</span><span class="history-list__meta">5 Oct 2026 · mark changed (higher) · reviewer Anil Naidoo</span><span class="history-list__actions"><span class="tag tag--plain">Current</span></span></li>
+              <li class="history-list__item"><span class="history-list__badge">1</span><span class="history-list__title">Not yet competent</span><span class="history-list__meta">Released 22 Sep 2026 · assessor Thandiwe Nkosi · kept on record</span></li>
+            </ol>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ============================== RECORDS ============================== -->
+      <section class="sg-section" id="records" aria-labelledby="records-h">
+        <h2 class="text-title" id="records-h">Receipts, history and logs</h2>
+        <p class="text-muted">Records are append-only. Nothing is edited: a new record is added and the earlier one stays on screen. References and timestamps are set in monospace so that they can be read out, compared and copied without error.</p>
+        <div class="grid grid--2">
+          <div class="receipt" aria-labelledby="rc-h">
+            <p class="receipt__title" id="rc-h"><svg class="icon" aria-hidden="true"><use href="#i-check-circle"/></svg>We have your work</p>
+            <code class="receipt__id">SUB-2026-0904-7K2M</code>
+            <dl class="receipt__rows">
+              <div class="receipt__row"><dt>Learner</dt><dd>Lerato Mokoena · KSI-2026-0417</dd></div>
+              <div class="receipt__row"><dt>Task</dt><dd>Task 3: Workplace records portfolio</dd></div>
+              <div class="receipt__row"><dt>Version</dt><dd>2 (3 files, 17.3 MB)</dd></div>
+              <div class="receipt__row"><dt>Received</dt><dd><time datetime="2026-09-04T17:42:00+02:00">Friday 4 September 2026 at 17:42 (SAST)</time></dd></div>
+              <div class="receipt__row"><dt>On time?</dt><dd>Late by 42 minutes. The late policy applies.</dd></div>
+            </dl>
+            <p class="receipt__note">What happens next: your work will be assessed. You will get a message here and by email when your result is ready. Keep this reference in case you need to ask about this submission.</p>
+            <div class="receipt__actions"><button type="button" class="btn btn--secondary" onclick="window.print()"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-printer"/></svg>Print</button><button type="button" class="btn btn--ghost" data-toast="Reference copied" data-toast-meta="SUB-2026-0904-7K2M"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-copy"/></svg>Copy reference</button></div>
+          </div>
+          <div class="stack">
+            <ol class="history-list" aria-label="Submission versions, newest first">
+              <li class="history-list__item is-current"><span class="history-list__badge">v2</span><span class="history-list__title">Version 2 <span class="tag tag--caution">Late</span></span><span class="history-list__meta">4 Sep 2026, 17:42 · 3 files · 17.3 MB</span><span class="history-list__actions"><span class="tag tag--plain">Current</span></span></li>
+              <li class="history-list__item"><span class="history-list__badge">v1</span><span class="history-list__title">Version 1</span><span class="history-list__meta">28 Aug 2026, 16:55 · 2 files · 9.8 MB · replaced by version 2, kept on record</span><span class="history-list__actions"><a class="btn btn--ghost btn--sm" href="#records">View<span class="u-visually-hidden"> version 1</span></a></span></li>
+            </ol>
+            <div class="conflict" role="alert" aria-labelledby="cf-h">
+              <h3 class="conflict__title" id="cf-h" tabindex="-1"><svg class="icon" aria-hidden="true"><use href="#i-scales"/></svg>This would break separation of duties</h3>
+              <p class="conflict__body">Thandiwe Nkosi cannot be the moderator for this item because she assessed it. Nothing was changed.</p>
+              <dl class="conflict__evidence dl"><div class="dl__row"><dt>Conflicting decision</dt><dd><a href="#records">Not yet competent, 10 Sep 2026</a>, Lerato Mokoena, Task 3</dd></div><div class="dl__row"><dt>Role at the time</dt><dd>Assessor, 2026 Intake B</dd></div></dl>
+              <p class="conflict__rule">BR-01 · separation_of_duties_conflict · Reference 8f41c2e0 · 23 Sep 2026, 10:14</p>
+              <div class="conflict__actions"><button type="button" class="btn btn--primary">Choose another moderator</button><button type="button" class="btn btn--ghost">View the decision</button></div>
+            </div>
+          </div>
+        </div>
+        <h3 class="text-heading sg-h">Audit and event log (assessor's integrity view)</h3>
+        <ol class="log log--boxed" aria-label="Exam record for Sipho Zulu, oldest first. Times in SAST.">
+          <li class="log__item"><time class="log__time" datetime="2026-09-02T09:00:02+02:00">2 Sep 2026, 09:00:02</time><div class="log__event"><span class="log__actor">Sipho Zulu</span> started the attempt. Fullscreen entered.<div class="log__detail">attempt 7c41e0 · Chrome 139 · Windows</div></div></li>
+          <li class="log__item log__item--marked"><time class="log__time" datetime="2026-09-02T09:21:47+02:00">2 Sep 2026, 09:21:47</time><div class="log__event"><span class="log__actor">System</span> recorded a window switch. Away for 9 seconds, inside the grace period.</div></li>
+          <li class="log__item log__item--marked"><time class="log__time" datetime="2026-09-02T09:48:15+02:00">2 Sep 2026, 09:48:15</time><div class="log__event"><span class="log__actor">System</span> recorded a fullscreen exit. Away for 4 seconds.</div></li>
+          <li class="log__item"><time class="log__time" datetime="2026-09-02T11:00:00+02:00">2 Sep 2026, 11:00:00</time><div class="log__event"><span class="log__actor">System</span> submitted the attempt automatically when time ran out.<div class="log__detail">receipt EXM-2026-0902-4AF1</div></div></li>
+          <li class="log__item"><time class="log__time" datetime="2026-09-03T08:40:26+02:00">3 Sep 2026, 08:40:26</time><div class="log__event"><span class="log__actor">Thandiwe Nkosi</span> recorded a judgement: the events are not material to the assessment.</div></li>
+        </ol>
+      </section>
+
+      <!-- ============================== FEEDBACK ============================== -->
+      <section class="sg-section" id="feedback" aria-labelledby="feedback-h">
+        <h2 class="text-title" id="feedback-h">Banners, status lines, toasts and dialogs</h2>
+        <p class="text-muted">A banner is for a state that colours the whole page and cannot be dismissed while it is true. A status line is persistent text in a fixed place. A toast confirms something small. A consequence dialog is for a command that cannot be undone.</p>
+        <div class="stack">
+          <div class="banner banner--info" role="status"><svg class="icon banner__icon" aria-hidden="true"><use href="#i-info"/></svg><p class="banner__title">We have your work</p><p class="banner__body">In this programme, results are checked by a second person (a moderator) before anyone sees them, and everyone's results for the same task are released together. You will get a message here and by email when your result is ready.</p></div>
+          <div class="banner banner--positive" role="status"><svg class="icon banner__icon" aria-hidden="true"><use href="#i-check-circle"/></svg><p class="banner__title">Term 3 tasks signed off</p><p class="banner__body">96 results were released and 96 learners notified on 22 Sep 2026 at 14:05.</p></div>
+          <div class="banner banner--caution" role="alert"><svg class="icon banner__icon" aria-hidden="true"><use href="#i-info"/></svg><p class="banner__title">You cannot sign off yet: 1 returned item is still open</p><p class="banner__body">Lerato Mokoena, Task 3, is with Thandiwe Nkosi for a re-mark, due Thursday 17 September 2026.</p><div class="banner__actions"><a href="#feedback">View the open item</a></div></div>
+          <div class="banner banner--critical" role="alert"><svg class="icon banner__icon" aria-hidden="true"><use href="#i-warning"/></svg><p class="banner__title">The LMS is having trouble right now</p><p class="banner__body">Your work is safe. Trying again... <span class="text-meta">Reference 5d09e1aa</span></p></div>
+          <div class="banner banner--readonly" role="status"><svg class="icon banner__icon" aria-hidden="true"><use href="#i-archive"/></svg><p class="banner__title">2025 Intake A is archived</p><p class="banner__body">This cohort is read-only. Records and reports can still be read and exported. Nothing can be changed.</p></div>
+          <div class="banner banner--offline" role="alert"><svg class="icon banner__icon" aria-hidden="true"><use href="#i-offline"/></svg><p class="banner__title">No connection</p><p class="banner__body">Carry on answering. Your answers are being kept on this device. The timer is still running.</p></div>
+        </div>
+
+        <h3 class="text-heading sg-h">Status line (autosave, drafts)</h3>
+        <div class="sg-specimen cluster">
+          <span class="status-line" role="status"><span class="spinner" aria-hidden="true"></span>Saving</span>
+          <span class="status-line status-line--local"><svg class="icon" aria-hidden="true"><use href="#i-device"/></svg>Saved on this device</span>
+          <span class="status-line status-line--saved"><svg class="icon" aria-hidden="true"><use href="#i-cloud-check"/></svg>Saved <span class="status-line__time">10:42</span></span>
+          <span class="status-line status-line--locked"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Submitted and locked</span>
+          <span class="status-line status-line--problem"><svg class="icon" aria-hidden="true"><use href="#i-offline"/></svg>Not saved to the server. Your answers are being kept on this device.</span>
+          <span class="status-line status-line--saved"><svg class="icon" aria-hidden="true"><use href="#i-cloud-check"/></svg>Back online. All answers saved.</span>
+          <span class="status-line status-line--critical"><svg class="icon" aria-hidden="true"><use href="#i-warning"/></svg>This device cannot keep a safety copy. Only "Saved" answers are safe.</span>
+        </div>
+
+        <h3 class="text-heading sg-h">Toast</h3>
+        <div class="sg-specimen sg-static stack">
+          <div class="toast-region" aria-hidden="true"><div class="toast"><svg class="icon" aria-hidden="true"><use href="#i-check-circle"/></svg><div><span class="toast__title">Reminder sent</span><span class="toast__body"> to 23 learners</span><span class="toast__meta">23 Sep 2026, 10:14</span></div><button type="button" class="toast__close" tabindex="-1" aria-label="Dismiss (specimen)"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-x"/></svg></button></div></div>
+          <div class="cluster"><button type="button" class="btn btn--secondary" data-toast="Reminder sent" data-toast-meta="23 Sep 2026, 10:14">Show a live toast</button><span class="text-small text-muted">Announced politely, stays 6 seconds, pauses on hover or focus. Never for errors, saving, or anything the person must act on.</span></div>
+        </div>
+
+        <h3 class="text-heading sg-h">Consequence dialogs and sheets</h3>
+        <div class="sg-specimen cluster">
+          <button type="button" class="btn btn--secondary" data-modal-open="m-submit-exam">Submit exam</button>
+          <button type="button" class="btn btn--secondary" data-modal-open="m-signoff">Sign off moderation</button>
+          <button type="button" class="btn btn--secondary" data-modal-open="m-finalise">Finalise decision</button>
+          <button type="button" class="btn btn--secondary" data-modal-open="m-workspaces">Workspace picker sheet</button>
+          <button type="button" class="btn btn--secondary" data-modal-open="m-decision-sheet">Decision sheet</button>
+        </div>
+      </section>
+
+      <!-- ============================== EXAM ============================== -->
+      <section class="sg-section" id="exam" aria-labelledby="exam-h">
+        <h2 class="text-title" id="exam-h">Exam shell</h2>
+        <p class="text-muted">A separate shell with no navigation components at all: no side navigation, tabs, bell, search, account menu or brand link. Exam bar, optional offline banner, collapsible navigator, one question per page, action bar. It follows the same Light, Dark or System setting as the rest of the LMS.</p>
+        <div class="sg-frame">
+          <div class="exam-shell">
+            <header class="exam-shell__bar exam-bar">
+              <span class="exam-bar__title">Unit 5 summative exam</span><span class="exam-bar__position">Question 7 of 40</span>
+              <span class="status-line status-line--saved" role="status"><svg class="icon" aria-hidden="true"><use href="#i-cloud-check"/></svg>Saved <span class="status-line__time">10:42</span></span>
+              <span class="exam-bar__closes">Exam closes at 12:00</span>
+              <div class="timer" role="timer" aria-label="Time left: 1 hour 12 minutes"><span class="timer__label">Time left</span><span class="timer__value">01:12:40</span></div>
+            </header>
+            <div class="exam-shell__banner banner banner--offline banner--compact" role="alert"><svg class="icon banner__icon" aria-hidden="true"><use href="#i-offline"/></svg><p class="banner__body"><strong class="banner__title">No connection.</strong> Carry on answering. Your answers are being kept on this device. The timer is still running.</p></div>
+            <details class="exam-shell__navigator" open>
+              <summary>Questions <span class="text-meta">6 of 40 answered</span></summary>
+              <nav class="qnav" aria-label="Question navigator">
+                <a class="qnav__item is-answered" href="#exam" aria-label="Question 4, answered">4</a>
+                <a class="qnav__item is-answered" href="#exam" aria-label="Question 5, answered">5</a>
+                <a class="qnav__item is-answered is-marked" href="#exam" aria-label="Question 6, answered, marked to come back to">6</a>
+                <a class="qnav__item is-answered is-local" href="#exam" aria-current="true" aria-label="Question 7, answered, saved on this device only, current">7</a>
+                <a class="qnav__item" href="#exam" aria-label="Question 8, not answered">8</a>
+                <a class="qnav__item is-marked" href="#exam" aria-label="Question 9, not answered, marked to come back to">9</a>
+                <a class="qnav__item" href="#exam" aria-label="Question 10, not answered">10</a>
+                <a class="qnav__item" href="#exam" aria-label="Question 11, not answered">11</a>
+              </nav>
+              <ul class="qnav__key" aria-label="Key">
+                <li><span class="qnav__item is-answered" aria-hidden="true">1</span>Answered</li>
+                <li><span class="qnav__item" aria-hidden="true">1</span>Not answered</li>
+                <li><span class="qnav__item is-marked" aria-hidden="true">1</span>Come back to</li>
+                <li><span class="qnav__item is-local" aria-hidden="true">1</span>On this device only</li>
+              </ul>
+            </details>
+            <div class="exam-shell__main">
+              <p class="question__number">Question 7 of 40 · 4 marks</p>
+              <h3 class="question__stem" tabindex="-1">A colleague asks to see another employee's leave record. What should happen before the record is shown?</h3>
+              <fieldset class="fieldset"><legend class="u-visually-hidden">Choose one answer</legend><div class="choice-group">
+                <label class="choice"><input class="choice__input" type="radio" name="q7"><span class="choice__title">Show the record, because colleagues may see each other's leave</span></label>
+                <label class="choice"><input class="choice__input" type="radio" name="q7" checked><span class="choice__title">Write the request in the access register and get the office manager's approval</span></label>
+                <label class="choice"><input class="choice__input" type="radio" name="q7"><span class="choice__title">Refuse, because leave records may never be shown to anyone</span></label>
+              </div></fieldset>
+              <p class="question__notice" role="status">Pasting is switched off during this exam.</p>
+            </div>
+            <footer class="exam-shell__actions"><button type="button" class="btn btn--secondary"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-left"/></svg>Previous</button><button type="button" class="btn btn--ghost" aria-pressed="false"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-bookmark"/></svg>Mark to come back to</button><button type="button" class="btn btn--primary">Next<svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></button></footer>
+          </div>
+        </div>
+
+        <h3 class="text-heading sg-h">Timer</h3>
+        <div class="sg-specimen stack">
+          <div class="cluster">
+            <div class="timer" role="timer" aria-label="Time left: 1 hour 12 minutes"><span class="timer__label">Time left</span><span class="timer__value">01:12:40</span></div>
+            <div class="timer" role="timer" aria-label="Time left: 42 minutes"><span class="timer__label">Time left</span><span class="timer__value">42:10</span></div>
+            <div class="timer timer--low" role="timer" aria-label="5 minutes left"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg><span class="timer__label">5 minutes left</span><span class="timer__value">04:58</span></div>
+            <div class="timer timer--low" role="timer" aria-label="1 minute left"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg><span class="timer__label">1 minute left</span><span class="timer__value">00:48</span></div>
+            <div class="timer timer--ended"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg><span class="timer__label">Time is up</span><span class="timer__value">00:00</span></div>
+          </div>
+          <div class="timer timer--lg" role="timer" aria-label="Time left: 1 hour 12 minutes"><span class="timer__label">Time left in this exam (pre-flight and review pages)</span><span class="timer__value">01:12:40</span></div>
+          <p class="text-small text-muted">The ticking value is not a live region. One polite announcement is made at 15, 5 and 1 minute, when the label changes. The tone stays caution: running low on time is not a fault.</p>
+        </div>
+
+        <h3 class="text-heading sg-h">Integrity overlay (alert dialog, covers the question)</h3>
+        <div class="sg-frame">
+          <div class="exam-overlay" role="alertdialog" aria-labelledby="ig-h" aria-describedby="ig-b">
+            <div class="exam-notice__panel exam-notice__panel--caution">
+              <h3 class="exam-notice__title" id="ig-h"><svg class="icon icon--lg" aria-hidden="true"><use href="#i-shield-warning"/></svg>You left the exam window at 10:42</h3>
+              <div class="exam-notice__body" id="ig-b"><p>This has been recorded (2 so far). Your assessor will see the record and decide whether it matters. Please stay in the exam window until you submit.</p><p><strong>The timer is still running.</strong></p></div>
+              <div class="exam-notice__actions"><button type="button" class="btn btn--primary btn--lg">Return to the exam</button></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid--2 u-mt-6">
+          <div><h3 class="text-heading u-mb-4">Takeover screen (lease_lost)</h3>
+            <div class="sg-frame"><div class="exam-notice" role="alertdialog" aria-labelledby="tk-h"><div class="exam-notice__panel">
+              <h3 class="exam-notice__title" id="tk-h"><svg class="icon icon--lg" aria-hidden="true"><use href="#i-laptop"/></svg>This exam is now open in another tab or window</h3>
+              <div class="exam-notice__body"><p>You can only work in one place at a time. Answers saved before 10:42 are safe.</p></div>
+              <p class="exam-notice__fact">Time left 01:12:40 · the timer is still running</p>
+              <div class="exam-notice__actions"><button type="button" class="btn btn--primary">Continue here instead</button><button type="button" class="btn btn--secondary">Close this tab</button></div>
+            </div></div></div></div>
+          <div><h3 class="text-heading u-mb-4">Mobile gate</h3>
+            <div class="sg-frame"><div class="exam-notice"><div class="exam-notice__panel">
+              <h3 class="exam-notice__title"><svg class="icon icon--lg" aria-hidden="true"><use href="#i-laptop"/></svg>You need a laptop or desktop computer to sit this exam</h3>
+              <div class="exam-notice__body"><p>Phones and tablets cannot be used, because the exam needs a full-screen mode that they do not support properly.</p><p>If you do not have a computer you can use, speak to your coordinator before the exam day.</p></div>
+              <p class="exam-notice__fact">Open from 09:00 to 12:00 on Wednesday 14 October 2026</p>
+              <div class="exam-notice__actions"><a class="btn btn--secondary" href="#exam">Back to the LMS</a></div>
+            </div></div></div></div>
+        </div>
+      </section>
+
+      <!-- ============================== CALENDAR ============================== -->
+      <section class="sg-section" id="calendar" aria-labelledby="calendar-h">
+        <h2 class="text-title" id="calendar-h">Calendar and notifications</h2>
+        <p class="text-muted">The agenda list is the default on phones and tablets; the month grid is for orientation and shows markers only below 768px. Event type is given by shape and by words, not only by colour.</p>
+        <div class="page-layout">
+          <div class="calendar page-layout__main">
+            <div class="calendar__toolbar"><h3 class="calendar__month">September 2026</h3><div class="cluster"><button type="button" class="btn btn--ghost btn--icon" aria-label="Previous month"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-caret-left"/></svg></button><button type="button" class="btn btn--secondary">Today</button><button type="button" class="btn btn--ghost btn--icon" aria-label="Next month"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-caret-right"/></svg></button></div></div>
+            <div class="calendar__grid" id="cal-grid" role="list" aria-label="September 2026"></div>
+          </div>
+          <div class="card page-layout__aside"><div class="card__header"><h3 class="card__title">Coming up</h3><a class="text-small" href="#calendar">Subscribe in your calendar app</a></div><div class="card__body">
+            <div class="agenda">
+              <section><h4 class="agenda__day-title">Tuesday 29 September</h4>
+                <div class="agenda__item"><span class="agenda__time">09:00</span><span class="agenda__title">Session 15: Office administration</span><span class="agenda__meta"><span>Pieter van Wyk · 2 hours</span><a class="link link--standalone" href="#calendar"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-video"/></svg>Join in Teams</a></span></div>
+                <div class="agenda__item"><span class="agenda__time">All day</span><span class="agenda__title">Last day to appeal: Task 3</span><span class="agenda__meta"><span class="deadline deadline--soon">Until the end of the day</span></span></div>
+              </section>
+              <section><h4 class="agenda__day-title">Tuesday 6 October</h4><div class="agenda__item"><span class="agenda__time">All day</span><span class="agenda__title">Last day to resubmit: Task 3</span><span class="agenda__meta"><span class="tag tag--caution">Resubmission open</span></span></div></section>
+              <section><h4 class="agenda__day-title">Wednesday 14 October</h4><div class="agenda__item"><span class="agenda__time">09:00</span><span class="agenda__title">Exam window: Unit 5 summative exam</span><span class="agenda__meta"><span>09:00 to 12:00 · 2 hours · laptop or desktop only</span></span></div></section>
+            </div></div></div>
+        </div>
+
+        <h3 class="text-heading sg-h">Notification rows, with delivery evidence</h3>
+        <ul class="notification-list" aria-label="Notifications">
+          <li class="notification is-unread"><span class="notification__icon"><svg class="icon" aria-hidden="true"><use href="#i-check-circle"/></svg></span><span class="notification__title"><span class="u-visually-hidden">Unread: </span><a href="#assessment">Your result for Task 3 is ready</a></span><time class="notification__time" datetime="2026-09-22T14:05:00+02:00">22 Sep, 14:05</time><span class="notification__body">You can appeal until the end of Tuesday 29 September 2026.</span><span class="notification__unread" aria-hidden="true"></span>
+            <details class="delivery-evidence notification__extra"><summary>How you were told</summary><ul class="delivery-evidence__list"><li class="delivery-evidence__row"><span class="delivery-evidence__channel">In the LMS</span><time class="delivery-evidence__time" datetime="2026-09-22T14:05:00+02:00">22 Sep 2026, 14:05</time></li><li class="delivery-evidence__row"><span class="delivery-evidence__channel">Email: delivered</span><time class="delivery-evidence__time" datetime="2026-09-22T14:06:00+02:00">22 Sep 2026, 14:06</time></li></ul></details></li>
+          <li class="notification is-unread"><span class="notification__icon"><svg class="icon" aria-hidden="true"><use href="#i-scales"/></svg></span><span class="notification__title"><span class="u-visually-hidden">Unread: </span><a href="#process">Your appeal APL-2026-0031 was accepted</a></span><time class="notification__time" datetime="2026-09-25T10:02:00+02:00">25 Sep, 10:02</time><span class="notification__body">A reviewer who did not assess your work will mark it again.</span><span class="notification__unread" aria-hidden="true"></span></li>
+          <li class="notification"><span class="notification__icon"><svg class="icon" aria-hidden="true"><use href="#i-megaphone"/></svg></span><span class="notification__title"><a href="#calendar">Notice from Zanele Dlamini: venue change for the contact session on 1 October</a></span><time class="notification__time" datetime="2026-09-14T15:20:00+02:00">14 Sep, 15:20</time><span class="notification__body">We have moved to Training Room 2. Catering is confirmed for 96.</span></li>
+        </ul>
+      </section>
+
+      <!-- ============================== FIGURES ============================== -->
+      <section class="sg-section" id="figures" aria-labelledby="figures-h">
+        <h2 class="text-title" id="figures-h">Figures and charts</h2>
+        <p class="text-muted">Key figures are set in the serif. Charts are bars and simple trends with direct labels: no gridlines, no boxed legends, no decoration. Every chart has a text summary or a table alternative.</p>
+        <div class="grid grid--4">
+          <div class="stat"><span class="stat__label">To mark</span><span class="stat__value">12</span><span class="stat__meta">3 late · 1 with integrity events to review</span></div>
+          <div class="stat"><span class="stat__label">Median turnaround</span><span class="stat__value">4.5 <span class="stat__unit">days</span></span><span class="stat__meta"><span class="stat__delta">1.5 days faster</span> than August</span></div>
+          <div class="stat"><span class="stat__label">Competent on first submission</span><span class="stat__value">78<span class="stat__unit">%</span></span><span class="stat__meta">75 of 96 learners</span></div>
+          <div class="stat"><span class="stat__label">Open appeals</span><span class="stat__value">2</span><span class="stat__meta">Oldest received 24 Sep 2026</span></div>
+        </div>
+
+        <div class="grid grid--2 u-mt-6">
+          <div class="card"><div class="card__header"><h3 class="card__title">Progress toward your qualification</h3><span class="text-small text-muted">Certificate in Business Administration, NQF Level 4</span></div><div class="card__body">
+            <div class="credits">
+              <p class="credits__figure">52 <span class="credits__of">of 140 credits earned</span></p>
+              <div class="credits__bar" role="img" aria-label="52 credits earned, 88 outstanding, of 140"><span class="credits__segment credits__segment--earned" style="--value:37.1%"></span><span class="credits__segment credits__segment--outstanding"></span></div>
+              <ul class="credits__legend"><li class="credits__key credits__key--earned"><strong>52</strong> earned</li><li class="credits__key"><strong>88</strong> outstanding</li></ul>
+              <p class="text-small text-muted">Credits are counted when a Competent result is released. Work that is still being assessed is not part of this total.</p>
+            </div></div></div>
+          <div class="card"><div class="card__header"><h3 class="card__title">Competency rate by unit</h3><span class="text-small text-muted">2026 Intake B · released results</span></div><div class="card__body">
+            <div class="bar-chart" role="img" aria-label="Competency rate by unit: Unit 1 91 percent, Unit 2 87 percent, Unit 4 83 percent, Unit 5 74 percent, Unit 3 65 percent">
+              <div class="bar-chart__row"><span class="bar-chart__label">Unit 1</span><span class="bar-chart__track"><span class="bar-chart__bar" style="--value:91%"></span></span><span class="bar-chart__value">91%</span></div>
+              <div class="bar-chart__row"><span class="bar-chart__label">Unit 2</span><span class="bar-chart__track"><span class="bar-chart__bar" style="--value:87%"></span></span><span class="bar-chart__value">87%</span></div>
+              <div class="bar-chart__row"><span class="bar-chart__label">Unit 4</span><span class="bar-chart__track"><span class="bar-chart__bar" style="--value:83%"></span></span><span class="bar-chart__value">83%</span></div>
+              <div class="bar-chart__row"><span class="bar-chart__label">Unit 5</span><span class="bar-chart__track"><span class="bar-chart__bar" style="--value:74%"></span></span><span class="bar-chart__value">74%</span></div>
+              <div class="bar-chart__row"><span class="bar-chart__label">Unit 3</span><span class="bar-chart__track"><span class="bar-chart__bar bar-chart__bar--caution" style="--value:65%"></span></span><span class="bar-chart__value">65%</span></div>
+            </div>
+            <p class="chart-caption">The lowest unit is marked and named: Unit 3, 65%.</p>
+            <hr>
+            <p class="text-subheading">Assessment turnaround, last 8 weeks</p>
+            <svg class="sparkline u-mt-2" viewBox="0 0 280 48" preserveAspectRatio="none" role="img" aria-label="Median turnaround in days by week: 7, 6.5, 6, 6.5, 5.5, 5, 5, 4.5"><path class="sparkline__area" d="M0 6 40 10 80 14 120 10 160 20 200 26 240 26 280 32V48H0Z"/><path d="M0 6 40 10 80 14 120 10 160 20 200 26 240 26 280 32"/><circle class="sparkline__point" cx="280" cy="32" r="4"/></svg>
+            <p class="chart-caption">From 7 days in the week of 27 Jul to 4.5 days in the week of 14 Sep.</p>
+          </div></div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<!-- ============================== DIALOGS AND SHEETS ============================== -->
+<dialog class="modal" id="m-submit-exam" aria-labelledby="m1-t" data-modal-static>
+  <div class="modal__header"><h2 class="modal__title" id="m1-t">Submit your exam?</h2></div>
+  <div class="modal__body">
+    <p class="modal__consequence">You cannot change your answers after this.</p>
+    <p>Unit 5 summative exam. You have answered <strong>38 of 40</strong> questions. Questions 9 and 31 have no answer. You still have 01:12:40 left, so you may go back and check first.</p>
+    <label class="check"><input class="check__input" type="checkbox" id="ack-exam"><span class="check__label">I understand that I cannot change my answers after submitting.</span></label>
+  </div>
+  <div class="modal__footer"><button type="button" class="btn btn--secondary" data-modal-close autofocus>Go back</button><button type="button" class="btn btn--primary" data-requires="#ack-exam" data-modal-close>Submit exam</button></div>
+</dialog>
+
+<dialog class="modal" id="m-signoff" aria-labelledby="m2-t" data-modal-static>
+  <div class="modal__header"><h2 class="modal__title" id="m2-t">Sign off "Term 3 tasks"?</h2></div>
+  <div class="modal__body">
+    <p class="modal__consequence">96 learners in 2026 Intake B will see their results straight away, and each learner's 7 days to appeal start today.</p>
+    <ul class="modal__list"><li>22 sampled items: 22 agreed, 0 open.</li><li>Credits are awarded for every Competent result.</li><li>Sign-off cannot be undone. You are signing off as the moderator: Anil Naidoo.</li></ul>
+    <div class="field"><label class="field__label" for="so-obs">Observations about the cohort for the coordinator <span class="field__optional">(optional)</span></label><textarea class="textarea" id="so-obs" rows="3"></textarea></div>
+    <label class="check"><input class="check__input" type="checkbox" id="ack-so"><span class="check__label">I did not assess any item that I moderated in this cycle.</span></label>
+  </div>
+  <div class="modal__footer"><button type="button" class="btn btn--secondary" data-modal-close autofocus>Not yet</button><button type="button" class="btn btn--primary" data-requires="#ack-so" data-modal-close>Sign off and release 96 results</button></div>
+</dialog>
+
+<dialog class="modal" id="m-finalise" aria-labelledby="m3-t" data-modal-static>
+  <div class="modal__header"><h2 class="modal__title" id="m3-t">Finalise this decision?</h2></div>
+  <div class="modal__body">
+    <p class="modal__consequence">This decision is kept permanently and cannot be edited. Because 2026 Intake B is moderated, Lerato will not see it until the moderator signs off.</p>
+    <p>Lerato Mokoena · Task 3 · version 2 · <span class="tag tag--caution">Not yet competent</span></p>
+    <p class="text-small text-muted">You are finalising this decision as the assessor. Every Not yet competent decision is included in the moderation sample.</p>
+  </div>
+  <div class="modal__footer"><button type="button" class="btn btn--secondary" data-modal-close autofocus>Keep editing</button><button type="button" class="btn btn--primary" data-modal-close>Finalise decision</button></div>
+</dialog>
+
+<dialog class="modal modal--sheet" id="m-workspaces" aria-labelledby="m4-t">
+  <div class="modal__header"><h2 class="modal__title" id="m4-t">Your workspaces</h2><button type="button" class="btn btn--ghost btn--icon" data-modal-close aria-label="Close"><svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+  <div class="modal__body">
+    <a class="menu__item" href="#shell" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-house"/></svg><span class="menu__item-text">My work<span class="menu__item-meta">Everything waiting for you, across workspaces</span></span></a>
+    <a class="menu__item" href="#shell" aria-current="true" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-inbox"/></svg><span class="menu__item-text">Assessing<span class="menu__item-meta">2026 Intake B · 12 to mark · 1 returned to you</span></span><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></a>
+    <a class="menu__item" href="#shell" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-scales"/></svg><span class="menu__item-text">Moderating<span class="menu__item-meta">2026 Intake C · 3 sample items to review</span></span></a>
+  </div>
+</dialog>
+
+<dialog class="modal modal--sheet" id="m-sections" aria-labelledby="m6-t">
+  <div class="modal__header"><h2 class="modal__title" id="m6-t">Gallery sections</h2><button type="button" class="btn btn--ghost btn--icon" data-modal-close aria-label="Close"><svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+  <div class="modal__body">
+    <a class="menu__item" href="#brand" data-modal-close>Brand</a><a class="menu__item" href="#colour" data-modal-close>Colour and contrast</a><a class="menu__item" href="#type" data-modal-close>Typography</a><a class="menu__item" href="#space" data-modal-close>Space, radius, icons</a><a class="menu__item" href="#shell" data-modal-close>Shells and navigation</a><a class="menu__item" href="#actions" data-modal-close>Buttons and links</a><a class="menu__item" href="#forms" data-modal-close>Forms and upload</a><a class="menu__item" href="#tables" data-modal-close>Tables</a><a class="menu__item" href="#status" data-modal-close>Status vocabulary</a><a class="menu__item" href="#process" data-modal-close>Steps and deadlines</a><a class="menu__item" href="#assessment" data-modal-close>Marking workspace</a><a class="menu__item" href="#records" data-modal-close>Receipts, history, logs</a><a class="menu__item" href="#feedback" data-modal-close>Banners and dialogs</a><a class="menu__item" href="#exam" data-modal-close>Exam shell</a><a class="menu__item" href="#calendar" data-modal-close>Calendar, notifications</a><a class="menu__item" href="#figures" data-modal-close>Figures and charts</a>
+  </div>
+</dialog>
+
+<dialog class="modal modal--sheet modal--full" id="m-decision-sheet" aria-labelledby="m5-t">
+  <div class="modal__header"><h2 class="modal__title" id="m5-t">Decision</h2><button type="button" class="btn btn--ghost btn--icon" data-modal-close aria-label="Close"><svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+  <div class="modal__body">
+    <p class="text-small text-muted">Lerato Mokoena · Task 3 · version 2 · rubric 3 / 8, 1 criterion not scored</p>
+    <fieldset class="fieldset"><legend class="fieldset__legend">Outcome <span class="field__required">(required)</span></legend><div class="choice-group">
+      <label class="choice choice--positive"><input class="choice__input" type="radio" name="outcome-sheet"><span class="choice__title">Competent</span></label>
+      <label class="choice choice--caution"><input class="choice__input" type="radio" name="outcome-sheet" checked><span class="choice__title">Not yet competent</span></label></div></fieldset>
+    <div class="field"><label class="field__label" for="ds-just">Justification <span class="field__required">(required)</span></label><textarea class="textarea" id="ds-just" rows="5"></textarea></div>
+  </div>
+  <div class="modal__footer"><button type="button" class="btn btn--secondary" data-modal-close>Save draft</button><button type="button" class="btn btn--primary" data-modal-close>Finalise decision</button></div>
+</dialog>
+
+<div class="toast-region" role="status" aria-live="polite"></div>
+
+<script src="assets/ui.js"></script>
+<script>
+/* Style-guide only: swatches with live contrast ratios, icon list, calendar grid. */
+(function () {
+  var cs;
+  function tok(n) { return cs.getPropertyValue(n).trim(); }
+  function lum(hex) { var c = [1, 3, 5].map(function (i) { var v = parseInt(hex.slice(i, i + 2), 16) / 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }); return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]; }
+  function ratio(a, b) { var x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); }
+  var groups = {
+    'swatches-text': [['text-strong', 'canvas'], ['text', 'canvas'], ['text', 'surface'], ['text', 'surface-sunken'], ['text-secondary', 'canvas'], ['text-secondary', 'surface'], ['text-secondary', 'surface-sunken'], ['text-tertiary', 'canvas'], ['text-tertiary', 'surface'], ['text-tertiary', 'surface-sunken']],
+    'swatches-accent': [['text-inverse', 'ink'], ['text-inverse', 'ink-hover'], ['accent', 'canvas'], ['accent', 'surface'], ['accent', 'accent-subtle'], ['accent-hover', 'canvas'], ['on-accent', 'accent'], ['on-critical', 'critical-fill'], ['on-critical', 'critical-fill-hover'], ['accent', 'caution-bg'], ['accent', 'info-bg']],
+    'swatches-tones': [['neutral-text', 'neutral-bg'], ['info-text', 'info-bg'], ['positive-text', 'positive-bg'], ['caution-text', 'caution-bg'], ['critical-text', 'critical-bg'], ['text', 'info-bg'], ['text', 'positive-bg'], ['text', 'caution-bg'], ['text', 'critical-bg'], ['info-text', 'surface'], ['positive-text', 'surface'], ['caution-text', 'surface'], ['critical-text', 'surface']],
+    'swatches-graphic': [['border-strong', 'surface', 3], ['border-strong', 'canvas', 3], ['border-strong', 'surface-sunken', 3], ['neutral-solid', 'neutral-bg', 3], ['info-solid', 'info-bg', 3], ['positive-solid', 'positive-bg', 3], ['caution-solid', 'caution-bg', 3], ['critical-solid', 'critical-bg', 3], ['neutral-solid', 'canvas', 3], ['info-solid', 'canvas', 3], ['positive-solid', 'canvas', 3], ['caution-solid', 'canvas', 3], ['critical-solid', 'canvas', 3], ['focus', 'canvas', 3], ['focus', 'surface', 3], ['focus', 'surface-sunken', 3], ['focus', 'caution-bg', 3], ['text-inverse', 'ink', 3], ['border', 'surface', 0]]
+  };
+  function render() {
+    cs = getComputedStyle(document.documentElement);
+    Object.keys(groups).forEach(function (id) {
+      var host = document.getElementById(id); host.innerHTML = '';
+      groups[id].forEach(function (p) {
+        var fg = tok('--color-' + p[0]), bg = tok('--color-' + p[1]), min = p[2] === undefined ? 4.5 : p[2], r = ratio(fg, bg);
+        var el = document.createElement('div'); el.className = 'sg-swatch';
+        el.innerHTML = '<div class="sg-swatch__chip" style="background:' + bg + ';color:' + fg + '">' + (min === 0 ? '<span style="display:block;width:100%;border-top:1px solid ' + fg + '"></span>' : min === 3 ? '<span style="display:block;width:100%;height:1.5rem;border:2px solid ' + fg + ';border-radius:6px"></span>' : 'Lerato Mokoena 0417') + '</div>' +
+          '<div class="sg-swatch__meta"><code>' + p[0] + ' ' + fg + '</code><code>on ' + p[1] + ' ' + bg + '</code><span><span class="sg-ratio">' + r.toFixed(2) + ':1</span> ' +
+          (min === 0 ? 'decorative hairline, no minimum' : (r >= min ? 'passes ' : 'FAILS ') + (min === 3 ? '3:1 non-text' : r >= 7 ? 'AA and AAA' : 'AA 4.5:1')) + '</span></div>';
+        host.appendChild(el);
+      });
+    });
+  }
+  render();
+  new MutationObserver(render).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  if (window.matchMedia) { var mq = matchMedia('(prefers-color-scheme: dark)'); if (mq.addEventListener) mq.addEventListener('change', render); }
+
+  var list = document.getElementById('icon-list');
+  Array.prototype.forEach.call(document.querySelectorAll('#takusani-icons symbol'), function (s) {
+    var name = s.id.replace('i-', ''), li = document.createElement('li');
+    li.innerHTML = '<svg class="icon icon--lg" aria-hidden="true"><use href="#' + s.id + '"/></svg>' + name; list.appendChild(li);
+  });
+
+  var grid = document.getElementById('cal-grid'), html = '';
+  ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].forEach(function (d) { html += '<div class="calendar__weekday" aria-hidden="true">' + d + '</div>'; });
+  var events = { 1: ['session', 'Session 11'], 4: ['due', 'Due 17:00: Task 3'], 8: ['session', 'Session 12'], 15: ['session', 'Session 13'], 22: ['session', 'Session 14'], 29: ['session', 'Session 15', 'due', 'Last day to appeal: Task 3'] };
+  var words = { session: 'Session', exam: 'Exam window', due: 'Deadline' };
+  for (var i = 0; i < 35; i++) {
+    var day = i === 0 ? 31 : i <= 30 ? i : i - 30, outside = i === 0 || i > 30, ev = outside ? null : events[day], inner = '';
+    if (ev) for (var k = 0; k < ev.length; k += 2) inner += '<a class="calendar__event calendar__event--' + ev[k] + '" href="#calendar"><span class="u-visually-hidden">' + words[ev[k]] + ': </span><span class="calendar__event-text">' + ev[k + 1] + '</span></a>';
+    if (!outside && day === 24) inner += '<span class="calendar__event"><span class="calendar__event-text">Heritage Day</span></span>';
+    html += '<div role="listitem" class="calendar__day' + (outside ? ' calendar__day--outside' : '') + (!outside && day === 23 ? ' calendar__day--today' : '') + '"><span class="calendar__date">' + (!outside && day === 23 ? '<span class="u-visually-hidden">Today, </span>' : '') + day + '</span>' + inner + '</div>';
+  }
+  grid.innerHTML = html;
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="en-ZA" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sample item 7 of 18 · Moderating · Takusani LMS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400..600&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/ui.css">
+<link rel="stylesheet" href="assets/proto.css">
+<link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+<style>
+/* Page-level layout only (prefix pg-). Tokens only. */
+.pg-head { padding: var(--space-5) var(--space-4) var(--space-4); display: grid; gap: var(--space-4); }
+.pg-head > .page-header { margin-bottom: 0; }
+@media (min-width: 48rem) { .pg-head { padding: var(--space-8) var(--space-6) var(--space-5); } }
+.pg-blocked { padding: 0 var(--space-4) var(--space-12); max-width: var(--width-content); }
+@media (min-width: 48rem) { .pg-blocked { padding: 0 var(--space-6) var(--space-16); } }
+ol.pg-steps { padding-left: var(--space-5); list-style: decimal; display: grid; gap: var(--space-2); max-width: var(--measure); }
+.pg-date { max-width: 14rem; }
+/* Prototype only: keep the prototype controls clear of the sticky decision bar. */
+.proto-panel { bottom: calc(var(--actionbar-height) + var(--space-3)); }
+</style>
+</head>
+<body data-proto-screen="P0-12" data-proto-title="Moderator sample item review"
+      data-proto-frs="FR-507 FR-508 FR-509 (FR-502 FR-503 FR-504)"
+      data-proto-states="review:In review|returned:Returned, waiting for the assessor|remarked:Re-marked, review again|agreed:Agreed, item concluded|blocked:Blocked: you assessed this result">
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<div class="app-shell">
+  <header class="app-shell__topbar">
+    <a class="brand" href="index.html" aria-label="Takusani LMS, all prototype screens">
+      <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M7 0H25A7 7 0 0 1 32 7V25A7 7 0 0 1 25 32H7A7 7 0 0 1 0 25V7A7 7 0 0 1 7 0ZM7 8.5H25V12H17.75V24H14.25V12H7ZM8.25 17.5A1.75 1.75 0 1 0 11.75 17.5A1.75 1.75 0 1 0 8.25 17.5ZM20.25 17.5A1.75 1.75 0 1 0 23.75 17.5A1.75 1.75 0 1 0 20.25 17.5Z"/></svg>
+      <span class="brand__name">Takusani</span><span class="brand__suffix">LMS</span>
+    </a>
+    <span class="topbar__institution">Khanya Skills Institute</span>
+    <button type="button" class="btn btn--secondary btn--sm topbar__workspace" data-modal-open="m-workspaces">Moderating<svg class="icon icon--sm" aria-hidden="true"><use href="#i-caret-down"/></svg></button>
+    <div class="topbar__context"><details class="menu-wrap" data-menu>
+      <summary class="context-select__button" aria-label="Cohort filter. Current: All my cohorts"><span class="context-select__label">Cohort</span><span class="context-select__value">All my cohorts</span><svg class="icon icon--sm" aria-hidden="true"><use href="#i-caret-down"/></svg></summary>
+      <div class="menu">
+        <p class="menu__label">Assessing</p>
+        <a class="menu__item" href="assess-marking.html"><span class="menu__item-text">2026 Intake B<span class="menu__item-meta">Certificate in Business Administration · Active</span></span><span class="tag tag--plain">Moderated</span></a>
+        <p class="menu__label">Moderating</p>
+        <a class="menu__item" href="#main" aria-current="true"><span class="menu__item-text">All my cohorts</span><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></a>
+        <a class="menu__item" href="#main"><span class="menu__item-text">2026 Intake C<span class="menu__item-meta">Certificate in Business Administration · Active</span></span><span class="tag tag--plain">Moderated</span></a>
+      </div>
+    </details></div>
+    <span class="topbar__spacer"></span>
+    <form class="topbar__search" role="search" action="#main" method="get"><label class="input-icon"><span class="u-visually-hidden">Search learners and items in your allocation</span><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><input class="input" type="search" name="q" placeholder="Search"></label></form>
+    <div class="topbar__actions">
+      <a class="btn btn--ghost btn--icon" href="notifications.html" aria-label="Notifications, 2 unread"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg><span class="badge-count" aria-hidden="true">2</span></a>
+      <details class="menu-wrap" data-menu>
+        <summary class="btn btn--ghost btn--icon" aria-label="Account menu for Thandiwe Nkosi"><span class="avatar" aria-hidden="true">TN</span></summary>
+        <div class="menu menu--end">
+          <div class="account__identity"><p class="account__name">Thandiwe Nkosi</p><p class="account__email">thandiwe.nkosi@khanya.example</p><ul class="account__roles"><li>Assessor: 2026 Intake B</li><li>Moderator: 2026 Intake C</li></ul></div>
+          <a class="menu__item" href="#main"><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg>Profile</a>
+          <a class="menu__item" href="notifications.html"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg>Notification preferences</a>
+          <div class="menu__section"><fieldset class="fieldset"><legend class="fieldset__legend">Appearance</legend>
+            <div class="segmented">
+              <label class="segmented__option"><input type="radio" name="theme" value="light" data-theme-choice checked><span>Light</span></label>
+              <label class="segmented__option"><input type="radio" name="theme" value="dark" data-theme-choice><span>Dark</span></label>
+              <label class="segmented__option"><input type="radio" name="theme" value="auto" data-theme-choice><span>System</span></label>
+            </div></fieldset></div>
+          <div class="menu__divider" role="separator"></div>
+          <a class="menu__item" href="#main"><svg class="icon" aria-hidden="true"><use href="#i-help"/></svg>Help</a>
+          <a class="menu__item" href="sign-in.html"><svg class="icon" aria-hidden="true"><use href="#i-sign-out"/></svg>Sign out</a>
+        </div>
+      </details>
+    </div>
+  </header>
+
+  <aside class="app-shell__sidenav" aria-label="Workspaces">
+    <nav class="sidenav" aria-label="Main navigation">
+      <div class="sidenav__group"><ul class="sidenav__list">
+        <li><a class="sidenav__item" href="#main"><svg class="icon" aria-hidden="true"><use href="#i-house"/></svg><span class="sidenav__label">My work</span><span class="sidenav__short" aria-hidden="true">My work</span></a></li>
+      </ul></div>
+      <div class="sidenav__group"><h2 class="sidenav__heading">Assessing</h2><ul class="sidenav__list">
+        <li><a class="sidenav__item" href="assess-marking.html"><svg class="icon" aria-hidden="true"><use href="#i-inbox"/></svg><span class="sidenav__label">Queue</span><span class="sidenav__short" aria-hidden="true">Queue</span><span class="sidenav__count" aria-label="12 to mark">12</span></a></li>
+        <li><a class="sidenav__item" href="assess-marking.html#state=returned"><svg class="icon" aria-hidden="true"><use href="#i-refresh"/></svg><span class="sidenav__label">Returned to me</span><span class="sidenav__short" aria-hidden="true">Returned</span><span class="sidenav__count" aria-label="1 returned">1</span></a></li>
+        <li><a class="sidenav__item" href="#main"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg><span class="sidenav__label">Cohort release status</span><span class="sidenav__short" aria-hidden="true">Status</span></a></li>
+      </ul></div>
+      <div class="sidenav__group"><h2 class="sidenav__heading">Moderating</h2><ul class="sidenav__list">
+        <li><a class="sidenav__item" href="moderate-signoff.html"><svg class="icon" aria-hidden="true"><use href="#i-scales"/></svg><span class="sidenav__label">Cycles</span><span class="sidenav__short" aria-hidden="true">Cycles</span></a></li>
+        <li><a class="sidenav__item" href="moderate-item.html" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg><span class="sidenav__label">My sample items</span><span class="sidenav__short" aria-hidden="true">Items</span><span class="sidenav__count" aria-label="3 to review">3</span></a></li>
+      </ul></div>
+    </nav>
+  </aside>
+
+  <main class="app-shell__main" id="main" tabindex="-1">
+    <div class="pg-head">
+      <header class="page-header">
+        <nav aria-label="Breadcrumb"><ol class="breadcrumb">
+          <li><a href="moderate-signoff.html">Cycles</a></li>
+          <li><a href="moderate-signoff.html">Unit 3 portfolios</a></li>
+          <li aria-current="page"><span data-proto-state="!blocked">Item 7 of 18</span><span data-proto-state="blocked">Item 12 of 18</span></li>
+        </ol></nav>
+        <p class="page-header__workspace">Moderating</p>
+        <h1 class="page-header__title"><span data-proto-state="!blocked">Item 7 of 18: Naledi Khoza, Task 3</span><span data-proto-state="blocked">Item 12 of 18: you cannot moderate this item</span></h1>
+        <div class="page-header__meta">
+          <span class="tag tag--info tag--shape-half" data-proto-state="review">In review</span>
+          <span class="tag tag--caution" data-proto-state="returned">Returned to assessor, due 25 Sep</span>
+          <span class="tag tag--info" data-proto-state="remarked">Re-marked. Review again</span>
+          <span class="tag tag--positive" data-proto-state="agreed">Agreed</span>
+          <span class="tag tag--shape-square" data-proto-state="blocked">Being reallocated</span>
+          <span data-proto-state="!blocked">Naledi Khoza · <span class="mono">KSI-2026-0588</span> · Task 3: Workplace records portfolio, Unit 3</span>
+          <span>2026 Intake C <span class="tag tag--plain">Moderated</span> · cycle "Unit 3 portfolios"</span>
+        </div>
+        <div class="page-header__actions">
+          <a class="btn btn--secondary" href="#main"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-left"/></svg>Previous<span class="u-visually-hidden"> item<span data-proto-state="!blocked">, 6 of 18</span><span data-proto-state="blocked">, 11 of 18</span></span></a>
+          <a class="btn btn--secondary" href="moderate-item.html#state=review">Next<span class="u-visually-hidden"> item<span data-proto-state="!blocked">, 8 of 18</span><span data-proto-state="blocked">, 13 of 18</span></span><svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+        </div>
+      </header>
+
+      <!-- Why this item is in the sample, and the independence line -->
+      <section class="card" aria-labelledby="why-h" data-proto-state="!blocked">
+        <div class="card__header"><h2 class="card__title" id="why-h">Why this item is in the sample</h2><span class="text-meta">rule-v4 · seed 5520913</span></div>
+        <div class="card__body"><dl class="dl dl--inline">
+          <div class="dl__row"><dt>Included because</dt><dd><span class="tag tag--plain">Mandatory: Not yet competent decision</span> Every Not yet competent decision in the frozen population is sampled.</dd></div>
+          <div class="dl__row"><dt>Also</dt><dd><span class="tag tag--plain">First-time assessor</span> Nomvula Mahlangu has no decision in an earlier signed-off cycle. 3 of her Competent decisions are included for the same reason.</dd></div>
+          <div class="dl__row"><dt>Stratum</dt><dd>Assessor N. Mahlangu · Not yet competent · Unit 3 (5 of 5 sampled)</dd></div>
+          <div class="dl__row"><dt>Independence</dt><dd>You did not assess this work. Assessor: Nomvula Mahlangu.</dd></div>
+          <div class="dl__row"><dt>Your progress</dt><dd>15 of your 18 items are concluded. <a href="moderate-signoff.html">Go to the cycle sign-off</a></dd></div>
+        </dl></div>
+      </section>
+
+      <div class="banner banner--caution" role="status" data-proto-state="returned">
+        <svg class="icon banner__icon" aria-hidden="true"><use href="#i-refresh"/></svg>
+        <p class="banner__title">Returned to Nomvula Mahlangu on Mon 21 Sep 2026, 11:05 SAST. Waiting for her re-mark.</p>
+        <p class="banner__body">Nomvula Mahlangu (assessor) and Zanele Dlamini (coordinator) were notified at 11:05. "Unit 3 portfolios" cannot be signed off until this item is re-marked and you have reviewed it again. Nothing is released automatically if the deadline passes.</p>
+      </div>
+      <p class="deadline-line" data-proto-state="returned"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg><span>Re-mark due <span class="deadline-line__date">by the end of Friday 25 September 2026</span>. <span class="deadline-line__left">4 days left</span></span></p>
+      <div class="banner banner--info" role="status" data-proto-state="remarked">
+        <svg class="icon banner__icon" aria-hidden="true"><use href="#i-info"/></svg>
+        <p class="banner__title">Nomvula Mahlangu re-marked this item on Wed 23 Sep 2026, 11:32 SAST. Review it again.</p>
+        <p class="banner__body">Her revised decision and her original decision are shown together below, newest first. The original stays on record. Record a new finding against the revised decision.</p>
+      </div>
+      <div class="banner banner--positive" role="status" data-proto-state="agreed">
+        <svg class="icon banner__icon" aria-hidden="true"><use href="#i-check-circle"/></svg>
+        <p class="banner__title">You agreed with the revised decision on Wed 23 Sep 2026, 14:20 SAST. This item is concluded.</p>
+        <p class="banner__body">The result stays held until the cycle is signed off. 17 of your 18 items are now concluded.</p>
+        <div class="banner__actions"><a href="moderate-item.html#state=review">Next item</a><a href="moderate-signoff.html">Go to the cycle sign-off</a></div>
+      </div>
+    </div>
+
+    <!-- BLOCKED: the page is replaced by the named conflict panel. No evidence is shown. -->
+    <div class="pg-blocked" data-proto-state="blocked">
+      <div class="conflict" role="alert" aria-labelledby="cf-h">
+        <h2 class="conflict__title" id="cf-h" tabindex="-1"><svg class="icon" aria-hidden="true"><use href="#i-scales"/></svg>This would break separation of duties</h2>
+        <p class="conflict__body">Thandiwe Nkosi, you cannot be the moderator for this item because you assessed it. Nothing was recorded, and the evidence is not shown to you in this workspace.</p>
+        <dl class="conflict__evidence dl">
+          <div class="dl__row"><dt>Conflicting decision</dt><dd>Competent, decided Wed 9 Sep 2026, 15:42 SAST · Thabo Mthembu · Task 3: Workplace records portfolio</dd></div>
+          <div class="dl__row"><dt>Your role at the time</dt><dd>Assessor, 2026 Intake C. A temporary allocation from 7 to 11 Sep 2026, covering Nomvula Mahlangu's leave. That role has ended, but the decision is still yours.</dd></div>
+          <div class="dl__row"><dt>Allocation refused</dt><dd>Sample item 12 of 18, cycle "Unit 3 portfolios", allocated to you as moderator</dd></div>
+        </dl>
+        <p class="conflict__body"><strong>What happens now.</strong> Zanele Dlamini (coordinator) has been told and is reallocating item 12 to another moderator. The item stays in the sample. Because you assessed a sampled result, another moderator will also have to sign off this cycle. You do not need to do anything for this item.</p>
+        <p class="conflict__rule">BR-01 · separation_of_duties_conflict · Reference 3c9a71d4 · 21 Sep 2026, 09:12</p>
+        <div class="conflict__actions"><a class="btn btn--primary" href="moderate-item.html#state=review">Go to your next item</a><a class="btn btn--ghost" href="assess-marking.html">Open your assessing queue</a></div>
+      </div>
+    </div>
+
+    <nav class="section-switcher" id="pg-switcher" aria-label="Sections of this item" data-proto-state="!blocked">
+      <a class="section-switcher__item" href="#ws-evidence" aria-current="true">Evidence</a>
+      <a class="section-switcher__item" href="#ws-assessor">Assessor's decision</a>
+      <a class="section-switcher__item" href="#ws-rubric">Marks</a>
+      <a class="section-switcher__item" href="#ws-finding">Your finding</a>
+      <a class="section-switcher__item" href="#ws-findings">History</a>
+    </nav>
+
+    <!-- FR-507: submission, evidence, rubric, the assessor's marks and the decision on ONE route -->
+    <div class="workspace" data-proto-state="!blocked">
+      <div class="workspace__evidence">
+        <section id="ws-evidence" class="stack" aria-labelledby="ev-h" tabindex="-1">
+          <h2 class="text-subheading" id="ev-h">Submission and evidence</h2>
+          <div class="cluster cluster--between"><span class="text-small">Version 1 of 1, submitted 10 Sep 2026 at 16:20, on time</span><span class="text-meta">3 files · 11.6 MB · SUB-2026-0910-3QF8</span></div>
+          <div class="tabs" data-tabs>
+            <div class="tabs__list" role="tablist" aria-label="Evidence files, by evidence requirement">
+              <button type="button" class="tabs__tab" role="tab" id="t-ev1" aria-controls="p-ev1" aria-selected="true">1. Portfolio</button>
+              <button type="button" class="tabs__tab" role="tab" id="t-ev2" aria-controls="p-ev2" aria-selected="false">2. Filing index</button>
+              <button type="button" class="tabs__tab" role="tab" id="t-ev3" aria-controls="p-ev3" aria-selected="false">3. Retention schedule</button>
+              <button type="button" class="tabs__tab" role="tab" id="t-ev4" aria-controls="p-ev4" aria-selected="false">4. Access register</button>
+            </div>
+            <div class="tabs__panel" role="tabpanel" id="p-ev1" aria-labelledby="t-ev1" tabindex="0">
+              <div class="viewer">
+                <div class="viewer__toolbar"><div class="cluster"><span class="text-subheading">Records-portfolio-N-Khoza.pdf</span><span class="text-meta">Page 2 of 9 · 6.4 MB</span></div><div class="cluster"><button type="button" class="btn btn--ghost btn--icon btn--sm" aria-label="Previous page"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-caret-left"/></svg></button><button type="button" class="btn btn--ghost btn--icon btn--sm" aria-label="Next page"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-caret-right"/></svg></button></div></div>
+                <div class="viewer__body"><div class="viewer__page prose">
+                  <h3>2. How the filing index works</h3>
+                  <p>The reception office keeps supplier invoices, delivery notes and staff leave forms. I rebuilt the index in August 2026. Each shelf has a letter, each box has a number, and the index lists every record type against a shelf and a box.</p>
+                  <p>To test it, my supervisor chose five records I had not filed myself. A colleague who does not work in reception found all five using only the index. The longest search took under two minutes. The test sheet is on page 3.</p>
+                  <h3>3. Who may see staff records</h3>
+                  <p>Leave forms are kept in a locked drawer. People ask the receptionist if they need to see one. I have attached the access register for August.</p>
+                </div></div>
+              </div>
+            </div>
+            <div class="tabs__panel" role="tabpanel" id="p-ev2" aria-labelledby="t-ev2" tabindex="0" hidden>
+              <div class="viewer"><div class="viewer__toolbar"><div class="cluster"><span class="text-subheading">Filing-index-reception.xlsx</span><span class="text-meta">Sheet 1 of 2 · 0.9 MB</span></div></div>
+                <div class="viewer__body"><div class="viewer__page prose"><h3>Filing index: reception office</h3><p>Shelf A, boxes 1 to 6: supplier invoices by month. Shelf B, boxes 1 to 3: delivery notes by supplier. Locked drawer: staff leave forms by surname.</p><p>Sheet 2 is the test sheet: five records, the person who searched, and the time each search took.</p></div></div></div>
+            </div>
+            <div class="tabs__panel" role="tabpanel" id="p-ev3" aria-labelledby="t-ev3" tabindex="0" hidden>
+              <div class="viewer"><div class="viewer__toolbar"><div class="cluster"><span class="text-subheading">Retention-schedule.docx</span><span class="text-meta">Page 1 of 1 · 0.3 MB</span></div></div>
+                <div class="viewer__body"><div class="viewer__page prose"><h3>Retention schedule</h3><p>Supplier invoices: 5 years. Delivery notes: 2 years. Leave forms: 3 years after the employee leaves.</p></div></div></div>
+            </div>
+            <div class="tabs__panel" role="tabpanel" id="p-ev4" aria-labelledby="t-ev4" tabindex="0" hidden>
+              <div class="viewer"><div class="viewer__toolbar"><div class="cluster"><span class="text-subheading">Access-register-Aug.jpg</span><span class="text-meta">Image · 4.0 MB</span></div></div>
+                <div class="viewer__body"><div class="viewer__page prose"><h3>Access register, August 2026 (photograph)</h3><p>Four entries. Each has a date, a name and the record asked for. There is no column for who approved the request, and no time of return.</p></div></div></div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="workspace__panel">
+        <!-- Assessor's decision(s), newest first -->
+        <section id="ws-assessor" class="stack" aria-labelledby="as-h" tabindex="-1">
+          <h2 class="text-subheading" id="as-h">Assessor's decision</h2>
+
+          <article class="decision" aria-labelledby="rev-h" data-proto-state="remarked agreed">
+            <div class="decision__header"><div class="cluster cluster--between"><h3 class="decision__title" id="rev-h">Revised decision</h3><span class="tag tag--plain">Current</span></div></div>
+            <div class="decision__body"><dl class="dl">
+              <div class="dl__row"><dt>Outcome</dt><dd><span class="tag tag--caution">Not yet competent</span> <span class="mono">5 of 8</span> · unchanged outcome, marks up from 4</dd></div>
+              <div class="dl__row"><dt>Decided</dt><dd>Wed 23 Sep 2026, 11:32 SAST, by Nomvula Mahlangu (re-mark)</dd></div>
+              <div class="dl__row"><dt>Released</dt><dd>Not yet. Held in this cycle</dd></div>
+              <div class="dl__row"><dt>Justification</dt><dd>AC 3.1 is met: the test sheet (filing index, sheet 2) shows a colleague found all five records from the index alone. AC 3.2 is not yet met: the access register (requirement 4) has no approval column and no return time, so access is recorded but not shown to be approved.</dd></div>
+              <div class="dl__row"><dt>What the learner must do</dt><dd>Add an approval column and a return time to the access register, and submit one month of entries.</dd></div>
+              <div class="dl__row"><dt>Resubmission period</dt><dd>14 days from release</dd></div>
+            </dl></div>
+          </article>
+
+          <article class="decision" aria-labelledby="orig-h">
+            <div class="decision__header"><div class="cluster cluster--between"><h3 class="decision__title" id="orig-h"><span data-proto-state="review returned">Decision</span><span data-proto-state="remarked agreed">Original decision</span></h3><span class="tag tag--plain" data-proto-state="review returned">Current</span><span class="tag tag--shape-square" data-proto-state="remarked agreed">Replaced, kept on record</span></div></div>
+            <div class="decision__body"><dl class="dl">
+              <div class="dl__row"><dt>Outcome</dt><dd><span class="tag tag--caution">Not yet competent</span> <span class="mono">4 of 8</span></dd></div>
+              <div class="dl__row"><dt>Decided</dt><dd>Wed 16 Sep 2026, 15:10 SAST, by Nomvula Mahlangu</dd></div>
+              <div class="dl__row" data-proto-state="review returned"><dt>Released</dt><dd>Not yet. Held in this cycle</dd></div>
+              <div class="dl__row"><dt>Justification</dt><dd>The index is partly usable and access control is partly shown. More evidence is needed for both criteria.</dd></div>
+              <div class="dl__row"><dt>What the learner must do</dt><dd>Submit a new filing index and a complete access register.</dd></div>
+              <div class="dl__row"><dt>Resubmission period</dt><dd>14 days from release</dd></div>
+            </dl></div>
+          </article>
+        </section>
+
+        <!-- Rubric with the assessor's marks, read-only -->
+        <form class="rubric rubric--readonly" id="ws-rubric" onsubmit="return false" aria-labelledby="rb-h" tabindex="-1">
+          <h2 class="text-subheading" id="rb-h">Rubric and the assessor's marks <span class="text-muted">(read-only)</span></h2>
+
+          <fieldset class="rubric__row" data-proto-state="review returned">
+            <legend class="rubric__head"><span><span class="rubric__id">AC 3.1</span> <span class="rubric__title">Maintains a filing index that others can use</span></span><span class="rubric__score">2 / 4</span></legend>
+            <p class="rubric__desc">Records in the sample can be found from the index without help.</p>
+            <div class="rubric__levels">
+              <label class="choice"><input class="choice__input" type="radio" name="m31" disabled><span class="choice__title">Not shown</span><span class="choice__meta">0</span></label>
+              <label class="choice"><input class="choice__input" type="radio" name="m31" disabled checked><span class="choice__title">Partly</span><span class="choice__meta">2</span></label>
+              <label class="choice"><input class="choice__input" type="radio" name="m31" disabled><span class="choice__title">Meets</span><span class="choice__meta">3</span></label>
+              <label class="choice"><input class="choice__input" type="radio" name="m31" disabled><span class="choice__title">Exceeds</span><span class="choice__meta">4</span></label>
+            </div>
+            <p class="text-small"><strong>Assessor's comment:</strong> Index could be clearer.</p>
+          </fieldset>
+          <fieldset class="rubric__row" data-proto-state="remarked agreed">
+            <legend class="rubric__head"><span><span class="rubric__id">AC 3.1</span> <span class="rubric__title">Maintains a filing index that others can use</span></span><span class="rubric__score">3 / 4</span></legend>
+            <p class="rubric__desc">Records in the sample can be found from the index without help.</p>
+            <div class="rubric__levels">
+              <label class="choice"><input class="choice__input" type="radio" name="m31r" disabled><span class="choice__title">Not shown</span><span class="choice__meta">0</span></label>
+              <label class="choice"><input class="choice__input" type="radio" name="m31r" disabled><span class="choice__title">Partly</span><span class="choice__meta">2 · original mark</span></label>
+              <label class="choice"><input class="choice__input" type="radio" name="m31r" disabled checked><span class="choice__title">Meets</span><span class="choice__meta">3 · revised mark</span></label>
+              <label class="choice"><input class="choice__input" type="radio" name="m31r" disabled><span class="choice__title">Exceeds</span><span class="choice__meta">4</span></label>
+            </div>
+            <p class="text-small"><strong>Assessor's comment (revised):</strong> All five test records were found by a colleague from the index alone (filing index, sheet 2; portfolio, page 3).</p>
+            <p class="text-small text-muted"><strong>Original comment:</strong> Index could be clearer.</p>
+          </fieldset>
+
+          <fieldset class="rubric__row">
+            <legend class="rubric__head"><span><span class="rubric__id">AC 3.2</span> <span class="rubric__title">Controls access to confidential records</span></span><span class="rubric__score">2 / 4</span></legend>
+            <p class="rubric__desc">Evidence that access is requested, approved and recorded.</p>
+            <div class="rubric__levels">
+              <label class="choice"><input class="choice__input" type="radio" name="m32" disabled><span class="choice__title">Not shown</span><span class="choice__meta">0</span></label>
+              <label class="choice"><input class="choice__input" type="radio" name="m32" disabled checked><span class="choice__title">Partly</span><span class="choice__meta">2</span></label>
+              <label class="choice"><input class="choice__input" type="radio" name="m32" disabled><span class="choice__title">Meets</span><span class="choice__meta">3</span></label>
+              <label class="choice"><input class="choice__input" type="radio" name="m32" disabled><span class="choice__title">Exceeds</span><span class="choice__meta">4</span></label>
+            </div>
+            <p class="text-small"><strong>Assessor's comment:</strong> <span data-proto-state="review returned">Register attached but incomplete.</span><span data-proto-state="remarked agreed">The register records requests but not who approved them or when the record came back (requirement 4).</span></p>
+          </fieldset>
+
+          <div class="rubric__total"><span>Assessor's total <span class="text-muted">(2 of 2 criteria scored)</span></span><span class="rubric__total-value"><span data-proto-state="review returned">4 / 8</span><span data-proto-state="remarked agreed">5 / 8</span></span></div>
+        </form>
+
+        <!-- Finding form -->
+        <form class="decision" id="ws-finding" onsubmit="return false" aria-labelledby="fd-h" tabindex="-1" data-proto-state="review remarked">
+          <div class="decision__header"><h2 class="decision__title" id="fd-h">Your finding</h2><p class="text-small text-muted">A finding is never edited. Each one is added to the item's history. Reasons are required whether you agree or disagree.</p></div>
+          <div class="decision__body">
+            <fieldset class="fieldset">
+              <legend class="fieldset__legend">Do you agree with the assessor's <span data-proto-state="remarked">revised </span>decision? <span class="field__required">(required)</span></legend>
+              <div class="choice-group choice-group--2">
+                <label class="choice choice--positive"><input class="choice__input" type="radio" name="finding" value="agree"><span class="choice__title">Agree</span><span class="choice__desc">The marks and the outcome are supported by the evidence.</span></label>
+                <label class="choice choice--caution"><input class="choice__input" type="radio" name="finding" value="disagree"><span class="choice__title">Disagree</span><span class="choice__desc">Something must be corrected. The item goes back to the assessor.</span></label>
+              </div>
+            </fieldset>
+            <div class="field">
+              <label class="field__label" for="fd-reasons">Reasons <span class="field__required">(required)</span></label>
+              <p class="field__help" id="fd-reasons-h">Refer to the criteria and to the evidence pages. The assessor and the coordinator can read this. The learner cannot.</p>
+              <textarea class="textarea textarea--feedback" id="fd-reasons" required aria-describedby="fd-reasons-h"></textarea>
+            </div>
+            <div class="decision__remediation" id="fd-return">
+              <p class="text-subheading">Return to the assessor</p>
+              <div class="field"><label class="field__label" for="fd-corr">Required corrections <span class="field__required">(required)</span></label><p class="field__help" id="fd-corr-h">Number them. The assessor must deal with each one.</p><textarea class="textarea" id="fd-corr" rows="5" required aria-describedby="fd-corr-h"></textarea></div>
+              <div class="field"><label class="field__label" for="fd-due">Re-mark by the end of <span class="field__required">(required)</span></label><p class="field__help" id="fd-due-h">The assessor has the whole of this day. Thursday 24 September is a public holiday.</p><input class="input pg-date" id="fd-due" type="date" value="2026-09-25" min="2026-09-22" required aria-describedby="fd-due-h"></div>
+              <p class="text-small">The assessor and the coordinator are notified. This cycle cannot be signed off until the item is re-marked and you have reviewed it again. The result stays held.</p>
+            </div>
+          </div>
+          <div class="decision__footer"><span class="decision__attribution">You are recording this finding as the moderator: Thandiwe Nkosi</span><span class="status-line status-line--saved" role="status"><svg class="icon" aria-hidden="true"><use href="#i-cloud-check"/></svg>Draft saved <span class="status-line__time" data-proto-state="review">10:52</span><span class="status-line__time" data-proto-state="remarked">14:12</span></span></div>
+        </form>
+
+        <!-- What was returned (read-only), while waiting -->
+        <section class="card" aria-labelledby="rt-h" data-proto-state="returned">
+          <div class="card__header"><h2 class="card__title" id="rt-h">What you returned</h2><span class="tag tag--caution">Waiting for assessor</span></div>
+          <div class="card__body"><dl class="dl">
+            <div class="dl__row"><dt>Required corrections</dt><dd><ol class="pg-steps"><li>Re-score AC 3.1 against the descriptor. The test sheet (filing index, sheet 2) shows a colleague found all five records from the index alone.</li><li>Rewrite the justification so that it names the evidence for each criterion.</li><li>If AC 3.1 is met, remove the request for a new filing index from what the learner must do.</li></ol></dd></div>
+            <div class="dl__row"><dt>Re-mark due</dt><dd>By the end of Friday 25 September 2026</dd></div>
+            <div class="dl__row"><dt>Notified</dt><dd>Nomvula Mahlangu, assessor: in the LMS 21 Sep 2026, 11:05; email delivered 11:06<br>Zanele Dlamini, coordinator: in the LMS 21 Sep 2026, 11:05; email delivered 11:06</dd></div>
+          </dl></div>
+        </section>
+
+        <!-- Findings history: append-only -->
+        <section id="ws-findings" class="stack" aria-labelledby="fh-h" tabindex="-1">
+          <h2 class="text-subheading" id="fh-h">Findings on this item</h2>
+          <p class="text-small" data-proto-state="review">No finding has been recorded yet.</p>
+          <ol class="history-list" aria-label="Findings, newest first" data-proto-state="returned remarked agreed">
+            <li class="history-list__item is-current" data-proto-state="agreed"><span class="history-list__badge">2</span><span class="history-list__title">Agree <span class="tag tag--positive">Agreed</span></span><span class="history-list__meta">23 Sep 2026, 14:20 · Thandiwe Nkosi · on the revised decision of 23 Sep · "All three corrections are dealt with. AC 3.1 Meets is supported by the test sheet; AC 3.2 Partly is supported by the register."</span></li>
+            <li class="history-list__item"><span class="history-list__badge">1</span><span class="history-list__title">Disagree, returned to assessor</span><span class="history-list__meta">21 Sep 2026, 11:05 · Thandiwe Nkosi · on the original decision of 16 Sep · "AC 3.1 is under-marked: the test sheet shows the index works without help. The justification names no evidence." · 3 required corrections · due end of 25 Sep 2026</span></li>
+          </ol>
+        </section>
+      </div>
+    </div>
+
+    <div class="decision-bar" id="pg-bar" role="region" aria-label="Assessor's decision and your finding" data-proto-state="!blocked">
+      <div class="decision-bar__summary" data-proto-state="review returned"><strong>Assessor decided: Not yet competent, 4 of 8</strong>Nomvula Mahlangu · 16 Sep 2026 · held</div>
+      <div class="decision-bar__summary" data-proto-state="remarked agreed"><strong>Assessor's revised decision: Not yet competent, 5 of 8</strong>Nomvula Mahlangu · 23 Sep 2026 · original 4 of 8 kept on record</div>
+
+      <div class="decision-bar__actions" data-proto-state="review remarked">
+        <button type="button" class="btn btn--secondary">Save draft</button>
+        <button type="button" class="btn btn--primary" id="btn-agree" data-pg-next="agreed">Record agreement</button>
+        <button type="button" class="btn btn--primary" id="btn-return" data-modal-open="m-return">Return to assessor</button>
+      </div>
+      <div class="decision-bar__actions" data-proto-state="returned agreed"><a class="btn btn--secondary" href="moderate-signoff.html">Cycle sign-off</a><a class="btn btn--primary" href="moderate-item.html#state=review">Next item</a></div>
+
+      <button type="button" class="btn btn--primary decision-bar__open" data-modal-open="m-finding-sheet" data-proto-state="review remarked">Your finding</button>
+      <a class="btn btn--primary decision-bar__open" href="moderate-item.html#state=review" data-proto-state="returned agreed">Next item</a>
+    </div>
+  </main>
+
+  <nav class="bottom-tabs" aria-label="Moderating">
+    <a class="bottom-tabs__item" href="moderate-signoff.html"><svg class="icon" aria-hidden="true"><use href="#i-scales"/></svg>Cycles</a>
+    <a class="bottom-tabs__item" href="moderate-item.html" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg>Items</a>
+  </nav>
+</div>
+
+<!-- ============================== DIALOGS AND SHEETS ============================== -->
+<dialog class="modal" id="m-return" aria-labelledby="mrt-t" data-modal-static>
+  <div class="modal__header"><h2 class="modal__title" id="mrt-t">Return this item to the assessor?</h2></div>
+  <div class="modal__body">
+    <p class="modal__consequence">Nomvula Mahlangu must re-mark this item by the end of Friday 25 September 2026. Until she has, and you have reviewed it again, "Unit 3 portfolios" cannot be signed off and all 64 results in the cycle stay held.</p>
+    <ul class="modal__list">
+      <li>Nomvula Mahlangu (assessor) and Zanele Dlamini (coordinator) are notified now.</li>
+      <li>Your finding and the 3 required corrections are recorded and cannot be edited.</li>
+      <li>Her original decision stays on record. Naledi sees nothing until the cycle is signed off.</li>
+      <li>You are returning this item as the moderator: Thandiwe Nkosi.</li>
+    </ul>
+  </div>
+  <div class="modal__footer"><button type="button" class="btn btn--secondary" data-modal-close autofocus>Keep reviewing</button><button type="button" class="btn btn--primary" data-modal-close data-pg-next="returned">Return to assessor</button></div>
+</dialog>
+
+<dialog class="modal modal--sheet modal--full" id="m-finding-sheet" aria-labelledby="mfs-t">
+  <div class="modal__header"><h2 class="modal__title" id="mfs-t">Your finding</h2><button type="button" class="btn btn--ghost btn--icon" data-modal-close aria-label="Close"><svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+  <div class="modal__body">
+    <p class="text-small text-muted">Item 7 of 18 · Naledi Khoza · Task 3 · assessor Nomvula Mahlangu decided Not yet competent</p>
+    <fieldset class="fieldset"><legend class="fieldset__legend">Do you agree with the assessor's decision? <span class="field__required">(required)</span></legend><div class="choice-group">
+      <label class="choice choice--positive"><input class="choice__input" type="radio" name="finding-sheet"><span class="choice__title">Agree</span></label>
+      <label class="choice choice--caution"><input class="choice__input" type="radio" name="finding-sheet"><span class="choice__title">Disagree</span><span class="choice__desc">The item goes back to the assessor.</span></label></div></fieldset>
+    <div class="field"><label class="field__label" for="fs-reasons">Reasons <span class="field__required">(required)</span></label><textarea class="textarea" id="fs-reasons" rows="5" required></textarea></div>
+    <div class="field"><label class="field__label" for="fs-corr">Required corrections, if you disagree</label><textarea class="textarea" id="fs-corr" rows="4"></textarea></div>
+    <div class="field"><label class="field__label" for="fs-due">Re-mark by the end of</label><p class="field__help" id="fs-due-h">The assessor has the whole of this day. The assessor and the coordinator are notified.</p><input class="input pg-date" id="fs-due" type="date" value="2026-09-25" aria-describedby="fs-due-h"></div>
+    <p class="text-small text-muted">You are recording this finding as the moderator: Thandiwe Nkosi.</p>
+  </div>
+  <div class="modal__footer"><button type="button" class="btn btn--secondary" data-modal-close>Save draft</button><button type="button" class="btn btn--primary" data-modal-close>Record finding</button></div>
+</dialog>
+
+<dialog class="modal modal--sheet" id="m-workspaces" aria-labelledby="mws-t">
+  <div class="modal__header"><h2 class="modal__title" id="mws-t">Your workspaces</h2><button type="button" class="btn btn--ghost btn--icon" data-modal-close aria-label="Close"><svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+  <div class="modal__body">
+    <a class="menu__item" href="#main" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-house"/></svg><span class="menu__item-text">My work<span class="menu__item-meta">Everything waiting for you, across workspaces</span></span></a>
+    <a class="menu__item" href="assess-marking.html" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-inbox"/></svg><span class="menu__item-text">Assessing<span class="menu__item-meta">2026 Intake B · 12 to mark · 1 returned to you</span></span></a>
+    <a class="menu__item" href="moderate-item.html" aria-current="true" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-scales"/></svg><span class="menu__item-text">Moderating<span class="menu__item-meta">2026 Intake C · 3 sample items to review</span></span><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></a>
+  </div>
+</dialog>
+
+<div class="toast-region" role="status" aria-live="polite"></div>
+<script src="assets/ui.js"></script>
+<script src="assets/proto.js"></script>
+<script>
+/* Prototype only. Keeps in-page links from overwriting the #state= hash, and sets the finding form per prototype state. */
+(function () {
+  var $ = function (s) { return document.querySelector(s); };
+  var $$ = function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
+  function go(id) { var t = document.getElementById(id); if (!t) return; t.scrollIntoView(); t.focus({ preventScroll: true }); }
+
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('a[href^="#"]');
+    if (a) {
+      e.preventDefault(); go(a.getAttribute('href').slice(1));
+      if (a.classList.contains('section-switcher__item')) $$('.section-switcher__item').forEach(function (i) { if (i === a) i.setAttribute('aria-current', 'true'); else i.removeAttribute('aria-current'); });
+      return;
+    }
+    var b = e.target.closest('[data-pg-next]'); if (b) { location.hash = 'state=' + b.getAttribute('data-pg-next'); window.scrollTo(0, 0); }
+  });
+
+  var PRESET = {
+    review: { finding: 'disagree',
+      reasons: 'AC 3.1 is under-marked. The test sheet (filing index, sheet 2) and page 3 of the portfolio show that a colleague found all five records from the index alone, which is the descriptor for Meets. The justification names no evidence for either criterion. I agree that AC 3.2 is not yet met.',
+      corr: '1. Re-score AC 3.1 against the descriptor. The test sheet (filing index, sheet 2) shows a colleague found all five records from the index alone.\n2. Rewrite the justification so that it names the evidence for each criterion.\n3. If AC 3.1 is met, remove the request for a new filing index from what the learner must do.' },
+    remarked: { finding: 'agree',
+      reasons: 'All three corrections are dealt with. AC 3.1 Meets is supported by the test sheet; AC 3.2 Partly is supported by the register, which has no approval column. The outcome and the revised remediation follow from the marks.', corr: '' }
+  };
+  function syncChoice() {
+    var v = ($('input[name="finding"]:checked') || {}).value;
+    $('#fd-return').hidden = v !== 'disagree';
+    $('#btn-return').hidden = v !== 'disagree';
+    $('#btn-agree').hidden = v === 'disagree';
+    $('#btn-agree').disabled = v !== 'agree';
+  }
+  $$('input[name="finding"]').forEach(function (r) { r.addEventListener('change', syncChoice); });
+
+  function apply(state) {
+    var p = PRESET[state] || { finding: '', reasons: '', corr: '' };
+    $$('input[name="finding"]').forEach(function (r) { r.checked = r.value === p.finding; });
+    $('#fd-reasons').value = p.reasons; $('#fd-corr').value = p.corr;
+    syncChoice();
+    /* The shared CSS hides the bottom tabs and reserves space whenever a .decision-bar exists, even a hidden one.
+       In the blocked state there is no decision to take, so the classes are dropped to give the tabs back. */
+    var blocked = state === 'blocked';
+    $('#pg-bar').classList.toggle('decision-bar', !blocked);
+    $('#pg-switcher').classList.toggle('section-switcher', !blocked);
+    if (blocked) { var h = document.getElementById('cf-h'); if (h) h.focus({ preventScroll: true }); }
+  }
+  document.addEventListener('proto:state', function (e) { apply(e.detail.state); });
+  apply(document.body.getAttribute('data-proto-current') || 'review');
+})();
+</script>
+</body>
+</html>

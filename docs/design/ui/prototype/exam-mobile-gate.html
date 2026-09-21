@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en-ZA" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>You need a computer for this exam · Takusani LMS</title>
+<!-- Fonts: optional. The page is fully usable on the fallback stacks if this request fails (no web-font dependency for first paint). -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400..600&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap">
+<!-- Optional extended icon set (Phosphor Bold). Critical icons come from the inline sprite in ui.js. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/ui.css">
+<link rel="stylesheet" href="assets/proto.css">
+<link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+</head>
+<body data-proto-screen="L-12 gate" data-proto-title="Mobile gate for exams"
+      data-proto-frs="NFR-10 FR-312 FR-901"
+      data-proto-states="before:Before the exam has started|resume:An attempt is already running">
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<!-- What a phone or tablet shows at /exam/[attemptId] in place of the exam. The gate runs before an attempt is created,
+     so a refused device never uses an attempt or starts a timer. ExamShell: no navigation components. -->
+<main class="exam-notice" id="main" tabindex="-1">
+  <div class="exam-notice__panel">
+    <p class="text-overline">Khanya Skills Institute · Unit 5 summative exam</p>
+    <h1 class="exam-notice__title u-mt-2"><svg class="icon icon--lg" aria-hidden="true"><use href="#i-laptop"/></svg><span data-proto-state="before">You need a laptop or desktop computer to sit this exam</span><span data-proto-state="resume">You need a laptop or desktop computer to carry on with this exam</span></h1>
+
+    <div class="exam-notice__body" data-proto-state="before">
+      <p>Phones and tablets cannot be used, because the exam needs a full-screen mode that they do not support properly.</p>
+      <p><strong>The exam has not started. No attempt and no time have been used.</strong></p>
+    </div>
+    <div class="exam-notice__body" data-proto-state="resume">
+      <p>Your exam has started and <strong>the timer is still running</strong>. It cannot be opened on a phone or tablet, because the exam needs a full-screen mode that they do not support properly.</p>
+      <p>Open the LMS on a laptop or desktop computer as soon as you can, and select "Resume exam". The answers you have saved are safe.</p>
+    </div>
+
+    <p class="exam-notice__fact" data-proto-state="before">Open from 09:00 to 12:00 on Wednesday 14 October 2026 (SAST)</p>
+    <p class="exam-notice__fact" data-proto-state="resume">Time left 01:12:40 · exam open until 12:00 on Wednesday 14 October 2026</p>
+
+    <div class="exam-notice__body">
+      <h2 class="text-subheading">What you need</h2>
+      <ul class="modal__list">
+        <li>A laptop or desktop computer with a keyboard. A tablet with a keyboard cannot be used.</li>
+        <li>An up-to-date browser: Chrome, Edge or Firefox.</li>
+        <li>A normal browser window, not a private window.</li>
+      </ul>
+      <p data-proto-state="before">You can check a computer at any time before the exam day. Sign in on that computer, open this exam, and look under "Check this device".</p>
+      <p>If you do not have a computer you can use, speak to your coordinator, Zanele Dlamini, <span data-proto-state="before">before the exam day.</span><span data-proto-state="resume">or your invigilator straight away.</span></p>
+      <p class="text-small text-muted">On this phone or tablet you can still read the exam rules, see when the exam is open, and see your result later.</p>
+    </div>
+
+    <div class="exam-notice__actions">
+      <a class="btn btn--primary" href="learn-exam-preflight.html" data-proto-state="before">Read the exam information</a>
+      <a class="btn btn--primary" href="learn-exam-preflight.html#state=resume" data-proto-state="resume">Read the exam information</a>
+      <a class="btn btn--secondary" href="learn-home.html">Back to Home</a>
+    </div>
+  </div>
+</main>
+
+<div class="toast-region" role="status" aria-live="polite"></div>
+<script src="assets/ui.js"></script>
+<script src="assets/proto.js"></script>
+</body>
+</html>

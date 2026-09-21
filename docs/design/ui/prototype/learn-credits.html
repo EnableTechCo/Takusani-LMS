@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en-ZA" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Credits · Takusani LMS</title>
+<!-- Fonts: optional. The page is fully usable on the fallback stacks if this request fails (no web-font dependency for first paint). -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400..600&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap">
+<!-- Optional extended icon set (Phosphor Bold). Critical icons come from the inline sprite in ui.js. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/ui.css">
+<link rel="stylesheet" href="assets/proto.css">
+<link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+</head>
+<body data-proto-screen="P0-09" data-proto-title="Credits record" data-proto-frs="FR-318 FR-801 FR-802 FR-803 FR-804" data-proto-states="default:Partly earned|none:Nothing earned yet">
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<div class="app-shell">
+  <header class="app-shell__topbar">
+    <a class="brand" href="learn-home.html" aria-label="Takusani LMS, go to your home page">
+      <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M7 0H25A7 7 0 0 1 32 7V25A7 7 0 0 1 25 32H7A7 7 0 0 1 0 25V7A7 7 0 0 1 7 0ZM7 8.5H25V12H17.75V24H14.25V12H7ZM8.25 17.5A1.75 1.75 0 1 0 11.75 17.5A1.75 1.75 0 1 0 8.25 17.5ZM20.25 17.5A1.75 1.75 0 1 0 23.75 17.5A1.75 1.75 0 1 0 20.25 17.5Z"/></svg>
+      <span class="brand__name">Takusani</span><span class="brand__suffix">LMS</span>
+    </a>
+    <span class="topbar__institution">Khanya Skills Institute</span>
+    <span class="topbar__spacer"></span>
+    <form class="topbar__search" role="search" action="index.html" method="get"><label class="input-icon"><span class="u-visually-hidden">Search materials, tasks, sessions and exams</span><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><input class="input" type="search" name="q" placeholder="Search"></label></form>
+    <div class="topbar__actions">
+      <a class="btn btn--ghost btn--icon" href="notifications.html" aria-label="Notifications, 2 unread"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg><span class="badge-count" aria-hidden="true">2</span></a>
+      <details class="menu-wrap" data-menu>
+        <summary class="btn btn--ghost btn--icon" aria-label="Account menu for Lerato Mokoena"><span class="avatar" aria-hidden="true">LM</span></summary>
+        <div class="menu menu--end">
+          <div class="account__identity"><p class="account__name">Lerato Mokoena</p><p class="account__email">l.mokoena@example.org</p><ul class="account__roles"><li>Learner: 2026 Intake B</li><li>Learner number KSI-2026-0417</li></ul></div>
+          <a class="menu__item" href="index.html"><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg>Profile</a>
+          <a class="menu__item" href="index.html"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg>Notification preferences</a>
+          <a class="menu__item" href="index.html"><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg>Subscribe to your calendar</a>
+          <div class="menu__section"><fieldset class="fieldset"><legend class="fieldset__legend">Appearance</legend>
+            <div class="segmented">
+              <label class="segmented__option"><input type="radio" name="theme" value="light" data-theme-choice checked><span>Light</span></label>
+              <label class="segmented__option"><input type="radio" name="theme" value="dark" data-theme-choice><span>Dark</span></label>
+              <label class="segmented__option"><input type="radio" name="theme" value="auto" data-theme-choice><span>System</span></label>
+            </div></fieldset></div>
+          <div class="menu__divider" role="separator"></div>
+          <a class="menu__item" href="index.html"><svg class="icon" aria-hidden="true"><use href="#i-help"/></svg>Help</a>
+          <a class="menu__item" href="sign-in.html"><svg class="icon" aria-hidden="true"><use href="#i-sign-out"/></svg>Sign out</a>
+        </div>
+      </details>
+    </div>
+  </header>
+
+  <aside class="app-shell__sidenav" aria-label="Main navigation">
+    <nav class="sidenav" aria-label="Learning">
+      <div class="sidenav__group">
+        <ul class="sidenav__list">
+          <li><a class="sidenav__item" href="learn-home.html"><svg class="icon" aria-hidden="true"><use href="#i-house"/></svg><span class="sidenav__label">Home</span><span class="sidenav__short" aria-hidden="true">Home</span></a></li>
+          <li><a class="sidenav__item" href="learn-task.html"><svg class="icon" aria-hidden="true"><use href="#i-clipboard"/></svg><span class="sidenav__label">Tasks</span><span class="sidenav__short" aria-hidden="true">Tasks</span></a></li>
+          <li><a class="sidenav__item" href="learn-exam-preflight.html"><svg class="icon" aria-hidden="true"><use href="#i-laptop"/></svg><span class="sidenav__label">Exams</span><span class="sidenav__short" aria-hidden="true">Exams</span></a></li>
+          <li><a class="sidenav__item" href="index.html"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg><span class="sidenav__label">Materials</span><span class="sidenav__short" aria-hidden="true">Materials</span></a></li>
+          <li><a class="sidenav__item" href="index.html"><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg><span class="sidenav__label">Calendar</span><span class="sidenav__short" aria-hidden="true">Calendar</span></a></li>
+          <li><a class="sidenav__item" href="learn-result.html"><svg class="icon" aria-hidden="true"><use href="#i-check-circle"/></svg><span class="sidenav__label">Results</span><span class="sidenav__short" aria-hidden="true">Results</span></a></li>
+          <li><a class="sidenav__item" href="learn-credits.html" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-chart"/></svg><span class="sidenav__label">Credits</span><span class="sidenav__short" aria-hidden="true">Credits</span></a></li>
+          <li><a class="sidenav__item" href="index.html"><svg class="icon" aria-hidden="true"><use href="#i-note"/></svg><span class="sidenav__label">Notes</span><span class="sidenav__short" aria-hidden="true">Notes</span></a></li>
+        </ul>
+      </div>
+    </nav>
+  </aside>
+
+  <main class="app-shell__main" id="main" tabindex="-1">
+    <div class="page">
+      <header class="page-header">
+        <nav aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="learn-home.html">Home</a></li><li aria-current="page">Credits</li></ol></nav>
+        <h1 class="page-header__title">Your credits</h1>
+        <p class="page-header__lead" data-proto-state="default">You have earned 52 of 140 credits. 88 credits are still outstanding.</p>
+        <p class="page-header__lead" data-proto-state="none">You have not earned any credits yet. All 140 credits are still outstanding.</p>
+        <div class="page-header__meta"><span>Certificate in Business Administration, NQF Level 4</span><span>2026 Intake B</span></div>
+      </header>
+
+      <div class="page-layout">
+        <div class="page-layout__main stack stack--lg">
+
+          <!-- ============ Progress toward the qualification ============ -->
+          <section class="card" aria-labelledby="progress-h">
+            <div class="card__header"><h2 class="card__title" id="progress-h">Progress toward your qualification</h2></div>
+            <div class="card__body">
+              <div class="credits" data-proto-state="default">
+                <p class="credits__figure">52 <span class="credits__of">of 140 credits earned</span></p>
+                <div class="credits__bar" role="img" aria-label="52 credits earned, 88 outstanding, of 140"><span class="credits__segment credits__segment--earned" style="--value:37.1%"></span><span class="credits__segment credits__segment--outstanding"></span></div>
+                <ul class="credits__legend"><li class="credits__key credits__key--earned"><strong>52</strong> earned (3 units)</li><li class="credits__key"><strong>88</strong> outstanding (6 units)</li></ul>
+              </div>
+              <div class="credits" data-proto-state="none">
+                <p class="credits__figure">0 <span class="credits__of">of 140 credits earned</span></p>
+                <div class="credits__bar" role="img" aria-label="0 credits earned, 140 outstanding, of 140"><span class="credits__segment credits__segment--outstanding"></span></div>
+                <ul class="credits__legend"><li class="credits__key credits__key--earned"><strong>0</strong> earned</li><li class="credits__key"><strong>140</strong> outstanding (9 units)</li></ul>
+              </div>
+              <p class="text-small text-muted u-mt-4">You earn the credits for a unit when a Competent result has been released for every assessment in that unit. Work that is still being assessed is not part of this total, and has no credit value until its result is released.</p>
+            </div>
+          </section>
+
+          <!-- ============ Earned units ============ -->
+          <section aria-labelledby="earned-h" data-proto-state="default">
+            <div class="section__header"><h2 class="text-heading" id="earned-h">Units you have earned</h2><span class="text-meta">52 credits</span></div>
+            <div class="table-wrap">
+              <table class="table table--cards">
+                <caption class="u-visually-hidden">Units you have earned, with the credits, the date they were awarded and the assessments that counted</caption>
+                <thead><tr><th scope="col">Unit</th><th scope="col" class="table__num">Credits</th><th scope="col">Status</th><th scope="col">Assessments that counted</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td class="table__primary-cell" data-label="Unit"><span class="table__primary">Unit 1: Workplace orientation and conduct</span></td>
+                    <td class="table__num" data-label="Credits">12</td>
+                    <td data-label="Status"><span class="tag tag--positive">Earned on 14 Jul 2026</span></td>
+                    <td data-label="Assessments"><div>Task 1: Workplace conduct case study · Competent</div></td>
+                  </tr>
+                  <tr>
+                    <td class="table__primary-cell" data-label="Unit"><span class="table__primary">Unit 6: Computer skills for the office</span></td>
+                    <td class="table__num" data-label="Credits">24</td>
+                    <td data-label="Status"><span class="tag tag--positive">Earned on 11 Aug 2026</span></td>
+                    <td data-label="Assessments"><div>Practical 1: Documents and spreadsheets · Competent<br>Practical 2: Email and calendar · Competent</div></td>
+                  </tr>
+                  <tr>
+                    <td class="table__primary-cell" data-label="Unit"><span class="table__primary">Unit 7: Customer service</span></td>
+                    <td class="table__num" data-label="Credits">16</td>
+                    <td data-label="Status"><span class="tag tag--positive">Earned on 21 Aug 2026</span></td>
+                    <td data-label="Assessments"><div>Role play: Handling a customer query · Competent</div></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="card" aria-labelledby="earned-none-h" data-proto-state="none">
+            <div class="card__header"><h2 class="card__title" id="earned-none-h">Units you have earned</h2></div>
+            <div class="empty">
+              <span class="empty__icon"><svg class="icon icon--lg" aria-hidden="true"><use href="#i-chart"/></svg></span>
+              <p class="empty__title">No units earned yet</p>
+              <p class="empty__body">A unit appears here on the day its last Competent result is released. Your first assessment, Task 1 for Unit 1, is planned for July 2026.</p>
+              <div class="empty__actions"><a class="btn btn--secondary" href="learn-home.html#state=firstday">See what to do next</a></div>
+            </div>
+          </section>
+
+          <!-- ============ Outstanding units ============ -->
+          <section aria-labelledby="outstanding-h" data-proto-state="default">
+            <div class="section__header"><h2 class="text-heading" id="outstanding-h">Units still outstanding</h2><span class="text-meta">88 credits</span></div>
+            <div class="table-wrap">
+              <table class="table table--cards">
+                <caption class="u-visually-hidden">Units still outstanding, with the credits each is worth, how far you are, and the assessments that count</caption>
+                <thead><tr><th scope="col">Unit</th><th scope="col" class="table__num">Credits</th><th scope="col">Status</th><th scope="col">Assessments that count</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td class="table__primary-cell" data-label="Unit"><span class="table__primary">Unit 2: Business numeracy</span></td>
+                    <td class="table__num" data-label="Credits">16</td>
+                    <td data-label="Status"><span class="tag tag--info tag--shape-half">In progress: 1 of 2 assessments Competent</span></td>
+                    <td data-label="Assessments"><div>Numeracy workbook · Competent<br>Unit 2 summative exam · <span class="tag tag--info tag--shape-half">Being assessed</span><span class="table__secondary">No credit value until the result is released.</span></div></td>
+                  </tr>
+                  <tr>
+                    <td class="table__primary-cell" data-label="Unit"><span class="table__primary">Unit 3: Workplace records</span></td>
+                    <td class="table__num" data-label="Credits">8</td>
+                    <td data-label="Status"><span class="tag tag--caution">Resubmission open</span></td>
+                    <td data-label="Assessments"><div><a href="learn-result.html">Task 3: Workplace records portfolio</a> · Not yet competent<span class="table__secondary">You can resubmit until the end of Tuesday 6 October 2026.</span></div></td>
+                  </tr>
+                  <tr>
+                    <td class="table__primary-cell" data-label="Unit"><span class="table__primary">Unit 4: Business communication</span></td>
+                    <td class="table__num" data-label="Credits">10</td>
+                    <td data-label="Status"><span class="tag tag--info tag--shape-half">In progress: 1 of 2 assessments Competent</span></td>
+                    <td data-label="Assessments"><div>Task 2: Business letters · Competent<br>Task 4: Meeting minutes and action list · Not started<span class="table__secondary">Due Friday 2 October 2026 at 17:00.</span></div></td>
+                  </tr>
+                  <tr>
+                    <td class="table__primary-cell" data-label="Unit"><span class="table__primary">Unit 5: Office administration</span></td>
+                    <td class="table__num" data-label="Credits">14</td>
+                    <td data-label="Status"><span class="tag">Not started</span></td>
+                    <td data-label="Assessments"><div><a href="learn-exam-preflight.html">Unit 5 summative exam</a><span class="table__secondary">Opens Wednesday 14 October 2026 at 09:00.</span></div></td>
+                  </tr>
+                  <tr>
+                    <td class="table__primary-cell" data-label="Unit"><span class="table__primary">Unit 8: Bookkeeping basics</span></td>
+                    <td class="table__num" data-label="Credits">12</td>
+                    <td data-label="Status"><span class="tag">Not started</span></td>
+                    <td data-label="Assessments"><div>Task 5 and the Unit 8 summative exam<span class="table__secondary">Dates will be set in Term 4.</span></div></td>
+                  </tr>
+                  <tr>
+                    <td class="table__primary-cell" data-label="Unit"><span class="table__primary">Unit 9: Workplace project</span></td>
+                    <td class="table__num" data-label="Credits">28</td>
+                    <td data-label="Status"><span class="tag">Not started</span></td>
+                    <td data-label="Assessments"><div>Project portfolio and presentation<span class="table__secondary">Dates will be set in Term 4.</span></div></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section aria-labelledby="outstanding-none-h" data-proto-state="none">
+            <div class="section__header"><h2 class="text-heading" id="outstanding-none-h">Units still outstanding</h2><span class="text-meta">140 credits</span></div>
+            <div class="table-wrap">
+              <table class="table table--cards">
+                <caption class="u-visually-hidden">All nine units of the qualification, with the credits each is worth</caption>
+                <thead><tr><th scope="col">Unit</th><th scope="col" class="table__num">Credits</th><th scope="col">Status</th></tr></thead>
+                <tbody>
+                  <tr><td class="table__primary-cell" data-label="Unit"><span class="table__primary">Unit 1: Workplace orientation and conduct</span></td><td class="table__num" data-label="Credits">12</td><td data-label="Status"><span class="tag">Not started</span></td></tr>
+                  <tr><td class="table__primary-cell" data-label="Unit"><span class="table__primary">Unit 2: Business numeracy</span></td><td class="table__num" data-label="Credits">16</td><td data-label="Status"><span class="tag">Not started</span></td></tr>
+                  <tr><td class="table__primary-cell" data-label="Unit"><span class="table__primary">Unit 3: Workplace records</span></td><td class="table__num" data-label="Credits">8</td><td data-label="Status"><span class="tag">Not started</span></td></tr>
+                  <tr><td class="table__primary-cell" data-label="Unit"><span class="table__primary">Unit 4: Business communication</span></td><td class="table__num" data-label="Credits">10</td><td data-label="Status"><span class="tag">Not started</span></td></tr>
+                  <tr><td class="table__primary-cell" data-label="Unit"><span class="table__primary">Unit 5: Office administration</span></td><td class="table__num" data-label="Credits">14</td><td data-label="Status"><span class="tag">Not started</span></td></tr>
+                  <tr><td class="table__primary-cell" data-label="Unit"><span class="table__primary">Unit 6: Computer skills for the office</span></td><td class="table__num" data-label="Credits">24</td><td data-label="Status"><span class="tag">Not started</span></td></tr>
+                  <tr><td class="table__primary-cell" data-label="Unit"><span class="table__primary">Unit 7: Customer service</span></td><td class="table__num" data-label="Credits">16</td><td data-label="Status"><span class="tag">Not started</span></td></tr>
+                  <tr><td class="table__primary-cell" data-label="Unit"><span class="table__primary">Unit 8: Bookkeeping basics</span></td><td class="table__num" data-label="Credits">12</td><td data-label="Status"><span class="tag">Not started</span></td></tr>
+                  <tr><td class="table__primary-cell" data-label="Unit"><span class="table__primary">Unit 9: Workplace project</span></td><td class="table__num" data-label="Credits">28</td><td data-label="Status"><span class="tag">Not started</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+
+        <!-- ============ Aside: credit history (append-only) and what this page is not ============ -->
+        <aside class="page-layout__aside stack" aria-label="Credit history and notes">
+          <section aria-labelledby="history-h">
+            <h2 class="text-subheading u-mb-4" id="history-h">Credit history</h2>
+            <ol class="log log--boxed" aria-label="Credit history, newest first. Dates are South African time." data-proto-state="default">
+              <li class="log__item"><time class="log__time" datetime="2026-08-21">21 Aug 2026</time><div class="log__event"><span class="log__actor">+16 credits</span> Unit 7: Customer service<div class="log__detail">award · total 52</div></div></li>
+              <li class="log__item"><time class="log__time" datetime="2026-08-11">11 Aug 2026</time><div class="log__event"><span class="log__actor">+24 credits</span> Unit 6: Computer skills for the office<div class="log__detail">award · total 36</div></div></li>
+              <li class="log__item"><time class="log__time" datetime="2026-07-14">14 Jul 2026</time><div class="log__event"><span class="log__actor">+12 credits</span> Unit 1: Workplace orientation and conduct<div class="log__detail">award · total 12</div></div></li>
+            </ol>
+            <p class="text-small text-muted" data-proto-state="none">Nothing here yet. Every time credits are awarded, a line is added with the date. Lines are never changed or removed.</p>
+            <p class="text-small text-muted u-mt-2" data-proto-state="default">A line is added each time credits are awarded. If an appeal changes an outcome, a new line is added. Earlier lines are never changed or removed.</p>
+          </section>
+
+          <div class="banner banner--info banner--compact" role="note">
+            <svg class="icon banner__icon" aria-hidden="true"><use href="#i-info"/></svg>
+            <p class="banner__body">This page is a record of credits. It is not a certificate or a statement of results.</p>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <nav class="bottom-tabs" aria-label="Learning, main destinations">
+    <a class="bottom-tabs__item" href="learn-home.html"><svg class="icon" aria-hidden="true"><use href="#i-house"/></svg>Home</a>
+    <a class="bottom-tabs__item" href="learn-task.html"><svg class="icon" aria-hidden="true"><use href="#i-clipboard"/></svg>Tasks</a>
+    <a class="bottom-tabs__item" href="index.html"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg>Materials</a>
+    <a class="bottom-tabs__item" href="learn-result.html"><svg class="icon" aria-hidden="true"><use href="#i-check-circle"/></svg>Results</a>
+    <a class="bottom-tabs__item" href="index.html" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg>More</a>
+  </nav>
+</div>
+
+<div class="toast-region" role="status" aria-live="polite"></div>
+<script src="assets/ui.js"></script>
+<script src="assets/proto.js"></script>
+</body>
+</html>

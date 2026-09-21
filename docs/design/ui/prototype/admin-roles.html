@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en-ZA" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roles and allocations · Takusani LMS</title>
+<!-- Fonts: optional. The page is fully usable on the fallback stacks if this request fails (no web-font dependency for first paint). -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400..600&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap">
+<!-- Optional extended icon set (Phosphor Bold). Critical icons come from the inline sprite in ui.js. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/ui.css">
+<link rel="stylesheet" href="assets/proto.css">
+<link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+</head>
+<body data-proto-screen="P0-17" data-proto-title="Roles and allocations" data-proto-frs="FR-102 FR-103 FR-104 FR-105 FR-107 U-01" data-proto-states="default:Default|advisory:Role assigned, with advisory|open:Ending a role refused|deactivate:Deactivation refused">
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<div class="app-shell">
+  <header class="app-shell__topbar">
+    <a class="brand" href="index.html" aria-label="Takusani LMS, all prototype screens">
+      <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M7 0H25A7 7 0 0 1 32 7V25A7 7 0 0 1 25 32H7A7 7 0 0 1 0 25V7A7 7 0 0 1 7 0ZM7 8.5H25V12H17.75V24H14.25V12H7ZM8.25 17.5A1.75 1.75 0 1 0 11.75 17.5A1.75 1.75 0 1 0 8.25 17.5ZM20.25 17.5A1.75 1.75 0 1 0 23.75 17.5A1.75 1.75 0 1 0 20.25 17.5Z"/></svg>
+      <span class="brand__name">Takusani</span><span class="brand__suffix">LMS</span>
+    </a>
+    <span class="topbar__institution">Khanya Skills Institute</span>
+    
+    <span class="topbar__spacer"></span>
+    <form class="topbar__search" role="search" action="#main" method="get" onsubmit="return false"><label class="input-icon"><span class="u-visually-hidden">Search</span><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><input class="input" type="search" name="q" placeholder="Search"></label></form>
+    <div class="topbar__actions">
+      <a class="btn btn--ghost btn--icon" href="notifications.html" aria-label="Notifications, 1 unread"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg><span class="badge-count" aria-hidden="true">1</span></a>
+      <details class="menu-wrap" data-menu>
+        <summary class="btn btn--ghost btn--icon" aria-label="Account menu for Sibusiso Khumalo"><span class="avatar" aria-hidden="true">SK</span></summary>
+        <div class="menu menu--end">
+          <div class="account__identity"><p class="account__name">Sibusiso Khumalo</p><p class="account__email">sibusiso.khumalo@khanya.example</p><ul class="account__roles"><li>System Administrator: Khanya Skills Institute</li></ul></div>
+          <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg>Profile</a>
+          <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg>Notification preferences</a>
+          <div class="menu__section"><fieldset class="fieldset"><legend class="fieldset__legend">Appearance</legend>
+            <div class="segmented">
+              <label class="segmented__option"><input type="radio" name="theme" value="light" data-theme-choice checked><span>Light</span></label>
+              <label class="segmented__option"><input type="radio" name="theme" value="dark" data-theme-choice><span>Dark</span></label>
+              <label class="segmented__option"><input type="radio" name="theme" value="auto" data-theme-choice><span>System</span></label>
+            </div></fieldset></div>
+          <div class="menu__divider" role="separator"></div>
+          <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-help"/></svg>Help</a>
+          <a class="menu__item" href="sign-in.html"><svg class="icon" aria-hidden="true"><use href="#i-sign-out"/></svg>Sign out</a>
+        </div>
+      </details>
+    </div>
+  </header>
+
+  <aside class="app-shell__sidenav" aria-label="Workspaces">
+    <nav class="sidenav" aria-label="Main navigation">
+      <div class="sidenav__group"><ul class="sidenav__list">
+        <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-house"/></svg><span class="sidenav__label">My work</span><span class="sidenav__short" aria-hidden="true">My work</span></a></li>
+      </ul></div>
+      <div class="sidenav__group"><h2 class="sidenav__heading">Administration</h2>
+        <ul class="sidenav__list">
+          <li><a class="sidenav__item" href="admin-roles.html" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-users"/></svg><span class="sidenav__label">Accounts</span><span class="sidenav__short" aria-hidden="true">Accounts</span></a></li>
+          <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-upload"/></svg><span class="sidenav__label">Imports</span><span class="sidenav__short" aria-hidden="true">Imports</span></a></li>
+          <li><a class="sidenav__item" href="admin-configuration.html"><svg class="icon" aria-hidden="true"><use href="#i-sliders"/></svg><span class="sidenav__label">Configuration</span><span class="sidenav__short" aria-hidden="true">Config</span></a></li>
+          <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-external"/></svg><span class="sidenav__label">Department integration</span><span class="sidenav__short" aria-hidden="true">Dept API</span></a></li>
+          <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-clipboard"/></svg><span class="sidenav__label">Audit log</span><span class="sidenav__short" aria-hidden="true">Audit</span></a></li>
+          <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-archive"/></svg><span class="sidenav__label">Cohort archive</span><span class="sidenav__short" aria-hidden="true">Archive</span></a></li>
+        </ul>
+      </div>
+    </nav>
+  </aside>
+
+  <main class="app-shell__main" id="main" tabindex="-1">
+    <div class="page">
+      <header class="page-header">
+        <nav aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="#main" data-toast="This screen is not part of the prototype">Accounts</a></li><li><a href="#main" data-toast="This screen is not part of the prototype">Thandiwe Nkosi</a></li><li aria-current="page">Roles and allocations</li></ol></nav>
+        <p class="page-header__workspace">Administration</p>
+        <h1 class="page-header__title">Thandiwe Nkosi: roles and allocations</h1>
+        <p class="page-header__lead">A role says what a person may be given. It does not give them any piece of work. Separation of duties is checked for each item when work is allocated.</p>
+        <div class="page-header__meta"><span class="tag tag--positive tag--shape-dot">Active</span><span>thandiwe.nkosi@khanya.example</span><span class="text-meta">STF-0042 · As at Tue 15 Sep 2026, 10:10 SAST</span></div>
+        <div class="page-header__actions">
+          <details class="menu-wrap" data-menu><summary class="btn btn--secondary btn--icon" aria-label="More actions for this account"><svg class="icon" aria-hidden="true"><use href="#i-dots"/></svg></summary>
+            <div class="menu menu--end"><button type="button" class="menu__item" data-toast="Password reset email sent" data-toast-meta="thandiwe.nkosi@khanya.example">Send a password reset</button><button type="button" class="menu__item" data-modal-open="m-deactivate">Deactivate account</button></div></details>
+        </div>
+      </header>
+
+      <!-- ===== Deactivation refused ===== -->
+      <div class="conflict u-mb-6" role="alert" aria-labelledby="deact-h" data-proto-state="deactivate">
+        <h2 class="conflict__title" id="deact-h" tabindex="-1" data-proto-focus><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>The account was not deactivated: this person still has open work</h2>
+        <p class="conflict__body">Thandiwe Nkosi still has 16 pieces of work allocated to her. Deactivating her account now would leave them with no one, and would block the release of 96 results in 2026 Intake B. Nothing was changed, and she can still sign in.</p>
+        <dl class="conflict__evidence dl">
+          <div class="dl__row"><dt>Assessor, 2026 Intake B</dt><dd>12 items to mark. <button type="button" class="link" data-modal-open="m-reallocate">Reallocate</button></dd></div>
+          <div class="dl__row"><dt>Assessor, 2026 Intake B</dt><dd>1 item returned for re-marking, due Thu 17 Sep 2026: Lerato Mokoena, Task 3, cycle "Term 3 tasks". <button type="button" class="link" data-modal-open="m-reallocate">Reallocate</button></dd></div>
+          <div class="dl__row"><dt>Moderator, 2026 Intake C</dt><dd>3 sample items to review. <a href="moderate-item.html">Reallocate from the cycle</a></dd></div>
+          <div class="dl__row"><dt>What to do</dt><dd>Reallocate all 16. When the list under Open allocations is empty, deactivate the account again.</dd></div>
+        </dl>
+        <p class="conflict__rule">FR-105 · open_allocations · Reference 2ad9f07b · Tue 15 Sep 2026, 10:22 SAST</p>
+        <div class="conflict__actions"><a class="btn btn--primary" href="#alloc-h">Go to open allocations</a><button type="button" class="btn btn--ghost" data-proto-goto="default">Keep the account active</button></div>
+      </div>
+
+      <!-- ===== Role assigned with advisory ===== -->
+      <div data-proto-state="advisory" class="stack u-mb-6">
+        <div class="banner banner--positive" role="status"><svg class="icon banner__icon" aria-hidden="true"><use href="#i-check-circle"/></svg><p class="banner__title">Role assigned: Moderator, 2026 Intake B</p><p class="banner__body">In force from Mon 21 Sep 2026. Thandiwe Nkosi has been notified. The change is in the history below, with the previous value.</p></div>
+        <div class="conflict" role="status" aria-labelledby="adv-h">
+          <h2 class="conflict__title" id="adv-h" tabindex="-1" data-proto-focus><svg class="icon" aria-hidden="true"><use href="#i-scales"/></svg>For your information: work she will be kept away from</h2>
+          <p class="conflict__body">Nothing was refused. Thandiwe Nkosi has assessed work in 2026 Intake B, so as a moderator or appeal reviewer in this cohort she will never be given these results. The LMS checks this for each item when work is allocated, and refuses by name if anyone tries.</p>
+          <dl class="conflict__evidence dl">
+            <div class="dl__row"><dt>Task 3: Workplace records portfolio</dt><dd>92 results she assessed, 3 to 14 Sep 2026, held in cycle "Term 3 tasks". She cannot moderate any of them or sign off that cycle.</dd></div>
+            <div class="dl__row"><dt>Unit 2 summative exam</dt><dd>47 results she assessed, 3 to 9 Sep 2026</dd></div>
+            <div class="dl__row"><dt>Task 1 and Task 2</dt><dd>119 results she assessed, released Fri 26 Jun 2026. She cannot review an appeal against any of them.</dd></div>
+            <div class="dl__row"><dt>What she can moderate</dt><dd>Work in 2026 Intake B assessed only by Bongani Sithole: 4 results in "Term 3 tasks" today.</dd></div>
+          </dl>
+          <p class="conflict__rule">BR-01 · advisory separation_of_duties_exclusions · 258 results · Reference 61d0a9f2 · Tue 15 Sep 2026, 10:14 SAST</p>
+          <div class="conflict__actions"><a class="btn btn--secondary" href="#main" data-toast="This screen is not part of the prototype">View the 258 results</a><button type="button" class="btn btn--ghost" data-proto-goto="default">Done</button></div>
+        </div>
+      </div>
+
+      <!-- ===== Role assignments ===== -->
+      <section aria-labelledby="roles-h">
+        <div class="section__header"><h2 class="text-heading" id="roles-h">Role assignments</h2><a class="btn btn--secondary btn--sm" href="#add-h">Add a role</a></div>
+
+        <div class="conflict u-mb-4" role="alert" aria-labelledby="open-h" data-proto-state="open">
+          <h3 class="conflict__title" id="open-h" tabindex="-1" data-proto-focus><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>The role was not ended: this person still has open work</h3>
+          <p class="conflict__body">Thandiwe still has work that depends on the role Assessor, 2026 Intake B. Ending it on Fri 18 Sep 2026 would leave 13 items with no assessor, and "Term 3 tasks" could not be signed off. Nothing was changed.</p>
+          <dl class="conflict__evidence dl">
+            <div class="dl__row"><dt>To mark</dt><dd>12 items in 2026 Intake B (9 for Task 4, 3 for Task 3). <button type="button" class="link" data-modal-open="m-reallocate">Reallocate</button></dd></div>
+            <div class="dl__row"><dt>Returned for re-marking</dt><dd>1 item, due Thu 17 Sep 2026: Lerato Mokoena, Task 3, returned by Anil Naidoo in cycle "Term 3 tasks". <button type="button" class="link" data-modal-open="m-reallocate">Reallocate</button></dd></div>
+            <div class="dl__row"><dt>What to do</dt><dd>Reallocate all 13 items, or wait until she has finished them. Then end the role again.</dd></div>
+          </dl>
+          <p class="conflict__rule">FR-105 · open_allocations · Reference 7e13b8c6 · Tue 15 Sep 2026, 10:18 SAST</p>
+          <div class="conflict__actions"><button type="button" class="btn btn--primary" data-modal-open="m-reallocate">Reallocate all 13 items</button><button type="button" class="btn btn--ghost" data-proto-goto="default">Keep the role</button></div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="table table--cards">
+            <caption class="u-visually-hidden">Role assignments for Thandiwe Nkosi, current first</caption>
+            <thead><tr><th scope="col">Role</th><th scope="col">Scope</th><th scope="col">In force from</th><th scope="col">Until</th><th scope="col">Assigned by</th><th scope="col">Status</th><th scope="col" class="table__actions"><span class="u-visually-hidden">Actions</span></th></tr></thead>
+            <tbody>
+              <tr data-proto-state="advisory">
+                <td class="table__primary-cell" data-label="Role"><span class="table__primary">Moderator</span></td>
+                <td data-label="Scope">Cohort: 2026 Intake B</td><td data-label="From">Mon 21 Sep 2026</td><td data-label="Until">No end date</td><td data-label="Assigned by">Sibusiso Khumalo (you)</td>
+                <td data-label="Status"><span class="tag tag--info">Starts Mon 21 Sep 2026</span></td>
+                <td class="table__actions"><button type="button" class="btn btn--secondary btn--sm" data-toast="The role has not started yet. It can be withdrawn from the change history">Withdraw<span class="u-visually-hidden"> Moderator, 2026 Intake B</span></button></td></tr>
+              <tr>
+                <td class="table__primary-cell" data-label="Role"><span class="table__primary">Assessor</span></td>
+                <td data-label="Scope">Cohort: 2026 Intake B</td><td data-label="From">Mon 12 Jan 2026</td><td data-label="Until">No end date</td><td data-label="Assigned by">Sibusiso Khumalo (you)</td>
+                <td data-label="Status"><span class="tag tag--positive tag--shape-dot">In force</span><span class="table__secondary">13 open allocations depend on it</span></td>
+                <td class="table__actions"><button type="button" class="btn btn--secondary btn--sm" data-modal-open="m-end">End role<span class="u-visually-hidden"> Assessor, 2026 Intake B</span></button></td></tr>
+              <tr>
+                <td class="table__primary-cell" data-label="Role"><span class="table__primary">Moderator</span></td>
+                <td data-label="Scope">Cohort: 2026 Intake C</td><td data-label="From">Mon 2 Mar 2026</td><td data-label="Until">No end date</td><td data-label="Assigned by">Zanele Dlamini</td>
+                <td data-label="Status"><span class="tag tag--positive tag--shape-dot">In force</span><span class="table__secondary">3 open allocations depend on it</span></td>
+                <td class="table__actions"><button type="button" class="btn btn--secondary btn--sm" data-toast="Not part of this prototype. It would be refused in the same way">End role<span class="u-visually-hidden"> Moderator, 2026 Intake C</span></button></td></tr>
+              <tr>
+                <td class="table__primary-cell" data-label="Role"><span class="table__primary">Assessor</span></td>
+                <td data-label="Scope">Cohort: 2025 Intake A</td><td data-label="From">Mon 13 Jan 2025</td><td data-label="Until">End of Fri 28 Nov 2025</td><td data-label="Assigned by">Sibusiso Khumalo (you)</td>
+                <td data-label="Status"><span class="tag tag--shape-square">Ended</span></td>
+                <td class="table__actions"><span class="text-small text-muted">Kept on record</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <div class="page-layout section">
+        <div class="page-layout__main stack--lg stack">
+
+          <!-- ===== Open allocations ===== -->
+          <section aria-labelledby="alloc-h">
+            <div class="section__header"><h2 class="text-heading" id="alloc-h" tabindex="-1">Open allocations</h2><span class="text-small text-muted">Work that is with her now. A role cannot be ended while work depends on it.</span></div>
+            <div class="table-wrap">
+              <table class="table table--cards">
+                <caption class="u-visually-hidden">Work currently allocated to Thandiwe Nkosi</caption>
+                <thead><tr><th scope="col">Work</th><th scope="col">Depends on the role</th><th scope="col" class="table__num">Items</th><th scope="col">Next date</th><th scope="col" class="table__actions"><span class="u-visually-hidden">Actions</span></th></tr></thead>
+                <tbody>
+                  <tr><td class="table__primary-cell" data-label="Work"><span class="table__primary">Items to mark</span><span class="table__secondary">2026 Intake B · Task 4 (9), Task 3 (3)</span></td><td data-label="Role">Assessor, 2026 Intake B</td><td class="table__num" data-label="Items">12</td><td data-label="Next date">Oldest submitted Fri 4 Sep 2026</td><td class="table__actions"><button type="button" class="btn btn--secondary btn--sm" data-modal-open="m-reallocate">Reallocate<span class="u-visually-hidden"> 12 items to mark</span></button></td></tr>
+                  <tr><td class="table__primary-cell" data-label="Work"><span class="table__primary">Item returned for re-marking</span><span class="table__secondary">Lerato Mokoena · Task 3 · cycle "Term 3 tasks"</span></td><td data-label="Role">Assessor, 2026 Intake B</td><td class="table__num" data-label="Items">1</td><td data-label="Next date"><span class="deadline deadline--soon"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-clock"/></svg>Due Thu 17 Sep 2026 · in 2 days</span></td><td class="table__actions"><button type="button" class="btn btn--secondary btn--sm" data-modal-open="m-reallocate">Reallocate<span class="u-visually-hidden"> the returned item</span></button></td></tr>
+                  <tr><td class="table__primary-cell" data-label="Work"><span class="table__primary">Sample items to review</span><span class="table__secondary">2026 Intake C</span></td><td data-label="Role">Moderator, 2026 Intake C</td><td class="table__num" data-label="Items">3</td><td data-label="Next date">No date set</td><td class="table__actions"><a class="btn btn--secondary btn--sm" href="moderate-item.html">Open<span class="u-visually-hidden"> the 3 sample items</span></a></td></tr>
+                  <tr><td class="table__primary-cell" data-label="Work"><span class="table__primary">Appeal reviews</span></td><td data-label="Role">Given for one appeal at a time</td><td class="table__num" data-label="Items">0</td><td data-label="Next date">None</td><td class="table__actions"><span class="text-small text-muted">Nothing to reallocate</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===== Add a role ===== -->
+          <section aria-labelledby="add-h" data-proto-state="!advisory">
+            <div class="section__header"><h2 class="text-heading" id="add-h" tabindex="-1">Add a role</h2></div>
+            <form class="form card" onsubmit="return false"><div class="card__body form">
+              <div class="form__row form__row--2">
+                <div class="field"><label class="field__label" for="r-role">Role</label><span class="select"><select id="r-role"><option>Moderator</option><option>Assessor</option><option>Facilitator</option><option>Coordinator</option><option>System Administrator</option></select></span></div>
+                <div class="field"><label class="field__label" for="r-type">Scope type</label><span class="select"><select id="r-type"><option>Cohort</option><option>Programme</option><option>Unit</option><option>Global</option></select></span></div>
+              </div>
+              <div class="field"><label class="field__label" for="r-scope">Scope</label><p class="field__help" id="r-scope-help">Where the role applies. She holds Assessor in this cohort already.</p><span class="select"><select id="r-scope" aria-describedby="r-scope-help r-advice"><option>2026 Intake B · Certificate in Business Administration · Moderated</option><option>2026 Intake C · Certificate in Business Administration · Not moderated</option></select></span></div>
+              <div class="banner banner--info banner--compact" role="status" id="r-advice"><svg class="icon banner__icon" aria-hidden="true"><use href="#i-info"/></svg><p class="banner__body">Thandiwe Nkosi also assesses in 2026 Intake B. You can still assign this role. She will never be given work she assessed, and after you assign it you will see exactly which results that covers.</p></div>
+              <div class="form__row form__row--2">
+                <div class="field"><label class="field__label" for="r-from">In force from</label><input class="input" id="r-from" type="date" value="2026-09-21"></div>
+                <div class="field"><label class="field__label" for="r-to">Until the end of <span class="field__optional">(optional)</span></label><input class="input" id="r-to" type="date"></div>
+              </div>
+              <div class="form__actions"><button type="button" class="btn btn--primary" data-proto-goto="advisory">Assign role</button></div>
+            </div></form>
+          </section>
+        </div>
+
+        <!-- ===== Change history ===== -->
+        <aside class="page-layout__aside" aria-labelledby="hist-h">
+          <h2 class="text-subheading u-mb-4" id="hist-h">Change history</h2>
+          <ol class="log log--boxed" aria-label="Changes to this person's roles and account, newest first. Times in SAST.">
+            <li class="log__item log__item--marked" data-proto-state="deactivate"><time class="log__time" datetime="2026-09-15T10:22:00+02:00">15 Sep 2026, 10:22</time><div class="log__event"><span class="log__actor">Sibusiso Khumalo</span> tried to deactivate the account. Refused: 16 open allocations. Previous value kept: Active.<div class="log__detail">open_allocations · 2ad9f07b</div></div></li>
+            <li class="log__item log__item--marked" data-proto-state="open"><time class="log__time" datetime="2026-09-15T10:18:00+02:00">15 Sep 2026, 10:18</time><div class="log__event"><span class="log__actor">Sibusiso Khumalo</span> tried to end Assessor, 2026 Intake B on 18 Sep 2026. Refused: 13 open allocations. Previous value kept: no end date.<div class="log__detail">open_allocations · 7e13b8c6</div></div></li>
+            <li class="log__item" data-proto-state="advisory"><time class="log__time" datetime="2026-09-15T10:14:00+02:00">15 Sep 2026, 10:14</time><div class="log__event"><span class="log__actor">Sibusiso Khumalo</span> assigned Moderator, Cohort: 2026 Intake B, from 21 Sep 2026. Previous value: none. Advisory shown: excluded from 258 results.<div class="log__detail">separation_of_duties_exclusions · 61d0a9f2</div></div></li>
+            <li class="log__item"><time class="log__time" datetime="2026-03-02T08:55:00+02:00">2 Mar 2026, 08:55</time><div class="log__event"><span class="log__actor">Zanele Dlamini</span> assigned Moderator, Cohort: 2026 Intake C, from 2 Mar 2026. Previous value: none.</div></li>
+            <li class="log__item"><time class="log__time" datetime="2026-01-12T09:31:00+02:00">12 Jan 2026, 09:31</time><div class="log__event"><span class="log__actor">Sibusiso Khumalo</span> assigned Assessor, Cohort: 2026 Intake B, from 12 Jan 2026. Previous value: none.</div></li>
+            <li class="log__item"><time class="log__time" datetime="2025-11-28T16:02:00+02:00">28 Nov 2025, 16:02</time><div class="log__event"><span class="log__actor">Sibusiso Khumalo</span> ended Assessor, Cohort: 2025 Intake A. Previous value: no end date. New value: end of 28 Nov 2025. No open allocations.</div></li>
+            <li class="log__item"><time class="log__time" datetime="2025-01-13T08:40:00+02:00">13 Jan 2025, 08:40</time><div class="log__event"><span class="log__actor">Sibusiso Khumalo</span> created the account and assigned Assessor, Cohort: 2025 Intake A.</div></li>
+          </ol>
+          <p class="text-small u-mt-4"><a href="#main" data-toast="This screen is not part of the prototype">See these entries in the audit log</a></p>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <nav class="bottom-tabs" aria-label="Administration, phone tabs">
+    <a class="bottom-tabs__item" href="admin-roles.html" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-users"/></svg>Accounts</a>
+    <a class="bottom-tabs__item" href="admin-configuration.html"><svg class="icon" aria-hidden="true"><use href="#i-sliders"/></svg>Config</a>
+    <a class="bottom-tabs__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-clipboard"/></svg>Audit log</a>
+    <a class="bottom-tabs__item" href="#main" data-modal-open="m-more"><svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg>More</a>
+  </nav>
+</div>
+
+<dialog class="modal modal--sheet" id="m-more" aria-labelledby="m-more-t">
+  <div class="modal__header"><h2 class="modal__title" id="m-more-t">More in Administration</h2><button type="button" class="btn btn--ghost btn--icon" data-modal-close aria-label="Close"><svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+  <div class="modal__body">
+    <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-upload"/></svg><span class="menu__item-text">Imports</span></a>
+    <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-external"/></svg><span class="menu__item-text">Department integration</span></a>
+    <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-archive"/></svg><span class="menu__item-text">Cohort archive</span></a>
+    <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><span class="menu__item-text">Search</span></a>
+  </div>
+</dialog>
+<dialog class="modal" id="m-end" aria-labelledby="m-end-t" data-modal-static>
+  <div class="modal__header"><h2 class="modal__title" id="m-end-t">End the role Assessor, 2026 Intake B?</h2></div>
+  <div class="modal__body">
+    <p class="modal__consequence">From the day after the end date, Thandiwe Nkosi cannot be given anything to mark in 2026 Intake B. Her past decisions stay on record under her name.</p>
+    <div class="field"><label class="field__label" for="end-date">Last day in force</label><p class="field__help" id="end-date-help">She has the whole of this day.</p><input class="input" id="end-date" type="date" value="2026-09-18" aria-describedby="end-date-help"></div>
+    <p class="text-small text-muted">The LMS will refuse this if any work still depends on the role. She has 13 open allocations now. You are doing this as the System Administrator: Sibusiso Khumalo.</p>
+  </div>
+  <div class="modal__footer"><button type="button" class="btn btn--secondary" data-modal-close autofocus>Keep the role</button><button type="button" class="btn btn--primary" data-modal-close data-proto-goto="open">End role</button></div>
+</dialog>
+
+<dialog class="modal" id="m-deactivate" aria-labelledby="m-de-t" data-modal-static>
+  <div class="modal__header"><h2 class="modal__title" id="m-de-t">Deactivate Thandiwe Nkosi's account?</h2></div>
+  <div class="modal__body">
+    <p class="modal__consequence">She is signed out everywhere at once and cannot sign in again until the account is reactivated. Her records and decisions are kept.</p>
+    <p class="text-small text-muted">The LMS will refuse this if she still has work allocated to her. She has 16 open allocations now.</p>
+    <label class="check"><input class="check__input" type="checkbox" id="ack-de"><span class="check__label">I have a ticket or written request for this.</span></label>
+  </div>
+  <div class="modal__footer"><button type="button" class="btn btn--secondary" data-modal-close autofocus>Keep the account active</button><button type="button" class="btn btn--destructive" data-requires="#ack-de" data-modal-close data-proto-goto="deactivate">Deactivate account</button></div>
+</dialog>
+
+<dialog class="modal" id="m-reallocate" aria-labelledby="m-re-t" data-modal-static>
+  <div class="modal__header"><h2 class="modal__title" id="m-re-t">Reallocate Thandiwe Nkosi's marking</h2></div>
+  <div class="modal__body">
+    <p class="modal__consequence">13 items in 2026 Intake B move to the person you choose. Her saved drafts stay with her and are not copied. Both people and the coordinator are notified.</p>
+    <fieldset class="candidate-list">
+      <legend class="fieldset__legend">New assessor for 12 items to mark and 1 returned item</legend>
+      <div class="candidate-list__tier"><h3 class="candidate-list__tier-title">Assessors in 2026 Intake B</h3>
+        <label class="candidate"><input class="candidate__input" type="radio" name="newassessor" checked><span class="candidate__name">Bongani Sithole</span><span class="tag tag--plain">Assessor, Intake B</span><span class="candidate__note">6 items to mark now. He took no decision on any of the 13.</span></label></div>
+      <div class="candidate-list__tier"><h3 class="candidate-list__tier-title">Cannot be chosen</h3>
+        <div class="candidate is-excluded"><input class="candidate__input" type="radio" name="newassessor" disabled aria-label="Nomvula Mahlangu, cannot be chosen" aria-describedby="re-ex1"><span class="candidate__name">Nomvula Mahlangu</span><span class="tag tag--plain">Assessor, Intake C</span><span class="candidate__reason" id="re-ex1">Does not hold the Assessor role for 2026 Intake B. Assign the role first.</span></div>
+        <div class="candidate is-excluded"><input class="candidate__input" type="radio" name="newassessor" disabled aria-label="Anil Naidoo, cannot be chosen" aria-describedby="re-ex2"><span class="candidate__name">Anil Naidoo</span><span class="tag tag--plain">Moderator, Intake B</span><span class="candidate__reason" id="re-ex2">Moderated the returned item on 15 Sep 2026. A person cannot assess an item they moderated. Rule BR-01.</span></div></div>
+    </fieldset>
+  </div>
+  <div class="modal__footer"><button type="button" class="btn btn--secondary" data-modal-close autofocus>Cancel</button><button type="button" class="btn btn--primary" data-modal-close data-toast="13 items reallocated to Bongani Sithole" data-toast-meta="Tue 15 Sep 2026, 10:25">Reallocate 13 items</button></div>
+</dialog>
+
+<div class="toast-region" role="status" aria-live="polite"></div>
+<script src="assets/ui.js"></script>
+<script src="assets/proto.js"></script>
+<script>
+/* Prototype only. Keeps placeholder links and in-page anchors from replacing the state in the URL hash,
+   lets a button move the screen to another prototype state, and moves focus to a refusal when a state shows one. */
+(function () {
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest) return;
+    var a = e.target.closest('a[href^="#"]');
+    if (a && a.getAttribute('href').indexOf('#state=') !== 0) {
+      e.preventDefault();
+      var t = document.getElementById(a.getAttribute('href').slice(1));
+      if (t && !a.hasAttribute('data-toast') && !a.hasAttribute('data-modal-open')) { t.scrollIntoView(); t.focus({ preventScroll: true }); }
+    }
+    var g = e.target.closest('[data-proto-goto]');
+    if (g) location.hash = 'state=' + g.getAttribute('data-proto-goto');
+  });
+  function settle(initial) {
+    setTimeout(function () {
+      var f = Array.prototype.filter.call(document.querySelectorAll('[data-proto-focus]'), function (el) { return !el.closest('[hidden]'); })[0];
+      if (f) { f.focus(); return; }
+      if (!initial) { window.scrollTo(0, 0); document.getElementById('main').focus({ preventScroll: true }); }
+    }, 0);
+  }
+  document.addEventListener('proto:state', function () { settle(false); });
+  if (/state=/.test(location.hash)) settle(true);
+})();
+</script>
+
+</body>
+</html>

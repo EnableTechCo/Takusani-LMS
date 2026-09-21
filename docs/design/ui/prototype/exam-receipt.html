@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en-ZA" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Exam receipt: Unit 5 summative exam · Takusani LMS</title>
+<!-- Fonts: optional. The page is fully usable on the fallback stacks if this request fails (no web-font dependency for first paint). -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400..600&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap">
+<!-- Optional extended icon set (Phosphor Bold). Critical icons come from the inline sprite in ui.js. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/ui.css">
+<link rel="stylesheet" href="assets/proto.css">
+<link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+<style>
+/* Page-specific (prefix rc-). Spacing only. */
+.rc-section { margin-top: var(--space-8); }
+.rc-section > .text-heading { margin-bottom: var(--space-3); }
+</style>
+</head>
+<body data-proto-screen="L-12 receipt" data-proto-title="Exam receipt"
+      data-proto-frs="FR-313 FR-315 FR-903 NFR-07"
+      data-proto-states="learner:Submitted by the learner|auto:Submitted automatically when time ended">
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<!-- Still in the ExamShell route group: exam bar only, no navigation components. The way out is the button at the end.
+     Fullscreen exits on arrival. Any later visit to the exam address lands here, and a repeated submit returns this same receipt. -->
+<header class="exam-bar">
+  <span class="exam-bar__title">Unit 5 summative exam</span>
+  <span class="status-line status-line--locked" role="status"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Submitted and locked</span>
+</header>
+
+<main class="page page--prose" id="main" tabindex="-1">
+  <header class="page-header">
+    <p class="text-overline">Khanya Skills Institute · Exam receipt</p>
+    <h1 class="page-header__title"><span data-proto-state="learner">Your exam has been submitted</span><span data-proto-state="auto">Your exam was submitted automatically when your time ended</span></h1>
+    <p class="page-header__lead" data-proto-state="learner">We have your answers. They are locked and cannot be changed. You do not need to do anything else today.</p>
+    <p class="page-header__lead" data-proto-state="auto">Your time ended at 11:55, so the LMS submitted your exam for you. We have your answers, including what you had typed when the time ended. They are locked and cannot be changed.</p>
+    <div class="page-header__meta">
+      <span class="tag tag--positive" data-proto-state="learner">Submitted 10:58</span>
+      <span class="tag tag--positive" data-proto-state="auto">Submitted automatically when time ran out</span>
+    </div>
+  </header>
+
+  <div class="receipt" role="group" aria-labelledby="rc-title">
+    <p class="receipt__title" id="rc-title"><svg class="icon" aria-hidden="true"><use href="#i-check-circle"/></svg>We have your exam</p>
+    <code class="receipt__id" id="rc-id">EX-2026-000931</code>
+    <dl class="receipt__rows">
+      <div class="receipt__row"><dt>Learner</dt><dd>Lerato Mokoena · KSI-2026-0417</dd></div>
+      <div class="receipt__row"><dt>Exam</dt><dd>Unit 5 summative exam · Unit 5: Office administration</dd></div>
+      <div class="receipt__row"><dt>Attempt</dt><dd>1 of 1</dd></div>
+      <div class="receipt__row"><dt>Started</dt><dd><time datetime="2026-10-14T09:55:00+02:00">Wednesday 14 October 2026 at 09:55</time></dd></div>
+      <div class="receipt__row" data-proto-state="learner"><dt>Submitted</dt><dd><time datetime="2026-10-14T10:58:00+02:00">Wednesday 14 October 2026 at 10:58 (SAST)</time></dd></div>
+      <div class="receipt__row" data-proto-state="auto"><dt>Submitted</dt><dd><time datetime="2026-10-14T11:55:00+02:00">Wednesday 14 October 2026 at 11:55 (SAST)</time></dd></div>
+      <div class="receipt__row" data-proto-state="learner"><dt>How</dt><dd>Submitted by you</dd></div>
+      <div class="receipt__row" data-proto-state="auto"><dt>How</dt><dd>Submitted automatically when your time ran out</dd></div>
+      <div class="receipt__row" data-proto-state="learner"><dt>Answered</dt><dd>6 of 6 questions</dd></div>
+      <div class="receipt__row" data-proto-state="auto"><dt>Answered</dt><dd>5 of 6 questions. Question 6 has no answer.</dd></div>
+      <div class="receipt__row"><dt>Recorded</dt><dd>2 moments when you left the exam window</dd></div>
+    </dl>
+    <p class="receipt__note">Keep this reference in case you need to ask about this exam. You can find this receipt again under Exams.</p>
+    <div class="receipt__actions"><button type="button" class="btn btn--secondary" id="rc-print"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-printer"/></svg>Print this receipt</button><button type="button" class="btn btn--ghost" id="rc-copy"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-copy"/></svg>Copy reference</button></div>
+  </div>
+
+  <section class="rc-section" aria-labelledby="rc-next-h">
+    <h2 class="text-heading" id="rc-next-h">What happens next</h2>
+    <div class="stack">
+      <p><span class="tag tag--info tag--shape-half">Being assessed</span></p>
+      <div class="prose">
+        <p>Your assessor will mark your exam. In this programme, results are checked by a second person (a moderator) before anyone sees them, and everyone's results for the same exam are released together.</p>
+        <p>We cannot give you a date yet. You will get a message in the LMS and by email when your result is ready. Until then this exam will show "Being assessed".</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="rc-section" aria-labelledby="rc-record-h">
+    <h2 class="text-heading" id="rc-record-h">About the 2 recorded moments</h2>
+    <div class="prose">
+      <p>2 moments when you left the exam window were recorded. Your assessor will see the record and decide whether it matters. A record does not decide your result.</p>
+      <p>If something outside your control caused them, for example a pop-up from another program, tell your coordinator, Zanele Dlamini.</p>
+      <p data-proto-state="auto">If you lost your connection for a long time during the exam, tell your coordinator what happened as soon as you can.</p>
+    </div>
+  </section>
+
+  <section class="rc-section" aria-labelledby="rc-done-h">
+    <h2 class="text-heading" id="rc-done-h">You can leave the exam now</h2>
+    <p class="u-measure">Your browser has left full-screen mode. The LMS menus and your notifications work again.</p>
+    <div class="cluster u-mt-4 u-no-print"><a class="btn btn--primary" href="learn-home.html">Back to Home</a></div>
+  </section>
+</main>
+
+<div class="toast-region" role="status" aria-live="polite"></div>
+<script src="assets/ui.js"></script>
+<script src="assets/proto.js"></script>
+<script>
+/* Prototype-only: print, copy the reference, and keep the prototype state when the skip link is used. */
+(function () {
+  'use strict';
+  document.getElementById('rc-print').addEventListener('click', function () { window.print(); });
+  document.getElementById('rc-copy').addEventListener('click', function () {
+    var id = document.getElementById('rc-id').textContent;
+    function done(ok) { window.TakusaniUI.toast(ok ? { title: 'Reference copied', meta: id } : { title: 'Select the reference to copy it', meta: id, icon: 'info' }); }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(id).then(function () { done(true); }, function () { done(false); });
+    else done(false);
+  });
+  document.querySelector('.skip-link').addEventListener('click', function (e) { e.preventDefault(); document.getElementById('main').focus(); });
+})();
+</script>
+</body>
+</html>

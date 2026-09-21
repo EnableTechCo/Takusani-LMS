@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en-ZA" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Notifications · Takusani LMS</title>
+<!-- Fonts: optional. The page is fully usable on the fallback stacks if this request fails (no web-font dependency for first paint). -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400..600&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap">
+<!-- Optional extended icon set (Phosphor Bold). Critical icons come from the inline sprite in ui.js. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/ui.css">
+<link rel="stylesheet" href="assets/proto.css">
+<link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+</head>
+<body data-proto-screen="P0-02" data-proto-title="Notification centre" data-proto-frs="NFR-11 FR-203 FR-207 FR-511 FR-604 FR-611" data-proto-states="default:Unread and read|released:Result just released|failed:Email could not be delivered|empty:No notifications yet">
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<div class="app-shell">
+  <header class="app-shell__topbar">
+    <a class="brand" href="learn-home.html" aria-label="Takusani LMS, go to your home page">
+      <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M7 0H25A7 7 0 0 1 32 7V25A7 7 0 0 1 25 32H7A7 7 0 0 1 0 25V7A7 7 0 0 1 7 0ZM7 8.5H25V12H17.75V24H14.25V12H7ZM8.25 17.5A1.75 1.75 0 1 0 11.75 17.5A1.75 1.75 0 1 0 8.25 17.5ZM20.25 17.5A1.75 1.75 0 1 0 23.75 17.5A1.75 1.75 0 1 0 20.25 17.5Z"/></svg>
+      <span class="brand__name">Takusani</span><span class="brand__suffix">LMS</span>
+    </a>
+    <span class="topbar__institution">Khanya Skills Institute</span>
+    <span class="topbar__spacer"></span>
+    <form class="topbar__search" role="search" action="index.html" method="get"><label class="input-icon"><span class="u-visually-hidden">Search materials, tasks, sessions and exams</span><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><input class="input" type="search" name="q" placeholder="Search"></label></form>
+    <div class="topbar__actions">
+      <a class="btn btn--ghost btn--icon" href="notifications.html" aria-label="Notifications, 2 unread"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg><span class="badge-count" aria-hidden="true">2</span></a>
+      <details class="menu-wrap" data-menu>
+        <summary class="btn btn--ghost btn--icon" aria-label="Account menu for Lerato Mokoena"><span class="avatar" aria-hidden="true">LM</span></summary>
+        <div class="menu menu--end">
+          <div class="account__identity"><p class="account__name">Lerato Mokoena</p><p class="account__email">l.mokoena@example.org</p><ul class="account__roles"><li>Learner: 2026 Intake B</li><li>Learner number KSI-2026-0417</li></ul></div>
+          <a class="menu__item" href="index.html"><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg>Profile</a>
+          <a class="menu__item" href="index.html"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg>Notification preferences</a>
+          <a class="menu__item" href="index.html"><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg>Subscribe to your calendar</a>
+          <div class="menu__section"><fieldset class="fieldset"><legend class="fieldset__legend">Appearance</legend>
+            <div class="segmented">
+              <label class="segmented__option"><input type="radio" name="theme" value="light" data-theme-choice checked><span>Light</span></label>
+              <label class="segmented__option"><input type="radio" name="theme" value="dark" data-theme-choice><span>Dark</span></label>
+              <label class="segmented__option"><input type="radio" name="theme" value="auto" data-theme-choice><span>System</span></label>
+            </div></fieldset></div>
+          <div class="menu__divider" role="separator"></div>
+          <a class="menu__item" href="index.html"><svg class="icon" aria-hidden="true"><use href="#i-help"/></svg>Help</a>
+          <a class="menu__item" href="sign-in.html"><svg class="icon" aria-hidden="true"><use href="#i-sign-out"/></svg>Sign out</a>
+        </div>
+      </details>
+    </div>
+  </header>
+
+  <aside class="app-shell__sidenav" aria-label="Main navigation">
+    <nav class="sidenav" aria-label="Learning">
+      <div class="sidenav__group">
+        <ul class="sidenav__list">
+          <li><a class="sidenav__item" href="learn-home.html"><svg class="icon" aria-hidden="true"><use href="#i-house"/></svg><span class="sidenav__label">Home</span><span class="sidenav__short" aria-hidden="true">Home</span></a></li>
+          <li><a class="sidenav__item" href="learn-task.html"><svg class="icon" aria-hidden="true"><use href="#i-clipboard"/></svg><span class="sidenav__label">Tasks</span><span class="sidenav__short" aria-hidden="true">Tasks</span></a></li>
+          <li><a class="sidenav__item" href="learn-exam-preflight.html"><svg class="icon" aria-hidden="true"><use href="#i-laptop"/></svg><span class="sidenav__label">Exams</span><span class="sidenav__short" aria-hidden="true">Exams</span></a></li>
+          <li><a class="sidenav__item" href="index.html"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg><span class="sidenav__label">Materials</span><span class="sidenav__short" aria-hidden="true">Materials</span></a></li>
+          <li><a class="sidenav__item" href="index.html"><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg><span class="sidenav__label">Calendar</span><span class="sidenav__short" aria-hidden="true">Calendar</span></a></li>
+          <li><a class="sidenav__item" href="learn-result.html"><svg class="icon" aria-hidden="true"><use href="#i-check-circle"/></svg><span class="sidenav__label">Results</span><span class="sidenav__short" aria-hidden="true">Results</span></a></li>
+          <li><a class="sidenav__item" href="learn-credits.html"><svg class="icon" aria-hidden="true"><use href="#i-chart"/></svg><span class="sidenav__label">Credits</span><span class="sidenav__short" aria-hidden="true">Credits</span></a></li>
+          <li><a class="sidenav__item" href="index.html"><svg class="icon" aria-hidden="true"><use href="#i-note"/></svg><span class="sidenav__label">Notes</span><span class="sidenav__short" aria-hidden="true">Notes</span></a></li>
+        </ul>
+      </div>
+    </nav>
+  </aside>
+
+  <main class="app-shell__main" id="main" tabindex="-1">
+    <div class="page page--prose">
+      <header class="page-header">
+        <nav aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="learn-home.html">Home</a></li><li aria-current="page">Notifications</li></ol></nav>
+        <h1 class="page-header__title">Notifications</h1>
+        <p class="page-header__lead" data-proto-state="default">2 unread. Every message here is also a record of when and how we told you.</p>
+        <p class="page-header__lead" data-proto-state="released failed">1 unread. Every message here is also a record of when and how we told you.</p>
+        <p class="page-header__lead" data-proto-state="empty">Every message here is also a record of when and how we told you.</p>
+        <div class="page-header__actions" data-proto-state="!empty"><button type="button" class="btn btn--secondary" data-toast="All notifications marked as read">Mark all as read</button></div>
+      </header>
+
+      <!-- Filters: toggle buttons above the list, as in the table toolbar. -->
+      <div class="table-toolbar" role="group" aria-label="Filter notifications" data-proto-state="!empty">
+        <button type="button" class="filter-chip" aria-pressed="true">All</button>
+        <button type="button" class="filter-chip" aria-pressed="false">Results</button>
+        <button type="button" class="filter-chip" aria-pressed="false">Deadlines</button>
+        <button type="button" class="filter-chip" aria-pressed="false">Appeals</button>
+        <button type="button" class="filter-chip" aria-pressed="false">Notices</button>
+      </div>
+
+      <div class="stack stack--lg">
+
+        <!-- ===================== Default: Wednesday 23 September, morning ===================== -->
+        <section aria-labelledby="day-today" data-proto-state="default">
+          <h2 class="text-subheading u-mb-4" id="day-today">Today, Wednesday 23 September 2026</h2>
+          <ul class="notification-list" aria-label="Notifications from today">
+            <li class="notification is-unread"><span class="notification__icon"><svg class="icon" aria-hidden="true"><use href="#i-video"/></svg></span><span class="notification__title"><span class="u-visually-hidden">Unread: </span><a href="learn-home.html">The Teams link for Session 15 on Tuesday 29 September is ready</a></span><time class="notification__time" datetime="2026-09-23T08:10:00+02:00">23 Sep, 08:10</time><span class="notification__body">Session 15: Office administration, 09:00 to 11:00, with Pieter van Wyk.</span><span class="notification__unread" aria-hidden="true"></span>
+              <details class="delivery-evidence notification__extra"><summary>How you were told</summary><ul class="delivery-evidence__list"><li class="delivery-evidence__row"><span class="delivery-evidence__channel">In the LMS</span><time class="delivery-evidence__time" datetime="2026-09-23T08:10:00+02:00">23 Sep 2026, 08:10</time></li><li class="delivery-evidence__row"><span class="delivery-evidence__channel">Email: sending</span><time class="delivery-evidence__time" datetime="2026-09-23T08:10:00+02:00">23 Sep 2026, 08:10</time></li></ul></details></li>
+            <li class="notification is-unread"><span class="notification__icon"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg></span><span class="notification__title"><span class="u-visually-hidden">Unread: </span><a href="learn-task.html#state=returned">Reminder: you can resubmit Task 3 until the end of Tuesday 6 October 2026</a></span><time class="notification__time" datetime="2026-09-23T07:00:00+02:00">23 Sep, 07:00</time><span class="notification__body">13 days left. Your assessor asked for the access register and one more paragraph.</span><span class="notification__unread" aria-hidden="true"></span>
+              <details class="delivery-evidence notification__extra"><summary>How you were told</summary><ul class="delivery-evidence__list"><li class="delivery-evidence__row"><span class="delivery-evidence__channel">In the LMS</span><time class="delivery-evidence__time" datetime="2026-09-23T07:00:00+02:00">23 Sep 2026, 07:00</time></li><li class="delivery-evidence__row"><span class="delivery-evidence__channel">Email to l.mokoena@example.org: delivered</span><time class="delivery-evidence__time" datetime="2026-09-23T07:01:00+02:00">23 Sep 2026, 07:01</time></li></ul></details></li>
+          </ul>
+        </section>
+
+        <section aria-labelledby="day-22" data-proto-state="default">
+          <h2 class="text-subheading u-mb-4" id="day-22">Tuesday 22 September 2026</h2>
+          <ul class="notification-list" aria-label="Notifications from Tuesday 22 September">
+            <li class="notification"><span class="notification__icon"><svg class="icon" aria-hidden="true"><use href="#i-check-circle"/></svg></span><span class="notification__title"><a href="learn-result.html">Your result for Task 3 is ready</a></span><time class="notification__time" datetime="2026-09-22T14:05:00+02:00">22 Sep, 14:05</time><span class="notification__body">You can appeal until the end of Tuesday 29 September 2026.</span>
+              <details class="delivery-evidence notification__extra" open><summary>How you were told</summary><ul class="delivery-evidence__list"><li class="delivery-evidence__row"><span class="delivery-evidence__channel">In the LMS</span><time class="delivery-evidence__time" datetime="2026-09-22T14:05:00+02:00">22 Sep 2026, 14:05</time></li><li class="delivery-evidence__row"><span class="delivery-evidence__channel">Email to l.mokoena@example.org: delivered</span><time class="delivery-evidence__time" datetime="2026-09-22T14:06:00+02:00">22 Sep 2026, 14:06</time></li><li class="delivery-evidence__row"><span class="delivery-evidence__channel">First opened by you</span><time class="delivery-evidence__time" datetime="2026-09-22T18:31:00+02:00">22 Sep 2026, 18:31</time></li></ul></details></li>
+          </ul>
+        </section>
+
+        <!-- ===================== Result just released: Tuesday 22 September, 14:07 ===================== -->
+        <section aria-labelledby="day-22r" data-proto-state="released">
+          <h2 class="text-subheading u-mb-4" id="day-22r">Today, Tuesday 22 September 2026</h2>
+          <ul class="notification-list" aria-label="Notifications from today">
+            <li class="notification is-unread"><span class="notification__icon"><svg class="icon" aria-hidden="true"><use href="#i-check-circle"/></svg></span><span class="notification__title"><span class="u-visually-hidden">Unread: </span><a href="learn-result.html">Your result for Task 3 is ready</a></span><time class="notification__time" datetime="2026-09-22T14:05:00+02:00">22 Sep, 14:05</time><span class="notification__body">You can appeal until the end of Tuesday 29 September 2026.</span><span class="notification__unread" aria-hidden="true"></span>
+              <details class="delivery-evidence notification__extra" open><summary>How you were told</summary><ul class="delivery-evidence__list"><li class="delivery-evidence__row"><span class="delivery-evidence__channel">In the LMS</span><time class="delivery-evidence__time" datetime="2026-09-22T14:05:00+02:00">22 Sep 2026, 14:05</time></li><li class="delivery-evidence__row"><span class="delivery-evidence__channel">Email to l.mokoena@example.org: delivered</span><time class="delivery-evidence__time" datetime="2026-09-22T14:06:00+02:00">22 Sep 2026, 14:06</time></li><li class="delivery-evidence__row"><span class="delivery-evidence__channel">Not opened by you yet</span></li></ul></details></li>
+          </ul>
+        </section>
+
+        <!-- ===================== Email could not be delivered: the LMS record still stands ===================== -->
+        <section aria-labelledby="day-22f" data-proto-state="failed">
+          <h2 class="text-subheading u-mb-4" id="day-22f">Today, Tuesday 22 September 2026</h2>
+          <ul class="notification-list" aria-label="Notifications from today">
+            <li class="notification is-unread"><span class="notification__icon"><svg class="icon" aria-hidden="true"><use href="#i-check-circle"/></svg></span><span class="notification__title"><span class="u-visually-hidden">Unread: </span><a href="learn-result.html">Your result for Task 3 is ready</a></span><time class="notification__time" datetime="2026-09-22T14:05:00+02:00">22 Sep, 14:05</time><span class="notification__body">You can appeal until the end of Tuesday 29 September 2026.</span><span class="notification__unread" aria-hidden="true"></span>
+              <details class="delivery-evidence notification__extra" open><summary>How you were told</summary><ul class="delivery-evidence__list"><li class="delivery-evidence__row"><span class="delivery-evidence__channel">In the LMS</span><time class="delivery-evidence__time" datetime="2026-09-22T14:05:00+02:00">22 Sep 2026, 14:05</time></li><li class="delivery-evidence__row delivery-evidence__row--failed"><span class="delivery-evidence__channel">Email could not be delivered. <a href="index.html">Check your email address</a></span><time class="delivery-evidence__time" datetime="2026-09-22T14:06:00+02:00">22 Sep 2026, 14:06</time></li></ul></details></li>
+          </ul>
+          <p class="text-small text-muted u-mt-4">The message in the LMS is the record that you were told. Your 7 days to appeal are counted from it, even when an email does not arrive.</p>
+        </section>
+
+        <!-- ===================== Earlier (shared by the three non-empty states) ===================== -->
+        <section aria-labelledby="day-earlier" data-proto-state="!empty">
+          <h2 class="text-subheading u-mb-4" id="day-earlier">Earlier this month</h2>
+          <ul class="notification-list" aria-label="Earlier notifications">
+            <li class="notification"><span class="notification__icon"><svg class="icon" aria-hidden="true"><use href="#i-megaphone"/></svg></span><span class="notification__title"><a href="index.html">Notice from Zanele Dlamini: venue change for the contact session on 1 October</a></span><time class="notification__time" datetime="2026-09-14T15:20:00+02:00">14 Sep, 15:20</time><span class="notification__body">We have moved to Training Room 2. Lunch is provided.</span>
+              <details class="delivery-evidence notification__extra"><summary>How you were told</summary><ul class="delivery-evidence__list"><li class="delivery-evidence__row"><span class="delivery-evidence__channel">In the LMS</span><time class="delivery-evidence__time" datetime="2026-09-14T15:20:00+02:00">14 Sep 2026, 15:20</time></li><li class="delivery-evidence__row"><span class="delivery-evidence__channel">Email to l.mokoena@example.org: delivered</span><time class="delivery-evidence__time" datetime="2026-09-14T15:21:00+02:00">14 Sep 2026, 15:21</time></li><li class="delivery-evidence__row"><span class="delivery-evidence__channel">First opened by you</span><time class="delivery-evidence__time" datetime="2026-09-14T19:02:00+02:00">14 Sep 2026, 19:02</time></li></ul></details></li>
+            <li class="notification"><span class="notification__icon"><svg class="icon" aria-hidden="true"><use href="#i-upload"/></svg></span><span class="notification__title"><a href="learn-task.html#state=late">We have your work: Task 3, version 2</a></span><time class="notification__time" datetime="2026-09-04T17:42:00+02:00">4 Sep, 17:42</time><span class="notification__body">Received late, at 17:42. Receipt SUB-2026-0904-7K2M.</span>
+              <details class="delivery-evidence notification__extra"><summary>How you were told</summary><ul class="delivery-evidence__list"><li class="delivery-evidence__row"><span class="delivery-evidence__channel">In the LMS</span><time class="delivery-evidence__time" datetime="2026-09-04T17:42:00+02:00">4 Sep 2026, 17:42</time></li><li class="delivery-evidence__row"><span class="delivery-evidence__channel">Email to l.mokoena@example.org: delivered</span><time class="delivery-evidence__time" datetime="2026-09-04T17:43:00+02:00">4 Sep 2026, 17:43</time></li><li class="delivery-evidence__row"><span class="delivery-evidence__channel">First opened by you</span><time class="delivery-evidence__time" datetime="2026-09-04T17:44:00+02:00">4 Sep 2026, 17:44</time></li></ul></details></li>
+            <li class="notification"><span class="notification__icon"><svg class="icon" aria-hidden="true"><use href="#i-laptop"/></svg></span><span class="notification__title"><a href="learn-home.html">We have your exam: Unit 2 summative exam</a></span><time class="notification__time" datetime="2026-09-02T10:58:00+02:00">2 Sep, 10:58</time><span class="notification__body">Submitted at 10:58. It is now being assessed.</span>
+              <details class="delivery-evidence notification__extra"><summary>How you were told</summary><ul class="delivery-evidence__list"><li class="delivery-evidence__row"><span class="delivery-evidence__channel">In the LMS</span><time class="delivery-evidence__time" datetime="2026-09-02T10:58:00+02:00">2 Sep 2026, 10:58</time></li><li class="delivery-evidence__row"><span class="delivery-evidence__channel">Email to l.mokoena@example.org: delivered</span><time class="delivery-evidence__time" datetime="2026-09-02T10:59:00+02:00">2 Sep 2026, 10:59</time></li><li class="delivery-evidence__row"><span class="delivery-evidence__channel">First opened by you</span><time class="delivery-evidence__time" datetime="2026-09-02T11:03:00+02:00">2 Sep 2026, 11:03</time></li></ul></details></li>
+          </ul>
+        </section>
+
+        <nav class="pagination" aria-label="Notification pages" data-proto-state="!empty">
+          <span data-proto-state="default">Showing 1 to 6 of 23</span><span data-proto-state="released failed">Showing 1 to 4 of 21</span>
+          <ul class="pagination__list">
+            <li><a class="pagination__item" role="link" aria-disabled="true" aria-label="Previous page"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-caret-left"/></svg></a></li>
+            <li><a class="pagination__item" href="notifications.html" aria-current="page" aria-label="Page 1, current">1</a></li>
+            <li><a class="pagination__item" href="notifications.html" aria-label="Page 2">2</a></li>
+            <li><a class="pagination__item" href="notifications.html" aria-label="Page 3">3</a></li>
+            <li><a class="pagination__item" href="notifications.html" aria-label="Page 4">4</a></li>
+            <li><a class="pagination__item" href="notifications.html" aria-label="Next page"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-caret-right"/></svg></a></li>
+          </ul>
+        </nav>
+
+        <!-- ===================== Empty ===================== -->
+        <div class="card" data-proto-state="empty">
+          <div class="empty">
+            <span class="empty__icon"><svg class="icon icon--lg" aria-hidden="true"><use href="#i-bell"/></svg></span>
+            <p class="empty__title">No notifications yet</p>
+            <p class="empty__body">Messages about your results, deadlines, appeals and notices from your coordinator will appear here. Each one is also sent to l.mokoena@example.org.</p>
+            <div class="empty__actions"><a class="btn btn--secondary" href="learn-home.html#state=firstday">Go to your home page</a></div>
+          </div>
+        </div>
+
+        <p class="text-small text-muted">Times are South African time (SAST). Messages about results, appeals and your account are always sent and cannot be switched off. You can choose the others in your <a href="index.html">notification preferences</a>.</p>
+      </div>
+    </div>
+  </main>
+
+  <nav class="bottom-tabs" aria-label="Learning, main destinations">
+    <a class="bottom-tabs__item" href="learn-home.html"><svg class="icon" aria-hidden="true"><use href="#i-house"/></svg>Home</a>
+    <a class="bottom-tabs__item" href="learn-task.html"><svg class="icon" aria-hidden="true"><use href="#i-clipboard"/></svg>Tasks</a>
+    <a class="bottom-tabs__item" href="index.html"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg>Materials</a>
+    <a class="bottom-tabs__item" href="learn-result.html"><svg class="icon" aria-hidden="true"><use href="#i-check-circle"/></svg>Results</a>
+    <a class="bottom-tabs__item" href="index.html"><svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg>More</a>
+  </nav>
+</div>
+
+<div class="toast-region" role="status" aria-live="polite"></div>
+<script src="assets/ui.js"></script>
+<script src="assets/proto.js"></script>
+</body>
+</html>

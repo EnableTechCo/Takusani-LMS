@@ -23,6 +23,7 @@ Since first issue the package has had a requirement-by-requirement coverage pass
 9. [Risk and test plan](LMS-risk-and-test-plan.md) - production risks, validation, load tests, and go-live gates.
 10. [Architecture decisions](adrs/README.md) - the decision record set, ADR-001 to ADR-027.
 11. [Architecture review, 18 September 2026](reviews/2026-09-18-architecture-review.md) - the merged findings as reported.
+12. [UI design](ui/README.md) - UX architecture, design system, and static HTML prototypes of the 18 priority screens.
 
 ## Recommended architecture
 

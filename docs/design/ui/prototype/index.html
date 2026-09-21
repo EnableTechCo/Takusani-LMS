@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en-ZA" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Takusani LMS — prototype screens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400..600&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/ui.css">
+<link rel="stylesheet" href="assets/proto.css">
+<link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+<style>
+  .hub { max-width: 75rem; margin-inline: auto; padding: var(--space-8, 2rem) var(--space-4, 1rem) var(--space-12, 4rem); }
+  .hub__brand { display: flex; align-items: center; gap: var(--space-3, .75rem); margin-bottom: var(--space-6, 1.5rem); }
+  .hub__brand img { height: 28px; width: auto; }
+  .hub__flow { margin: 0; padding-left: 1.25rem; }
+  .hub__flow li + li { margin-top: var(--space-1, .25rem); }
+  .hub__states { margin: var(--space-2, .5rem) 0 0; }
+</style>
+</head>
+<body data-proto-screen="Hub" data-proto-title="All prototype screens">
+<a class="skip-link" href="#main">Skip to main content</a>
+<main class="hub" id="main">
+  <div class="hub__brand"><img src="assets/logo.svg" alt="Takusani LMS"></div>
+  <header class="page-header">
+    <p class="page-header__workspace">UI prototype</p>
+    <h1 class="page-header__title">Prototype screens</h1>
+    <p class="page-header__lead">Static screens for the 18 priority screens in the UX architecture, built on the design system. Every screen uses the same example data: Khanya Skills Institute, the 2026 Intake B cohort, and learner Lerato Mokoena. Nothing here saves, signs in, or sends anything.</p>
+    <div class="page-header__meta"><span class="tag tag--info">For review</span><span class="text-meta mono">21 Sep 2026</span></div>
+  </header>
+
+  <div class="stack stack--lg">
+    <div class="banner banner--info" role="note">
+      <div>
+        <p class="banner__title">How to use these</p>
+        <p class="banner__body">Most screens have several states, such as a late submission or a refused action. Use the dashed <strong>Prototype controls</strong> box in the bottom right corner to switch between them. That box is not part of the design. Narrow the window to see the phone layout; the exam itself needs a window at least 1024 pixels wide.</p>
+      </div>
+    </div>
+
+    <section class="section" aria-labelledby="h-flows">
+      <div class="section__header"><h2 class="text-heading" id="h-flows">Suggested walk-throughs</h2></div>
+      <div class="grid grid--3">
+        <div class="card"><div class="card__body">
+          <h3 class="text-subheading">A learner's week</h3>
+          <ol class="hub__flow text-small">
+            <li><a class="link" href="sign-in.html">Sign in</a></li>
+            <li><a class="link" href="learn-home.html">Home</a></li>
+            <li><a class="link" href="learn-task.html">Submit Task 3</a></li>
+            <li><a class="link" href="notifications.html">Told a result is out</a></li>
+            <li><a class="link" href="learn-result.html">Read the result</a></li>
+            <li><a class="link" href="learn-appeal-new.html">Lodge an appeal</a></li>
+            <li><a class="link" href="learn-credits.html">Check credits</a></li>
+          </ol>
+        </div></div>
+        <div class="card"><div class="card__body">
+          <h3 class="text-subheading">Sitting an exam</h3>
+          <ol class="hub__flow text-small">
+            <li><a class="link" href="learn-exam-preflight.html">Checks before starting</a></li>
+            <li><a class="link" href="exam-attempt.html">The exam</a></li>
+            <li><a class="link" href="exam-attempt.html#state=offline">Connection drops</a></li>
+            <li><a class="link" href="exam-attempt.html#state=integrity-warning">Leaving the exam window</a></li>
+            <li><a class="link" href="exam-attempt.html#state=time-up">Time runs out</a></li>
+            <li><a class="link" href="exam-receipt.html">Receipt</a></li>
+          </ol>
+        </div></div>
+        <div class="card"><div class="card__body">
+          <h3 class="text-subheading">From marking to release</h3>
+          <ol class="hub__flow text-small">
+            <li><a class="link" href="coordinate-cohort-setup.html">Cohort set as moderated</a></li>
+            <li><a class="link" href="assess-marking.html">Assessor marks and decides</a></li>
+            <li><a class="link" href="coordinate-moderation.html">Coordinator freezes and samples</a></li>
+            <li><a class="link" href="moderate-item.html">Moderator reviews an item</a></li>
+            <li><a class="link" href="moderate-signoff.html">Sign-off releases results</a></li>
+            <li><a class="link" href="coordinate-appeal-detail.html">An appeal is allocated</a></li>
+          </ol>
+        </div></div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="h-all">
+      <div class="section__header"><h2 class="text-heading" id="h-all">All screens</h2></div>
+      <div class="table-wrap">
+        <table class="table table--cards">
+          <caption class="u-visually-hidden">Prototype screens by role, with the requirements each one covers</caption>
+          <thead><tr><th scope="col">Ref</th><th scope="col">Screen</th><th scope="col">Role</th><th scope="col">Requirements</th></tr></thead>
+          <tbody>
+            <tr><td data-label="Ref" class="mono">P0-01</td><td data-label="Screen" class="table__primary-cell"><a class="link" href="sign-in.html">Sign in</a></td><td data-label="Role">Everyone</td><td data-label="Requirements" class="mono text-small">FR-101 FR-106</td></tr>
+            <tr><td data-label="Ref" class="mono">P0-02</td><td data-label="Screen" class="table__primary-cell"><a class="link" href="notifications.html">Notification centre</a></td><td data-label="Role">Everyone</td><td data-label="Requirements" class="mono text-small">NFR-11 FR-203 FR-207</td></tr>
+            <tr><td data-label="Ref" class="mono">P0-03</td><td data-label="Screen" class="table__primary-cell"><a class="link" href="learn-home.html">Learner home</a></td><td data-label="Role">Learner</td><td data-label="Requirements" class="mono text-small">FR-304 FR-305 FR-316</td></tr>
+            <tr><td data-label="Ref" class="mono">P0-04</td><td data-label="Screen" class="table__primary-cell"><a class="link" href="learn-task.html">Task detail and submission</a></td><td data-label="Role">Learner</td><td data-label="Requirements" class="mono text-small">FR-308 to FR-311</td></tr>
+            <tr><td data-label="Ref" class="mono">P0-05</td><td data-label="Screen" class="table__primary-cell"><a class="link" href="learn-exam-preflight.html">Exam checks and start</a></td><td data-label="Role">Learner</td><td data-label="Requirements" class="mono text-small">FR-312 FR-901 NFR-10</td></tr>
+            <tr><td data-label="Ref" class="mono">P0-06</td><td data-label="Screen" class="table__primary-cell"><a class="link" href="exam-attempt.html">Exam</a>, <a class="link" href="exam-receipt.html">receipt</a>, <a class="link" href="exam-mobile-gate.html">phone gate</a></td><td data-label="Role">Learner</td><td data-label="Requirements" class="mono text-small">FR-313 to FR-315 FR-901 to FR-905 NFR-07</td></tr>
+            <tr><td data-label="Ref" class="mono">P0-07</td><td data-label="Screen" class="table__primary-cell"><a class="link" href="learn-result.html">Released result</a></td><td data-label="Role">Learner</td><td data-label="Requirements" class="mono text-small">FR-316 FR-317 BR-05</td></tr>
+            <tr><td data-label="Ref" class="mono">P0-08</td><td data-label="Screen" class="table__primary-cell"><a class="link" href="learn-appeal-new.html">Lodge an appeal</a></td><td data-label="Role">Learner</td><td data-label="Requirements" class="mono text-small">FR-601 to FR-604</td></tr>
+            <tr><td data-label="Ref" class="mono">P0-09</td><td data-label="Screen" class="table__primary-cell"><a class="link" href="learn-credits.html">Credits record</a></td><td data-label="Role">Learner</td><td data-label="Requirements" class="mono text-small">FR-318 FR-801 to FR-804</td></tr>
+            <tr><td data-label="Ref" class="mono">P0-10</td><td data-label="Screen" class="table__primary-cell"><a class="link" href="teach-submissions.html">Submission dashboard</a></td><td data-label="Role">Facilitator</td><td data-label="Requirements" class="mono text-small">FR-210 to FR-212</td></tr>
+            <tr><td data-label="Ref" class="mono">P0-11</td><td data-label="Screen" class="table__primary-cell"><a class="link" href="assess-marking.html">Marking workspace</a></td><td data-label="Role">Assessor</td><td data-label="Requirements" class="mono text-small">FR-401 to FR-410</td></tr>
+            <tr><td data-label="Ref" class="mono">P0-12</td><td data-label="Screen" class="table__primary-cell"><a class="link" href="moderate-item.html">Sample item review</a></td><td data-label="Role">Moderator</td><td data-label="Requirements" class="mono text-small">FR-504 FR-507 to FR-509</td></tr>
+            <tr><td data-label="Ref" class="mono">P0-13</td><td data-label="Screen" class="table__primary-cell"><a class="link" href="moderate-signoff.html">Cycle sign-off</a></td><td data-label="Role">Moderator</td><td data-label="Requirements" class="mono text-small">FR-508 FR-510 FR-511</td></tr>
+            <tr><td data-label="Ref" class="mono">P0-14</td><td data-label="Screen" class="table__primary-cell"><a class="link" href="coordinate-cohort-setup.html">Cohort setup and moderation policy</a></td><td data-label="Role">Coordinator</td><td data-label="Requirements" class="mono text-small">FR-701 FR-702 BR-04</td></tr>
+            <tr><td data-label="Ref" class="mono">P0-15</td><td data-label="Screen" class="table__primary-cell"><a class="link" href="coordinate-moderation.html">Moderation planning</a></td><td data-label="Role">Coordinator</td><td data-label="Requirements" class="mono text-small">FR-501 to FR-506</td></tr>
+            <tr><td data-label="Ref" class="mono">P0-16</td><td data-label="Screen" class="table__primary-cell"><a class="link" href="coordinate-appeals.html">Appeals</a> and <a class="link" href="coordinate-appeal-detail.html">one appeal</a></td><td data-label="Role">Coordinator</td><td data-label="Requirements" class="mono text-small">FR-604 to FR-612 BR-02</td></tr>
+            <tr><td data-label="Ref" class="mono">P0-17</td><td data-label="Screen" class="table__primary-cell"><a class="link" href="admin-roles.html">Roles and allocations</a></td><td data-label="Role">Administrator</td><td data-label="Requirements" class="mono text-small">FR-102 to FR-107 BR-01</td></tr>
+            <tr><td data-label="Ref" class="mono">P0-18</td><td data-label="Screen" class="table__primary-cell"><a class="link" href="admin-configuration.html">Configuration</a> and <a class="link" href="admin-configuration-key.html">one setting</a></td><td data-label="Role">Administrator</td><td data-label="Requirements" class="mono text-small">FR-108 FR-109</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="h-ref">
+      <div class="section__header"><h2 class="text-heading" id="h-ref">Reference</h2></div>
+      <p class="text-body"><a class="link" href="components.html">Component gallery</a>: every token and component in every state, with measured contrast ratios.</p>
+      <p class="text-small text-muted">The written specifications are beside this folder: <span class="mono">LMS-ux-architecture.md</span> and <span class="mono">LMS-design-system.md</span>.</p>
+    </section>
+  </div>
+</main>
+<div class="toast-region" role="status" aria-live="polite"></div>
+<script src="assets/ui.js"></script>
+<script src="assets/proto.js"></script>
+</body>
+</html>

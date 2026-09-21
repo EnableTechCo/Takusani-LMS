@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en-ZA" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cohort setup · Takusani LMS</title>
+<!-- Fonts: optional. The page is fully usable on the fallback stacks if this request fails (no web-font dependency for first paint). -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400..600&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap">
+<!-- Optional extended icon set (Phosphor Bold). Critical icons come from the inline sprite in ui.js. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/ui.css">
+<link rel="stylesheet" href="assets/proto.css">
+<link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+<style>
+/* Page-specific layout only. Tokens only. Not part of the component library. */
+.cohort-nav { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-5); margin-bottom: var(--space-6); font-size: var(--text-sm); }
+.cohort-nav a, .cohort-nav strong { display: inline-flex; align-items: center; min-height: 2.75rem; }
+.cohort-nav strong { color: var(--color-text-strong); font-weight: var(--weight-semibold); box-shadow: inset 0 -3px 0 var(--color-text-strong); }
+.setup-sections { display: flex; flex-direction: column; gap: var(--space-6); }
+.policy-note { margin-top: var(--space-3); }
+</style>
+</head>
+<body data-proto-screen="P0-14" data-proto-title="Cohort setup" data-proto-frs="FR-701 FR-702 FR-104 FR-105 BR-04 U-02" data-proto-states="new:New cohort, policy not chosen|ready:New cohort, ready to activate|active:Active cohort|refused:Active cohort, policy change refused">
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<div class="app-shell">
+  <header class="app-shell__topbar">
+    <a class="brand" href="index.html" aria-label="Takusani LMS, all prototype screens">
+      <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M7 0H25A7 7 0 0 1 32 7V25A7 7 0 0 1 25 32H7A7 7 0 0 1 0 25V7A7 7 0 0 1 7 0ZM7 8.5H25V12H17.75V24H14.25V12H7ZM8.25 17.5A1.75 1.75 0 1 0 11.75 17.5A1.75 1.75 0 1 0 8.25 17.5ZM20.25 17.5A1.75 1.75 0 1 0 23.75 17.5A1.75 1.75 0 1 0 20.25 17.5Z"/></svg>
+      <span class="brand__name">Takusani</span><span class="brand__suffix">LMS</span>
+    </a>
+    <span class="topbar__institution">Khanya Skills Institute</span>
+    <div class="topbar__context"><details class="menu-wrap" data-menu><summary class="context-select__button" aria-label="Cohort. Current: 2026 Intake B"><span class="context-select__label">Cohort</span><span class="context-select__value">2026 Intake B</span><svg class="icon icon--sm" aria-hidden="true"><use href="#i-caret-down"/></svg></summary><div class="menu"><p class="menu__label">Coordinating</p><a class="menu__item" href="#main" data-toast="This screen is not part of the prototype"><span class="menu__item-text">All my cohorts</span></a><a class="menu__item" href="coordinate-cohort-setup.html#state=active" aria-current="true"><span class="menu__item-text">2026 Intake B<span class="menu__item-meta">Certificate in Business Administration · Active</span></span><span class="tag tag--plain">Moderated</span><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></a><a class="menu__item" href="#main" data-toast="This screen is not part of the prototype"><span class="menu__item-text">2026 Intake C<span class="menu__item-meta">Certificate in Business Administration · Active</span></span><span class="tag tag--plain">Not moderated</span></a><div class="menu__divider" role="separator"></div><p class="menu__label">Archived</p><a class="menu__item" href="#main" data-toast="This screen is not part of the prototype"><span class="menu__item-text">2025 Intake A<span class="menu__item-meta">Certificate in Business Administration · Archived (read-only)</span></span></a></div></details></div>
+    <span class="topbar__spacer"></span>
+    <form class="topbar__search" role="search" action="#main" method="get" onsubmit="return false"><label class="input-icon"><span class="u-visually-hidden">Search</span><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><input class="input" type="search" name="q" placeholder="Search"></label></form>
+    <div class="topbar__actions">
+      <a class="btn btn--ghost btn--icon" href="notifications.html" aria-label="Notifications, 3 unread"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg><span class="badge-count" aria-hidden="true">3</span></a>
+      <details class="menu-wrap" data-menu>
+        <summary class="btn btn--ghost btn--icon" aria-label="Account menu for Zanele Dlamini"><span class="avatar" aria-hidden="true">ZD</span></summary>
+        <div class="menu menu--end">
+          <div class="account__identity"><p class="account__name">Zanele Dlamini</p><p class="account__email">zanele.dlamini@khanya.example</p><ul class="account__roles"><li>Coordinator: Certificate in Business Administration</li></ul></div>
+          <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg>Profile</a>
+          <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg>Notification preferences</a>
+          <div class="menu__section"><fieldset class="fieldset"><legend class="fieldset__legend">Appearance</legend>
+            <div class="segmented">
+              <label class="segmented__option"><input type="radio" name="theme" value="light" data-theme-choice checked><span>Light</span></label>
+              <label class="segmented__option"><input type="radio" name="theme" value="dark" data-theme-choice><span>Dark</span></label>
+              <label class="segmented__option"><input type="radio" name="theme" value="auto" data-theme-choice><span>System</span></label>
+            </div></fieldset></div>
+          <div class="menu__divider" role="separator"></div>
+          <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-help"/></svg>Help</a>
+          <a class="menu__item" href="sign-in.html"><svg class="icon" aria-hidden="true"><use href="#i-sign-out"/></svg>Sign out</a>
+        </div>
+      </details>
+    </div>
+  </header>
+
+  <aside class="app-shell__sidenav" aria-label="Workspaces">
+    <nav class="sidenav" aria-label="Main navigation">
+      <div class="sidenav__group"><ul class="sidenav__list">
+        <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-house"/></svg><span class="sidenav__label">My work</span><span class="sidenav__short" aria-hidden="true">My work</span></a></li>
+      </ul></div>
+      <div class="sidenav__group"><h2 class="sidenav__heading">Coordinating</h2>
+        <ul class="sidenav__list">
+          <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg><span class="sidenav__label">Overview</span><span class="sidenav__short" aria-hidden="true">Overview</span></a></li>
+          <li><a class="sidenav__item" href="coordinate-cohort-setup.html#state=active" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-users"/></svg><span class="sidenav__label">Cohorts</span><span class="sidenav__short" aria-hidden="true">Cohorts</span></a></li>
+          <li><a class="sidenav__item" href="coordinate-appeals.html"><svg class="icon" aria-hidden="true"><use href="#i-scales"/></svg><span class="sidenav__label">Appeals</span><span class="sidenav__short" aria-hidden="true">Appeals</span><span class="sidenav__count" aria-label="3 appeals need your action">3</span></a></li>
+          <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-megaphone"/></svg><span class="sidenav__label">Notices</span><span class="sidenav__short" aria-hidden="true">Notices</span></a></li>
+          <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-help"/></svg><span class="sidenav__label">Queries</span><span class="sidenav__short" aria-hidden="true">Queries</span></a></li>
+          <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg><span class="sidenav__label">Logistics</span><span class="sidenav__short" aria-hidden="true">Logistics</span></a></li>
+          <li><a class="sidenav__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-chart"/></svg><span class="sidenav__label">Reports</span><span class="sidenav__short" aria-hidden="true">Reports</span></a></li>
+        </ul>
+      </div>
+    </nav>
+  </aside>
+
+  <main class="app-shell__main" id="main" tabindex="-1">
+    <div class="page">
+      <header class="page-header">
+        <nav aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="#main" data-toast="This screen is not part of the prototype">Cohorts</a></li>
+          <li data-proto-state="new ready" aria-current="page">New cohort</li>
+          <li data-proto-state="active refused"><a href="coordinate-cohort-setup.html#state=active">2026 Intake B</a></li>
+          <li data-proto-state="active refused" aria-current="page">Setup</li></ol></nav>
+        <p class="page-header__workspace">Coordinating</p>
+        <h1 class="page-header__title"><span data-proto-state="new ready">Set up a new cohort</span><span data-proto-state="active refused">2026 Intake B: cohort setup</span></h1>
+        <p class="page-header__lead" data-proto-state="new ready">One page, saved as you go. You can leave and come back. The cohort stays hidden from learners until you activate it.</p>
+        <div class="page-header__meta">
+          <span class="tag tag--shape-half" data-proto-state="new ready">Draft, not active</span>
+          <span class="tag tag--positive tag--shape-dot" data-proto-state="active refused">Active</span>
+          <span data-proto-state="new ready">2027 Intake A · Certificate in Business Administration</span>
+          <span data-proto-state="active refused">Certificate in Business Administration <span class="tag tag--plain">Moderated</span></span>
+          <span class="status-line status-line--saved" role="status" data-proto-state="new ready"><svg class="icon" aria-hidden="true"><use href="#i-cloud-check"/></svg>Draft saved <span class="status-line__time">11:42</span></span>
+        </div>
+      </header>
+
+      <nav class="cohort-nav" aria-label="Pages for this cohort" data-proto-state="active refused">
+        <strong aria-current="page">Setup</strong>
+        <a href="#main" data-toast="This screen is not part of the prototype">People</a>
+        <a href="#main" data-toast="This screen is not part of the prototype">Readiness</a>
+        <a href="coordinate-moderation.html">Moderation</a>
+      </nav>
+
+      <div class="page-layout">
+        <div class="page-layout__main">
+          <form class="setup-sections" onsubmit="return false" novalidate aria-label="Cohort setup">
+
+            <!-- ============ 1. Details ============ -->
+            <section class="card" aria-labelledby="sec-details">
+              <div class="card__header"><h2 class="card__title" id="sec-details">1. Details</h2></div>
+              <div class="card__body form" data-proto-state="new ready">
+                <div class="field">
+                  <label class="field__label" for="c-prog">Programme <span class="field__required">(required)</span></label>
+                  <span class="select"><select id="c-prog"><option>Certificate in Business Administration, NQF Level 4 (140 credits)</option></select></span>
+                </div>
+                <div class="field">
+                  <label class="field__label" for="c-name">Cohort name <span class="field__required">(required)</span></label>
+                  <p class="field__help" id="c-name-help">Learners and staff see this name everywhere. Use the year and intake.</p>
+                  <input class="input" id="c-name" type="text" value="2027 Intake A" aria-describedby="c-name-help">
+                </div>
+                <div class="form__row form__row--2">
+                  <div class="field"><label class="field__label" for="c-start">First day <span class="field__required">(required)</span></label><input class="input" id="c-start" type="date" value="2027-01-18"></div>
+                  <div class="field"><label class="field__label" for="c-end">Last day <span class="field__required">(required)</span></label><p class="field__help" id="c-end-help">The cohort has the whole of this day.</p><input class="input" id="c-end" type="date" value="2027-11-26" aria-describedby="c-end-help"></div>
+                </div>
+              </div>
+              <div class="card__body" data-proto-state="active refused">
+                <dl class="dl dl--inline">
+                  <div class="dl__row"><dt>Programme</dt><dd>Certificate in Business Administration, NQF Level 4 (140 credits)</dd></div>
+                  <div class="dl__row"><dt>Cohort name</dt><dd>2026 Intake B</dd></div>
+                  <div class="dl__row"><dt>Dates</dt><dd>Mon 19 Jan 2026 to the end of Fri 27 Nov 2026</dd></div>
+                  <div class="dl__row"><dt>Activated</dt><dd>Mon 12 Jan 2026, 09:20 SAST by Zanele Dlamini</dd></div>
+                </dl>
+              </div>
+            </section>
+
+            <!-- ============ 2. Moderation policy ============ -->
+            <section class="card" aria-labelledby="sec-policy">
+              <div class="card__header"><h2 class="card__title" id="sec-policy">2. Moderation policy</h2>
+                <span class="tag tag--caution" data-proto-state="new">Not chosen</span>
+                <span class="tag tag--positive" data-proto-state="ready">Confirmed: Moderated</span>
+                <span class="tag tag--plain" data-proto-state="active refused">Version 1 in force</span></div>
+              <div class="card__body">
+
+                <div class="conflict u-mb-6" role="alert" aria-labelledby="pol-ref-h" data-proto-state="refused">
+                  <h3 class="conflict__title" id="pol-ref-h" tabindex="-1" data-proto-focus><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>The policy was not changed: results are waiting or held</h3>
+                  <p class="conflict__body">You cannot change 2026 Intake B to Not moderated. 14 results are decided and waiting for a moderation cycle, and 96 are held in the cycle "Term 3 tasks". Changing the policy now would release all 110 to learners without moderation. Nothing was changed.</p>
+                  <dl class="conflict__evidence dl">
+                    <div class="dl__row"><dt>Waiting for a cycle</dt><dd>14 results: Task 4 (9), Task 3 (3), Unit 2 summative exam (2). Oldest decided Tue 15 Sep 2026. <a href="coordinate-moderation.html#state=overlap">View the waiting results</a></dd></div>
+                    <div class="dl__row"><dt>Held in a cycle</dt><dd>96 results in <a href="moderate-signoff.html">"Term 3 tasks"</a>, in review, frozen Mon 14 Sep 2026</dd></div>
+                    <div class="dl__row"><dt>What to do</dt><dd>Plan a cycle for the 14 waiting results. When both cycles are signed off and nothing is waiting or held, you can change the policy here.</dd></div>
+                  </dl>
+                  <p class="conflict__rule">BR-04 · results_pending_or_held · Reference 3b7e91c4 · Thu 17 Sep 2026, 09:12 SAST</p>
+                  <div class="conflict__actions"><a class="btn btn--primary" href="coordinate-moderation.html#state=overlap">Open moderation planning</a><button type="button" class="btn btn--ghost" data-proto-goto="active">Keep Moderated</button></div>
+                </div>
+
+                <fieldset class="fieldset" aria-describedby="pol-help">
+                  <legend class="fieldset__legend">How are results in this cohort released? <span class="field__required">(required)</span></legend>
+                  <p class="field__help" id="pol-help"><span data-proto-state="new ready">There is no default. Choose one before you activate the cohort.</span><span data-proto-state="active refused">To change the policy, choose the other option and select Change policy. The change is versioned and audited.</span></p>
+                  <div class="choice-group choice-group--2">
+                    <label class="choice"><input class="choice__input" type="radio" name="policy" id="pol-mod" value="moderated"><span class="choice__title">Moderated</span><span class="choice__desc">Every result is held until a moderation cycle signs it off. Learners see nothing, not even Not yet competent, until then. You must plan cycles and keep a moderator assigned.</span></label>
+                    <label class="choice"><input class="choice__input" type="radio" name="policy" id="pol-not" value="not_moderated"><span class="choice__title">Not moderated</span><span class="choice__desc">Each result is released to the learner as soon as the assessor decides. The learner's 7 days to appeal start at that moment. No second person checks the result first.</span></label>
+                  </div>
+                </fieldset>
+                <p class="text-small text-muted policy-note">You can change this later only while no results are waiting or held.</p>
+
+                <div class="cluster u-mt-4" data-proto-state="active refused">
+                  <button type="button" class="btn btn--secondary" id="pol-change" data-proto-goto="refused" disabled aria-describedby="pol-change-why">Change policy</button>
+                  <p class="blocked-reason" id="pol-change-why"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg><span id="pol-change-text">Moderated is the policy in force. Choose Not moderated to ask for a change.</span></p>
+                </div>
+              </div>
+            </section>
+
+            <!-- ============ 3. People ============ -->
+            <section class="card" aria-labelledby="sec-people">
+              <div class="card__header"><h2 class="card__title" id="sec-people">3. People</h2><a class="btn btn--secondary btn--sm" href="#main" data-toast="This screen is not part of the prototype">Manage people</a></div>
+              <div class="card__body stack">
+                <div class="grid grid--2">
+                  <div class="stat"><span class="stat__label">Learners enrolled</span>
+                    <span class="stat__value"><span data-proto-state="new ready">84</span><span data-proto-state="active refused">96</span></span>
+                    <span class="stat__meta"><span data-proto-state="new ready">Imported Mon 14 Dec 2026 by Sibusiso Khumalo, batch IMP-0058. 3 rows had problems and were not imported.</span><span data-proto-state="active refused">96 active. None withdrawn.</span></span></div>
+                  <div class="stat"><span class="stat__label">Staff assigned</span><span class="stat__value">4</span><span class="stat__meta">1 facilitator, 2 assessors, 1 moderator</span></div>
+                </div>
+                <div class="table-wrap">
+                  <table class="table table--cards">
+                    <caption class="u-visually-hidden">Role assignments for this cohort</caption>
+                    <thead><tr><th scope="col">Person</th><th scope="col">Role in this cohort</th><th scope="col">From</th><th scope="col">Note</th></tr></thead>
+                    <tbody>
+                      <tr><td class="table__primary-cell" data-label="Person"><span class="table__primary">Pieter van Wyk</span></td><td data-label="Role">Facilitator</td><td data-label="From"><span data-proto-state="new ready">Mon 18 Jan 2027</span><span data-proto-state="active refused">Mon 12 Jan 2026</span></td><td data-label="Note">All units</td></tr>
+                      <tr><td class="table__primary-cell" data-label="Person"><span class="table__primary">Thandiwe Nkosi</span></td><td data-label="Role">Assessor</td><td data-label="From"><span data-proto-state="new ready">Mon 18 Jan 2027</span><span data-proto-state="active refused">Mon 12 Jan 2026</span></td><td data-label="Note">All units</td></tr>
+                      <tr><td class="table__primary-cell" data-label="Person"><span class="table__primary">Bongani Sithole</span></td><td data-label="Role">Assessor</td><td data-label="From"><span data-proto-state="new ready">Mon 18 Jan 2027</span><span data-proto-state="active refused">Mon 3 Aug 2026</span></td><td data-label="Note"><span data-proto-state="new ready">All units</span><span data-proto-state="active refused">First cycle as an assessor: all his decisions are sampled</span></td></tr>
+                      <tr><td class="table__primary-cell" data-label="Person"><span class="table__primary">Anil Naidoo</span></td><td data-label="Role">Moderator</td><td data-label="From"><span data-proto-state="new ready">Mon 18 Jan 2027</span><span data-proto-state="active refused">Mon 12 Jan 2026</span></td><td data-label="Note">May sign off cycles</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p class="text-small text-muted">A person may assess and moderate in the same cohort. They are never given an item they assessed: that is checked for each item when work is allocated.</p>
+              </div>
+            </section>
+
+            <!-- ============ 4. Exam accommodations (decision U-02) ============ -->
+            <section class="card" aria-labelledby="sec-acc" data-proto-state="active refused">
+              <div class="card__header"><h2 class="card__title" id="sec-acc">4. Exam accommodations</h2><button type="button" class="btn btn--secondary btn--sm" data-modal-open="m-acc">Add accommodation</button></div>
+              <div class="card__body stack">
+                <p class="text-small text-muted u-measure">Set before the learner starts the exam. The assessor sees the accommodation beside the integrity record. The reason is kept as a category only: do not record medical details.</p>
+                <div class="table-wrap">
+                  <table class="table table--cards">
+                    <caption class="u-visually-hidden">Exam accommodations in 2026 Intake B</caption>
+                    <thead><tr><th scope="col">Learner</th><th scope="col">Exam</th><th scope="col">Accommodation</th><th scope="col">Reason category</th><th scope="col">Can it change?</th></tr></thead>
+                    <tbody>
+                      <tr><td class="table__primary-cell" data-label="Learner"><span class="table__primary">Naledi Khoza</span><span class="table__secondary mono">KSI-2026-0440</span></td><td data-label="Exam">Unit 5 summative exam<span class="table__secondary">Wed 14 Oct 2026, 09:00 to 12:00</span></td><td data-label="Accommodation">30 minutes extra (2 hours 30 minutes in all). Pasting permitted. Assistive technology: screen reader in use.</td><td data-label="Reason">Disability or learning support</td><td data-label="Can change"><span class="tag">Yes, until she starts</span></td></tr>
+                      <tr><td class="table__primary-cell" data-label="Learner"><span class="table__primary">Sipho Zulu</span><span class="table__secondary mono">KSI-2026-0398</span></td><td data-label="Exam">Unit 2 summative exam<span class="table__secondary">Wed 2 Sep 2026</span></td><td data-label="Accommodation">15 minutes extra. Pasting not permitted.</td><td data-label="Reason">Language support</td><td data-label="Can change"><span class="tag tag--shape-square">No. He started on Wed 2 Sep 2026, 09:00</span></td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+
+            <!-- ============ Review and activate ============ -->
+            <section class="card" aria-labelledby="sec-review" data-proto-state="new ready">
+              <div class="card__header"><h2 class="card__title" id="sec-review">4. Review and activate</h2></div>
+              <div class="card__body stack">
+                <p data-proto-state="new">1 thing is still needed before this cohort can be activated. It is listed under Readiness.</p>
+                <p data-proto-state="ready">Everything needed is in place. Activating makes the cohort visible to 84 learners and 4 staff.</p>
+                <div class="cluster">
+                  <button type="button" class="btn btn--primary" disabled aria-describedby="act-why" data-proto-state="new">Activate cohort</button>
+                  <button type="button" class="btn btn--primary" data-modal-open="m-activate" data-proto-state="ready">Activate cohort</button>
+                  <button type="button" class="btn btn--secondary" data-toast="Draft saved" data-toast-meta="2027 Intake A">Save draft</button>
+                </div>
+                <p class="blocked-reason" id="act-why" data-proto-state="new"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg>You cannot activate this cohort yet: the moderation policy has not been chosen. Choose Moderated or Not moderated in section 2.</p>
+              </div>
+            </section>
+          </form>
+        </div>
+
+        <aside class="page-layout__aside stack" aria-label="Readiness and policy history">
+          <section aria-labelledby="ready-h">
+            <h2 class="text-subheading u-mb-4" id="ready-h">Readiness <span class="text-muted" data-proto-state="new">(4 of 5 done)</span><span class="text-muted" data-proto-state="ready active refused">(5 of 5 done)</span></h2>
+            <ul class="checklist" aria-label="Readiness checklist">
+              <li class="checklist__item checklist__item--pass"><svg class="icon checklist__icon" aria-hidden="true"><use href="#i-check-circle"/></svg><span class="checklist__title">Programme, name and dates</span><span class="tag tag--positive">Done</span></li>
+              <li class="checklist__item checklist__item--problem" data-proto-state="new"><svg class="icon checklist__icon" aria-hidden="true"><use href="#i-info"/></svg><span class="checklist__title">Moderation policy confirmed</span><span class="tag tag--caution">Needed</span><span class="checklist__detail">Not chosen yet. There is no default. <a href="#pol-mod">Choose a policy</a></span></li>
+              <li class="checklist__item checklist__item--pass" data-proto-state="ready active refused"><svg class="icon checklist__icon" aria-hidden="true"><use href="#i-check-circle"/></svg><span class="checklist__title">Moderation policy confirmed</span><span class="tag tag--positive">Done</span><span class="checklist__detail">Moderated. <span data-proto-state="ready">Confirmed by Zanele Dlamini today at 11:42.</span><span data-proto-state="active refused">Confirmed by Zanele Dlamini on Mon 12 Jan 2026.</span></span></li>
+              <li class="checklist__item checklist__item--pass"><svg class="icon checklist__icon" aria-hidden="true"><use href="#i-check-circle"/></svg><span class="checklist__title">Learners enrolled</span><span class="tag tag--positive">Done</span></li>
+              <li class="checklist__item checklist__item--pass"><svg class="icon checklist__icon" aria-hidden="true"><use href="#i-check-circle"/></svg><span class="checklist__title">Facilitator and at least one assessor</span><span class="tag tag--positive">Done</span></li>
+              <li class="checklist__item checklist__item--pass"><svg class="icon checklist__icon" aria-hidden="true"><use href="#i-check-circle"/></svg><span class="checklist__title">Moderator assigned</span><span class="tag tag--positive">Done</span><span class="checklist__detail">Needed only for a moderated cohort. Anil Naidoo.</span></li>
+            </ul>
+          </section>
+
+          <section aria-labelledby="polhist-h" data-proto-state="active refused">
+            <h2 class="text-subheading u-mb-4" id="polhist-h">Moderation policy history</h2>
+            <ol class="history-list" aria-label="Moderation policy versions, newest first">
+              <li class="history-list__item is-current"><span class="history-list__badge">v1</span><span class="history-list__title">Moderated</span><span class="history-list__meta">Set at creation by Zanele Dlamini · Mon 12 Jan 2026, 09:20 · no previous value</span><span class="history-list__actions"><span class="tag tag--plain">Current</span></span></li>
+            </ol>
+            <ol class="log log--boxed u-mt-4" aria-label="Refused policy changes. Times in SAST." data-proto-state="refused">
+              <li class="log__item log__item--marked"><time class="log__time" datetime="2026-09-17T09:12:00+02:00">17 Sep 2026, 09:12</time><div class="log__event"><span class="log__actor">Zanele Dlamini</span> asked to change the policy to Not moderated. Refused: 14 results waiting, 96 held. The policy stays at version 1.<div class="log__detail">results_pending_or_held · 3b7e91c4</div></div></li>
+            </ol>
+          </section>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <nav class="bottom-tabs" aria-label="Coordinating, phone tabs">
+    <a class="bottom-tabs__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg>Overview</a>
+    <a class="bottom-tabs__item" href="coordinate-cohort-setup.html#state=active" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-users"/></svg>Cohorts</a>
+    <a class="bottom-tabs__item" href="coordinate-appeals.html"><svg class="icon" aria-hidden="true"><use href="#i-scales"/></svg>Appeals</a>
+    <a class="bottom-tabs__item" href="#main" data-toast="This screen is not part of the prototype"><svg class="icon" aria-hidden="true"><use href="#i-megaphone"/></svg>Notices</a>
+    <a class="bottom-tabs__item" href="#main" data-modal-open="m-more"><svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg>More</a>
+  </nav>
+</div>
+
+<dialog class="modal modal--sheet" id="m-more" aria-labelledby="m-more-t">
+  <div class="modal__header"><h2 class="modal__title" id="m-more-t">More in Coordinating</h2><button type="button" class="btn btn--ghost btn--icon" data-modal-close aria-label="Close"><svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+  <div class="modal__body">
+    <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-help"/></svg><span class="menu__item-text">Queries</span></a>
+    <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg><span class="menu__item-text">Logistics</span></a>
+    <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-chart"/></svg><span class="menu__item-text">Reports</span></a>
+    <a class="menu__item" href="#main" data-toast="This screen is not part of the prototype" data-modal-close><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><span class="menu__item-text">Search</span></a>
+  </div>
+</dialog>
+<dialog class="modal" id="m-activate" aria-labelledby="m-act-t" data-modal-static>
+  <div class="modal__header"><h2 class="modal__title" id="m-act-t">Activate 2027 Intake A?</h2></div>
+  <div class="modal__body">
+    <p class="modal__consequence">84 learners and 4 staff will see this cohort from Mon 18 Jan 2027. It is a moderated cohort: every result will be held until a moderation cycle signs it off.</p>
+    <ul class="modal__list"><li>Learners in this cohort see "Being assessed" until a cycle is signed off.</li><li>You can change the policy later only while no results are waiting or held.</li><li>You are activating this cohort as the coordinator: Zanele Dlamini.</li></ul>
+    <label class="check"><input class="check__input" type="checkbox" id="ack-act"><span class="check__label">I have confirmed the moderation policy with the quality-assurance lead.</span></label>
+  </div>
+  <div class="modal__footer"><button type="button" class="btn btn--secondary" data-modal-close autofocus>Not yet</button><button type="button" class="btn btn--primary" data-requires="#ack-act" data-modal-close data-toast="2027 Intake A activated" data-toast-meta="Moderated · 84 learners">Activate cohort</button></div>
+</dialog>
+
+<dialog class="modal modal--sheet" id="m-acc" aria-labelledby="m-acc-t">
+  <div class="modal__header"><h2 class="modal__title" id="m-acc-t">Add an exam accommodation</h2><button type="button" class="btn btn--ghost btn--icon" data-modal-close aria-label="Close"><svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+  <div class="modal__body">
+    <form class="form" onsubmit="return false">
+      <div class="field"><label class="field__label" for="acc-learner">Learner</label><span class="select"><select id="acc-learner"><option>Lerato Mokoena · KSI-2026-0417</option><option>Ayesha Patel · KSI-2026-0422</option><option>Johan Botha · KSI-2026-0431</option></select></span></div>
+      <div class="field"><label class="field__label" for="acc-exam">Exam</label><p class="field__help" id="acc-exam-help">Only exams the learner has not started are listed.</p><span class="select"><select id="acc-exam" aria-describedby="acc-exam-help"><option>Unit 5 summative exam · Wed 14 Oct 2026, 09:00 to 12:00 · 2 hours</option></select></span></div>
+      <div class="field"><label class="field__label" for="acc-time">Extra time, in minutes</label><p class="field__help" id="acc-time-help">Added to the 2 hours. The exam window closes later for this learner by the same amount.</p><input class="input" id="acc-time" type="number" min="0" max="120" step="5" value="30" aria-describedby="acc-time-help"></div>
+      <fieldset class="fieldset"><legend class="fieldset__legend">Permissions</legend>
+        <label class="check"><input class="check__input" type="checkbox"><span class="check__label">Pasting is permitted</span><span class="check__help">For learners who write with dictation or another tool and paste the text in.</span></label>
+      </fieldset>
+      <div class="field"><label class="field__label" for="acc-at">Note for the assessor about assistive technology <span class="field__optional">(optional)</span></label><p class="field__help" id="acc-at-help">Shown beside the integrity record, so that events caused by the tool are read fairly. Name the tool, not the condition.</p><input class="input" id="acc-at" type="text" aria-describedby="acc-at-help" placeholder="For example: screen reader in use"></div>
+      <div class="field"><label class="field__label" for="acc-reason">Reason category <span class="field__required">(required)</span></label><p class="field__help" id="acc-reason-help">A category only. Medical details are never recorded here.</p><span class="select"><select id="acc-reason" aria-describedby="acc-reason-help"><option>Disability or learning support</option><option>Language support</option><option>Temporary injury or illness</option><option>Other, agreed with the programme manager</option></select></span></div>
+    </form>
+  </div>
+  <div class="modal__footer"><button type="button" class="btn btn--secondary" data-modal-close>Cancel</button><button type="button" class="btn btn--primary" data-modal-close data-toast="Accommodation saved" data-toast-meta="Lerato Mokoena · Unit 5 summative exam">Save accommodation</button></div>
+</dialog>
+
+<div class="toast-region" role="status" aria-live="polite"></div>
+<script src="assets/ui.js"></script>
+<script src="assets/proto.js"></script>
+<script>
+/* Prototype only. Keeps placeholder links and in-page anchors from replacing the state in the URL hash,
+   lets a button move the screen to another prototype state, and moves focus to a refusal when a state shows one. */
+(function () {
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest) return;
+    var a = e.target.closest('a[href^="#"]');
+    if (a && a.getAttribute('href').indexOf('#state=') !== 0) {
+      e.preventDefault();
+      var t = document.getElementById(a.getAttribute('href').slice(1));
+      if (t && !a.hasAttribute('data-toast') && !a.hasAttribute('data-modal-open')) { t.scrollIntoView(); t.focus({ preventScroll: true }); }
+    }
+    var g = e.target.closest('[data-proto-goto]');
+    if (g) location.hash = 'state=' + g.getAttribute('data-proto-goto');
+  });
+  function settle(initial) {
+    setTimeout(function () {
+      var f = Array.prototype.filter.call(document.querySelectorAll('[data-proto-focus]'), function (el) { return !el.closest('[hidden]'); })[0];
+      if (f) { f.focus(); return; }
+      if (!initial) { window.scrollTo(0, 0); document.getElementById('main').focus({ preventScroll: true }); }
+    }, 0);
+  }
+  document.addEventListener('proto:state', function () { settle(false); });
+  if (/state=/.test(location.hash)) settle(true);
+})();
+</script>
+<script>
+/* Prototype only: sets the chosen policy for each state, and enables Change policy with a visible reason. */
+(function () {
+  var mod = document.getElementById('pol-mod'), not = document.getElementById('pol-not');
+  var btn = document.getElementById('pol-change'), why = document.getElementById('pol-change-text');
+  function sync() {
+    var active = /^(active|refused)$/.test(document.body.getAttribute('data-proto-current'));
+    btn.disabled = !(active && not.checked);
+    why.textContent = not.checked ? 'This asks the LMS to release results without moderation from now on. It is refused while any result is waiting or held.' : 'Moderated is the policy in force. Choose Not moderated to ask for a change.';
+  }
+  function apply() {
+    var s = document.body.getAttribute('data-proto-current');
+    mod.checked = s !== 'new'; not.checked = false; sync();
+  }
+  document.addEventListener('proto:state', apply);
+  document.addEventListener('change', sync);
+  apply();
+})();
+</script>
+</body>
+</html>
