@@ -11,14 +11,22 @@ skills-lock.json
 node_modules/
 .next/
 out/
-coverage/
 
 # Vercel local metadata
 .vercel/
+
+# Test and TypeScript outputs
+coverage/
+playwright-report/
+test-results/
+*.tsbuildinfo
+
+# Supabase local runtime
+supabase/.branches/
+supabase/.temp/
 
 # OS and editor files
 .DS_Store
 Thumbs.db
 .idea/
 .vscode/
-
