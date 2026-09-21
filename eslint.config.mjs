@@ -11,5 +11,6 @@ export default defineConfig([
     "coverage/**",
     "docs/**",
     "supabase/**",
+    "src/types/database.ts",
   ]),
 ]);

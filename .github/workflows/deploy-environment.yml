@@ -2,6 +2,12 @@ name: Deploy one environment
 
 # Called by deploy.yml for staging and then production. Each GitHub environment ("staging", "production")
 # holds its own secrets and variables under the same names, so this file never mixes them up.
+#
+# deploy_app decides who deploys the application:
+#   false (staging): Vercel's Git integration deploys main itself; this workflow applies migrations and
+#                    settings, then smoke-tests the site.
+#   true (production, later): this workflow also builds and deploys to a Vercel project that is not
+#                    connected to Git, so migrations always run first.
 
 on:
   workflow_call:
@@ -12,6 +18,10 @@ on:
       ref:
         required: true
         type: string
+      deploy_app:
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -45,7 +55,9 @@ jobs:
       - name: Check required settings
         run: |
           missing=""
-          for name in SUPABASE_ACCESS_TOKEN SUPABASE_DB_PASSWORD SUPABASE_PROJECT_ID SITE_URL VERCEL_ORG_ID VERCEL_PROJECT_ID VERCEL_TOKEN; do
+          required="SUPABASE_ACCESS_TOKEN SUPABASE_DB_PASSWORD SUPABASE_PROJECT_ID SITE_URL"
+          [ "${{ inputs.deploy_app }}" = "true" ] && required="$required VERCEL_ORG_ID VERCEL_PROJECT_ID VERCEL_TOKEN"
+          for name in $required; do
             [ -n "${!name}" ] || missing="$missing $name"
           done
           if [ -n "$missing" ]; then
@@ -83,18 +95,21 @@ jobs:
           supabase config diff --project-ref "$SUPABASE_PROJECT_ID"
           supabase --yes config push --project-ref "$SUPABASE_PROJECT_ID"
 
-      - run: npm ci
-      - run: npm install --global vercel@59.23.2
-      - run: vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
-      - run: vercel build --prod --token="$VERCEL_TOKEN"
-      - id: deploy
-        run: echo "url=$(vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN")" >> "$GITHUB_OUTPUT"
+      - name: Deploy the application to Vercel
+        if: ${{ inputs.deploy_app }}
+        run: |
+          npm ci
+          npm install --global vercel@59.23.2
+          vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
+          vercel build --prod --token="$VERCEL_TOKEN"
+          vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN"
 
       - name: Smoke test
         env:
           BYPASS: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
         run: |
-          for attempt in 1 2 3 4 5; do
+          # For staging, Vercel deploys main on its own and may still be building, so allow time.
+          for attempt in 1 2 3 4 5 6 7 8 9 10 11 12; do
             status=$(curl -s -o /tmp/ready.json -w '%{http_code}' ${BYPASS:+-H "x-vercel-protection-bypass: $BYPASS"} "$SITE_URL/api/health/ready")
             [ "$status" = "200" ] && { cat /tmp/ready.json; exit 0; }
             echo "Attempt $attempt: HTTP $status"; sleep 10

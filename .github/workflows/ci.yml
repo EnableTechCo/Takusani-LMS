@@ -36,9 +36,31 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # the migration rules compare against the base branch
+      - name: Migration rules (names, immutability, order)
+        run: bash scripts/check-migrations.sh ${{ github.event_name == 'pull_request' && format('origin/{0}', github.base_ref) || '' }}
       - uses: supabase/setup-cli@v1
         with:
           version: 2.117.0  # keep in step with the supabase devDependency
       - run: supabase start
       - run: supabase db lint --local --level warning
       - run: supabase test db
+      - name: Generated database types are up to date
+        run: |
+          supabase gen types typescript --local --schema api > /tmp/database.ts
+          if [ ! -f src/types/database.ts ]; then
+            echo "::error::src/types/database.ts is missing. Run 'npm run db:types' with the local stack running, and commit it."
+            cp /tmp/database.ts "$RUNNER_TEMP/database.ts"; exit 1
+          fi
+          if ! diff -u src/types/database.ts /tmp/database.ts; then
+            echo "::error::src/types/database.ts is out of date. Run 'npm run db:types' and commit the result."
+            cp /tmp/database.ts "$RUNNER_TEMP/database.ts"; exit 1
+          fi
+      - name: Upload the generated types when they differ
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: database-types
+          path: ${{ runner.temp }}/database.ts
+          if-no-files-found: ignore
