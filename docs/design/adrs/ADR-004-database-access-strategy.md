@@ -2,7 +2,7 @@
 
 ## Status
 
-Proposed
+Proposed. Refined by ADR-024 (Data API exposure, actor identity, audit capture).
 
 ## Context
 

@@ -2,7 +2,7 @@
 
 ## Status
 
-Proposed
+Proposed. Refined by ADR-024 (schemas, grants, placement rule) and ADR-019 (lock order).
 
 ## Context
 

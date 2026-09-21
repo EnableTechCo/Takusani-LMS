@@ -2,7 +2,7 @@
 
 ## Status
 
-Proposed
+Proposed. Refined by the API design: one permanent client identifier per command; replay is semantically, not byte, equivalent.
 
 ## Context
 

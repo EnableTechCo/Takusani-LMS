@@ -2,7 +2,7 @@
 
 ## Status
 
-Proposed
+Proposed. Refined by ADR-024 (authorization predicates written once in SQL).
 
 ## Context
 
