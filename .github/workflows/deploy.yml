@@ -1,4 +1,9 @@
-name: Deploy production
+name: Deploy
+
+# main -> staging, today. This repository's current Supabase and Vercel projects are the staging environment.
+# Production is added later (ADR-018): when it exists, set the repository variable PRODUCTION_ENABLED=true and
+# production will deploy after staging passes, then wait for the approval required on the "production" environment.
+# Vercel's own Git integration does not deploy main (vercel.json), so this workflow is the only deploy route.
 
 on:
   workflow_run:
@@ -11,55 +16,26 @@ permissions:
   contents: read
 
 concurrency:
-  group: production
+  group: deploy
   cancel-in-progress: false
 
 jobs:
-  database:
-    name: Apply database migrations
+  staging:
     if: >-
       ${{ vars.CD_ENABLED == 'true' &&
           (github.event_name == 'workflow_dispatch' ||
            github.event.workflow_run.conclusion == 'success') }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    environment: production
-    env:
-      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
-      SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
-      SUPABASE_PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
-      - uses: supabase/setup-cli@v1
-        with:
-          version: 2.117.0  # keep in step with the supabase devDependency
-      - run: supabase link --project-ref "$SUPABASE_PROJECT_ID" --password "$SUPABASE_DB_PASSWORD"
-      - run: supabase db push --linked --include-all
+    uses: ./.github/workflows/deploy-environment.yml
+    with:
+      environment: staging
+      ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+    secrets: inherit
 
-  application:
-    name: Deploy application
-    needs: database
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    environment:
-      name: production
-      url: ${{ steps.deploy.outputs.url }}
-    env:
-      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-          cache: npm
-      - run: npm ci
-      - run: npm install --global vercel@59.23.2
-      - run: vercel pull --yes --environment=production --token="${{ secrets.VERCEL_TOKEN }}"
-      - run: vercel build --prod --token="${{ secrets.VERCEL_TOKEN }}"
-      - id: deploy
-        run: echo "url=$(vercel deploy --prebuilt --prod --token='${{ secrets.VERCEL_TOKEN }}')" >> "$GITHUB_OUTPUT"
+  production:
+    needs: staging
+    if: ${{ vars.PRODUCTION_ENABLED == 'true' }}
+    uses: ./.github/workflows/deploy-environment.yml
+    with:
+      environment: production
+      ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+    secrets: inherit
