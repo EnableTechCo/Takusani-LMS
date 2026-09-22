@@ -38,9 +38,18 @@ export async function signIn(_: FormState, form: FormData): Promise<FormState> {
 
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword(parsed.data);
-  if (error) return { message: WRONG_DETAILS, values };
+  if (error) {
+    // Logged for operators (never shown): wrong details, or a project problem such as the email provider being
+    // off, look identical to the person signing in.
+    if (error.code !== "invalid_credentials") console.error(`sign-in refused: ${error.code ?? error.message}`);
+    return { message: WRONG_DETAILS, values };
+  }
 
-  const access = await getMyAccess();
+  // Ask with the client that just signed in: it holds the new session, whereas the session cookie it set is only
+  // readable from the next request.
+  const { data: accessRows, error: accessError } = await supabase.rpc("my_access");
+  if (accessError) throw new Error(`api.my_access failed: ${accessError.message}`);
+  const access = accessRows?.[0] ?? null;
   if (access?.status !== "active") {
     await supabase.auth.signOut();
     return { message: WRONG_DETAILS, values };
