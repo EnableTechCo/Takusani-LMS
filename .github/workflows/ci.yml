@@ -26,7 +26,7 @@ jobs:
       # exposed. Reviewed false positives go in .gitleaksignore with the reason.
       - name: Secret scan (gitleaks)
         run: docker run --rm -v "$PWD:/repo" ghcr.io/gitleaks/gitleaks:v8.28.0 git /repo --redact --no-banner
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
           cache: npm
@@ -58,7 +58,7 @@ jobs:
       - run: supabase test db
       # Spike X-1 as a standing check: through the Data API, with only the publishable key or a learner's token,
       # nothing outside the api schema is reachable and nothing in it runs without an explicit grant.
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
           cache: npm
