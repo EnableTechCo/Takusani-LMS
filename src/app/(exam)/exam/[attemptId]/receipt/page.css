@@ -1,0 +1,8 @@
+/* Page-specific styles ported from docs/design/ui/prototype/exam-receipt.html. */
+/* Page-specific (prefix rc-). Spacing only. */
+.rc-section {
+  margin-top: var(--space-8);
+}
+.rc-section > .text-heading {
+  margin-bottom: var(--space-3);
+}

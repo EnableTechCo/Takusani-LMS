@@ -1,0 +1,30 @@
+/* Page-specific styles ported from docs/design/ui/prototype/learn-exam-preflight.html. */
+/* Page-specific (prefix pf-). Below 1024px the Start area is replaced by the mobile gate (NFR-10, UX architecture 9.4).
+   Everything else on the page stays readable on a phone, so that the learner can prepare. */
+/* A11Y-01: gate on the input device, not on width alone. A laptop zoomed to 200% is narrow but is still a laptop. */
+.pf-narrow-only,
+.pf-zoomed-only {
+  display: none !important;
+}
+@media (max-width: 63.99rem) and (hover: none), (max-width: 63.99rem) and (pointer: coarse) {
+  .pf-narrow-only {
+    display: revert !important;
+  }
+  .pf-desktop-only {
+    display: none !important;
+  }
+}
+@media (max-width: 63.99rem) and (hover: hover) and (pointer: fine) {
+  .pf-zoomed-only {
+    display: revert !important;
+  }
+}
+.pf-section {
+  margin-top: var(--space-8);
+}
+.pf-section > .text-heading {
+  margin-bottom: var(--space-3);
+}
+.pf-gate {
+  width: 100%;
+}

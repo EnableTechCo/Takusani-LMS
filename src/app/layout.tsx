@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist_Mono, Instrument_Sans, Newsreader } from "next/font/google";
 import type { ReactNode } from "react";
+import { IconSprite } from "@/components/ui/icons";
 import "./globals.css";
 
 const serif = Newsreader({ subsets: ["latin"], variable: "--font-newsreader", display: "swap" });
@@ -17,7 +18,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <html lang="en-ZA" data-theme="light" className={`${serif.variable} ${sans.variable} ${mono.variable}`}>
-      <body>{children}</body>
+      <body>
+        <IconSprite />
+        {children}
+      </body>
     </html>
   );
 }

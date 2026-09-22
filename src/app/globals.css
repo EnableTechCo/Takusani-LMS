@@ -1,6 +1,12 @@
 @import "tailwindcss";
-/* Source of truth: docs/design/ui/prototype/assets/tokens.css. src/styles/tokens.test.ts fails if the copy drifts. */
+/* Source of truth: docs/design/ui/prototype/assets/tokens.css. src/styles/stylesheets.test.ts fails if the copy drifts. */
 @import "../styles/tokens.css";
+/* Source of truth: docs/design/ui/prototype/assets/ui.css, the component layer the screens are built from.
+   It sits in the components layer, above Tailwind's preflight and below Tailwind utilities. */
+@import "../styles/ui.css" layer(components);
+/* ui.css components whose names are also Tailwind utilities. The utility layer would win and break them
+   (for example .table--cards turns rows into cards on phones), so Tailwind never generates these two. */
+@source not inline("grid table");
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
@@ -110,65 +116,18 @@
   --tk-critical-text: var(--color-critical-text);
   --tk-critical-solid: var(--color-critical-solid);
   --tk-shadow-overlay: var(--shadow-overlay);
-  /* next/font supplies the self-hosted families; the token stacks follow as fallbacks. */
-  --tk-font-serif: var(--font-newsreader), var(--font-serif);
-  --tk-font-sans: var(--font-instrument-sans), var(--font-sans);
-  --tk-font-mono: var(--font-geist-mono), var(--font-mono);
+  --tk-font-serif: var(--font-serif);
+  --tk-font-sans: var(--font-sans);
+  --tk-font-mono: var(--font-mono);
 }
 
-@layer base {
-  html {
-    background: var(--color-canvas);
-    scroll-padding-top: calc(var(--topbar-height) + var(--space-4));
-  }
-
-  body {
-    min-height: 100vh;
-    margin: 0;
-    color: var(--color-text);
-    background: var(--color-canvas);
-    font-family: var(--tk-font-sans);
-    font-size: var(--text-base);
-    line-height: var(--leading-normal);
-    -webkit-font-smoothing: antialiased;
-  }
-
-  h1,
-  h2,
-  h3 {
-    color: var(--color-text-strong);
-    line-height: var(--leading-snug);
-  }
-
-  :focus-visible {
-    outline: var(--focus-width) solid var(--color-focus);
-    outline-offset: var(--focus-offset);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-      animation-duration: 0.01ms !important;
-      transition-duration: 0.01ms !important;
-    }
-  }
-}
-
-@layer components {
-  .skip-link {
-    position: absolute;
-    left: var(--space-4);
-    top: -100px;
-    z-index: 1000;
-    padding: var(--space-2) var(--space-4);
-    border-radius: var(--radius-sm);
-    background: var(--color-ink);
-    color: var(--color-text-inverse);
-    font-weight: var(--weight-medium);
-  }
-
-  .skip-link:focus {
-    top: var(--space-2);
-  }
+/* next/font self-hosts the families under generated names; put them first in the token stacks, which ui.css reads.
+   :root:root outranks the :root declarations in tokens.css. */
+:root:root {
+  --font-serif:
+    var(--font-newsreader), "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --font-sans:
+    var(--font-instrument-sans), "Segoe UI Variable Text", "Segoe UI", "Helvetica Neue", Helvetica, Arial, system-ui,
+    sans-serif;
+  --font-mono: var(--font-geist-mono), "Cascadia Mono", "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
 }

@@ -1,0 +1,12 @@
+/* Page-specific styles ported from docs/design/ui/prototype/teach-submissions.html. */
+/* Page-level layout only (prefix pg-). Tokens only. */
+.pg-task {
+  flex: 1 1 16rem;
+  max-width: 26rem;
+}
+.pg-preview {
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface-sunken);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+}

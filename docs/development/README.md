@@ -25,6 +25,37 @@
 - **API errors** use `errorResponse()` in `src/lib/http/error-response.ts`: `{ "error": { code, message, request_id, retryable, details } }` with lower snake_case codes.
 - **Database changes** start from `supabase/templates` and follow "Database changes" below. Every grant to `anon` or `authenticated` is added to the allow-list in `supabase/tests/database/0002_privilege_allowlist.test.sql` in the same pull request, or CI fails.
 
+## Screens
+
+The P0 screens are ported from the static prototype (`docs/design/ui/prototype`) as page shells: the markup and example data of each screen's default state, with no data access or behaviour yet. Each feature ticket replaces the example data with real data and adds the behaviour, screen by screen.
+
+- Styling comes from the prototype's own component layer, `src/styles/ui.css`, an exact copy of `docs/design/ui/prototype/assets/ui.css` (a test fails if they drift; change the prototype first). Tailwind utilities sit above it for anything new.
+- Icons: `<Icon name="check" />` from `src/components/ui/icons.tsx`; the sprite is rendered once in the root layout.
+- Shells: `AppShell` (`src/components/shell`) for every workspace page, `src/app/(auth)` for sign-in, `src/app/(exam)` for the exam, which has no navigation (FR-901).
+- Each workspace folder has a layout that returns 404 unless the person holds that workspace. Navigation destinations without a screen show "Not built yet".
+- Locally, `LMS_DEV_ROLES` in `.env.local` decides which workspaces you see; list all six roles to see every screen. Production builds always get no roles until sign-in exists.
+
+| Screen | Route | Prototype |
+|---|---|---|
+| Sign in | `/sign-in` | `sign-in.html` |
+| Notifications | `/notifications` | `notifications.html` |
+| Learner home | `/learn` | `learn-home.html` |
+| Task and submission | `/learn/tasks/[taskId]` | `learn-task.html` |
+| Exam checks | `/learn/exams/[examId]` | `learn-exam-preflight.html` |
+| Released result | `/learn/results/[resultId]` | `learn-result.html` |
+| Lodge an appeal | `/learn/results/[resultId]/appeal/new` | `learn-appeal-new.html` |
+| Credits | `/learn/credits` | `learn-credits.html` |
+| Exam, receipt, phone gate | `/exam/[attemptId]`, `/receipt`, `/device` | `exam-attempt.html`, `exam-receipt.html`, `exam-mobile-gate.html` |
+| Submission dashboard | `/teach/submissions` | `teach-submissions.html` |
+| Marking workspace | `/assess/instances/[instanceId]` | `assess-marking.html` |
+| Sample item review | `/moderate/cycles/[cycleId]/items/[itemId]` | `moderate-item.html` |
+| Cycle sign-off | `/moderate/cycles/[cycleId]/sign-off` | `moderate-signoff.html` |
+| Cohort setup | `/coordinate/cohorts/[cohortId]/setup` | `coordinate-cohort-setup.html` |
+| Moderation planning | `/coordinate/cohorts/[cohortId]/moderation` | `coordinate-moderation.html` |
+| Appeals, one appeal | `/coordinate/appeals`, `/[appealId]` | `coordinate-appeals.html`, `coordinate-appeal-detail.html` |
+| Roles and allocations | `/admin/accounts/[profileId]/roles` | `admin-roles.html` |
+| Configuration, one setting | `/admin/configuration`, `/[key]` | `admin-configuration.html`, `admin-configuration-key.html` |
+
 ## Database changes
 
 The same convention as BluBook: migrations run locally before the pull request, and reach the hosted database after merge.

@@ -1,0 +1,38 @@
+/* Page-specific styles ported from docs/design/ui/prototype/moderate-item.html. */
+/* Page-level layout only (prefix pg-). Tokens only. */
+.pg-head {
+  padding: var(--space-5) var(--space-4) var(--space-4);
+  display: grid;
+  gap: var(--space-4);
+}
+.pg-head > .page-header {
+  margin-bottom: 0;
+}
+@media (min-width: 48rem) {
+  .pg-head {
+    padding: var(--space-8) var(--space-6) var(--space-5);
+  }
+}
+.pg-blocked {
+  padding: 0 var(--space-4) var(--space-12);
+  max-width: var(--width-content);
+}
+@media (min-width: 48rem) {
+  .pg-blocked {
+    padding: 0 var(--space-6) var(--space-16);
+  }
+}
+ol.pg-steps {
+  padding-left: var(--space-5);
+  list-style: decimal;
+  display: grid;
+  gap: var(--space-2);
+  max-width: var(--measure);
+}
+.pg-date {
+  max-width: 14rem;
+}
+/* Prototype only: keep the prototype controls clear of the sticky decision bar. */
+.proto-panel {
+  bottom: calc(var(--actionbar-height) + var(--space-3));
+}

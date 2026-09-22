@@ -1,0 +1,12 @@
+/* Page-specific styles ported from docs/design/ui/prototype/coordinate-appeal-detail.html. */
+/* Page-specific layout only. Tokens only. Not part of the component library. */
+.notice-preview {
+  padding: var(--space-4);
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-subtle);
+  font-size: var(--text-sm);
+}
+.notice-preview > * + * {
+  margin-top: var(--space-2);
+}
