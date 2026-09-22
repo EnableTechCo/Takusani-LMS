@@ -139,6 +139,7 @@ Rules:
 
 - Never edit, rename or delete a migration once it is on `main`. Fix forward with a new migration.
 - Never change a hosted database from the Supabase dashboard.
+- Tables and functions go in their module schema, never in `public` (a pgTAP test fails otherwise). There is no automatic RLS trigger (ADR-028): RLS is a written policy where ADR-005 asks for one. When creating a Supabase project, leave "enable RLS on new tables" unticked.
 - Vercel can deploy the code a few minutes before its migration is applied, so the code already on `main` must keep working against the new schema: add first, switch over, remove later.
 
 ## Health checks

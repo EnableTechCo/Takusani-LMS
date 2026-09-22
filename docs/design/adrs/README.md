@@ -33,6 +33,7 @@ All records are proposed for architecture review. Approval should include produc
 - [ADR-025 Enqueue inside the domain transaction and split scheduling](ADR-025-in-transaction-enqueue-and-scheduler-split.md)
 - [ADR-026 Limit account lockout to new password sign-ins](ADR-026-account-lockout-scope.md)
 - [ADR-027 Platform plans and hosting region](ADR-027-platform-plans-and-hosting-region.md)
+- [ADR-028 Do not use Supabase's automatic RLS event trigger](ADR-028-no-automatic-rls-event-trigger.md)
 
 ADR-019 to ADR-027 follow the requirements-coverage pass and the 18 September 2026 architecture review. The [fixes and decisions register](../LMS-design-fixes-and-decisions.md) maps every review finding to its decision and to the record that carries it.
 
