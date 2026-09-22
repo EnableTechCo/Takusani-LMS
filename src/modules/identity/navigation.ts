@@ -81,7 +81,7 @@ export const WORKSPACES: readonly Workspace[] = [
     id: "review",
     segment: "review",
     label: "Appeal reviews",
-    items: [{ label: "Reviews", href: "/review", icon: "scales", tab: true }],
+    items: [{ label: "Reviews", href: "/review/appeals", icon: "scales", tab: true }],
   },
   {
     id: "coordinate",
@@ -102,11 +102,12 @@ export const WORKSPACES: readonly Workspace[] = [
     segment: "admin",
     label: "Administration",
     items: [
+      { label: "Overview", href: "/admin", icon: "grid", tab: true },
       { label: "Accounts", href: "/admin/accounts", icon: "users", tab: true },
       { label: "Imports", href: "/admin/imports", icon: "upload", tab: true },
       { label: "Configuration", href: "/admin/configuration", icon: "sliders", tab: true },
       { label: "Department integration", href: "/admin/integration", icon: "external" },
-      { label: "Audit log", href: "/admin/audit", icon: "clipboard", tab: true },
+      { label: "Audit log", href: "/admin/audit", icon: "clipboard" },
       { label: "Cohort archive", href: "/admin/cohorts", icon: "archive" },
     ],
   },

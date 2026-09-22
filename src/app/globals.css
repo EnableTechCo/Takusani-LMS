@@ -7,6 +7,8 @@
 /* ui.css components whose names are also Tailwind utilities. The utility layer would win and break them
    (for example .table--cards turns rows into cards on phones), so Tailwind never generates these two. */
 @source not inline("grid table");
+/* Labelled placeholders for screens not built yet. */
+@import "../styles/skeleton.css" layer(components);
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
