@@ -1,11 +1,10 @@
 import "server-only";
 import { notFound, redirect } from "next/navigation";
 import { cache } from "react";
-import type { AccountSummary } from "@/components/shell/app-shell";
 import { hasPublicEnvironment } from "@/config/env";
 import { createClient } from "@/lib/supabase/server";
-import { initialsOf, isRole, ROLE_LABELS, toNavigationSubject, type MyAccess } from "./access";
-import { type NavigationSubject, type WorkspaceId, workspacesFor } from "./navigation";
+import { initialsOf, roleLabels, toNavigationSubject, type AccountSummary, type MyAccess } from "./access";
+import { type WorkspaceId, workspacesFor } from "./navigation";
 
 /**
  * The signed-in person's profile and current roles, from api.my_access(). Null when there is no session or the
@@ -22,10 +21,6 @@ export const getMyAccess = cache(async (): Promise<MyAccess | null> => {
   return data?.[0] ?? null;
 });
 
-export async function getNavigationSubject(): Promise<NavigationSubject> {
-  return toNavigationSubject(await getMyAccess());
-}
-
 /**
  * For pages inside the app shell. Signed out: to sign-in. Signed in but with no profile, or deactivated: signed
  * out, then to sign-in with a neutral message (the proxy already handles "no session").
@@ -37,7 +32,7 @@ export async function requireActiveAccess(): Promise<MyAccess> {
 }
 
 export function toAccountSummary(access: MyAccess): AccountSummary {
-  const roles = access.roles.filter(isRole).map((role) => ROLE_LABELS[role]);
+  const roles = roleLabels(access.roles);
   return {
     name: access.full_name,
     email: access.email,
@@ -51,6 +46,6 @@ export function toAccountSummary(access: MyAccess): AccountSummary {
  * "not visible within your scope" (SRS 5.3; UX section 3.3).
  */
 export async function requireWorkspace(id: WorkspaceId): Promise<void> {
-  const held = workspacesFor(await getNavigationSubject());
+  const held = workspacesFor(toNavigationSubject(await getMyAccess()));
   if (!held.some((workspace) => workspace.id === id)) notFound();
 }

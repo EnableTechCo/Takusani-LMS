@@ -6,7 +6,7 @@ export const MODULES = [
     summary: "Programme structure, cohort lifecycle, enrolment, and moderation policy.",
   },
   {
-    id: "learning-content",
+    id: "learning",
     label: "Learning content",
     summary: "Units, materials, sessions, attendance, and calendar feeds.",
   },

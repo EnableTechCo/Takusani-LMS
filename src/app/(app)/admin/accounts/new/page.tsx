@@ -1,4 +1,4 @@
-import { PageHeader } from "@/components/shell/app-shell";
+import { PageHeader } from "@/components/shell/page-header";
 import { NewAccountForm } from "@/modules/identity/forms";
 
 export const metadata = { title: "New account · Administration" };

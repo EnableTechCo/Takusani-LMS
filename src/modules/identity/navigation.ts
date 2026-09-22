@@ -4,17 +4,12 @@
  * There is no role switcher and no "acting as" state: the route is the context.
  */
 
-import type { IconName } from "@/components/ui/icons";
-
 export const ROLES = ["learner", "facilitator", "assessor", "moderator", "coordinator", "administrator"] as const;
 export type Role = (typeof ROLES)[number];
 
 export interface NavItem {
   label: string;
   href: string;
-  icon: IconName;
-  /** Shown in the phone bottom tabs (at most four per workspace, then "More"). */
-  tab?: boolean;
 }
 
 export interface Workspace {
@@ -35,14 +30,14 @@ export const WORKSPACES: readonly Workspace[] = [
     segment: "learn",
     label: "Learning",
     items: [
-      { label: "Home", href: "/learn", icon: "house", tab: true },
-      { label: "Tasks", href: "/learn/tasks", icon: "clipboard", tab: true },
-      { label: "Exams", href: "/learn/exams", icon: "laptop" },
-      { label: "Materials", href: "/learn/materials", icon: "book", tab: true },
-      { label: "Calendar", href: "/learn/calendar", icon: "calendar" },
-      { label: "Results", href: "/learn/results", icon: "check-circle", tab: true },
-      { label: "Credits", href: "/learn/credits", icon: "chart" },
-      { label: "Notes", href: "/learn/notes", icon: "note" },
+      { label: "Home", href: "/learn" },
+      { label: "Tasks", href: "/learn/tasks" },
+      { label: "Exams", href: "/learn/exams" },
+      { label: "Materials", href: "/learn/materials" },
+      { label: "Calendar", href: "/learn/calendar" },
+      { label: "Results", href: "/learn/results" },
+      { label: "Credits", href: "/learn/credits" },
+      { label: "Notes", href: "/learn/notes" },
     ],
   },
   {
@@ -50,12 +45,12 @@ export const WORKSPACES: readonly Workspace[] = [
     segment: "teach",
     label: "Teaching",
     items: [
-      { label: "Overview", href: "/teach", icon: "house", tab: true },
-      { label: "Tasks", href: "/teach/tasks", icon: "clipboard", tab: true },
-      { label: "Materials", href: "/teach/materials", icon: "book" },
-      { label: "Quizzes", href: "/teach/quizzes", icon: "pencil" },
-      { label: "Sessions", href: "/teach/sessions", icon: "video", tab: true },
-      { label: "Submissions", href: "/teach/submissions", icon: "inbox", tab: true },
+      { label: "Overview", href: "/teach" },
+      { label: "Tasks", href: "/teach/tasks" },
+      { label: "Materials", href: "/teach/materials" },
+      { label: "Quizzes", href: "/teach/quizzes" },
+      { label: "Sessions", href: "/teach/sessions" },
+      { label: "Submissions", href: "/teach/submissions" },
     ],
   },
   {
@@ -63,9 +58,9 @@ export const WORKSPACES: readonly Workspace[] = [
     segment: "assess",
     label: "Assessing",
     items: [
-      { label: "Queue", href: "/assess", icon: "inbox", tab: true },
-      { label: "Returned to me", href: "/assess/returned", icon: "refresh", tab: true },
-      { label: "Cohort release status", href: "/assess/cohorts", icon: "lock", tab: true },
+      { label: "Queue", href: "/assess" },
+      { label: "Returned to me", href: "/assess/returned" },
+      { label: "Cohort release status", href: "/assess/cohorts" },
     ],
   },
   {
@@ -73,28 +68,28 @@ export const WORKSPACES: readonly Workspace[] = [
     segment: "moderate",
     label: "Moderating",
     items: [
-      { label: "Cycles", href: "/moderate", icon: "scales", tab: true },
-      { label: "My sample items", href: "/moderate/items", icon: "eye", tab: true },
+      { label: "Cycles", href: "/moderate" },
+      { label: "My sample items", href: "/moderate/items" },
     ],
   },
   {
     id: "review",
     segment: "review",
     label: "Appeal reviews",
-    items: [{ label: "Reviews", href: "/review/appeals", icon: "scales", tab: true }],
+    items: [{ label: "Reviews", href: "/review/appeals" }],
   },
   {
     id: "coordinate",
     segment: "coordinate",
     label: "Coordinating",
     items: [
-      { label: "Overview", href: "/coordinate", icon: "grid", tab: true },
-      { label: "Cohorts", href: "/coordinate/cohorts", icon: "users", tab: true },
-      { label: "Appeals", href: "/coordinate/appeals", icon: "scales", tab: true },
-      { label: "Notices", href: "/coordinate/notices", icon: "megaphone", tab: true },
-      { label: "Queries", href: "/coordinate/queries", icon: "help" },
-      { label: "Logistics", href: "/coordinate/logistics", icon: "calendar" },
-      { label: "Reports", href: "/coordinate/reports", icon: "chart" },
+      { label: "Overview", href: "/coordinate" },
+      { label: "Cohorts", href: "/coordinate/cohorts" },
+      { label: "Appeals", href: "/coordinate/appeals" },
+      { label: "Notices", href: "/coordinate/notices" },
+      { label: "Queries", href: "/coordinate/queries" },
+      { label: "Logistics", href: "/coordinate/logistics" },
+      { label: "Reports", href: "/coordinate/reports" },
     ],
   },
   {
@@ -102,13 +97,13 @@ export const WORKSPACES: readonly Workspace[] = [
     segment: "admin",
     label: "Administration",
     items: [
-      { label: "Overview", href: "/admin", icon: "grid", tab: true },
-      { label: "Accounts", href: "/admin/accounts", icon: "users", tab: true },
-      { label: "Imports", href: "/admin/imports", icon: "upload", tab: true },
-      { label: "Configuration", href: "/admin/configuration", icon: "sliders", tab: true },
-      { label: "Department integration", href: "/admin/integration", icon: "external" },
-      { label: "Audit log", href: "/admin/audit", icon: "clipboard" },
-      { label: "Cohort archive", href: "/admin/cohorts", icon: "archive" },
+      { label: "Overview", href: "/admin" },
+      { label: "Accounts", href: "/admin/accounts" },
+      { label: "Imports", href: "/admin/imports" },
+      { label: "Configuration", href: "/admin/configuration" },
+      { label: "Department integration", href: "/admin/integration" },
+      { label: "Audit log", href: "/admin/audit" },
+      { label: "Cohort archive", href: "/admin/cohorts" },
     ],
   },
 ];

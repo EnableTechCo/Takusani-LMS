@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { Banner } from "@/components/forms/form-parts";
-import { PageHeader } from "@/components/shell/app-shell";
+import { PageHeader } from "@/components/shell/page-header";
 import { createClient } from "@/lib/supabase/server";
-import { isRole, ROLE_LABELS } from "@/modules/identity/access";
+import { roleLabels } from "@/modules/identity/access";
 
 export const metadata = { title: "Accounts · Administration" };
 
@@ -59,12 +59,7 @@ export default async function AccountsPage({ searchParams }: { searchParams: Pro
                     {account.full_name}
                   </th>
                   <td data-label="Email">{account.email}</td>
-                  <td data-label="Roles">
-                    {account.roles
-                      .filter(isRole)
-                      .map((role) => ROLE_LABELS[role])
-                      .join(", ") || "None"}
-                  </td>
+                  <td data-label="Roles">{roleLabels(account.roles).join(", ") || "None"}</td>
                   <td data-label="Status">
                     <span className={account.status === "active" ? "tag tag--positive" : "tag"}>
                       {account.status === "active" ? "Active" : "Deactivated"}

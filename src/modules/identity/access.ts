@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ROLES, type NavigationSubject, type Role } from "./navigation";
+import { landingPathFor, ROLES, workspacesFor, type NavigationSubject, type Role } from "./navigation";
 
 export const ROLE_LABELS: Record<Role, string> = {
   learner: "Learner",
@@ -20,14 +20,39 @@ export interface MyAccess {
   has_review_allocation: boolean;
 }
 
-export function isRole(value: string): value is Role {
+/** The identity block of the account menu. */
+export interface AccountSummary {
+  name: string;
+  email: string;
+  initials: string;
+  /** Roles held, one per line (read-only; FR-102). */
+  details: string[];
+}
+
+function isRole(value: string): value is Role {
   return (ROLES as readonly string[]).includes(value);
+}
+
+/** Display labels for role codes, in the order given, skipping codes the application does not know. */
+export function roleLabels(roles: readonly string[]): string[] {
+  return roles.filter(isRole).map((role) => ROLE_LABELS[role]);
 }
 
 /** Navigation for a person. No access row, or a deactivated account, gives no workspaces. */
 export function toNavigationSubject(access: MyAccess | null): NavigationSubject {
   if (!access || access.status !== "active") return { roles: [], hasReviewAllocation: false };
   return { roles: access.roles.filter(isRole), hasReviewAllocation: access.has_review_allocation };
+}
+
+/**
+ * Where a person goes after signing in or opening the site (UX section 3.3): signed out to /sign-in, learner only
+ * to /learn, any staff role to /home, and someone signed in with no roles yet to their account page rather than
+ * back to sign-in.
+ */
+export function homePathFor(access: MyAccess | null): string {
+  const subject = toNavigationSubject(access);
+  if (access?.status === "active" && workspacesFor(subject).length === 0) return "/account";
+  return landingPathFor(subject);
 }
 
 export function initialsOf(name: string): string {
@@ -50,7 +75,7 @@ export function safeNextPath(next: unknown): string | null {
 
 /** Matches minimum_password_length in supabase/config.toml. 72 bytes is bcrypt's limit. */
 export const PASSWORD_MIN = 12;
-export const passwordSchema = z
+const passwordSchema = z
   .string()
   .min(PASSWORD_MIN, `Use at least ${PASSWORD_MIN} characters.`)
   .refine((value) => new TextEncoder().encode(value).length <= 72, "Use 72 characters or fewer.");

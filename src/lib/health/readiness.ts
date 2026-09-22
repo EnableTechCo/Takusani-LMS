@@ -8,7 +8,7 @@ export interface Readiness {
 }
 
 /** Upper bound for the database probe, so a slow dependency cannot hold the check open. */
-export const PROBE_TIMEOUT_MS = 2000;
+const PROBE_TIMEOUT_MS = 2000;
 
 /**
  * Configuration is valid, and the database answers `api.health_check()` through the Data API within the timeout.

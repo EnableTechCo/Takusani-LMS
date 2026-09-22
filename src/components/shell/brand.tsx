@@ -1,5 +1,5 @@
 /** The Takusani mark: a T whose crossbar carries two equal weights, a level balance (design system, brand). */
-export function BrandMark({ className = "brand__mark" }: { className?: string }) {
+function BrandMark({ className = "brand__mark" }: { className?: string }) {
   return (
     <svg aria-hidden="true" className={className} viewBox="0 0 32 32">
       <path
