@@ -10,7 +10,16 @@ export async function GET(request: Request) {
   const result = await checkReadiness();
 
   if (!result.ok) {
-    return errorResponse(503, { code: "dependency_unavailable", message: "The service is not ready.", retryable: true, details: { checks: result.checks } }, requestId);
+    return errorResponse(
+      503,
+      {
+        code: "dependency_unavailable",
+        message: "The service is not ready.",
+        retryable: true,
+        details: { checks: result.checks },
+      },
+      requestId,
+    );
   }
 
   return NextResponse.json(

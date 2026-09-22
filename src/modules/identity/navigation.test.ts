@@ -10,12 +10,18 @@ describe("workspacesFor", () => {
   });
 
   it("keeps desktop order with Learning first for a learner who is also staff", () => {
-    expect(ids({ roles: ["moderator", "learner", "assessor"], hasReviewAllocation: false })).toEqual(["learn", "assess", "moderate"]);
+    expect(ids({ roles: ["moderator", "learner", "assessor"], hasReviewAllocation: false })).toEqual([
+      "learn",
+      "assess",
+      "moderate",
+    ]);
   });
 
   it("shows appeal reviews only with an allocation, never from a role", () => {
     expect(ids({ roles: ["moderator"], hasReviewAllocation: true })).toEqual(["moderate", "review"]);
-    expect(ids({ roles: ["moderator", "coordinator", "administrator"], hasReviewAllocation: false })).not.toContain("review");
+    expect(ids({ roles: ["moderator", "coordinator", "administrator"], hasReviewAllocation: false })).not.toContain(
+      "review",
+    );
   });
 });
 
@@ -33,7 +39,15 @@ describe("landingPathFor", () => {
 
 describe("workspace routes", () => {
   it("uses the route prefixes from the UX architecture", () => {
-    expect(WORKSPACES.map((w) => `/${w.segment}`)).toEqual(["/learn", "/teach", "/assess", "/moderate", "/review", "/coordinate", "/admin"]);
+    expect(WORKSPACES.map((w) => `/${w.segment}`)).toEqual([
+      "/learn",
+      "/teach",
+      "/assess",
+      "/moderate",
+      "/review",
+      "/coordinate",
+      "/admin",
+    ]);
     expect(findWorkspace("learning")).toBeUndefined();
     expect(findWorkspace("assess")?.label).toBe("Assessing");
   });

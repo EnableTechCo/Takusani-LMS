@@ -21,7 +21,11 @@ export default async function WorkspacePage({ params }: { params: Promise<{ work
 
   return (
     <div className="mx-auto max-w-[75rem] px-4 py-8 md:px-8">
-      <PageHeader workspace={workspace.label} title={workspace.items[0].label} lead="This workspace is reserved for its first feature." />
+      <PageHeader
+        workspace={workspace.label}
+        title={workspace.items[0].label}
+        lead="This workspace is reserved for its first feature."
+      />
     </div>
   );
 }

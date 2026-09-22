@@ -30,7 +30,8 @@ export const SUPABASE_TO_VERCEL = {
 /** Returns null when aligned, or a message explaining the mismatch. */
 export function checkRegions(supabaseRegion, vercelRegions) {
   const expected = SUPABASE_TO_VERCEL[supabaseRegion];
-  if (!expected) return `No Vercel region is mapped for Supabase region "${supabaseRegion}". Add it to scripts/deploy-region.mjs.`;
+  if (!expected)
+    return `No Vercel region is mapped for Supabase region "${supabaseRegion}". Add it to scripts/deploy-region.mjs.`;
   if (!Array.isArray(vercelRegions) || vercelRegions.length !== 1) {
     return `vercel.json must pin exactly one function region; found ${JSON.stringify(vercelRegions)}.`;
   }

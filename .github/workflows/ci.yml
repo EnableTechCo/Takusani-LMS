@@ -25,6 +25,7 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
+      - run: npm run format:check
       - run: npm run lint
       - run: npm run typecheck
       - run: npm test
@@ -37,12 +38,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # the migration rules compare against the base branch
+          fetch-depth: 0 # the migration rules compare against the base branch
       - name: Migration rules (names, immutability, order)
         run: bash scripts/check-migrations.sh ${{ github.event_name == 'pull_request' && format('origin/{0}', github.base_ref) || '' }}
       - uses: supabase/setup-cli@v1
         with:
-          version: 2.117.0  # keep in step with the supabase devDependency
+          version: 2.117.0 # keep in step with the supabase devDependency
       - run: supabase start
       - run: supabase db lint --local --level warning
       - run: supabase test db

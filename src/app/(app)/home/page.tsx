@@ -6,7 +6,10 @@ export const metadata = { title: "My work" };
 export default function HomePage() {
   return (
     <div className="mx-auto max-w-[75rem] px-4 py-8 md:px-8">
-      <PageHeader title="My work" lead="Items to mark, items returned to you, sample items to review, and appeals to handle will be listed here." />
+      <PageHeader
+        title="My work"
+        lead="Items to mark, items returned to you, sample items to review, and appeals to handle will be listed here."
+      />
     </div>
   );
 }

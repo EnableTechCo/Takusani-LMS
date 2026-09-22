@@ -6,7 +6,9 @@ export const metadata = { title: "Sign in" };
 export default function SignInPage() {
   return (
     <>
-      <a className="skip-link" href="#main">Skip to main content</a>
+      <a className="skip-link" href="#main">
+        Skip to main content
+      </a>
       <div className="flex min-h-screen flex-col items-center px-4 py-10">
         <header className="mb-8">
           <Brand />

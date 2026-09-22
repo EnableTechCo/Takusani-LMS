@@ -6,18 +6,24 @@ import { NavLink } from "./nav-link";
 
 function WorkspaceNav({ workspaces, labelledBy }: { workspaces: Workspace[]; labelledBy: string }) {
   if (workspaces.length === 0) {
-    return <p className="px-3 text-sm text-text-secondary">No workspaces yet. Your roles are set by an administrator.</p>;
+    return (
+      <p className="px-3 text-sm text-text-secondary">No workspaces yet. Your roles are set by an administrator.</p>
+    );
   }
 
   // One person with one role gets a flat list; several roles get a heading per workspace (UX section 3.3).
   const grouped = workspaces.length > 1;
   return (
     <nav aria-labelledby={labelledBy} className="space-y-6">
-      <h2 className="sr-only" id={labelledBy}>Main</h2>
+      <h2 className="sr-only" id={labelledBy}>
+        Main
+      </h2>
       {workspaces.map((workspace) => (
         <div key={workspace.id}>
           {grouped && (
-            <h3 className="mb-1 px-3 text-xs font-semibold tracking-wide text-text-tertiary uppercase">{workspace.label}</h3>
+            <h3 className="mb-1 px-3 text-xs font-semibold tracking-wide text-text-tertiary uppercase">
+              {workspace.label}
+            </h3>
           )}
           <ul className="space-y-0.5">
             {workspace.items.map((item, index) => (
@@ -40,14 +46,19 @@ function WorkspaceNav({ workspaces, labelledBy }: { workspaces: Workspace[]; lab
 export function AppShell({ workspaces, children }: { workspaces: Workspace[]; children: ReactNode }) {
   return (
     <>
-      <a className="skip-link" href="#main">Skip to main content</a>
+      <a className="skip-link" href="#main">
+        Skip to main content
+      </a>
       <div className="min-h-screen lg:grid lg:grid-cols-[16rem_1fr]">
         <header className="sticky top-0 z-[200] flex h-14 items-center gap-3 border-b border-border bg-surface px-4 lg:col-span-2">
           <Link className="rounded-sm" href="/">
             <Brand />
           </Link>
           <span className="flex-1" />
-          <Link className="flex min-h-11 items-center rounded-sm px-3 text-sm font-medium text-text-secondary hover:text-text-strong" href="/notifications">
+          <Link
+            className="flex min-h-11 items-center rounded-sm px-3 text-sm font-medium text-text-secondary hover:text-text-strong"
+            href="/notifications"
+          >
             Notifications
           </Link>
           <details className="relative lg:hidden">

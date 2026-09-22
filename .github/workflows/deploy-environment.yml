@@ -70,7 +70,7 @@ jobs:
 
       - uses: supabase/setup-cli@v1
         with:
-          version: 2.117.0  # keep in step with the supabase devDependency
+          version: 2.117.0 # keep in step with the supabase devDependency
 
       - run: supabase link --project-ref "$SUPABASE_PROJECT_ID" --password "$SUPABASE_DB_PASSWORD"
 
