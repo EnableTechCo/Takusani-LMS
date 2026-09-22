@@ -30,6 +30,13 @@ The template also reserves variables for the next server-side features:
 - `NEXT_PUBLIC_APP_URL` is `http://localhost:3000` locally and `https://takusani-lms.vercel.app` on staging. The
   staging URL is live and redirects unauthenticated visits to `/sign-in`.
 
+Local development uses:
+
+```dotenv
+# .env.local (Development)
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+```
+
 The deployment credentials `SUPABASE_ACCESS_TOKEN`, `SUPABASE_DB_PASSWORD`, `SUPABASE_PROJECT_ID`, `VERCEL_TOKEN`,
 `VERCEL_ORG_ID`, and `VERCEL_PROJECT_ID` do not belong in `.env.local`. They are GitHub Actions secrets scoped to the
 deployment environment. GitHub shows their names but never reveals their values after they are saved.
