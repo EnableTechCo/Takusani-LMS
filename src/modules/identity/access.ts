@@ -107,13 +107,3 @@ export const newAccountSchema = z.object({
     .optional()
     .transform((value) => value || undefined),
 });
-
-/** Field errors from a failed parse, first message per field, for the form to show beside each field. */
-export function fieldErrors(error: z.ZodError): Record<string, string> {
-  const errors: Record<string, string> = {};
-  for (const issue of error.issues) {
-    const key = String(issue.path[0] ?? "form");
-    errors[key] ??= issue.message;
-  }
-  return errors;
-}

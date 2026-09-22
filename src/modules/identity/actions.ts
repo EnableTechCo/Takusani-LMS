@@ -2,27 +2,11 @@
 
 import { redirect } from "next/navigation";
 import { hasPublicEnvironment } from "@/config/env";
+import { fieldErrors, type FormState } from "@/lib/form-state";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
-import {
-  emailSchema,
-  fieldErrors,
-  homePathFor,
-  newAccountSchema,
-  newPasswordSchema,
-  safeNextPath,
-  signInSchema,
-} from "./access";
+import { emailSchema, homePathFor, newAccountSchema, newPasswordSchema, safeNextPath, signInSchema } from "./access";
 import { getMyAccess } from "./session";
-
-export interface FormState {
-  /** One message for the whole form, shown in an error summary or banner. */
-  message?: string;
-  errors?: Record<string, string>;
-  /** Values to put back in the fields after a refusal (never passwords). */
-  values?: Record<string, string>;
-  done?: boolean;
-}
 
 const text = (form: FormData, name: string) => String(form.get(name) ?? "");
 

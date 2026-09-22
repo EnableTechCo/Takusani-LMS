@@ -4,6 +4,12 @@ import { z } from "zod";
 export const ACTION_LABELS: Record<string, string> = {
   "identity.account_created": "Account created",
   "identity.role_assigned": "Role assigned",
+  "programmes.programme_created": "Programme created",
+  "programmes.qualification_created": "Qualification created",
+  "programmes.unit_created": "Unit created",
+  "programmes.module_created": "Module created",
+  "programmes.cohort_created": "Cohort created",
+  "programmes.learner_enrolled": "Learner enrolled",
 };
 
 export function actionLabel(action: string): string {
@@ -16,6 +22,16 @@ const FIELD_LABELS: Record<string, string> = {
   status: "Status",
   role: "Role",
   scope_type: "Scope",
+  code: "Code",
+  title: "Title",
+  nqf_level: "NQF level",
+  credits: "Credits",
+  unit_id: "Unit",
+  name: "Name",
+  starts_on: "Starts",
+  ends_on: "Ends",
+  moderation_policy: "Moderation",
+  cohort_id: "Cohort",
 };
 
 type Values = Record<string, unknown> | null;

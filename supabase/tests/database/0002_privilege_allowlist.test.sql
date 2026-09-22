@@ -16,7 +16,17 @@ insert into expected_grants values
   ('function', 'api', 'list_accounts()', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'create_account(p_user_id uuid, p_full_name text, p_role text, p_learner_number text)', 'authenticated', 'EXECUTE'),
   -- Audit log (20260923090000): administrators only, checked inside the function.
-  ('function', 'api', 'list_audit_events(p_action text, p_actor_email text, p_object_id text, p_from timestamp with time zone, p_to timestamp with time zone, p_before_id bigint, p_limit integer)', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'list_audit_events(p_action text, p_actor_email text, p_object_id text, p_from timestamp with time zone, p_to timestamp with time zone, p_before_id bigint, p_limit integer)', 'authenticated', 'EXECUTE'),
+  -- Programmes and cohorts (20260923120000): coordinators within scope, checked inside each function.
+  ('function', 'api', 'create_programme(p_code text, p_title text, p_nqf_level smallint)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'create_qualification(p_programme_id uuid, p_code text, p_title text)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'create_unit(p_qualification_id uuid, p_code text, p_title text, p_credits integer)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'create_module(p_programme_id uuid, p_code text, p_title text, p_unit_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'create_cohort(p_programme_id uuid, p_name text, p_starts_on date, p_ends_on date)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'enrol_learner(p_cohort_id uuid, p_email text)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_programmes()', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_cohorts()', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_enrolments(p_cohort_id uuid)', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (

@@ -1,10 +1,15 @@
-import { CohortNav } from "@/components/skeleton/cohort-nav";
+import { CohortNav } from "@/components/shell/cohort-nav";
 import { Block, Form, Screen } from "@/components/skeleton/skeleton";
 
 export const metadata = { title: "Cohort setup · Coordinating" };
 
 // C-03 skeleton (docs/design/ui/LMS-ux-architecture.md, section 5.1). Replace blocks as the feature is built.
-export default function CoordinateCohortsCohortIdSetupPage() {
+export default async function CoordinateCohortsCohortIdSetupPage({
+  params,
+}: {
+  params: Promise<{ cohortId: string }>;
+}) {
+  const { cohortId } = await params;
   return (
     <Screen
       id="C-03"
@@ -12,7 +17,7 @@ export default function CoordinateCohortsCohortIdSetupPage() {
       workspace="Coordinating"
       title="Cohort setup"
       actions={["Save"]}
-      nav={<CohortNav cohortId="example" current="Setup" />}
+      nav={<CohortNav cohortId={cohortId} current="Setup" />}
       aside={
         <>
           <Block heading="Policy history" label="Policy version history" />
