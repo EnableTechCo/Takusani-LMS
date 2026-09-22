@@ -109,7 +109,7 @@ Severity is the reviewers'. "Applied in" names the primary location; related tex
 
 | ID | Finding | Sev. | Decision | Status | Applied in |
 |---|---|---|---|---|---|
-| F1 | Post-commit dispatcher undefined and unnecessary | High | Enqueue inside the domain transaction; outbox remains the delivery ledger; alert on oldest undelivered outbox row | Decided, pending spike X-2 | ADR-025 |
+| F1 | Post-commit dispatcher undefined and unnecessary | High | Enqueue inside the domain transaction; outbox remains the delivery ledger; alert on oldest undelivered outbox row | Decided; spike X-2 confirmed 23 Sep 2026 | ADR-025 |
 | F2 | Transaction-scoped advisory lock cannot cover a per-message batch; session locks do not survive the pooler | High | No advisory lock; visibility timeouts make overlap harmless | Decided | ADR-025; API operational routes |
 | F3 | Vercel Cron is GET, best effort, no scheduled instant, paid for per-minute | High | GET with cron secret; one-shot jobs unique by domain object; database schedules on Supabase Cron | Decided; plan is P-15 | ADR-025 |
 | F4 | 15-minute RPO needs a paid add-on; in-place restore rewinds Storage metadata, queue, outbox, Auth | Medium | Add-on in the planning basis; restore runbook pauses worker, suppresses old outbox rows, reconciles Storage | Working (P-14) | ADR-027; security "Backup, restore" |
@@ -215,15 +215,15 @@ U-02 adds a category of restricted personal information. The reason is stored as
 
 Each settles an assumption the corrected design depends on. A failed spike reopens the named decision.
 
-| ID | Experiment | Settles | Reopens if it fails |
-|---|---|---|---|
-| X-1 | Create functions in `public` and in an unexposed schema; call both from a browser with only the publishable key and a learner token; confirm the revoke recipe | E1-E3 | ADR-024 |
-| X-2 | Send a queue message inside a domain function and force a rollback; confirm the message is gone; confirm read count and visibility timeout are reachable | F1 | ADR-025 |
-| X-3 | One-function autosave pinned to the database region; 250-client load test from a South African client; repeat with the function in Cape Town | F6, D5 | ADR-027, ADR-023 |
-| X-4 | Set-based release of 1,000 results; measure against the two-second gate | F7 | API sign-off path |
-| X-5 | 25 MB resumable upload with a signed token on an interrupted connection; record which integrity fields Storage metadata exposes | G3 | Upload handshake |
-| X-6 | Point-in-time restore of a throwaway project to ten minutes ago after uploads and queue sends; observe Storage metadata, queue, Auth, downtime | F4 | Restore runbook, RTO |
-| X-7 | Per-minute Vercel Cron for 48 hours logging missed and duplicate runs, beside a Supabase Cron job doing the same sweep | F3 | ADR-025 |
+| ID | Experiment | Settles | Reopens if it fails | Result |
+|---|---|---|---|---|
+| X-1 | Create functions in `public` and in an unexposed schema; call both from a browser with only the publishable key and a learner token; confirm the revoke recipe | E1-E3 | ADR-024 | **Confirmed 23 Sep 2026.** Unexposed schemas (`public`, `identity`, `audit`, GraphQL) refuse every call with `406 PGRST106`, even for a function granted to `anon`; a new `api` function without an explicit grant refuses with `42501`. Local and staging. Kept as a CI check: `scripts/check-data-api-exposure.mjs`. |
+| X-2 | Send a queue message inside a domain function and force a rollback; confirm the message is gone; confirm read count and visibility timeout are reachable | F1 | ADR-025 | **Confirmed 23 Sep 2026.** A message sent before a domain function fails is rolled back with its outbox row; `read_ct` rises per read, the visibility timeout hides a message from a second reader, `set_vt` and `archive` work (pgmq 1.5.1, also available on staging). Kept as `supabase/tests/database/0007_queue_in_transaction.test.sql`. |
+| X-3 | One-function autosave pinned to the database region; 250-client load test from a South African client; repeat with the function in Cape Town | F6, D5 | ADR-027, ADR-023 | Not run yet |
+| X-4 | Set-based release of 1,000 results; measure against the two-second gate | F7 | API sign-off path | Not run yet |
+| X-5 | 25 MB resumable upload with a signed token on an interrupted connection; record which integrity fields Storage metadata exposes | G3 | Upload handshake | Not run yet |
+| X-6 | Point-in-time restore of a throwaway project to ten minutes ago after uploads and queue sends; observe Storage metadata, queue, Auth, downtime | F4 | Restore runbook, RTO | Not run yet |
+| X-7 | Per-minute Vercel Cron for 48 hours logging missed and duplicate runs, beside a Supabase Cron job doing the same sweep | F3 | ADR-025 | Not run yet |
 
 ## 6. What can start, and what waits
 

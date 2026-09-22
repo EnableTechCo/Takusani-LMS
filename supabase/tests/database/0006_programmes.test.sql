@@ -1,5 +1,6 @@
 -- Programmes, cohorts and enrolments (S1-16): who can create what, scoped coordination, and enrolment rules.
--- Uses the local seed: coordinator@ (global coordinator), learner@, staff@, and the CBA-NQF4 programme.
+-- Uses the local seed: coordinator@ (global coordinator), learner@, staff@, and the CBA-NQF4 programme. Names it creates
+-- start with pgTAP so the test does not collide with records someone made by hand in a local database.
 create extension if not exists pgtap with schema extensions;
 
 begin;
@@ -36,14 +37,14 @@ reset role;
 select pg_temp.act_as(:'coordinator');
 select results_eq($$ select status from api.create_programme('bad code!', 'A programme') $$, $$ values ('invalid_code'::text) $$,
   'a programme code is upper case letters, digits and dashes');
-select results_eq($$ select status from api.create_programme('ops-2027', 'Operations', 5::smallint) $$, $$ values ('ok'::text) $$,
+select results_eq($$ select status from api.create_programme('pgtap-ops', 'Operations', 5::smallint) $$, $$ values ('ok'::text) $$,
   'a global coordinator creates a programme (the code is upper-cased)');
-select results_eq($$ select status from api.create_programme('OPS-2027', 'Again') $$, $$ values ('code_taken'::text) $$,
+select results_eq($$ select status from api.create_programme('PGTAP-OPS', 'Again') $$, $$ values ('code_taken'::text) $$,
   'programme codes are unique');
-select (select programme_id from api.create_programme('OTHER-1', 'Other programme')) as other_programme \gset
+select (select programme_id from api.create_programme('PGTAP-OTHER', 'Other programme')) as other_programme \gset
 
 -- qualifications, units with a versioned credit value, modules
-select (select qualification_id from api.create_qualification(:'programme', 'Q-2', 'Second qualification')) as qualification \gset
+select (select qualification_id from api.create_qualification(:'programme', 'PGTAP-Q', 'Second qualification')) as qualification \gset
 select results_eq(
   format($$ select status from api.create_unit(%L, 'U9', 'Unit nine', 8) $$, :'qualification'),
   $$ values ('ok'::text) $$, 'a coordinator creates a unit');
@@ -62,16 +63,16 @@ select results_eq(
 
 -- cohorts
 select results_eq(
-  format($$ select status from api.create_cohort(%L, '2027 Intake A', '2027-02-01', '2027-01-01') $$, :'programme'),
+  format($$ select status from api.create_cohort(%L, 'pgTAP Intake A', '2027-02-01', '2027-01-01') $$, :'programme'),
   $$ values ('invalid_dates'::text) $$, 'a cohort cannot end before it starts');
-select (select cohort_id from api.create_cohort(:'programme', '2027 Intake A', '2027-02-01', '2027-12-15')) as cohort \gset
+select (select cohort_id from api.create_cohort(:'programme', 'pgTAP Intake A', '2027-02-01', '2027-12-15')) as cohort \gset
 reset role;
 select results_eq(
   format($$ select moderation_policy, policy_version from programmes.cohort_moderation_state where cohort_id = %L $$, :'cohort'),
   $$ values ('not_moderated'::text, 1) $$, 'every new cohort has its moderation policy row, not moderated at go-live');
 select pg_temp.act_as(:'coordinator');
 select results_eq(
-  format($$ select status from api.create_cohort(%L, '2027 Intake A', '2027-02-01', '2027-12-15') $$, :'programme'),
+  format($$ select status from api.create_cohort(%L, 'pgTAP Intake A', '2027-02-01', '2027-12-15') $$, :'programme'),
   $$ values ('name_taken'::text) $$, 'cohort names are unique within a programme');
 
 -- scope: a coordinator for one programme, and one for one cohort
@@ -82,7 +83,7 @@ select pg_temp.act_as(:'scoped');
 select results_eq($$ select status from api.create_programme('NOPE-1', 'Not allowed') $$, $$ values ('forbidden'::text) $$,
   'a programme-scoped coordinator cannot create programmes');
 select results_eq(
-  format($$ select status from api.create_cohort(%L, '2027 Intake B', '2027-02-01', '2027-12-15') $$, :'programme'),
+  format($$ select status from api.create_cohort(%L, 'pgTAP Intake B', '2027-02-01', '2027-12-15') $$, :'programme'),
   $$ values ('ok'::text) $$, 'a programme-scoped coordinator creates cohorts in their programme');
 select results_eq(
   format($$ select status from api.create_cohort(%L, 'Elsewhere', '2027-02-01', '2027-12-15') $$, :'other_programme'),
