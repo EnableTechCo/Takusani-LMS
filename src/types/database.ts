@@ -15,7 +15,58 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      create_account: {
+        Args: {
+          p_full_name: string
+          p_learner_number?: string
+          p_role: string
+          p_user_id: string
+        }
+        Returns: {
+          profile_id: string
+          status: string
+        }[]
+      }
       health_check: { Args: never; Returns: boolean }
+      list_accounts: {
+        Args: never
+        Returns: {
+          created_at: string
+          email: string
+          full_name: string
+          last_sign_in_at: string
+          profile_id: string
+          roles: string[]
+          status: string
+        }[]
+      }
+      my_access: {
+        Args: never
+        Returns: {
+          email: string
+          full_name: string
+          has_review_allocation: boolean
+          profile_id: string
+          roles: string[]
+          status: string
+        }[]
+      }
+      provision_account: {
+        Args: {
+          p_full_name: string
+          p_learner_number?: string
+          p_role: string
+          p_user_id: string
+        }
+        Returns: {
+          profile_id: string
+          status: string
+        }[]
+      }
+      provision_role: {
+        Args: { p_role: string; p_user_id: string }
+        Returns: string
+      }
     }
     Enums: {
       [_ in never]: never

@@ -1,24 +1,84 @@
-import { Block, Form, Screen } from "@/components/skeleton/skeleton";
+import Link from "next/link";
+import { Banner } from "@/components/forms/form-parts";
+import { PageHeader } from "@/components/shell/app-shell";
+import { createClient } from "@/lib/supabase/server";
+import { isRole, ROLE_LABELS } from "@/modules/identity/access";
 
 export const metadata = { title: "Accounts · Administration" };
 
-// X-02 skeleton (docs/design/ui/LMS-ux-architecture.md, section 5.1). Replace blocks as the feature is built.
-export default function AdminAccountsPage() {
+const DATE = new Intl.DateTimeFormat("en-ZA", {
+  day: "numeric",
+  month: "short",
+  year: "numeric",
+  hour: "2-digit",
+  minute: "2-digit",
+  timeZone: "Africa/Johannesburg",
+});
+
+// X-02 (FR-103). Search, filters and account detail (X-03) come with the account administration ticket.
+export default async function AccountsPage({ searchParams }: { searchParams: Promise<{ created?: string }> }) {
+  const { created } = await searchParams;
+  const supabase = await createClient();
+  const { data: accounts, error } = await supabase.rpc("list_accounts");
+  if (error) throw new Error(`api.list_accounts failed: ${error.message}`);
+
   return (
-    <Screen
-      id="X-02"
-      frs="FR-103, FR-106"
-      workspace="Administration"
-      title="Accounts"
-      actions={[{ label: "New account", href: "/admin/accounts/new" }]}
-    >
-      <Form fields={[{ label: "Find an account", type: "search" }]} />
-      <Block
-        label="Accounts"
-        detail="Name, email, status, roles, last sign-in"
-        size="xl"
-        example={{ label: "Example account", href: "/admin/accounts/example" }}
+    <div className="page">
+      <PageHeader
+        workspace="Administration"
+        title="Accounts"
+        lead="Everyone who can sign in, and the roles they hold."
       />
-    </Screen>
+      <div className="stack stack--lg">
+        {created ? (
+          <Banner title="Account created" tone="positive">
+            <p>An invitation has been sent to {created}. They choose their own password from the email.</p>
+          </Banner>
+        ) : null}
+        <div className="cluster">
+          <Link className="btn btn--primary" href="/admin/accounts/new">
+            New account
+          </Link>
+        </div>
+        <div className="table-wrap">
+          <table className="table table--cards">
+            <caption className="u-visually-hidden">Accounts, by name. Times in SAST.</caption>
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Roles</th>
+                <th scope="col">Status</th>
+                <th scope="col">Last signed in</th>
+              </tr>
+            </thead>
+            <tbody>
+              {accounts.map((account) => (
+                <tr key={account.profile_id}>
+                  <th className="table__primary-cell" data-label="Name" scope="row">
+                    {account.full_name}
+                  </th>
+                  <td data-label="Email">{account.email}</td>
+                  <td data-label="Roles">
+                    {account.roles
+                      .filter(isRole)
+                      .map((role) => ROLE_LABELS[role])
+                      .join(", ") || "None"}
+                  </td>
+                  <td data-label="Status">
+                    <span className={account.status === "active" ? "tag tag--positive" : "tag"}>
+                      {account.status === "active" ? "Active" : "Deactivated"}
+                    </span>
+                  </td>
+                  <td data-label="Last signed in">
+                    {account.last_sign_in_at ? DATE.format(new Date(account.last_sign_in_at)) : "Not yet"}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   );
 }

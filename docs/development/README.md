@@ -11,21 +11,48 @@
 
 1. Copy .env.example to .env.local.
 2. Run npm install.
-3. Run npm run db:start and copy the local publishable key to .env.local.
-4. To preview the navigation before real sign-in exists, set `LMS_DEV_ROLES` in .env.local, for example `learner,assessor,moderator`. It is ignored in production builds, which always get no roles.
-5. Run npm run dev.
-6. Open http://localhost:3000.
+3. Run npm run db:start (Docker must be running). Copy the local publishable key and secret key it prints into .env.local.
+4. Run npm run dev.
+5. Open http://localhost:3000. Use the same host throughout: invitation and reset emails link to localhost (`site_url` in supabase/config.toml), and a session cookie belongs to one host.
+
+## Signing in and accounts
+
+Accounts are created by an administrator; there is no public sign-up (FR-103). Sign-in is Supabase Auth with email and password, and what a person sees comes from their role assignments in the database (`identity.role_assignments`, read through `api.my_access()`).
+
+**Local test accounts.** `supabase db reset` loads `supabase/seed.sql`, which creates one account per actor. They all use the password `takusani-local-password`, which exists only in local databases.
+
+| Email | Roles | Lands on |
+|---|---|---|
+| learner@takusani.test | Learner | /learn |
+| facilitator@takusani.test | Facilitator | /home |
+| assessor@takusani.test | Assessor | /home |
+| moderator@takusani.test | Moderator | /home |
+| coordinator@takusani.test | Coordinator | /home |
+| admin@takusani.test | Administrator (can create accounts) | /home |
+| staff@takusani.test | Facilitator, assessor, moderator, coordinator | /home |
+
+**Creating an account.** Sign in as the administrator, open Administration, then Accounts, then New account. The person gets an invitation email and chooses their own password at `/accept-invite`. Locally, emails go to Mailpit at http://127.0.0.1:54324, not to real inboxes. Roles apply to the whole institution until cohort setup adds scoped roles.
+
+**Forgot password.** `/forgot-password` emails a reset link; the reply is the same whether or not the account exists.
+
+**How the pieces fit.** `src/proxy.ts` refreshes the session and sends signed-out visitors to `/sign-in`. `/auth/confirm` verifies invitation and reset links (templates in `supabase/email`). The app layout reads the person's access once per request (`src/modules/identity/session.ts`), and each workspace layout returns 404 unless the person holds that workspace. The database checks again: administrator-only functions refuse anyone else, and every account and role change is written to `audit.events` in the same transaction.
+
+**Staging accounts.** Once the identity migration is on staging, `npm run accounts:staging` creates the same seven accounts there. It reads `STAGING_SUPABASE_URL`, `STAGING_SUPABASE_SECRET_KEY` and `STAGING_TEST_ACCOUNT_PASSWORD` from .env.local and is safe to run again.
+
+**Email on staging.** Supabase's built-in email service only delivers to members of the Supabase organisation and allows a handful of emails an hour. Real invitations and password resets on staging need custom SMTP (Dashboard, Authentication, Emails, SMTP settings).
 
 ## Environment variables
 
-Copy `.env.example` to `.env.local`; never commit `.env.local` or a real secret. The current application requires
-only `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. `LMS_DEV_ROLES` is an optional local-only
-navigation aid and is ignored in production.
+Copy `.env.example` to `.env.local`; never commit `.env.local` or a real secret. The application requires
+`NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`; creating accounts also needs
+`SUPABASE_SECRET_KEY`. Without the two public values the site still loads, but sign-in says it is not available and
+`/api/health/ready` reports not ready.
 
-The template also reserves variables for the next server-side features:
+The template also covers:
 
-- `SUPABASE_SECRET_KEY` is a dedicated `sb_secret_...` key for trusted workers and narrowly scoped administrative
-  operations. Create it under Supabase **Settings > API Keys**. It must never be exposed to browser code.
+- `SUPABASE_SECRET_KEY` is a dedicated `sb_secret_...` key, used today only by account creation (the Auth admin API,
+  `src/lib/supabase/admin.ts`) and later by trusted workers. Create it under Supabase **Settings > API Keys**. It
+  must never be exposed to browser code. Locally, use the secret key `npx supabase status` prints.
 - `CRON_SECRET` authenticates Vercel Cron requests. Generate an independent random value of at least 16 characters.
 - `NEXT_PUBLIC_APP_URL` is `http://localhost:3000` locally and `https://takusani-lms.vercel.app` on staging. The
   staging URL is live and redirects unauthenticated visits to `/sign-in`.
@@ -58,7 +85,7 @@ Every screen in the UX architecture's inventory (`docs/design/ui/LMS-ux-architec
 - Styling comes from the prototype's component layer, `src/styles/ui.css`, an exact copy of `docs/design/ui/prototype/assets/ui.css` (a test fails if they drift; change the prototype first). Skeleton blocks are styled in `src/styles/skeleton.css`, which goes away once no screen uses them.
 - Shells: `AppShell` for workspace pages, `src/app/(auth)` for sign-in and account recovery, `src/app/(exam)` for the exam, which has no navigation (FR-901).
 - Each workspace folder returns 404 unless the person holds that workspace; a test checks that every navigation link has a page.
-- Locally, `LMS_DEV_ROLES` in `.env.local` decides which workspaces you see. List all six roles plus `reviewer` to see every screen. Production builds always get no roles until sign-in exists.
+- Which workspaces you see depends on who you sign in as. Sign in as staff@takusani.test to see four workspaces at once.
 
 ## Database changes
 

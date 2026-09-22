@@ -118,10 +118,12 @@ function AccountMenu({ account }: { account: AccountSummary }) {
           <Icon name="help" />
           Help
         </Link>
-        <Link className="menu__item" href="/sign-in">
-          <Icon name="sign-out" />
-          Sign out
-        </Link>
+        <form action="/auth/sign-out" method="post">
+          <button className="menu__item" type="submit">
+            <Icon name="sign-out" />
+            Sign out
+          </button>
+        </form>
       </div>
     </details>
   );

@@ -26,6 +26,7 @@
     "db:migrations:check": "bash scripts/check-migrations.sh origin/main",
     "db:drift": "bash scripts/check-db-drift.sh",
     "db:types": "supabase gen types typescript --local --schema api > src/types/database.ts",
+    "accounts:staging": "node --env-file=.env.local scripts/provision-accounts.mjs",
     "db:check": "npm run db:migrations:check && npm run db:drift && supabase db reset && npm run db:lint && npm run db:test && npm run db:types"
   },
   "dependencies": {

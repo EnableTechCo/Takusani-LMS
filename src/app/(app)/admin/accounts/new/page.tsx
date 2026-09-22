@@ -1,27 +1,22 @@
-import { Block, Form, Screen } from "@/components/skeleton/skeleton";
+import { PageHeader } from "@/components/shell/app-shell";
+import { NewAccountForm } from "@/modules/identity/forms";
 
 export const metadata = { title: "New account · Administration" };
 
-// X-02 skeleton (docs/design/ui/LMS-ux-architecture.md, section 5.1). Replace blocks as the feature is built.
-export default function AdminAccountsNewPage() {
+// X-02 New account (FR-103): creates the account with one role and emails an invitation.
+export default function NewAccountPage() {
   return (
-    <Screen
-      id="X-02"
-      frs="FR-103"
-      workspace="Administration"
-      title="New account"
-      actions={["Create and invite"]}
-      width="form"
-    >
-      <Form
-        fields={[
-          { label: "Full name" },
-          { label: "Email address", type: "email" },
-          { label: "Role", type: "select" },
-          { label: "Scope", type: "select" },
-        ]}
+    <div className="page page--form">
+      <PageHeader
+        workspace="Administration"
+        title="New account"
+        lead="Create an account and send the person an invitation to choose their password."
       />
-      <Block label="Invitation" detail="The person is emailed a link to set their password" size="sm" />
-    </Screen>
+      <div className="card">
+        <div className="card__body">
+          <NewAccountForm />
+        </div>
+      </div>
+    </div>
   );
 }

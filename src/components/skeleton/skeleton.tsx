@@ -292,24 +292,3 @@ export function Workspace({
     </>
   );
 }
-
-/** Sign-in and account recovery screens: a heading and content inside the auth shell's card. */
-export function AuthScreen({
-  id,
-  frs,
-  title,
-  children,
-}: {
-  id: string;
-  frs?: string;
-  title: string;
-  children: ReactNode;
-}) {
-  return (
-    <div className="stack">
-      <h1 className="text-title">{title}</h1>
-      <ScreenMeta frs={frs} id={id} />
-      {children}
-    </div>
-  );
-}
