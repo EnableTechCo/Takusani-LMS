@@ -68,7 +68,7 @@ jobs:
       - name: Vercel region matches the Supabase region (ADR-027)
         run: node scripts/deploy-region.mjs "$SUPABASE_PROJECT_ID"
 
-      - uses: supabase/setup-cli@v1
+      - uses: supabase/setup-cli@v3
         with:
           version: 2.117.0 # keep in step with the supabase devDependency
 
