@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { isRole, ROLE_LABELS } from "@/modules/identity/access";
+import { roleLabels } from "@/modules/identity/access";
 import { NewPasswordForm } from "@/modules/identity/forms";
 import { getMyAccess } from "@/modules/identity/session";
 
@@ -9,7 +9,7 @@ export const metadata = { title: "Set up your account" };
 export default async function AcceptInvitePage() {
   const access = await getMyAccess();
   if (access?.status !== "active") redirect("/auth/sign-out?reason=no_access");
-  const roles = access.roles.filter(isRole).map((role) => ROLE_LABELS[role]);
+  const roles = roleLabels(access.roles);
 
   return (
     <div className="stack">

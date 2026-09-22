@@ -7,6 +7,7 @@
 // STAGING_TEST_ACCOUNT_PASSWORD (at least 12 characters, shared by every test account). Needs the identity
 // migration applied to staging first.
 import { createClient } from "@supabase/supabase-js";
+import { pathToFileURL } from "node:url";
 
 export const TEST_ACCOUNTS = [
   { email: "learner@takusani.test", fullName: "Lerato Mokoena", roles: ["learner"], learnerNumber: "KSI-2026-0417" },
@@ -83,7 +84,11 @@ async function main() {
   console.log(`\n${TEST_ACCOUNTS.length} test accounts ready. They sign in with STAGING_TEST_ACCOUNT_PASSWORD.`);
 }
 
-main().catch((error) => {
-  console.error(error.message ?? error);
-  process.exit(1);
-});
+// Run only when invoked as a script, so the account list can be imported by the test that keeps it in step with
+// supabase/seed.sql.
+if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
+  main().catch((error) => {
+    console.error(error.message ?? error);
+    process.exit(1);
+  });
+}

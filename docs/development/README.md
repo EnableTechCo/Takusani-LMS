@@ -71,7 +71,9 @@ deployment environment. GitHub shows their names but never reveals their values 
 ## Where things go
 
 - **Routes** follow the sitemap in `docs/design/ui/LMS-ux-architecture.md` section 4: `/learn`, `/teach`, `/assess`, `/moderate`, `/review`, `/coordinate`, `/admin`, plus `/home`, `/notifications` and `/sign-in`. A workspace the person does not hold returns 404.
-- **Navigation** is built from the person's roles in `src/modules/identity/navigation.ts`. There is no role switcher.
+- **Navigation**: which destinations exist and who sees them is in `src/modules/identity/navigation.ts`; how they look (icons, phone bottom tabs) is in `src/components/shell/nav-presentation.ts`. Tests check that every destination has a page and an icon. There is no role switcher.
+- **Layers**: `src/modules/*` holds each module's rules, commands and queries and never imports from `src/components` or `src/app`; `src/lib` and `src/config` import neither. ESLint enforces both. Pages in `src/app` compose modules and components.
+- **Institution details** (name, help contact) are read from `src/config/institution.ts` until configuration (X-06) stores them.
 - **Styling** uses the design tokens only. `src/styles/tokens.css` is a copy of `docs/design/ui/prototype/assets/tokens.css`; change the prototype file first, then copy it. A unit test fails if they differ.
 - **Server-only code** starts with `import "server-only";` so the build fails if a Client Component imports it. Anything that touches cookies, secrets or privileged keys is server-only.
 - **API errors** use `errorResponse()` in `src/lib/http/error-response.ts`: `{ "error": { code, message, request_id, retryable, details } }` with lower snake_case codes.
@@ -81,7 +83,7 @@ deployment environment. GitHub shows their names but never reveals their values 
 
 Every screen in the UX architecture's inventory (`docs/design/ui/LMS-ux-architecture.md`, section 5.1) has its route, and each route renders a **skeleton**: the real page frame, headings, form labels and primary actions, with each piece of content drawn as a dashed, labelled block that says what will go there. The header shows the screen ID (for example `L-03`) and its requirements. A feature ticket replaces a screen's blocks with real components and data; the prototype (`docs/design/ui/prototype`) shows what the finished P0 screens look like.
 
-- Skeleton parts are in `src/components/skeleton`: `Screen` (page frame, optional aside), `Block` (a labelled placeholder), `Blocks` (side by side), `Form` (real labels, no values, disabled actions), `Workspace` (marking, moderation and appeal review: evidence, panel and decision bar), `AuthScreen` and `CohortNav`. Primary actions are disabled buttons; links between screens work, using `example` for IDs.
+- Skeleton parts are in `src/components/skeleton`: `Screen` (page frame, optional aside), `Block` (a labelled placeholder), `Blocks` (side by side), `Form` (real labels, no values, disabled actions), `Workspace` (marking, moderation and appeal review: evidence, panel and decision bar) and `CohortNav`. Primary actions are disabled buttons; links between screens work, using `example` for IDs.
 - Styling comes from the prototype's component layer, `src/styles/ui.css`, an exact copy of `docs/design/ui/prototype/assets/ui.css` (a test fails if they drift; change the prototype first). Skeleton blocks are styled in `src/styles/skeleton.css`, which goes away once no screen uses them.
 - Shells: `AppShell` for workspace pages, `src/app/(auth)` for sign-in and account recovery, `src/app/(exam)` for the exam, which has no navigation (FR-901).
 - Each workspace folder returns 404 unless the person holds that workspace; a test checks that every navigation link has a page.

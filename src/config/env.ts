@@ -21,7 +21,7 @@ export function getPublicEnvironment() {
 }
 
 /** Server-only settings. Read them only from modules that import "server-only". */
-export const serverEnvironmentSchema = z.object({
+const serverEnvironmentSchema = z.object({
   SUPABASE_SECRET_KEY: z.string().min(1, "SUPABASE_SECRET_KEY is required to create accounts"),
 });
 

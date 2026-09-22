@@ -7,13 +7,12 @@ import { createClient } from "@/lib/supabase/server";
 import {
   emailSchema,
   fieldErrors,
+  homePathFor,
   newAccountSchema,
   newPasswordSchema,
   safeNextPath,
   signInSchema,
-  toNavigationSubject,
 } from "./access";
-import { landingPathFor } from "./navigation";
 import { getMyAccess } from "./session";
 
 export interface FormState {
@@ -55,7 +54,7 @@ export async function signIn(_: FormState, form: FormData): Promise<FormState> {
     return { message: WRONG_DETAILS, values };
   }
 
-  redirect(safeNextPath(text(form, "next")) ?? landingPathFor(toNavigationSubject(access)));
+  redirect(safeNextPath(text(form, "next")) ?? homePathFor(access));
 }
 
 export async function requestPasswordReset(_: FormState, form: FormData): Promise<FormState> {
@@ -83,8 +82,7 @@ export async function setNewPassword(_: FormState, form: FormData): Promise<Form
       : { message: "Your link has expired. Ask for a new one." };
   }
 
-  const access = await getMyAccess();
-  redirect(landingPathFor(toNavigationSubject(access)));
+  redirect(homePathFor(await getMyAccess()));
 }
 
 const REFUSALS: Record<string, string> = {

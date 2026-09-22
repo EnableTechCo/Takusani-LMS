@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest";
 import {
+  homePathFor,
   initialsOf,
   newAccountSchema,
   newPasswordSchema,
+  roleLabels,
   safeNextPath,
   signInSchema,
   toNavigationSubject,
@@ -80,5 +82,24 @@ describe("initialsOf", () => {
   it("uses first and last names", () => {
     expect(initialsOf("Zanele  Khumalo")).toBe("ZK");
     expect(initialsOf("Sipho")).toBe("SI");
+  });
+});
+
+describe("homePathFor", () => {
+  it("follows the landing rules", () => {
+    expect(homePathFor(null)).toBe("/sign-in");
+    expect(homePathFor(access())).toBe("/learn");
+    expect(homePathFor(access({ roles: ["learner", "assessor"] }))).toBe("/home");
+    expect(homePathFor(access({ status: "deactivated" }))).toBe("/sign-in");
+  });
+
+  it("sends someone signed in with no roles to their account, not back to sign-in", () => {
+    expect(homePathFor(access({ roles: [] }))).toBe("/account");
+  });
+});
+
+describe("roleLabels", () => {
+  it("labels known roles in order and skips unknown codes", () => {
+    expect(roleLabels(["assessor", "superuser", "learner"])).toEqual(["Assessor", "Learner"]);
   });
 });
