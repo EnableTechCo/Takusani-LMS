@@ -55,9 +55,11 @@ Rules:
 
 Run npm run ci for the application checks. With Docker running, also run npm run db:check.
 
+Code is formatted by Prettier (`.prettierrc.json`, 120 columns, Tailwind classes sorted). Run `npm run format` before committing, or turn on format-on-save in your editor; CI fails on unformatted files. Docs, SQL, generated types and `src/styles/tokens.css` (a copy of the prototype's tokens) are not formatted. The repository uses LF line endings on every platform (`.gitattributes`); on Windows, a clone made before this rule may need `git rm --cached -r . && git reset --hard` once.
+
 ## CI/CD setup
 
-CI validates linting, types, unit tests, the production build, database linting, and pgTAP tests on pull requests and pushes to main. The Supabase and Vercel CLI versions are pinned in the workflows; update them deliberately.
+CI validates formatting, linting, types, unit tests, the production build, database linting, and pgTAP tests on pull requests and pushes to main. The Supabase and Vercel CLI versions are pinned in the workflows; update them deliberately.
 
 ### Environments
 

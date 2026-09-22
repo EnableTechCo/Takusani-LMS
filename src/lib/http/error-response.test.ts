@@ -5,7 +5,12 @@ describe("errorResponse", () => {
   it("wraps the error in the documented envelope", async () => {
     const response = errorResponse(
       409,
-      { code: "state_conflict", message: "The exam attempt has already been submitted.", retryable: false, details: { current_state: "submitted" } },
+      {
+        code: "state_conflict",
+        message: "The exam attempt has already been submitted.",
+        retryable: false,
+        details: { current_state: "submitted" },
+      },
       "request-123",
     );
 

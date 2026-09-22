@@ -9,7 +9,8 @@ const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono", dis
 
 export const metadata: Metadata = {
   title: { default: "Takusani LMS", template: "%s · Takusani LMS" },
-  description: "Learning delivery, assessment, moderation, appeals and statutory records for an accredited training programme.",
+  description:
+    "Learning delivery, assessment, moderation, appeals and statutory records for an accredited training programme.",
 };
 
 // data-theme will come from the appearance cookie once the account menu exists (ticket S1-11, shells).

@@ -1,0 +1,16 @@
+# Generated or owned elsewhere
+package-lock.json
+src/types/database.ts
+.next/
+coverage/
+.agents/
+.claude/
+
+# Hand-written design documents and the static prototype are kept as authored
+docs/
+
+# SQL is not formatted by Prettier; the Supabase CLI owns these files
+supabase/
+
+# Exact copy of docs/design/ui/prototype/assets/tokens.css; src/styles/tokens.test.ts keeps them identical
+src/styles/tokens.css

@@ -6,7 +6,10 @@ export const metadata = { title: "Notifications" };
 export default function NotificationsPage() {
   return (
     <div className="mx-auto max-w-[45rem] px-4 py-8 md:px-8">
-      <PageHeader title="Notifications" lead="Results, deadlines, appeals and notices, with a record of when and how you were told." />
+      <PageHeader
+        title="Notifications"
+        lead="Results, deadlines, appeals and notices, with a record of when and how you were told."
+      />
     </div>
   );
 }
