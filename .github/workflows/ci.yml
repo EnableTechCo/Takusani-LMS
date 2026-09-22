@@ -56,6 +56,17 @@ jobs:
       - run: supabase start
       - run: supabase db lint --local --level warning
       - run: supabase test db
+      # Spike X-1 as a standing check: through the Data API, with only the publishable key or a learner's token,
+      # nothing outside the api schema is reachable and nothing in it runs without an explicit grant.
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Data API exposure (spike X-1)
+        env:
+          SUPABASE_CLI: supabase
+        run: node scripts/check-data-api-exposure.mjs local
       - name: Generated database types are up to date
         run: |
           supabase gen types typescript --local --schema api > /tmp/database.ts
