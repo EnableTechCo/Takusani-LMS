@@ -81,7 +81,18 @@ jobs:
       # exposed, no public sign-up, password rules). Only the URLs differ per environment, so they are added
       # here as a [remotes] block for this project and never committed.
       - name: Push project settings from supabase/config.toml
+        env:
+          CUSTOM_SMTP_ENABLED: ${{ vars.CUSTOM_SMTP_ENABLED }}
         run: |
+          # Supabase refuses custom email templates (400) on a free-plan project that uses its built-in email, and
+          # the refusal stops every other auth setting from being pushed. Until custom SMTP is configured on the
+          # project (then set the CUSTOM_SMTP_ENABLED variable to true), leave the templates out; the project
+          # sends Supabase's default emails instead.
+          if [ "$CUSTOM_SMTP_ENABLED" != "true" ]; then
+            awk '/^\[/ { skip = ($0 ~ /^\[auth\.email\.template\./) } !skip' supabase/config.toml > /tmp/config.toml
+            mv /tmp/config.toml supabase/config.toml
+            echo "::notice::Email templates not pushed: custom SMTP is not enabled (CUSTOM_SMTP_ENABLED)."
+          fi
           cat >> supabase/config.toml <<EOF
 
           [remotes.${{ inputs.environment }}]
