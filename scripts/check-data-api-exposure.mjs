@@ -181,10 +181,11 @@ async function main() {
       },
       notExposed,
     ],
-    ["anon cannot reach the public schema", { path: rpc("rls_auto_enable"), profile: "public" }, notExposed],
+    // Any name will do: an unexposed schema is refused before PostgREST looks for the function (ADR-028 keeps it empty).
+    ["anon cannot reach the public schema", { path: rpc("any_function"), profile: "public" }, notExposed],
     [
       "learner cannot reach the public schema",
-      { path: rpc("rls_auto_enable"), profile: "public", token: learner },
+      { path: rpc("any_function"), profile: "public", token: learner },
       notExposed,
     ],
     ["GraphQL is not exposed", { path: "/graphql/v1", token: learner, body: { query: "{ __typename }" } }, notExposed],
