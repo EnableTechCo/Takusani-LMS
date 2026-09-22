@@ -1,19 +1,13 @@
-import { AuthScreen, Form } from "@/components/skeleton/skeleton";
+import { NewPasswordForm } from "@/modules/identity/forms";
 
-export const metadata = { title: "Set a new password" };
+export const metadata = { title: "Choose a new password" };
 
-// G-02 skeleton (docs/design/ui/LMS-ux-architecture.md, section 5.1). Replace blocks as the feature is built.
+// G-02. Reached from the reset email through /auth/confirm, which has signed the person in.
 export default function ResetPasswordPage() {
   return (
-    <AuthScreen id="G-02" frs="FR-101, FR-106" title="Set a new password">
-      <Form
-        fields={[
-          { label: "New password", type: "password", help: "At least 12 characters." },
-          { label: "Confirm new password", type: "password" },
-        ]}
-        actions={["Set new password"]}
-        bare
-      />
-    </AuthScreen>
+    <div className="stack">
+      <h1 className="text-title">Choose a new password</h1>
+      <NewPasswordForm submitLabel="Save new password" />
+    </div>
   );
 }

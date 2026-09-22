@@ -1,25 +1,25 @@
-import { AuthScreen, Block, Form } from "@/components/skeleton/skeleton";
+import { redirect } from "next/navigation";
+import { safeNextPath } from "@/modules/identity/access";
+import { SignInForm } from "@/modules/identity/forms";
+import { getMyAccess } from "@/modules/identity/session";
 
 export const metadata = { title: "Sign in" };
 
-// G-01 skeleton (docs/design/ui/LMS-ux-architecture.md, section 5.1). Replace blocks as the feature is built.
-export default function SignInPage() {
+const NOTICES: Record<string, string> = {
+  link_expired: "That link has expired or has already been used. Ask for a new one.",
+  no_access: "This account cannot sign in. If you think it should, ask your administrator.",
+};
+
+// G-01 (FR-101). Accounts come from an administrator's invitation; there is no public sign-up.
+export default async function SignInPage({ searchParams }: { searchParams: Promise<Record<string, string>> }) {
+  const params = await searchParams;
+  const next = safeNextPath(params.next) ?? undefined;
+  if ((await getMyAccess())?.status === "active") redirect(next ?? "/");
+
   return (
-    <AuthScreen id="G-01" frs="FR-101, FR-106" title="Sign in">
-      <Block
-        label="Message, when needed"
-        detail="Wrong details (one neutral message), sign-in paused after too many attempts, or “You were signed out for security”."
-        size="sm"
-      />
-      <Form
-        fields={[
-          { label: "Email address", type: "email" },
-          { label: "Password", type: "password" },
-          { label: "Show password", type: "checkbox" },
-        ]}
-        actions={["Sign in", { label: "Forgot your password?", href: "/forgot-password", plain: true }]}
-        bare
-      />
-    </AuthScreen>
+    <div className="stack">
+      <h1 className="text-title">Sign in</h1>
+      <SignInForm next={next} notice={params.reason ? NOTICES[params.reason] : undefined} />
+    </div>
   );
 }

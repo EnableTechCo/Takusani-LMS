@@ -9,7 +9,12 @@ select plan(8);
 create temporary table expected_grants (kind text, schema_name text, object_name text, grantee text, privilege text) on commit drop;
 insert into expected_grants values
   ('function', 'api', 'health_check()', 'anon', 'EXECUTE'),
-  ('function', 'api', 'health_check()', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'health_check()', 'authenticated', 'EXECUTE'),
+  -- Identity (20260922130000): the signed-in person's access; administrator-only reads and commands check the
+  -- caller inside the function.
+  ('function', 'api', 'my_access()', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_accounts()', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'create_account(p_user_id uuid, p_full_name text, p_role text, p_learner_number text)', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (
