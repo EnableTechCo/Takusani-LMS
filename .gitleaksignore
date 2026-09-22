@@ -1,0 +1,3 @@
+# Reviewed false positives for the secret scan in CI (gitleaks). One fingerprint per line, with the reason.
+# Example Idempotency-Key UUID in the API design document, not a credential:
+f1e09bb1f5492b3ee159b2fbbd5f8ca46e4daeed:docs/design/LMS-api-design.md:generic-api-key:10

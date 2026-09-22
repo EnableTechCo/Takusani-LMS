@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { INSTITUTION } from "@/config/institution";
 import { Icon } from "@/components/ui/icons";
+import type { Theme } from "@/lib/theme";
 import type { AccountSummary } from "@/modules/identity/access";
 import type { Workspace } from "@/modules/identity/navigation";
 import { AccountMenu } from "./account-menu";
@@ -16,10 +17,12 @@ import { SideNav } from "./side-nav";
 export function AppShell({
   workspaces,
   account,
+  theme,
   children,
 }: {
   workspaces: Workspace[];
   account: AccountSummary;
+  theme: Theme;
   children: ReactNode;
 }) {
   return (
@@ -34,7 +37,7 @@ export function AppShell({
           </Link>
           <span className="topbar__institution">{INSTITUTION.name}</span>
           <span className="topbar__spacer" />
-          <form className="topbar__search" role="search">
+          <form action="/search" className="topbar__search" role="search">
             <label className="input-icon">
               <span className="u-visually-hidden">Search materials, tasks, sessions and exams</span>
               <Icon name="search" />
@@ -45,7 +48,7 @@ export function AppShell({
             <Link aria-label="Notifications" className="btn btn--ghost btn--icon" href="/notifications">
               <Icon name="bell" />
             </Link>
-            <AccountMenu account={account} />
+            <AccountMenu account={account} theme={theme} />
           </div>
         </header>
 

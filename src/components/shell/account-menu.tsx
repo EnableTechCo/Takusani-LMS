@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { INSTITUTION } from "@/config/institution";
 import { Icon } from "@/components/ui/icons";
+import type { Theme } from "@/lib/theme";
 import type { AccountSummary } from "@/modules/identity/access";
+import { ThemeControl } from "./theme-control";
 
 /** The account menu in the top bar (UX section 3.7): who you are, your roles, appearance, help and sign out. */
-export function AccountMenu({ account }: { account: AccountSummary }) {
+export function AccountMenu({ account, theme }: { account: AccountSummary; theme: Theme }) {
   return (
     <details className="menu-wrap">
       <summary aria-label={`Account menu for ${account.name}`} className="btn btn--ghost btn--icon">
@@ -31,23 +33,7 @@ export function AccountMenu({ account }: { account: AccountSummary }) {
           Notification preferences
         </Link>
         <div className="menu__section">
-          <fieldset className="fieldset">
-            <legend className="fieldset__legend">Appearance</legend>
-            <div className="segmented">
-              <label className="segmented__option">
-                <input defaultChecked name="theme" type="radio" value="light" />
-                <span>Light</span>
-              </label>
-              <label className="segmented__option">
-                <input name="theme" type="radio" value="dark" />
-                <span>Dark</span>
-              </label>
-              <label className="segmented__option">
-                <input name="theme" type="radio" value="auto" />
-                <span>System</span>
-              </label>
-            </div>
-          </fieldset>
+          <ThemeControl current={theme} />
         </div>
         <div className="menu__divider" role="separator" />
         <a className="menu__item" href={`mailto:${INSTITUTION.helpEmail}`}>

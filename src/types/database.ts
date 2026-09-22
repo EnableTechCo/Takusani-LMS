@@ -40,6 +40,35 @@ export type Database = {
           status: string
         }[]
       }
+      list_audit_events: {
+        Args: {
+          p_action?: string
+          p_actor_email?: string
+          p_before_id?: number
+          p_from?: string
+          p_limit?: number
+          p_object_id?: string
+          p_to?: string
+        }
+        Returns: {
+          acting_role: string
+          action: string
+          actor_email: string
+          actor_id: string
+          actor_name: string
+          after: Json
+          before: Json
+          details: Json
+          id: number
+          object_id: string
+          object_label: string
+          object_type: string
+          occurred_at: string
+          request_id: string
+          scope_key: string
+          scope_type: string
+        }[]
+      }
       my_access: {
         Args: never
         Returns: {

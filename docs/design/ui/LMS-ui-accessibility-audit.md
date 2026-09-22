@@ -374,9 +374,9 @@ Short, and only what is worth defending when the React build starts.
 Shared files first; within each file the highest-leverage fix first.
 
 **`assets/ui.css`**
-- [ ] A11Y-02: `@media (max-height: 30rem), (max-width: 47.99rem)`: `.exam-shell__actions` static; `.exam-bar` on one row (hide title and position, truncate the status line); set `--sticky-top` and `--sticky-bottom` to match.
-- [ ] A11Y-03: in the same `max-height` query, make `.section-switcher`, `.decision-bar`, `.action-bar` and `.bulk-bar` static and set `--sticky-bottom: 0px`.
-- [ ] A11Y-04: add `scroll-padding-bottom` for `html:has(.bulk-bar:not([hidden]))`, desktop and select-mode phone values.
+- [x] A11Y-02: `@media (max-height: 30rem), (max-width: 47.99rem)`: `.exam-shell__actions` static; `.exam-bar` on one row (hide title and position, truncate the status line); set `--sticky-top` and `--sticky-bottom` to match.
+- [x] A11Y-03: in the same `max-height` query, make `.section-switcher`, `.decision-bar`, `.action-bar` and `.bulk-bar` static and set `--sticky-bottom: 0px`.
+- [x] A11Y-04: add `scroll-padding-bottom` for `html:has(.bulk-bar:not([hidden]))`, desktop and select-mode phone values.
 - [ ] A11Y-10: style `tbody th` wherever `.table td` and `.table--cards td` are styled, so that row headers can be real `th` elements.
 - [ ] A11Y-13: extend the `forced-colors` block (segmented control, filter chip, pagination, navigator answered state, progress and chart bars, tag shapes, unread dot, today marker).
 - [ ] A11Y-19: `.btn { white-space: normal; text-align: center; }`; keep `nowrap` on `.btn--icon` only.

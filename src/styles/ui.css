@@ -24,6 +24,16 @@ html:has(.action-bar:not([hidden]), .decision-bar:not([hidden]), .exam-shell__ac
 html:has(.auth-shell) { --sticky-top: 0px; }
 @media (min-width: 48rem) { html:has(.bottom-tabs):not(:has(.action-bar:not([hidden]), .decision-bar:not([hidden]))) { --sticky-bottom: 0px; } }
 @media (min-width: 80rem) { html:has(.section-switcher) { --sticky-top: var(--topbar-height); } }
+/* A11Y-04: the bulk-action bar floats above any other sticky bottom region, so keep the focused row clear of it too. */
+html:has(.bulk-bar:not([hidden])) { scroll-padding-bottom: calc(var(--sticky-bottom) + 6rem); }
+@media (max-width: 47.99rem) { html:has(.is-selecting ~ .bulk-bar:not([hidden])) { scroll-padding-bottom: calc(var(--sticky-bottom) + 9.5rem); } }
+/* A11Y-03: on short viewports (400% zoom on a laptop) only the top bar stays sticky; everything else scrolls with
+   the page, so no sticky region can cover the focused control. */
+@media (max-height: 30rem) {
+  .section-switcher, .decision-bar, .action-bar, .bulk-bar { position: static; }
+  html, html:has(.bottom-tabs), html:has(.action-bar:not([hidden]), .decision-bar:not([hidden]), .exam-shell__actions) { --sticky-bottom: 0px; }
+  html:has(.section-switcher) { --sticky-top: var(--topbar-height); }
+}
 :target, :focus-visible { scroll-margin-block: var(--space-4); }
 body {
   margin: 0; background: var(--color-canvas); color: var(--color-text);
@@ -804,6 +814,17 @@ th[aria-sort="descending"] .table__sort::after { content: "\2193"; color: var(--
 .exam-notice__fact { margin-top: var(--space-4); padding: var(--space-3) var(--space-4); background: var(--color-surface); border: var(--border-control); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: var(--text-sm); color: var(--color-text-strong); }
 .exam-notice__actions { margin-top: var(--space-5); display: flex; flex-wrap: wrap; gap: var(--space-2); }
 @media (min-width: 48rem) { .exam-notice__panel { padding: var(--space-8); } }
+
+/* A11Y-02: at 400% zoom (and on phones) the exam's bars must not cover the question. The action bar scrolls with
+   the page and the exam bar keeps one row: the timer and save status stay visible; the title and position are
+   repeated in the question heading and the page title. */
+@media (max-height: 30rem), (max-width: 47.99rem) {
+  .exam-shell__actions { position: static; }
+  .exam-bar { flex-wrap: nowrap; min-height: 2.75rem; }
+  .exam-bar__title, .exam-bar__position { display: none; }
+  .exam-bar .status-line { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; min-width: 0; flex: 1 1 0; }
+  html:has(.exam-shell) { --sticky-top: 2.75rem; --sticky-bottom: 0px; }
+}
 
 /* ---- 13. RECORDS -------------------------------------------------------------------- */
 /* Receipt: proof of submission (coursework, exam, appeal). Mono reference and time, selectable, printable. */

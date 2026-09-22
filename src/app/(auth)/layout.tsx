@@ -1,9 +1,13 @@
+import { cookies } from "next/headers";
 import type { ReactNode } from "react";
 import { Brand } from "@/components/shell/brand";
+import { ThemeControl } from "@/components/shell/theme-control";
 import { INSTITUTION } from "@/config/institution";
+import { parseTheme, THEME_COOKIE } from "@/lib/theme";
 
 /** AuthShell (UX architecture 3.1): institution, brand, one card, help and time-zone note in the footer. */
-export default function AuthLayout({ children }: Readonly<{ children: ReactNode }>) {
+export default async function AuthLayout({ children }: Readonly<{ children: ReactNode }>) {
+  const theme = parseTheme((await cookies()).get(THEME_COOKIE)?.value);
   return (
     <>
       <a className="skip-link" href="#main">
@@ -24,6 +28,7 @@ export default function AuthLayout({ children }: Readonly<{ children: ReactNode 
             Help with signing in
           </a>
           <span className="text-small text-muted">Times are shown in South African time (SAST).</span>
+          <ThemeControl current={theme} />
         </footer>
       </div>
     </>

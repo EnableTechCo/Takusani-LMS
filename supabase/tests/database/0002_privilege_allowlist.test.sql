@@ -14,7 +14,9 @@ insert into expected_grants values
   -- caller inside the function.
   ('function', 'api', 'my_access()', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'list_accounts()', 'authenticated', 'EXECUTE'),
-  ('function', 'api', 'create_account(p_user_id uuid, p_full_name text, p_role text, p_learner_number text)', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'create_account(p_user_id uuid, p_full_name text, p_role text, p_learner_number text)', 'authenticated', 'EXECUTE'),
+  -- Audit log (20260923090000): administrators only, checked inside the function.
+  ('function', 'api', 'list_audit_events(p_action text, p_actor_email text, p_object_id text, p_from timestamp with time zone, p_to timestamp with time zone, p_before_id bigint, p_limit integer)', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (
