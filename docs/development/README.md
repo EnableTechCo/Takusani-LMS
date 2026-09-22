@@ -91,6 +91,32 @@ Every screen in the UX architecture's inventory (`docs/design/ui/LMS-ux-architec
 - Skeleton parts are in `src/components/skeleton`: `Screen` (page frame, optional aside), `Block` (a labelled placeholder), `Blocks` (side by side), `Form` (real labels, no values, disabled actions), `Workspace` (marking, moderation and appeal review: evidence, panel and decision bar) and `CohortNav`. Primary actions are disabled buttons; links between screens work, using `example` for IDs.
 - Styling comes from the prototype's component layer, `src/styles/ui.css`, an exact copy of `docs/design/ui/prototype/assets/ui.css` (a test fails if they drift; change the prototype first). Skeleton blocks are styled in `src/styles/skeleton.css`, which goes away once no screen uses them.
 - Shells: `AppShell` for workspace pages, `src/app/(auth)` for sign-in and account recovery, `src/app/(exam)` for the exam, which has no navigation (FR-901).
+
+### Component library
+
+Build screens from `src/components/ui`, not from `ui.css` class names. Each component renders the design system's markup (`docs/design/ui/LMS-design-system.md`, section 4) with its accessibility wiring built in, so a screen cannot forget an `aria-describedby`, a hidden state word or focus return. Run the app and open **`/components`** (development only) to see every component in each state, with the prototype's example content.
+
+| File | Components |
+|---|---|
+| `link.tsx` | `ButtonLink`, `TextLink` (quiet, standalone, external), `BlockedReason` |
+| `button.tsx` | `Button` (variants, sizes, `loading`), `IconButton` |
+| `field.tsx` | `Field`, `TextField`, `TextareaField`, `SelectField`: label, help before, error or confirmation after, ids `field-<name>` |
+| `form-feedback.tsx` | `ErrorSummary` (takes focus), `SubmitButton` (spinner, one submit) |
+| `choice.tsx` | `Checkbox`, `Radio`, `Fieldset`, `ChoiceGroup`, `Choice` (with outcome tones) |
+| `status.tsx` | `Tag` (tone and shape), `Banner`, `StatusLine`, `Meter`, `EmptyState` |
+| `conflict.tsx` | `ConflictPanel`: a refusal (announced, takes focus) or an advisory (polite) |
+| `dialog.tsx` | `Dialog` (sheet on phones), `ConsequenceDialog` (static, focus on the safe action, acknowledgement gates confirm) |
+| `menu.tsx` | `Menu`, `MenuLink`, `MenuButton`, `MenuSection`, `MenuDivider` |
+| `tabs.tsx` | `Tabs`, on React Aria |
+| `toast.tsx` | `ToastProvider` (in the root layout), `useToast` |
+| `table.tsx` | `DataTable` (a table from 768px, a real list of cards below; `cards={false}` scrolls instead), `Pagination` |
+| `process.tsx` | `Stepper`, `Subnav` |
+| `records.tsx` | `DateTime`, `Receipt`, `HistoryList`, `Log` |
+
+- **Server first.** Everything renders on the server except what needs the browser: `Button`, dialogs, menus, tabs, toasts, the error summary and the conflict panel. Links, tables, tags and records ship no JavaScript.
+- **React Aria only where HTML is not enough** (design system 8.2): tabs today; later the staff data table with selection, date pickers, combo boxes and the upload drop zone. Dialogs use the native `<dialog>`, menus `<details>`. React Aria's toast queue is still marked unstable, so toasts are built directly.
+- **Missing, built with their screens**: upload rows, the marking workspace and rubric, the decision panel and result, the exam shell and question navigator, calendar and agenda, notifications, charts, bulk selection and Select mode on phones, the candidate list, deadlines and the timer.
+- **Tests** for components run in jsdom (`// @vitest-environment jsdom` and `import "./test-dom"`) with Testing Library and `user-event` for keyboard behaviour.
 - Each workspace folder returns 404 unless the person holds that workspace; a test checks that every navigation link has a page.
 - Which workspaces you see depends on who you sign in as. Sign in as staff@takusani.test to see four workspaces at once.
 

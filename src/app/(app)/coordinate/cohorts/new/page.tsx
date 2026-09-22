@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { PageHeader } from "@/components/shell/page-header";
+import { ButtonLink } from "@/components/ui/link";
 import { NewCohortForm } from "@/modules/programmes/forms";
 import { listProgrammes } from "@/modules/programmes/queries";
 
@@ -18,9 +18,9 @@ export default async function NewCohortPage({ searchParams }: { searchParams: Pr
             <div className="stack">
               <p>There is no programme your role covers yet. A cohort belongs to a programme.</p>
               <div className="cluster">
-                <Link className="btn btn--primary" href="/coordinate/programmes/new">
+                <ButtonLink href="/coordinate/programmes/new" variant="primary">
                   New programme
-                </Link>
+                </ButtonLink>
               </div>
             </div>
           ) : (

@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import type { ReactNode } from "react";
 import { StickyInsets } from "@/components/shell/sticky-insets";
 import { IconSprite } from "@/components/ui/icons";
+import { ToastProvider } from "@/components/ui/toast";
 import { parseTheme, THEME_COOKIE } from "@/lib/theme";
 import "./globals.css";
 
@@ -25,7 +26,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       <body>
         <IconSprite />
         <StickyInsets />
-        {children}
+        <ToastProvider>{children}</ToastProvider>
       </body>
     </html>
   );

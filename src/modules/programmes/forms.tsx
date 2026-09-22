@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { useActionState } from "react";
-import { Banner, ErrorSummary, SubmitButton, TextField } from "@/components/forms/form-parts";
+import { SelectField, TextField } from "@/components/ui/field";
+import { ErrorSummary, SubmitButton } from "@/components/ui/form-feedback";
+import { Banner } from "@/components/ui/status";
 import type { FormState } from "@/lib/form-state";
 import { createCohort, createProgramme, enrolLearner } from "./actions";
 
@@ -61,29 +63,17 @@ export function NewCohortForm({
     <form action={action} className="stack" noValidate>
       {state.message ? <Banner title={state.message} tone="critical" /> : null}
       <ErrorSummary errors={state.errors} labels={COHORT_LABELS} />
-      <TextField error={state.errors?.programmeId} label={COHORT_LABELS.programmeId} name="programmeId">
-        <span className="select">
-          <select
-            aria-describedby={state.errors?.programmeId ? "field-programmeId-error" : undefined}
-            aria-invalid={state.errors?.programmeId ? true : undefined}
-            defaultValue={state.values?.programmeId ?? selected ?? ""}
-            id="field-programmeId"
-            // A select ignores a changed defaultValue after a form action; re-mount it to keep the choice.
-            key={state.values?.programmeId ?? selected ?? ""}
-            name="programmeId"
-            required
-          >
-            <option disabled value="">
-              Choose a programme
-            </option>
-            {programmes.map((programme) => (
-              <option key={programme.id} value={programme.id}>
-                {programme.title} ({programme.code})
-              </option>
-            ))}
-          </select>
-        </span>
-      </TextField>
+      <SelectField
+        defaultValue={state.values?.programmeId ?? selected}
+        error={state.errors?.programmeId}
+        label={COHORT_LABELS.programmeId}
+        name="programmeId"
+        options={programmes.map((programme) => ({
+          value: programme.id,
+          label: `${programme.title} (${programme.code})`,
+        }))}
+        placeholder="Choose a programme"
+      />
       <TextField
         defaultValue={state.values?.name}
         error={state.errors?.name}
@@ -92,13 +82,20 @@ export function NewCohortForm({
         name="name"
       />
       <div className="grid grid--2">
-        <DateField
+        <TextField
           defaultValue={state.values?.startsOn}
           error={state.errors?.startsOn}
-          label="Starts"
+          label={COHORT_LABELS.startsOn}
           name="startsOn"
+          type="date"
         />
-        <DateField defaultValue={state.values?.endsOn} error={state.errors?.endsOn} label="Ends" name="endsOn" />
+        <TextField
+          defaultValue={state.values?.endsOn}
+          error={state.errors?.endsOn}
+          label={COHORT_LABELS.endsOn}
+          name="endsOn"
+          type="date"
+        />
       </div>
       <p className="text-small text-muted">
         New cohorts are not moderated: each result is released when the assessor finalises it. Choosing moderation
@@ -111,33 +108,6 @@ export function NewCohortForm({
         </Link>
       </div>
     </form>
-  );
-}
-
-function DateField({
-  name,
-  label,
-  error,
-  defaultValue,
-}: {
-  name: string;
-  label: string;
-  error?: string;
-  defaultValue?: string;
-}) {
-  return (
-    <TextField error={error} label={label} name={name}>
-      <input
-        aria-describedby={error ? `field-${name}-error` : undefined}
-        aria-invalid={error ? true : undefined}
-        className="input"
-        defaultValue={defaultValue}
-        id={`field-${name}`}
-        name={name}
-        required
-        type="date"
-      />
-    </TextField>
   );
 }
 
