@@ -41,7 +41,7 @@ jobs:
           fetch-depth: 0 # the migration rules compare against the base branch
       - name: Migration rules (names, immutability, order)
         run: bash scripts/check-migrations.sh ${{ github.event_name == 'pull_request' && format('origin/{0}', github.base_ref) || '' }}
-      - uses: supabase/setup-cli@v1
+      - uses: supabase/setup-cli@v3
         with:
           version: 2.117.0 # keep in step with the supabase devDependency
       - run: supabase start
