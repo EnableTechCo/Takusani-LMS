@@ -1,0 +1,11 @@
+/* Page-specific styles ported from docs/design/ui/prototype/learn-appeal-new.html. */
+/* Prototype-only. The state switcher hides the action bar with [hidden], but ui.css hides the bottom tabs whenever an
+   .action-bar exists in the DOM. In production the bar is simply not rendered. Restore the tabs while it is hidden. */
+@media (max-width: 47.99rem) {
+  .app-shell:has(.action-bar[hidden]) > .bottom-tabs {
+    display: grid;
+  }
+  .app-shell:has(.action-bar[hidden]) .app-shell__main {
+    padding-bottom: calc(var(--bottomtabs-height) + env(safe-area-inset-bottom, 0px));
+  }
+}

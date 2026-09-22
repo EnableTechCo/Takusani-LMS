@@ -12,5 +12,6 @@ docs/
 # SQL is not formatted by Prettier; the Supabase CLI owns these files
 supabase/
 
-# Exact copy of docs/design/ui/prototype/assets/tokens.css; src/styles/tokens.test.ts keeps them identical
+# Exact copies of the prototype's tokens.css and ui.css; src/styles/stylesheets.test.ts keeps them identical
 src/styles/tokens.css
+src/styles/ui.css

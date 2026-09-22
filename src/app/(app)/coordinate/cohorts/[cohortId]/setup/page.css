@@ -1,0 +1,28 @@
+/* Page-specific styles ported from docs/design/ui/prototype/coordinate-cohort-setup.html. */
+/* Page-specific layout only. Tokens only. Not part of the component library. */
+.cohort-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-5);
+  margin-bottom: var(--space-6);
+  font-size: var(--text-sm);
+}
+.cohort-nav a,
+.cohort-nav strong {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+}
+.cohort-nav strong {
+  color: var(--color-text-strong);
+  font-weight: var(--weight-semibold);
+  box-shadow: inset 0 -3px 0 var(--color-text-strong);
+}
+.setup-sections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+.policy-note {
+  margin-top: var(--space-3);
+}
