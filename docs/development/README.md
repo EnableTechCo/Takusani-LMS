@@ -16,6 +16,24 @@
 5. Run npm run dev.
 6. Open http://localhost:3000.
 
+## Environment variables
+
+Copy `.env.example` to `.env.local`; never commit `.env.local` or a real secret. The current application requires
+only `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. `LMS_DEV_ROLES` is an optional local-only
+navigation aid and is ignored in production.
+
+The template also reserves variables for the next server-side features:
+
+- `SUPABASE_SECRET_KEY` is a dedicated `sb_secret_...` key for trusted workers and narrowly scoped administrative
+  operations. Create it under Supabase **Settings > API Keys**. It must never be exposed to browser code.
+- `CRON_SECRET` authenticates Vercel Cron requests. Generate an independent random value of at least 16 characters.
+- `NEXT_PUBLIC_APP_URL` is `http://localhost:3000` locally and `https://takusani-lms.vercel.app` on staging. The
+  staging URL is live and redirects unauthenticated visits to `/sign-in`.
+
+The deployment credentials `SUPABASE_ACCESS_TOKEN`, `SUPABASE_DB_PASSWORD`, `SUPABASE_PROJECT_ID`, `VERCEL_TOKEN`,
+`VERCEL_ORG_ID`, and `VERCEL_PROJECT_ID` do not belong in `.env.local`. They are GitHub Actions secrets scoped to the
+deployment environment. GitHub shows their names but never reveals their values after they are saved.
+
 ## Where things go
 
 - **Routes** follow the sitemap in `docs/design/ui/LMS-ux-architecture.md` section 4: `/learn`, `/teach`, `/assess`, `/moderate`, `/review`, `/coordinate`, `/admin`, plus `/home`, `/notifications` and `/sign-in`. A workspace the person does not hold returns 404.
@@ -98,8 +116,8 @@ Deployment stays off until the repository variable `CD_ENABLED` is `true`. Befor
 | Where | What |
 |---|---|
 | Supabase | Done: the staging project is "Takusani - LMS" (`mfgaoqabgboegovodklq`, `eu-west-3`). Its ref goes in the `SUPABASE_PROJECT_ID` secret |
-| Vercel | In the existing project, set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` for the Production target (the staging site) |
-| GitHub | Create an environment named `staging` with secrets `SUPABASE_ACCESS_TOKEN`, `SUPABASE_DB_PASSWORD`, `SUPABASE_PROJECT_ID`, optionally `VERCEL_AUTOMATION_BYPASS_SECRET`, and variable `SITE_URL` (the staging site's address). No Vercel token is needed: Vercel deploys staging itself |
+| Vercel | In the existing project, set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` for the Production target (the staging site). Add `SUPABASE_SECRET_KEY`, `CRON_SECRET`, and `NEXT_PUBLIC_APP_URL` when their corresponding server features are implemented |
+| GitHub | Create an environment named `staging` with secrets `SUPABASE_ACCESS_TOKEN`, `SUPABASE_DB_PASSWORD`, `SUPABASE_PROJECT_ID`, optionally `VERCEL_AUTOMATION_BYPASS_SECRET`, and variable `SITE_URL=https://takusani-lms.vercel.app`. No Vercel token is needed: Vercel deploys staging itself |
 
 `main` is protected: changes arrive by pull request, and both CI jobs ("Web application", "Database boundaries") must pass, for administrators too.
 
