@@ -39,7 +39,7 @@ Accounts are created by an administrator; there is no public sign-up (FR-103). S
 
 **Staging accounts.** Once the identity migration is on staging, `npm run accounts:staging` creates the same seven accounts there. It reads `STAGING_SUPABASE_URL`, `STAGING_SUPABASE_SECRET_KEY` and `STAGING_TEST_ACCOUNT_PASSWORD` from .env.local and is safe to run again.
 
-**Email on staging.** Supabase's built-in email service only delivers to members of the Supabase organisation and allows a handful of emails an hour. Real invitations and password resets on staging need custom SMTP (Dashboard, Authentication, Emails, SMTP settings).
+**Email on staging.** Supabase's built-in email service only delivers to members of the Supabase organisation and allows a handful of emails an hour. Real invitations and password resets on staging need custom SMTP (Dashboard, Authentication, Emails, SMTP settings). On the free plan Supabase also refuses our email templates (`supabase/email`) until custom SMTP is set, so the deploy leaves them out; after configuring SMTP, set the repository variable `CUSTOM_SMTP_ENABLED` to `true` and the next deploy pushes them.
 
 ## Environment variables
 
