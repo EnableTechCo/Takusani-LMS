@@ -60,7 +60,7 @@ jobs:
           fi
       - name: Upload the generated types when they differ
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: database-types
           path: ${{ runner.temp }}/database.ts
