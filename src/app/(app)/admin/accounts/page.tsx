@@ -1,5 +1,6 @@
-import Link from "next/link";
-import { Banner } from "@/components/forms/form-parts";
+import { ButtonLink } from "@/components/ui/link";
+import { Banner, Tag } from "@/components/ui/status";
+import { DataTable } from "@/components/ui/table";
 import { PageHeader } from "@/components/shell/page-header";
 import { formatDateTime } from "@/lib/dates";
 import { createClient } from "@/lib/supabase/server";
@@ -28,43 +29,31 @@ export default async function AccountsPage({ searchParams }: { searchParams: Pro
           </Banner>
         ) : null}
         <div className="cluster">
-          <Link className="btn btn--primary" href="/admin/accounts/new">
+          <ButtonLink href="/admin/accounts/new" variant="primary">
             New account
-          </Link>
+          </ButtonLink>
         </div>
-        <div className="table-wrap">
-          <table className="table table--cards">
-            <caption className="u-visually-hidden">Accounts, by name. Times in SAST.</caption>
-            <thead>
-              <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Email</th>
-                <th scope="col">Roles</th>
-                <th scope="col">Status</th>
-                <th scope="col">Last signed in</th>
-              </tr>
-            </thead>
-            <tbody>
-              {accounts.map((account) => (
-                <tr key={account.profile_id}>
-                  <th className="table__primary-cell" data-label="Name" scope="row">
-                    {account.full_name}
-                  </th>
-                  <td data-label="Email">{account.email}</td>
-                  <td data-label="Roles">{roleLabels(account.roles).join(", ") || "None"}</td>
-                  <td data-label="Status">
-                    <span className={account.status === "active" ? "tag tag--positive" : "tag"}>
-                      {account.status === "active" ? "Active" : "Deactivated"}
-                    </span>
-                  </td>
-                  <td data-label="Last signed in">
-                    {account.last_sign_in_at ? formatDateTime(account.last_sign_in_at) : "Not yet"}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <DataTable
+          caption="Accounts, by name. Times in SAST."
+          columns={[
+            { key: "name", header: "Name", primary: true, cell: (account) => account.full_name },
+            { key: "email", header: "Email", cell: (account) => account.email },
+            { key: "roles", header: "Roles", cell: (account) => roleLabels(account.roles).join(", ") || "None" },
+            {
+              key: "status",
+              header: "Status",
+              cell: (account) =>
+                account.status === "active" ? <Tag tone="positive">Active</Tag> : <Tag>Deactivated</Tag>,
+            },
+            {
+              key: "lastSignIn",
+              header: "Last signed in",
+              cell: (account) => (account.last_sign_in_at ? formatDateTime(account.last_sign_in_at) : "Not yet"),
+            },
+          ]}
+          rowKey={(account) => account.profile_id}
+          rows={accounts}
+        />
       </div>
     </div>
   );

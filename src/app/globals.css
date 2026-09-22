@@ -133,3 +133,12 @@
     sans-serif;
   --font-mono: var(--font-geist-mono), "Cascadia Mono", "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
 }
+
+/* Tailwind's preflight sets every margin to 0, which takes away the browser's centring of a modal <dialog>.
+   ui.css was written without Tailwind and relies on that default; put it back underneath the component layer,
+   so .modal--sheet can still anchor itself to the bottom on phones. */
+@layer base {
+  dialog:modal {
+    margin: auto;
+  }
+}

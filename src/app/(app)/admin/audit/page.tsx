@@ -1,20 +1,15 @@
 import Link from "next/link";
 import { PageHeader } from "@/components/shell/page-header";
+import { Button } from "@/components/ui/button";
+import { ButtonLink } from "@/components/ui/link";
+import { DateTime } from "@/components/ui/records";
+import { EmptyState } from "@/components/ui/status";
+import { DataTable } from "@/components/ui/table";
 import { ACTION_LABELS, actionLabel, describeChange, parseAuditFilters } from "@/modules/audit/events";
 import { AUDIT_PAGE_SIZE, listAuditEvents } from "@/modules/audit/queries";
 import { roleLabels } from "@/modules/identity/access";
 
 export const metadata = { title: "Audit log · Administration" };
-
-const WHEN = new Intl.DateTimeFormat("en-ZA", {
-  day: "numeric",
-  month: "short",
-  year: "numeric",
-  hour: "2-digit",
-  minute: "2-digit",
-  second: "2-digit",
-  timeZone: "Africa/Johannesburg",
-});
 
 type Params = Record<string, string | string[] | undefined>;
 
@@ -80,9 +75,9 @@ export default async function AuditLogPage({ searchParams }: { searchParams: Pro
               </div>
             </div>
             <div className="cluster">
-              <button className="btn btn--primary" type="submit">
+              <Button type="submit" variant="primary">
                 Show entries
-              </button>
+              </Button>
               <Link className="link" href="/admin/audit">
                 Clear filters
               </Link>
@@ -92,73 +87,69 @@ export default async function AuditLogPage({ searchParams }: { searchParams: Pro
 
         {events.length === 0 ? (
           <div className="card">
-            <div className="empty">
-              <p className="empty__title">No audit entries</p>
-              <p className="empty__body">Nothing matches these filters.</p>
-            </div>
+            <EmptyState icon="filter" title="No audit entries">
+              <p>Nothing matches these filters.</p>
+            </EmptyState>
           </div>
         ) : (
-          <div className="table-wrap">
-            <table className="table table--cards">
-              <caption className="u-visually-hidden">Audit entries, newest first. Times in SAST.</caption>
-              <thead>
-                <tr>
-                  <th scope="col">When</th>
-                  <th scope="col">Done by</th>
-                  <th scope="col">Action</th>
-                  <th scope="col">On</th>
-                  <th scope="col">Change</th>
-                </tr>
-              </thead>
-              <tbody>
-                {events.map((event) => (
-                  <tr key={event.id}>
-                    <td data-label="When">
-                      <time dateTime={event.occurred_at}>{WHEN.format(new Date(event.occurred_at))}</time>
-                    </td>
-                    <td data-label="Done by">
-                      <span className="table__primary">{event.actor_name ?? "System provisioning"}</span>
-                      <span className="table__secondary">
-                        {[
-                          event.actor_email,
-                          event.acting_role ? `as ${roleLabels([event.acting_role])[0] ?? event.acting_role}` : null,
-                        ]
-                          .filter(Boolean)
-                          .join(", ")}
-                      </span>
-                    </td>
-                    <td data-label="Action">{actionLabel(event.action)}</td>
-                    <td data-label="On">
-                      <span className="table__primary">{event.object_label ?? event.object_id}</span>
-                      <span className="table__secondary">{event.object_type}</span>
-                    </td>
-                    <td data-label="Change">
-                      <ul className="stack stack--sm">
-                        {describeChange(
-                          event.before as Record<string, unknown> | null,
-                          event.after as Record<string, unknown> | null,
-                        ).map((line) => (
-                          <li key={line}>{line}</li>
-                        ))}
-                      </ul>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          // The audit log is two-dimensional: it scrolls sideways on phones rather than becoming cards.
+          <DataTable
+            caption="Audit entries, newest first. Times in SAST."
+            cards={false}
+            columns={[
+              { key: "when", header: "When", cell: (event) => <DateTime iso={event.occurred_at} seconds /> },
+              {
+                key: "actor",
+                header: "Done by",
+                cell: (event) => (
+                  <>
+                    <span className="table__primary">{event.actor_name ?? "System provisioning"}</span>
+                    <span className="table__secondary">
+                      {[
+                        event.actor_email,
+                        event.acting_role ? `as ${roleLabels([event.acting_role])[0] ?? event.acting_role}` : null,
+                      ]
+                        .filter(Boolean)
+                        .join(", ")}
+                    </span>
+                  </>
+                ),
+              },
+              { key: "action", header: "Action", cell: (event) => actionLabel(event.action) },
+              {
+                key: "object",
+                header: "On",
+                cell: (event) => (
+                  <>
+                    <span className="table__primary">{event.object_label ?? event.object_id}</span>
+                    <span className="table__secondary">{event.object_type}</span>
+                  </>
+                ),
+              },
+              {
+                key: "change",
+                header: "Change",
+                cell: (event) => (
+                  <ul className="stack stack--sm">
+                    {describeChange(
+                      event.before as Record<string, unknown> | null,
+                      event.after as Record<string, unknown> | null,
+                    ).map((line) => (
+                      <li key={line}>{line}</li>
+                    ))}
+                  </ul>
+                ),
+              },
+            ]}
+            rowKey={(event) => String(event.id)}
+            rows={events}
+          />
         )}
 
         <nav aria-label="Audit log pages" className="cluster">
-          {filters.beforeId ? (
-            <Link className="btn btn--secondary" href={withCursor(params)}>
-              Newest entries
-            </Link>
-          ) : null}
+          {filters.beforeId ? <ButtonLink href={withCursor(params)}>Newest entries</ButtonLink> : null}
           {events.length === AUDIT_PAGE_SIZE && oldest ? (
-            <Link className="btn btn--secondary" href={withCursor(params, oldest)}>
-              Older entries
-            </Link>
+            <ButtonLink href={withCursor(params, oldest)}>Older entries</ButtonLink>
           ) : null}
         </nav>
       </div>

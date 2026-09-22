@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatDateTime, formatDay, formatDayOf } from "./dates";
+import { formatDateTime, formatDay, formatDayOf, formatDateTimeSeconds } from "./dates";
 
 describe("dates in SAST", () => {
   it("shows a stored date as the same calendar day", () => {
@@ -13,5 +13,9 @@ describe("dates in SAST", () => {
 
   it("takes the day of an instant in South African time, not UTC", () => {
     expect(formatDayOf("2026-09-22T22:30:00Z")).toBe("23 Sept 2026");
+  });
+
+  it("shows log times to the second in South African time", () => {
+    expect(formatDateTimeSeconds("2026-09-02T07:00:02Z")).toBe("02 Sept 2026, 09:00:02");
   });
 });

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { ButtonLink } from "@/components/ui/link";
 
 export const metadata = { title: "Page not found" };
 
@@ -12,9 +12,9 @@ export default function NotFound() {
           This page does not exist, or it is not part of your work. Check the address, or go back to your home page.
         </p>
       </header>
-      <Link className="btn btn--primary" href="/">
+      <ButtonLink href="/" variant="primary">
         Go to your home page
-      </Link>
+      </ButtonLink>
     </main>
   );
 }

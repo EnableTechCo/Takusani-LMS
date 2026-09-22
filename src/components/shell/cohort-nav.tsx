@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Subnav } from "@/components/ui/process";
 
 const PAGES = [
   { segment: "", label: "Overview" },
@@ -11,19 +11,13 @@ const PAGES = [
 /** The pages of one cohort (UX architecture 4.6). The cohort is the object of work, so it is in the path. */
 export function CohortNav({ cohortId, current }: { cohortId: string; current: (typeof PAGES)[number]["label"] }) {
   return (
-    <nav aria-label="This cohort" className="tabs">
-      <div className="tabs__list">
-        {PAGES.map((page) => (
-          <Link
-            aria-current={page.label === current ? "page" : undefined}
-            className="tabs__tab"
-            href={`/coordinate/cohorts/${cohortId}${page.segment}`}
-            key={page.label}
-          >
-            {page.label}
-          </Link>
-        ))}
-      </div>
-    </nav>
+    <Subnav
+      items={PAGES.map((page) => ({
+        label: page.label,
+        href: `/coordinate/cohorts/${cohortId}${page.segment}`,
+        current: page.label === current,
+      }))}
+      label="This cohort"
+    />
   );
 }

@@ -19,9 +19,7 @@ export default async function CohortOverviewPage({ params }: { params: Promise<{
   return (
     <div className="page">
       <PageHeader workspace="Coordinating" title={cohort.name} lead={cohort.programme_title} />
-      <div className="u-mb-4">
-        <CohortNav cohortId={cohort.id} current="Overview" />
-      </div>
+      <CohortNav cohortId={cohort.id} current="Overview" />
       <div className="stack stack--lg">
         <dl className="grid grid--4">
           <div className="card">

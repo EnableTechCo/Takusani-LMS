@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { useActionState, useState } from "react";
-import { Banner, ErrorSummary, SubmitButton, TextField } from "@/components/forms/form-parts";
+import { SelectField, TextField } from "@/components/ui/field";
+import { ErrorSummary, SubmitButton } from "@/components/ui/form-feedback";
+import { Banner } from "@/components/ui/status";
 import type { FormState } from "@/lib/form-state";
 import { createAccount, requestPasswordReset, setNewPassword, signIn } from "./actions";
 import { PASSWORD_MIN, ROLE_LABELS } from "./access";
@@ -150,29 +152,14 @@ export function NewAccountForm() {
         name="email"
         type="email"
       />
-      <TextField error={state.errors?.role} label={ACCOUNT_LABELS.role} name="role">
-        <span className="select">
-          <select
-            aria-describedby={state.errors?.role ? "field-role-error" : undefined}
-            aria-invalid={state.errors?.role ? true : undefined}
-            defaultValue={state.values?.role ?? ""}
-            id="field-role"
-            // A select ignores a changed defaultValue after a form action; re-mount it to keep the choice.
-            key={state.values?.role ?? ""}
-            name="role"
-            required
-          >
-            <option disabled value="">
-              Choose a role
-            </option>
-            {ROLES.map((role) => (
-              <option key={role} value={role}>
-                {ROLE_LABELS[role]}
-              </option>
-            ))}
-          </select>
-        </span>
-      </TextField>
+      <SelectField
+        defaultValue={state.values?.role}
+        error={state.errors?.role}
+        label={ACCOUNT_LABELS.role}
+        name="role"
+        options={ROLES.map((role) => ({ value: role, label: ROLE_LABELS[role] }))}
+        placeholder="Choose a role"
+      />
       <TextField
         autoComplete="off"
         defaultValue={state.values?.learnerNumber}

@@ -84,7 +84,7 @@ export function Screen({
         <ScreenMeta frs={frs} id={id} />
         {actions?.length ? <Actions actions={actions} className="page-header__actions" /> : null}
       </header>
-      {nav ? <div className="u-mb-4">{nav}</div> : null}
+      {nav}
       {aside ? (
         <div className="page-layout">
           <div className="page-layout__main stack stack--lg">{children}</div>
