@@ -55,3 +55,26 @@ begin
   end loop;
 end
 $seed$;
+
+-- A programme with one qualification, unit and module, and one cohort with the learner enrolled, so the
+-- coordinator screens have something to show. IDs are fixed so links and tests can use them.
+insert into programmes.programmes (id, code, title, nqf_level)
+values ('10000000-0000-4000-8000-000000000001', 'CBA-NQF4', 'Certificate in Business Administration', 4);
+insert into programmes.qualifications (id, programme_id, code, title)
+values ('10000000-0000-4000-8000-000000000002', '10000000-0000-4000-8000-000000000001', 'Q-CBA4',
+  'National Certificate: Business Administration Services');
+insert into programmes.units (id, qualification_id, code, title)
+values ('10000000-0000-4000-8000-000000000003', '10000000-0000-4000-8000-000000000002', 'U3',
+  'Keep workplace records');
+insert into programmes.unit_credit_values (unit_id, credits)
+values ('10000000-0000-4000-8000-000000000003', 12);
+insert into programmes.modules (programme_id, unit_id, code, title)
+values ('10000000-0000-4000-8000-000000000001', '10000000-0000-4000-8000-000000000003', 'M3',
+  'Records and filing');
+insert into programmes.cohorts (id, programme_id, name, starts_on, ends_on)
+values ('10000000-0000-4000-8000-000000000010', '10000000-0000-4000-8000-000000000001', '2026 Intake B',
+  '2026-07-01', '2027-06-30');
+insert into programmes.cohort_moderation_state (cohort_id, moderation_policy)
+values ('10000000-0000-4000-8000-000000000010', 'not_moderated');
+insert into programmes.enrolments (cohort_id, profile_id)
+values ('10000000-0000-4000-8000-000000000010', '00000000-0000-4000-8000-000000000001');

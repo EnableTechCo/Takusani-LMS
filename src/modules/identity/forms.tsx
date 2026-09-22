@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useActionState, useState } from "react";
 import { Banner, ErrorSummary, SubmitButton, TextField } from "@/components/forms/form-parts";
-import { createAccount, requestPasswordReset, setNewPassword, signIn, type FormState } from "./actions";
+import type { FormState } from "@/lib/form-state";
+import { createAccount, requestPasswordReset, setNewPassword, signIn } from "./actions";
 import { PASSWORD_MIN, ROLE_LABELS } from "./access";
 import { ROLES } from "./navigation";
 
@@ -156,6 +157,8 @@ export function NewAccountForm() {
             aria-invalid={state.errors?.role ? true : undefined}
             defaultValue={state.values?.role ?? ""}
             id="field-role"
+            // A select ignores a changed defaultValue after a form action; re-mount it to keep the choice.
+            key={state.values?.role ?? ""}
             name="role"
             required
           >

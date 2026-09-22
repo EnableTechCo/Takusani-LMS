@@ -31,6 +31,8 @@ Accounts are created by an administrator; there is no public sign-up (FR-103). S
 | admin@takusani.test | Administrator (can create accounts) | /home |
 | staff@takusani.test | Facilitator, assessor, moderator, coordinator | /home |
 
+**Local programme and cohort.** The seed also creates the programme CBA-NQF4 (Certificate in Business Administration) with one qualification, unit and module, and the cohort 2026 Intake B with the learner enrolled. Coordinators manage programmes, cohorts and enrolments under Coordinating, then Cohorts; what each coordinator sees follows the scope of their coordinator role (institution, programme or cohort).
+
 **Creating an account.** Sign in as the administrator, open Administration, then Accounts, then New account. The person gets an invitation email and chooses their own password at `/accept-invite`. Locally, emails go to Mailpit at http://127.0.0.1:54324, not to real inboxes. Roles apply to the whole institution until cohort setup adds scoped roles.
 
 **Forgot password.** `/forgot-password` emails a reset link; the reply is the same whether or not the account exists.

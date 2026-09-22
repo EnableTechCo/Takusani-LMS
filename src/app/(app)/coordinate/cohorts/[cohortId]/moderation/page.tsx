@@ -1,10 +1,15 @@
-import { CohortNav } from "@/components/skeleton/cohort-nav";
+import { CohortNav } from "@/components/shell/cohort-nav";
 import { Block, Screen } from "@/components/skeleton/skeleton";
 
 export const metadata = { title: "Moderation planning · Coordinating" };
 
 // C-06 skeleton (docs/design/ui/LMS-ux-architecture.md, section 5.1). Replace blocks as the feature is built.
-export default function CoordinateCohortsCohortIdModerationPage() {
+export default async function CoordinateCohortsCohortIdModerationPage({
+  params,
+}: {
+  params: Promise<{ cohortId: string }>;
+}) {
+  const { cohortId } = await params;
   return (
     <Screen
       id="C-06"
@@ -12,7 +17,7 @@ export default function CoordinateCohortsCohortIdModerationPage() {
       workspace="Coordinating"
       title="Moderation planning"
       actions={[{ label: "Plan a cycle", href: "/coordinate/cohorts/example/moderation/cycles/new" }]}
-      nav={<CohortNav cohortId="example" current="Moderation" />}
+      nav={<CohortNav cohortId={cohortId} current="Moderation" />}
     >
       <Block
         heading="Decided and waiting for a cycle"

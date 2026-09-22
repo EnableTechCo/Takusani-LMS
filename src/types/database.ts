@@ -27,6 +27,63 @@ export type Database = {
           status: string
         }[]
       }
+      create_cohort: {
+        Args: {
+          p_ends_on: string
+          p_name: string
+          p_programme_id: string
+          p_starts_on: string
+        }
+        Returns: {
+          cohort_id: string
+          status: string
+        }[]
+      }
+      create_module: {
+        Args: {
+          p_code: string
+          p_programme_id: string
+          p_title: string
+          p_unit_id?: string
+        }
+        Returns: {
+          module_id: string
+          status: string
+        }[]
+      }
+      create_programme: {
+        Args: { p_code: string; p_nqf_level?: number; p_title: string }
+        Returns: {
+          programme_id: string
+          status: string
+        }[]
+      }
+      create_qualification: {
+        Args: { p_code: string; p_programme_id: string; p_title: string }
+        Returns: {
+          qualification_id: string
+          status: string
+        }[]
+      }
+      create_unit: {
+        Args: {
+          p_code: string
+          p_credits: number
+          p_qualification_id: string
+          p_title: string
+        }
+        Returns: {
+          status: string
+          unit_id: string
+        }[]
+      }
+      enrol_learner: {
+        Args: { p_cohort_id: string; p_email: string }
+        Returns: {
+          enrolment_id: string
+          status: string
+        }[]
+      }
       health_check: { Args: never; Returns: boolean }
       list_accounts: {
         Args: never
@@ -67,6 +124,41 @@ export type Database = {
           request_id: string
           scope_key: string
           scope_type: string
+        }[]
+      }
+      list_cohorts: {
+        Args: never
+        Returns: {
+          ends_on: string
+          enrolment_count: number
+          id: string
+          moderation_policy: string
+          name: string
+          programme_id: string
+          programme_title: string
+          starts_on: string
+          status: string
+        }[]
+      }
+      list_enrolments: {
+        Args: { p_cohort_id: string }
+        Returns: {
+          email: string
+          enrolled_at: string
+          enrolment_id: string
+          full_name: string
+          learner_number: string
+          profile_id: string
+          status: string
+        }[]
+      }
+      list_programmes: {
+        Args: never
+        Returns: {
+          code: string
+          id: string
+          nqf_level: number
+          title: string
         }[]
       }
       my_access: {
