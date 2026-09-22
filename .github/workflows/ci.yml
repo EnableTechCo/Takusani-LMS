@@ -20,11 +20,20 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # the secret scan reads the whole history
+      # Secret scanning over every commit, not only the working tree: a key removed in a later commit is still
+      # exposed. Reviewed false positives go in .gitleaksignore with the reason.
+      - name: Secret scan (gitleaks)
+        run: docker run --rm -v "$PWD:/repo" ghcr.io/gitleaks/gitleaks:v8.28.0 git /repo --redact --no-banner
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
+      # Known vulnerabilities in what ships (development tools excluded); Dependabot proposes the upgrades.
+      - name: Dependency audit
+        run: npm audit --omit=dev --audit-level=high
       - run: npm run format:check
       - run: npm run lint
       - run: npm run typecheck

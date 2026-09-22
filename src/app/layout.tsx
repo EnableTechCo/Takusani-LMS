@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { Geist_Mono, Instrument_Sans, Newsreader } from "next/font/google";
+import { cookies } from "next/headers";
 import type { ReactNode } from "react";
+import { StickyInsets } from "@/components/shell/sticky-insets";
 import { IconSprite } from "@/components/ui/icons";
+import { parseTheme, THEME_COOKIE } from "@/lib/theme";
 import "./globals.css";
 
 const serif = Newsreader({ subsets: ["latin"], variable: "--font-newsreader", display: "swap" });
@@ -14,12 +17,14 @@ export const metadata: Metadata = {
     "Learning delivery, assessment, moderation, appeals and statutory records for an accredited training programme.",
 };
 
-// data-theme will come from the appearance cookie once the account menu exists (ticket S1-11, shells).
-export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
+// The theme comes from the appearance cookie (ThemeControl), so the page renders in it without a flash.
+export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
+  const theme = parseTheme((await cookies()).get(THEME_COOKIE)?.value);
   return (
-    <html lang="en-ZA" data-theme="light" className={`${serif.variable} ${sans.variable} ${mono.variable}`}>
+    <html lang="en-ZA" data-theme={theme} className={`${serif.variable} ${sans.variable} ${mono.variable}`}>
       <body>
         <IconSprite />
+        <StickyInsets />
         {children}
       </body>
     </html>

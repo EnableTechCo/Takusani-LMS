@@ -74,6 +74,9 @@ deployment environment. GitHub shows their names but never reveals their values 
 - **Navigation**: which destinations exist and who sees them is in `src/modules/identity/navigation.ts`; how they look (icons, phone bottom tabs) is in `src/components/shell/nav-presentation.ts`. Tests check that every destination has a page and an icon. There is no role switcher.
 - **Layers**: `src/modules/*` holds each module's rules, commands and queries and never imports from `src/components` or `src/app`; `src/lib` and `src/config` import neither. ESLint enforces both. Pages in `src/app` compose modules and components.
 - **Institution details** (name, help contact) are read from `src/config/institution.ts` until configuration (X-06) stores them.
+- **Audit**: every account and role change writes `audit.events` in the same transaction, with the actor, acting role and scope, and safe before and after values (never files, answers, tokens or notes). Administrators read it at Administration, then Audit log (`api.list_audit_events`); new actions get a plain-language name in `src/modules/audit/events.ts`.
+- **Appearance**: the Light, Dark and System choice (account menu and sign-in footer) is stored in the `theme` cookie and applied by the root layout. Colour pairs are checked against WCAG AA in both themes by `src/styles/contrast.test.ts`.
+- **Sticky regions**: `StickyInsets` measures the top bar, section switcher, bottom tabs and action bars and sets `--sticky-top` and `--sticky-bottom`, so a focused control is never hidden behind them at any zoom (WCAG 2.4.11).
 - **Styling** uses the design tokens only. `src/styles/tokens.css` is a copy of `docs/design/ui/prototype/assets/tokens.css`; change the prototype file first, then copy it. A unit test fails if they differ.
 - **Server-only code** starts with `import "server-only";` so the build fails if a Client Component imports it. Anything that touches cookies, secrets or privileged keys is server-only.
 - **API errors** use `errorResponse()` in `src/lib/http/error-response.ts`: `{ "error": { code, message, request_id, retryable, details } }` with lower snake_case codes.
@@ -123,7 +126,7 @@ Code is formatted by Prettier (`.prettierrc.json`, 120 columns, Tailwind classes
 
 ## CI/CD setup
 
-CI validates formatting, linting, types, unit tests, the production build, database linting, and pgTAP tests on pull requests and pushes to main. The Supabase and Vercel CLI versions are pinned in the workflows; update them deliberately.
+CI scans every commit for secrets (gitleaks; reviewed false positives go in `.gitleaksignore` with the reason), audits production dependencies for known high or critical vulnerabilities, and validates formatting, linting, types, unit tests, the production build, database linting, and pgTAP tests on pull requests and pushes to main. The Supabase and Vercel CLI versions are pinned in the workflows; update them deliberately.
 
 ### Environments
 
