@@ -176,6 +176,29 @@ export type Database = {
           versions: Json
         }[]
       }
+      get_my_result: {
+        Args: { p_result_id: string }
+        Returns: {
+          appeal_deadline_at: string
+          assessed_version: Json
+          assessor_name: string
+          cohort_name: string
+          feedback: string
+          first_viewed_at: string
+          item_title: string
+          latest_version: Json
+          marks: Json
+          moderated: boolean
+          outcome: string
+          released_at: string
+          remediation: string
+          remediation_deadline_at: string
+          result_id: string
+          state: string
+          task_closed: boolean
+          task_id: string
+        }[]
+      }
       get_my_task: {
         Args: { p_task_id: string }
         Returns: {
@@ -295,6 +318,20 @@ export type Database = {
           submitted_at: string
           task_title: string
           version_number: number
+        }[]
+      }
+      list_my_results: {
+        Args: never
+        Returns: {
+          appeal_deadline_at: string
+          cohort_name: string
+          item_title: string
+          outcome: string
+          released_at: string
+          remediation_deadline_at: string
+          result_id: string
+          state: string
+          task_id: string
         }[]
       }
       list_my_tasks: {

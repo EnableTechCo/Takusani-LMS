@@ -3,14 +3,20 @@ import { TextLink } from "@/components/ui/link";
 import { EmptyState, Tag } from "@/components/ui/status";
 import { DataTable } from "@/components/ui/table";
 import { formatDateTime } from "@/lib/dates";
+import { listMyResults } from "@/modules/assessment/queries";
+import { OUTCOME_LABELS } from "@/modules/assessment/rules";
 import { listMyTasks } from "@/modules/submissions/queries";
 
 export const metadata = { title: "Tasks" };
 
 type Task = Awaited<ReturnType<typeof listMyTasks>>[number];
+type Result = Awaited<ReturnType<typeof listMyResults>>[number];
 
 /** Where a task stands for this learner: text first, tone and shape only supporting it (design system 3). */
-function TaskStatus({ task }: { task: Task }) {
+function TaskStatus({ task, result }: { task: Task; result: Result | undefined }) {
+  if (result?.state === "released") {
+    return <Tag tone={result.outcome === "competent" ? "positive" : "caution"}>{OUTCOME_LABELS[result.outcome]}</Tag>;
+  }
   if (task.latest_version === null) {
     const overdue = task.due_at !== null && new Date(task.due_at) < new Date();
     return overdue ? <Tag tone="caution">Not submitted, overdue</Tag> : <Tag>Not started</Tag>;
@@ -26,7 +32,8 @@ function TaskStatus({ task }: { task: Task }) {
 
 // L-02 (FR-308, FR-309): the learner's published tasks and where each one stands.
 export default async function LearnTasksPage() {
-  const tasks = await listMyTasks();
+  const [tasks, results] = await Promise.all([listMyTasks(), listMyResults()]);
+  const resultFor = new Map(results.map((result) => [result.task_id, result]));
 
   return (
     <div className="page">
@@ -58,7 +65,11 @@ export default async function LearnTasksPage() {
                 header: "Due (SAST)",
                 cell: (task) => (task.due_at ? formatDateTime(task.due_at) : "No date"),
               },
-              { key: "status", header: "Status", cell: (task) => <TaskStatus task={task} /> },
+              {
+                key: "status",
+                header: "Status",
+                cell: (task) => <TaskStatus result={resultFor.get(task.id)} task={task} />,
+              },
             ]}
             rowKey={(task) => task.id}
             rows={tasks}

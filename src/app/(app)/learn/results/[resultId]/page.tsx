@@ -1,42 +1,97 @@
-import { Block, Screen } from "@/components/skeleton/skeleton";
+import { notFound } from "next/navigation";
+import { PageHeader } from "@/components/shell/page-header";
+import { TextLink } from "@/components/ui/link";
+import { Tag } from "@/components/ui/status";
+import { getMyResult } from "@/modules/assessment/queries";
+import {
+  HeldResultView,
+  ReleasedResultView,
+  type Mark,
+  type ReleasedResult,
+  type VersionFacts,
+} from "@/modules/assessment/result-view";
+import { OUTCOME_LABELS } from "@/modules/assessment/rules";
 
-export const metadata = { title: "Your result" };
+export async function generateMetadata({ params }: { params: Promise<{ resultId: string }> }) {
+  const result = await getMyResult((await params).resultId);
+  if (!result) return { title: "Not found" };
+  return {
+    title:
+      result.state === "released" ? `Your result for ${result.item_title}` : `${result.item_title}: being assessed`,
+  };
+}
 
-// L-15 skeleton (docs/design/ui/LMS-ux-architecture.md, section 5.1). Replace blocks as the feature is built.
-export default function LearnResultsResultIdPage() {
+// L-15 (P0-07; FR-316, FR-317, NFR-11, SRS 5.3): the learner's result. Held, it says only "Being assessed".
+export default async function LearnResultPage({ params }: { params: Promise<{ resultId: string }> }) {
+  const result = await getMyResult((await params).resultId);
+  if (!result) notFound();
+
+  const latestVersion = (result.latest_version ?? null) as unknown as VersionFacts | null;
+  const back = (
+    <p>
+      <TextLink href="/learn/results">Back to your results</TextLink>
+    </p>
+  );
+
+  if (result.state !== "released") {
+    return (
+      <div className="page">
+        <PageHeader
+          lead={result.cohort_name}
+          meta={
+            <Tag shape="half" tone="info">
+              Being assessed
+            </Tag>
+          }
+          title={`${result.item_title}: your result is not ready yet`}
+          workspace="Learning"
+        />
+        <div className="stack stack--lg">
+          <HeldResultView
+            itemTitle={result.item_title}
+            latestVersion={latestVersion}
+            moderated={result.moderated}
+            taskId={result.task_id}
+          />
+          {back}
+        </div>
+      </div>
+    );
+  }
+
+  const assessedVersion = result.assessed_version as unknown as VersionFacts;
+  const released: ReleasedResult = {
+    resultId: result.result_id,
+    taskId: result.task_id,
+    itemTitle: result.item_title,
+    taskClosed: result.task_closed,
+    outcome: result.outcome as ReleasedResult["outcome"],
+    releasedAt: result.released_at,
+    appealDeadlineAt: result.appeal_deadline_at,
+    remediation: result.remediation ?? null,
+    remediationDeadlineAt: result.remediation_deadline_at ?? null,
+    feedback: result.feedback ?? null,
+    assessorName: result.assessor_name ?? null,
+    marks: (result.marks ?? []) as unknown as Mark[],
+    assessedVersion,
+    latestVersion: latestVersion ?? assessedVersion,
+    firstViewedAt: result.first_viewed_at ?? null,
+  };
+
   return (
-    <Screen
-      id="L-15"
-      frs="FR-316, FR-317, FR-603, NFR-11"
-      workspace="Learning"
-      title="Your result"
-      actions={[{ label: "Lodge an appeal", href: "/learn/results/example/appeal/new" }]}
-      aside={
-        <>
-          <Block
-            heading="Appeal"
-            label="Appeal closing day"
-            detail="Days left, counting weekends and public holidays"
-            size="sm"
-          />
-          <Block
-            heading="How you were told"
-            label="Notification evidence"
-            detail="In-app and email, with times (NFR-11)"
-          />
-          <Block heading="History" label="Decision history" detail="Every decision on this item (BR-03)" />
-        </>
-      }
-      asideLabel="Appeal, notification and history"
-    >
-      <Block label="Outcome" detail="Competent or Not yet competent, and when it was released" size="sm" />
-      <Block
-        heading="What to do next"
-        label="Remediation"
-        detail="What to do and the resubmission deadline, when not yet competent (FR-317)"
+    <div className="page">
+      <PageHeader
+        lead={result.cohort_name}
+        meta={
+          <Tag tone={released.outcome === "competent" ? "positive" : "caution"}>{OUTCOME_LABELS[released.outcome]}</Tag>
+        }
+        title={`Your result for ${result.item_title}`}
+        workspace="Learning"
       />
-      <Block heading="Marks" label="Marks per criterion" />
-      <Block heading="Feedback" label="Assessor's feedback" size="lg" />
-    </Screen>
+      <div className="stack stack--lg">
+        <ReleasedResultView now={new Date()} result={released} />
+        {back}
+      </div>
+    </div>
   );
 }

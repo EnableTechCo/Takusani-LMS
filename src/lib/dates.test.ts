@@ -4,6 +4,7 @@ import {
   formatDateTimeSeconds,
   formatDay,
   formatDayOf,
+  formatLongDayOf,
   formatTime,
   instantFromSast,
   lastFullDayBefore,
@@ -43,6 +44,13 @@ describe("dates in SAST", () => {
 
   it("shows an exclusive deadline as the last full day before it (P-11)", () => {
     expect(lastFullDayBefore("2026-09-29T22:00:00Z")).toBe("29 Sept 2026");
+    expect(lastFullDayBefore("2026-09-29T22:00:00Z", "long")).toBe("Tuesday 29 September 2026");
+  });
+
+  it("says a day in a sentence's words, by the South African date", () => {
+    expect(formatLongDayOf("2026-10-06T12:05:00Z")).toBe("Tuesday 6 October 2026");
+    // 23:30 SAST on the 6th is still the 6th, although it is 21:30 UTC.
+    expect(formatLongDayOf("2026-10-06T21:30:00Z")).toBe("Tuesday 6 October 2026");
   });
 
   it("counts days by South African calendar date, so three hours away is today, not tomorrow", () => {
