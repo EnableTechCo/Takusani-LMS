@@ -38,6 +38,14 @@ export async function getMyTask(taskId: string) {
   return data?.[0] ?? null;
 }
 
+/** Files this learner has uploaded for a task and not yet handed in; they survive a reload. */
+export async function listMyUploads(taskId: string) {
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("list_my_uploads", { p_task_id: taskId });
+  if (error) throw new Error(`api.list_my_uploads failed: ${error.message}`);
+  return data;
+}
+
 /** The learner's own published tasks (FR-202: a draft never appears here). */
 export async function listMyTasks() {
   const supabase = await createClient();
