@@ -40,3 +40,26 @@ export function formatDateTime(iso: string): string {
 export function formatDateTimeSeconds(iso: string): string {
   return DATE_TIME_SECONDS.format(new Date(iso));
 }
+
+/**
+ * A `datetime-local` value ("2026-10-02T17:00") as an instant. South African time is UTC+02:00 all year, with no
+ * daylight saving, so the offset is fixed.
+ */
+export function instantFromSast(local: string): string {
+  return `${local}:00+02:00`;
+}
+
+/** The reverse: an instant as the `datetime-local` value a South African reader expects. */
+export function sastInputValue(iso: string): string {
+  const parts = new Intl.DateTimeFormat("en-ZA", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+    timeZone: ZONE,
+  }).formatToParts(new Date(iso));
+  const part = (type: string) => parts.find((p) => p.type === type)?.value ?? "";
+  return `${part("year")}-${part("month")}-${part("day")}T${part("hour")}:${part("minute")}`;
+}

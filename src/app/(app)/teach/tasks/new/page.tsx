@@ -1,42 +1,35 @@
-import { Block, Form, Screen } from "@/components/skeleton/skeleton";
+import { PageHeader } from "@/components/shell/page-header";
+import { EmptyState } from "@/components/ui/status";
+import { NewTaskForm } from "@/modules/submissions/forms";
+import { listWorkCohorts } from "@/modules/submissions/queries";
 
 export const metadata = { title: "New task · Teaching" };
 
-// F-03 skeleton (docs/design/ui/LMS-ux-architecture.md, section 5.1). Replace blocks as the feature is built.
-export default function TeachTasksNewPage() {
+// F-03 create (FR-201, FR-202): the brief and the dates. The rubric and the audience are set on the draft.
+export default async function NewTaskPage({ searchParams }: { searchParams: Promise<{ cohort?: string }> }) {
+  const [{ cohort }, cohorts] = await Promise.all([searchParams, listWorkCohorts()]);
+
   return (
-    <Screen
-      id="F-03"
-      frs="FR-201, FR-202, FR-203"
-      workspace="Teaching"
-      title="New task"
-      actions={["Publish", "Save draft"]}
-      width="form"
-    >
-      <Form heading="Brief" prefix="brief" fields={[{ label: "Title" }, { label: "Brief", type: "textarea" }]} />
-      <Block heading="Rubric" label="Rubric builder" detail="Criteria and what meets each one" />
-      <Form
-        heading="Submission"
-        prefix="submission"
-        fields={[
-          { label: "Due date and time", type: "datetime-local" },
-          { label: "Submission type", type: "select", options: ["File upload", "Online exam"] },
-          { label: "Evidence required", type: "textarea", help: "One line per file the learner must submit" },
-        ]}
-      />
-      <Form
-        heading="Audience"
-        prefix="audience"
-        fields={[
-          { label: "Cohort", type: "select" },
-          { label: "Learners", type: "select", help: "Everyone in the cohort, or chosen learners" },
-        ]}
-      />
-      <Block
-        label="Publish confirmation"
-        detail="Names who will be notified and what goes on their calendars (FR-203)"
-        size="sm"
-      />
-    </Screen>
+    <div className="page page--form">
+      <PageHeader workspace="Teaching" title="New task" lead="Set work for a cohort, or for named learners in it." />
+      <div className="card">
+        <div className="card__body">
+          {cohorts.length === 0 ? (
+            <EmptyState icon="users" title="No cohort to set work in">
+              <p>You set work in the cohorts your facilitator role covers. Ask a coordinator to give you the cohort.</p>
+            </EmptyState>
+          ) : (
+            <NewTaskForm
+              cohorts={cohorts.map((item) => ({
+                id: item.id,
+                name: item.name,
+                programmeTitle: item.programme_title,
+              }))}
+              selected={cohort}
+            />
+          )}
+        </div>
+      </div>
+    </div>
   );
 }
