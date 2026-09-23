@@ -67,7 +67,9 @@ insert into expected_grants values
   ('function', 'api', 'list_my_notifications(p_category text, p_page integer, p_page_size integer)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'my_unread_notification_count()', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'open_my_notification(p_notification_id uuid)', 'authenticated', 'EXECUTE'),
-  ('function', 'api', 'mark_my_notifications_read(p_category text)', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'mark_my_notifications_read(p_category text)', 'authenticated', 'EXECUTE'),
+  -- Learner home (20261006090000): the signed-in learner's own enrolments.
+  ('function', 'api', 'list_my_enrolments()', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (

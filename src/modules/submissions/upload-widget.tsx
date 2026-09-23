@@ -1,8 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import * as tus from "tus-js-client";
 import { Button, IconButton } from "@/components/ui/button";
+import { useOffline } from "@/components/ui/connection";
 import { Banner } from "@/components/ui/status";
 import { UploadDrop, UploadRow, type UploadState } from "@/components/ui/upload";
 import { createBrowserSupabase } from "@/lib/supabase/browser";
@@ -58,16 +59,6 @@ function isRefusal(error: Error): boolean {
   return status >= 400 && status < 500 && status !== 409 && status !== 423;
 }
 
-/** The browser's own view of the connection, read the way React wants an external value read. */
-function subscribeToConnection(onChange: () => void) {
-  window.addEventListener("online", onChange);
-  window.addEventListener("offline", onChange);
-  return () => {
-    window.removeEventListener("online", onChange);
-    window.removeEventListener("offline", onChange);
-  };
-}
-
 export function UploadWidget({
   taskId,
   requirements,
@@ -91,11 +82,7 @@ export function UploadWidget({
       fileId: file.fileId,
     })),
   );
-  const offline = useSyncExternalStore(
-    subscribeToConnection,
-    () => !navigator.onLine,
-    () => false,
-  );
+  const offline = useOffline();
   const [now, setNow] = useState(() => Date.now());
   const uploads = useRef(new Map<string, tus.Upload>());
 

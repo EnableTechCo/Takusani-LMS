@@ -339,6 +339,17 @@ export type Database = {
           version_number: number
         }[]
       }
+      list_my_enrolments: {
+        Args: never
+        Returns: {
+          cohort_id: string
+          cohort_name: string
+          ends_on: string
+          nqf_level: number
+          programme_title: string
+          starts_on: string
+        }[]
+      }
       list_my_notifications: {
         Args: { p_category?: string; p_page?: number; p_page_size?: number }
         Returns: {
