@@ -3,15 +3,8 @@ import { PageHeader } from "@/components/shell/page-header";
 import { TextLink } from "@/components/ui/link";
 import { Banner, Tag } from "@/components/ui/status";
 import { formatDateTime, sastInputValue } from "@/lib/dates";
-import {
-  AudienceForm,
-  CriteriaForm,
-  EditTaskForm,
-  PublishTask,
-  RequirementsForm,
-  type Criterion,
-  type Requirement,
-} from "@/modules/submissions/forms";
+import { AudienceForm, CriteriaForm, EditTaskForm, PublishTask, RequirementsForm } from "@/modules/submissions/forms";
+import type { Criterion, RequirementDraft } from "@/modules/submissions/types";
 import { getTask } from "@/modules/submissions/queries";
 import {
   AUDIENCE_LABELS,
@@ -45,7 +38,7 @@ export default async function EditTaskPage({
 
   const criteria = (task.criteria ?? []) as unknown as Criterion[];
   const named = (task.named_learners ?? []) as unknown as NamedLearner[];
-  const requirements = (task.requirements ?? []) as unknown as Requirement[];
+  const requirements = (task.requirements ?? []) as unknown as RequirementDraft[];
   const isDraft = task.state === "draft";
 
   return (

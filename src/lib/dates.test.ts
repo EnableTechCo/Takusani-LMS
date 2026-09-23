@@ -4,9 +4,11 @@ import {
   formatDateTimeSeconds,
   formatDay,
   formatDayOf,
+  formatTime,
   instantFromSast,
   lastFullDayBefore,
   sastDatePlusDays,
+  sastDaysFromToday,
   sastInputValue,
 } from "./dates";
 
@@ -41,5 +43,18 @@ describe("dates in SAST", () => {
 
   it("shows an exclusive deadline as the last full day before it (P-11)", () => {
     expect(lastFullDayBefore("2026-09-29T22:00:00Z")).toBe("29 Sept 2026");
+  });
+
+  it("counts days by South African calendar date, so three hours away is today, not tomorrow", () => {
+    const now = new Date("2026-09-23T10:00:00+02:00");
+    expect(sastDaysFromToday("2026-09-23T13:00:00+02:00", now)).toBe(0);
+    expect(sastDaysFromToday("2026-09-24T08:00:00+02:00", now)).toBe(1);
+    expect(sastDaysFromToday("2026-09-22T23:59:00+02:00", now)).toBe(-1);
+    // 23:30 SAST on the 23rd is still the 23rd, although it is 21:30 UTC.
+    expect(sastDaysFromToday("2026-09-23T23:30:00+02:00", now)).toBe(0);
+  });
+
+  it("gives the time of day in South Africa", () => {
+    expect(formatTime("2026-09-23T10:39:00Z")).toBe("12:39");
   });
 });
