@@ -63,3 +63,19 @@ export function sastInputValue(iso: string): string {
   const part = (type: string) => parts.find((p) => p.type === type)?.value ?? "";
   return `${part("year")}-${part("month")}-${part("day")}T${part("hour")}:${part("minute")}`;
 }
+
+/** Today's date in South Africa plus a number of days, as YYYY-MM-DD, for dates stated before anything is saved. */
+export function sastDatePlusDays(days: number, from: Date = new Date()): string {
+  const today = new Intl.DateTimeFormat("en-CA", { timeZone: ZONE }).format(from);
+  const date = new Date(`${today}T12:00:00+02:00`);
+  date.setUTCDate(date.getUTCDate() + days);
+  return new Intl.DateTimeFormat("en-CA", { timeZone: ZONE }).format(date);
+}
+
+/**
+ * The last full South African day before an exclusive deadline instant: an appeal window that closes at the start
+ * of 30 September is shown to people as "until the end of 29 September" (P-11).
+ */
+export function lastFullDayBefore(deadlineIso: string): string {
+  return formatDayOf(new Date(new Date(deadlineIso).getTime() - 1000).toISOString());
+}

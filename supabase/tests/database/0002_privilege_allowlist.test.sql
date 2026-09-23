@@ -55,7 +55,9 @@ insert into expected_grants values
   ('function', 'api', 'take_marking(p_instance_id uuid)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'save_marking_draft(p_instance_id uuid, p_expected_version integer, p_scores jsonb, p_feedback text, p_outcome text, p_justification text, p_remediation text, p_resubmission_days integer)', 'authenticated', 'EXECUTE'),
   ('function', 'assessment', 'may_read_evidence(p_profile_id uuid, p_bucket text, p_object_key text)', 'authenticated', 'EXECUTE'),
-  ('function', 'submissions', 'owns_upload(p_profile_id uuid, p_bucket text, p_object_key text)', 'authenticated', 'EXECUTE');
+  ('function', 'submissions', 'owns_upload(p_profile_id uuid, p_bucket text, p_object_key text)', 'authenticated', 'EXECUTE'),
+  -- Finalising (20261001090000): the allocated assessor only, checked inside the function.
+  ('function', 'api', 'finalise_decision(p_instance_id uuid, p_expected_draft_version integer)', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (

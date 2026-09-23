@@ -25,17 +25,17 @@ These are the working and open decisions. Each is applied in the documents as sh
 
 | ID | Question | Working decision applied | Owner | Blocks |
 |---|---|---|---|---|
-| P-01 | Is moderation a property of the cohort, and may it change mid-cohort? | Required `moderated` / `not_moderated` attribute set at creation; change is versioned and refused while results are pending or held | Quality assurance | Finalise, freeze, sign-off functions |
+| P-01 | Is moderation a property of the cohort, and may it change mid-cohort? | Required `moderated` / `not_moderated` attribute set at creation; change is versioned and refused while results are pending or held **Go-ahead on the working decision, 23 Sep 2026** (S2-08); formal confirmation by the owner still to be recorded. | Quality assurance | Finalise, freeze, sign-off functions |
 | P-02 | What does a moderation cycle cover? | Named assessable items or units, optionally a period; one non-terminal cycle per item | Quality assurance | Freeze and sign-off functions |
 | P-03 | What is the longest acceptable hold before a learner sees an outcome, especially NYC? | No value assumed; a configurable threshold drives a dashboard and alert | Quality assurance | Go-live, not build |
-| P-04 | Must resubmission decisions (NYC to Competent) be moderated? | Yes, by the next cycle, like any decision in a moderated cohort | Quality assurance | Finalise function |
+| P-04 | Must resubmission decisions (NYC to Competent) be moderated? | Yes, by the next cycle, like any decision in a moderated cohort **Go-ahead on the working decision, 23 Sep 2026** (S2-08); formal confirmation by the owner still to be recorded. | Quality assurance | Finalise function |
 | P-05 | Who may sign off a cycle? | A moderator who took no assessment decision on any sampled result | Quality assurance | Sign-off function |
 | P-06 | Does sign-off release the whole cohort (FR-511 wording) or the sampled population? | The frozen population only; later decisions wait for the next cycle (CR-19) | Quality assurance | Sign-off function |
 | P-07 | How do several assessments roll up to one unit's credit, and may one task serve several units? | Credit when every required item has a released Competent decision; many-to-many allowed; requirement set frozen per cohort | Academic policy, with the AS-03 unit list | Credit functions |
 | P-08 | Is one remark appeal per result the rule? Does a view-script request extend the window? | One remark per result, ever; no extension | Academic policy | Appeal functions |
 | P-09 | After an appeal downgrades a result to NYC, does the learner get remediation and resubmission? | Yes, like any NYC decision | Academic policy | Appeal conclusion function |
 | P-10 | Is the appeal reviewer fallback order in SRS AS-02 confirmed? | AS-02 order applied | Academic policy | Reviewer allocation |
-| P-11 | Is the seven-day window calendar days, and is the last day inclusive? | Calendar days; closes at the start of the eighth local day; learner shown the last full day | Academic policy | Release functions |
+| P-11 | Is the seven-day window calendar days, and is the last day inclusive? | Calendar days; closes at the start of the eighth local day; learner shown the last full day **Go-ahead on the working decision, 23 Sep 2026** (S2-08); formal confirmation by the owner still to be recorded. | Academic policy | Release functions |
 | P-12 | Is there an administrative route to correct a wrongly released outcome? | `correction` decision under dual control, original retained | Academic policy | Correction route only |
 | P-13 | Exam timing: does the timer pause on disconnect; when does a late-started attempt expire; how long is the acceptance grace; who may void and regrant? | Never pauses; earlier of start plus duration and window close; short configurable grace, flagged; coordinator voids and regrants | Academic policy | Exam functions; grace value before go-live |
 | P-14 | Which Supabase plan? | Pro with point-in-time recovery and Small compute; Team only if the Auth lockout hook is wanted | Management | Recovery objective, lockout mechanism |

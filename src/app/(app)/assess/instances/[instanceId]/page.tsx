@@ -60,6 +60,17 @@ export default async function MarkingPage({ params }: { params: Promise<{ instan
         moderated={item.moderation_policy === "moderated"}
         stored={(item.draft ?? null) as unknown as StoredDraft | null}
         takenBySomeoneElse={item.assessor_id && !mine ? item.assessor_name : null}
+        learnerName={item.learner_name}
+        decided={
+          item.instance_state === "decided"
+            ? {
+                resultState: item.result_state,
+                releasedAt: item.result_released_at,
+                appealDeadlineAt: item.result_appeal_deadline_at,
+                remediationDeadlineAt: item.result_remediation_deadline_at,
+              }
+            : null
+        }
         versions={versions}
       />
       <p className="u-mt-6">
