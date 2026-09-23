@@ -119,6 +119,18 @@ export type Database = {
           status: string
         }[]
       }
+      finalise_decision: {
+        Args: { p_expected_draft_version: number; p_instance_id: string }
+        Returns: {
+          appeal_deadline_at: string
+          decision_id: string
+          detail: string
+          released_at: string
+          remediation_deadline_at: string
+          result_state: string
+          status: string
+        }[]
+      }
       finalise_upload: {
         Args: { p_intent_id: string }
         Returns: {
@@ -145,7 +157,10 @@ export type Database = {
           learner_number: string
           moderation_policy: string
           requirements: Json
+          result_appeal_deadline_at: string
           result_id: string
+          result_released_at: string
+          result_remediation_deadline_at: string
           result_state: string
           submitted_at: string
           task_brief: string

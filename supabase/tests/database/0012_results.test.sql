@@ -84,8 +84,11 @@ select results_eq(
   'the earlier instance is superseded, not removed: what was marked before stays readable');
 
 -- Decisions: one root, no forks, append-only
-insert into assessment.decisions (result_id, type, outcome, actor_id, acting_role, justification)
-values (:'result', 'assessment', 'not_yet_competent', :'assessor', 'assessor', 'The retention schedule is missing.')
+-- A "not yet competent" assessment decision carries its remediation and resubmission period (S2-08 constraint).
+insert into assessment.decisions (result_id, type, outcome, actor_id, acting_role, justification, remediation,
+  resubmission_days)
+values (:'result', 'assessment', 'not_yet_competent', :'assessor', 'assessor', 'The retention schedule is missing.',
+  'Add the retention schedule.', 14)
 returning id as decision1 \gset
 update assessment.results set current_decision_id = :'decision1' where id = :'result';
 
@@ -172,8 +175,10 @@ insert into assessment.results (assessable_item_id, learner_id, remediation_peri
 select ai.id, '00000000-0000-4000-8000-000000000006', interval '14 days'
 from assessment.assessable_items ai where ai.task_id = :'task'
 returning id as nyc_result \gset
-insert into assessment.decisions (result_id, type, outcome, actor_id, acting_role, justification)
-values (:'nyc_result', 'assessment', 'not_yet_competent', :'assessor', 'assessor', 'Two records are missing.')
+insert into assessment.decisions (result_id, type, outcome, actor_id, acting_role, justification, remediation,
+  resubmission_days)
+values (:'nyc_result', 'assessment', 'not_yet_competent', :'assessor', 'assessor', 'Two records are missing.',
+  'Add the two missing records.', 14)
 returning id as decision4 \gset
 update assessment.results set state = 'released', current_decision_id = :'decision4' where id = :'nyc_result';
 select results_eq(

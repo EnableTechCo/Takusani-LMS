@@ -6,8 +6,10 @@ import { Choice, ChoiceGroup } from "@/components/ui/choice";
 import { Field } from "@/components/ui/field";
 import { Banner, StatusLine, Tag } from "@/components/ui/status";
 import { Tabs } from "@/components/ui/tabs";
-import { formatDateTime } from "@/lib/dates";
-import { saveMarkingDraft, takeMarking } from "./actions";
+import { ConsequenceDialog } from "@/components/ui/dialog";
+import { BlockedReason } from "@/components/ui/link";
+import { formatDateTime, formatDay, lastFullDayBefore, sastDatePlusDays } from "@/lib/dates";
+import { finaliseDecision, saveMarkingDraft, takeMarking } from "./actions";
 import { missingForFinalise, OUTCOME_LABELS, runningTotal, type Draft, type Score } from "./rules";
 
 /**
@@ -76,6 +78,8 @@ export function MarkingWorkspace({
   stored,
   decisions,
   moderated,
+  learnerName,
+  decided,
 }: {
   instanceId: string;
   /** This assessor has taken the item and it is open for marking. */
@@ -89,6 +93,14 @@ export function MarkingWorkspace({
   stored: StoredDraft | null;
   decisions: { type: string; outcome: string; acting_role: string; created_at: string }[];
   moderated: boolean;
+  learnerName: string;
+  /** Where the result stands once this item is decided; null while it is still being marked. */
+  decided: {
+    resultState: string;
+    releasedAt: string | null;
+    appealDeadlineAt: string | null;
+    remediationDeadlineAt: string | null;
+  } | null;
 }) {
   const [draft, setDraft] = useState<Draft>(() => initialDraft(criteria, stored));
   const [version, setVersion] = useState(stored?.version ?? 0);
@@ -97,6 +109,7 @@ export function MarkingWorkspace({
   const [problem, setProblem] = useState<string | null>(null);
   const [saving, startSaving] = useTransition();
   const [taking, startTaking] = useTransition();
+  const [finalising, startFinalising] = useTransition();
   const [viewing, setViewing] = useState(versions.find((item) => item.assessed)?.version_number ?? 0);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -266,8 +279,56 @@ export function MarkingWorkspace({
     </div>
   );
 
+  const finalise = () =>
+    startFinalising(async () => {
+      let current = version;
+      if (dirty) {
+        const saved = await saveMarkingDraft(instanceId, version, draft);
+        if (!saved.ok) {
+          setProblem(saved.message);
+          return;
+        }
+        current = saved.version;
+        setVersion(saved.version);
+        setDirty(false);
+      }
+      const result = await finaliseDecision(instanceId, current);
+      if (!result.ok) setProblem(result.message);
+    });
+
+  const consequence = moderated
+    ? `This decision will be held. ${learnerName} will not see it until moderation of this cohort is signed off.`
+    : `This releases the result to ${learnerName} now and starts the seven-day appeal window, which closes at the end of ${formatDay(
+        sastDatePlusDays(7),
+      )}.${
+        draft.outcome === "not_yet_competent" && draft.resubmissionDays
+          ? ` ${learnerName} must resubmit within ${draft.resubmissionDays} days.`
+          : ""
+      }`;
+
   return (
     <>
+      {decided ? (
+        decided.resultState === "released" && decided.releasedAt && decided.appealDeadlineAt ? (
+          <Banner title="Decided and released" tone="positive">
+            <p>
+              Released {formatDateTime(decided.releasedAt)} (SAST). The appeal window closes at the end of{" "}
+              {lastFullDayBefore(decided.appealDeadlineAt)}.
+              {decided.remediationDeadlineAt
+                ? ` Resubmission is due by ${formatDateTime(decided.remediationDeadlineAt)}.`
+                : ""}{" "}
+              This record cannot be edited.
+            </p>
+          </Banner>
+        ) : (
+          <Banner title="Decided, and held for moderation" tone="info">
+            <p>
+              {learnerName} will not see this decision until moderation of this cohort is signed off. It cannot be
+              edited; a moderator can return it for re-marking.
+            </p>
+          </Banner>
+        )
+      ) : null}
       {takenBySomeoneElse ? (
         <Banner title={`${takenBySomeoneElse} is marking this item`} tone="info">
           <p>You can read the evidence, but only they can mark it. Ask a coordinator to reallocate it if needed.</p>
@@ -459,7 +520,7 @@ export function MarkingWorkspace({
               <Button disabled={!dirty} loading={saving} loadingLabel="Saving the draft" onClick={save}>
                 Save draft
               </Button>
-            ) : takenBySomeoneElse ? null : (
+            ) : takenBySomeoneElse || decided ? null : (
               <Button
                 loading={taking}
                 loadingLabel="Taking the item"
@@ -476,11 +537,39 @@ export function MarkingWorkspace({
             )}
           </div>
           {canMark ? (
-            <p className="text-small text-muted">
-              {missing.length === 0
-                ? "The draft is complete and ready to finalise."
-                : `Before this can be finalised it still needs ${missing.join(", ")}.`}
-            </p>
+            <div className="stack stack--sm">
+              {missing.length > 0 ? (
+                <BlockedReason id="finalise-blocked">
+                  Before this can be finalised it still needs {missing.join(", ")}.
+                </BlockedReason>
+              ) : null}
+              {missing.length > 0 ? (
+                <div>
+                  <Button aria-describedby="finalise-blocked" disabled variant="primary">
+                    Finalise decision
+                  </Button>
+                </div>
+              ) : (
+                <div>
+                  <ConsequenceDialog
+                    cancelLabel="Keep editing"
+                    confirmLabel="Finalise decision"
+                    consequence={consequence}
+                    onConfirm={finalise}
+                    title="Finalise this decision?"
+                    trigger={{ label: finalising ? "Finalising" : "Finalise decision", variant: "primary" }}
+                  >
+                    <p>
+                      {learnerName} · {draft.outcome === "competent" ? "Competent" : "Not yet competent"}
+                    </p>
+                    <p className="text-small text-muted">
+                      You are finalising this decision as the assessor. It is kept permanently and cannot be edited; any
+                      later decision is recorded beside it.
+                    </p>
+                  </ConsequenceDialog>
+                </div>
+              )}
+            </div>
           ) : null}
         </div>
       </section>

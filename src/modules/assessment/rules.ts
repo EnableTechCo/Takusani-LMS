@@ -86,3 +86,20 @@ export const MARKING_REFUSALS: Record<string, string> = {
   invalid_scores: "The marks could not be read. Try again.",
   error: "The draft could not be saved. Your changes are still on this page; try again.",
 };
+
+export const FINALISE_REFUSALS: Record<string, string> = {
+  ...MARKING_REFUSALS,
+  stale_version:
+    "The draft changed after this page last saved it. Reload to see the latest before finalising; nothing was decided.",
+  moderated_resubmission_not_yet_supported:
+    "This cohort is moderated and this result was already released. Deciding it again waits for moderation of resubmissions, which is not available yet. Nothing was decided.",
+  not_found: "This item is not in your marking scope.",
+};
+
+/** What `incomplete` names, in the words the page uses. */
+export const FINALISE_MISSING: Record<string, string> = {
+  outcome: "the outcome",
+  justification: "the justification",
+  remediation: "what the learner must do",
+  resubmission_days: "the resubmission period",
+};

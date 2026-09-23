@@ -1,10 +1,12 @@
 import { describe, expect, it } from "vitest";
 import {
   formatDateTime,
+  formatDateTimeSeconds,
   formatDay,
   formatDayOf,
-  formatDateTimeSeconds,
   instantFromSast,
+  lastFullDayBefore,
+  sastDatePlusDays,
   sastInputValue,
 } from "./dates";
 
@@ -29,5 +31,15 @@ describe("dates in SAST", () => {
   it("reads a local date and time as South African time, and writes it back", () => {
     expect(instantFromSast("2026-10-02T17:00")).toBe("2026-10-02T17:00:00+02:00");
     expect(sastInputValue("2026-10-02T15:00:00Z")).toBe("2026-10-02T17:00");
+  });
+
+  it("adds days to the South African date, not the UTC one", () => {
+    // 23:30 SAST on 22 September is still 21:30 UTC, but in South Africa it is already the 22nd.
+    expect(sastDatePlusDays(7, new Date("2026-09-22T21:30:00Z"))).toBe("2026-09-29");
+    expect(sastDatePlusDays(7, new Date("2026-09-22T22:30:00Z"))).toBe("2026-09-30");
+  });
+
+  it("shows an exclusive deadline as the last full day before it (P-11)", () => {
+    expect(lastFullDayBefore("2026-09-29T22:00:00Z")).toBe("29 Sept 2026");
   });
 });
