@@ -47,7 +47,15 @@ insert into expected_grants values
   -- Submissions (20260927090000): the learner hands their own work in; requirements are set by whoever sets the work.
   ('function', 'api', 'set_task_requirements(p_task_id uuid, p_requirements jsonb)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'submit_task(p_task_id uuid, p_files jsonb, p_client_submission_id uuid)', 'authenticated', 'EXECUTE'),
-  ('function', 'api', 'get_my_task(p_task_id uuid)', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'get_my_task(p_task_id uuid)', 'authenticated', 'EXECUTE'),
+  -- Marking (20260930090000): assessors within scope, checked inside each function. may_read_evidence is the storage
+  -- policy's own check, which runs as the signed-in role.
+  ('function', 'api', 'list_marking_queue(p_cohort_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'get_marking_item(p_instance_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'take_marking(p_instance_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'save_marking_draft(p_instance_id uuid, p_expected_version integer, p_scores jsonb, p_feedback text, p_outcome text, p_justification text, p_remediation text, p_resubmission_days integer)', 'authenticated', 'EXECUTE'),
+  ('function', 'assessment', 'may_read_evidence(p_profile_id uuid, p_bucket text, p_object_key text)', 'authenticated', 'EXECUTE'),
+  ('function', 'submissions', 'owns_upload(p_profile_id uuid, p_bucket text, p_object_key text)', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (
