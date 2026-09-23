@@ -30,3 +30,11 @@ export async function listEnrolments(cohortId: string) {
   if (error) throw new Error(`api.list_enrolments failed: ${error.message}`);
   return data;
 }
+
+/** The signed-in learner's own active enrolments (learner home header and first-day welcome). */
+export async function listMyEnrolments() {
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("list_my_enrolments");
+  if (error) throw new Error(`api.list_my_enrolments failed: ${error.message}`);
+  return data;
+}
