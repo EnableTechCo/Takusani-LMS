@@ -94,7 +94,7 @@ export function TextField({
   placeholder,
   ...field
 }: FieldOptions & {
-  type?: "text" | "email" | "password" | "search" | "date" | "number" | "tel" | "url";
+  type?: "text" | "email" | "password" | "search" | "date" | "datetime-local" | "number" | "tel" | "url";
   defaultValue?: string;
   autoComplete?: string;
   inputMode?: "numeric" | "decimal" | "email" | "text";

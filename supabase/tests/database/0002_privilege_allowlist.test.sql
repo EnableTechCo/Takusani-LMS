@@ -26,7 +26,18 @@ insert into expected_grants values
   ('function', 'api', 'enrol_learner(p_cohort_id uuid, p_email text)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'list_programmes()', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'list_cohorts()', 'authenticated', 'EXECUTE'),
-  ('function', 'api', 'list_enrolments(p_cohort_id uuid)', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'list_enrolments(p_cohort_id uuid)', 'authenticated', 'EXECUTE'),
+  -- Tasks (20260925090000): facilitators and coordinators within scope; list_my_tasks is the learner's own
+  -- published work. Every function checks the caller inside itself.
+  ('function', 'api', 'create_task(p_cohort_id uuid, p_title text, p_brief text, p_submission_type text, p_due_at timestamp with time zone, p_late_policy text, p_module_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'update_task(p_task_id uuid, p_title text, p_brief text, p_submission_type text, p_due_at timestamp with time zone, p_late_policy text, p_module_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'set_task_criteria(p_task_id uuid, p_criteria jsonb)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'set_task_audience(p_task_id uuid, p_audience text, p_emails text[])', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'publish_task(p_task_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_tasks(p_cohort_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'get_task(p_task_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_my_tasks()', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_work_cohorts()', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (

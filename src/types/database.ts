@@ -65,6 +65,21 @@ export type Database = {
           status: string
         }[]
       }
+      create_task: {
+        Args: {
+          p_brief: string
+          p_cohort_id: string
+          p_due_at?: string
+          p_late_policy?: string
+          p_module_id?: string
+          p_submission_type?: string
+          p_title: string
+        }
+        Returns: {
+          status: string
+          task_id: string
+        }[]
+      }
       create_unit: {
         Args: {
           p_code: string
@@ -82,6 +97,25 @@ export type Database = {
         Returns: {
           enrolment_id: string
           status: string
+        }[]
+      }
+      get_task: {
+        Args: { p_task_id: string }
+        Returns: {
+          audience: string
+          audience_size: number
+          brief: string
+          cohort_id: string
+          cohort_name: string
+          criteria: Json
+          due_at: string
+          id: string
+          late_policy: string
+          module_id: string
+          named_learners: Json
+          state: string
+          submission_type: string
+          title: string
         }[]
       }
       health_check: { Args: never; Returns: boolean }
@@ -152,6 +186,18 @@ export type Database = {
           status: string
         }[]
       }
+      list_my_tasks: {
+        Args: never
+        Returns: {
+          cohort_name: string
+          due_at: string
+          id: string
+          late_policy: string
+          published_at: string
+          submission_type: string
+          title: string
+        }[]
+      }
       list_programmes: {
         Args: never
         Returns: {
@@ -159,6 +205,32 @@ export type Database = {
           id: string
           nqf_level: number
           title: string
+        }[]
+      }
+      list_tasks: {
+        Args: { p_cohort_id?: string }
+        Returns: {
+          audience: string
+          audience_size: number
+          cohort_id: string
+          cohort_name: string
+          criteria_count: number
+          due_at: string
+          id: string
+          late_policy: string
+          published_at: string
+          state: string
+          submission_type: string
+          title: string
+        }[]
+      }
+      list_work_cohorts: {
+        Args: never
+        Returns: {
+          id: string
+          name: string
+          programme_title: string
+          status: string
         }[]
       }
       my_access: {
@@ -187,6 +259,42 @@ export type Database = {
       provision_role: {
         Args: { p_role: string; p_user_id: string }
         Returns: string
+      }
+      publish_task: {
+        Args: { p_task_id: string }
+        Returns: {
+          notified: number
+          status: string
+        }[]
+      }
+      set_task_audience: {
+        Args: { p_audience: string; p_emails?: string[]; p_task_id: string }
+        Returns: {
+          audience_size: number
+          status: string
+        }[]
+      }
+      set_task_criteria: {
+        Args: { p_criteria: Json; p_task_id: string }
+        Returns: {
+          criteria_count: number
+          status: string
+        }[]
+      }
+      update_task: {
+        Args: {
+          p_brief: string
+          p_due_at?: string
+          p_late_policy?: string
+          p_module_id?: string
+          p_submission_type?: string
+          p_task_id: string
+          p_title: string
+        }
+        Returns: {
+          status: string
+          task_id: string
+        }[]
       }
     }
     Enums: {
