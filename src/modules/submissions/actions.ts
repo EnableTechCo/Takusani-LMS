@@ -12,6 +12,8 @@ import {
   newTaskSchema,
   requirementsSchema,
   TASK_REFUSALS,
+  UPLOAD_REFUSALS,
+  uploadRefusalMessage,
 } from "./rules";
 
 const text = (form: FormData, name: string) => String(form.get(name) ?? "");
@@ -173,4 +175,84 @@ export async function publishTask(taskId: string, ...ignored: [FormState, FormDa
 
   revalidatePath("/teach/tasks");
   redirect(`/teach/tasks/${taskId}/edit?published=${data![0].notified}`);
+}
+
+/**
+ * Step 1 of an upload (ADR-007): the database decides whether this learner may upload for this task and hands back
+ * one random object key with its limits. The browser then sends the file straight to Storage.
+ */
+export async function authoriseUpload(input: {
+  taskId: string;
+  requirementId: string | null;
+  filename: string;
+  mediaType: string;
+  bytes: number;
+  clientUploadId: string;
+}): Promise<
+  | { ok: true; intentId: string; bucket: string; objectKey: string; maxBytes: number; expiresAt: string }
+  | { ok: false; message: string }
+> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("authorise_upload", {
+    p_context_type: "task_submission",
+    p_context_id: input.taskId,
+    p_filename: input.filename,
+    p_media_type: input.mediaType,
+    p_bytes: input.bytes,
+    p_client_upload_id: input.clientUploadId,
+    p_requirement_id: input.requirementId ?? undefined,
+  });
+  const row = data?.[0];
+  if (error || !row || row.status !== "ok") {
+    return {
+      ok: false,
+      message: uploadRefusalMessage(row?.status ?? "error", row?.max_bytes ? Number(row.max_bytes) : null, input),
+    };
+  }
+  return {
+    ok: true,
+    intentId: row.intent_id!,
+    bucket: row.bucket!,
+    objectKey: row.object_key!,
+    maxBytes: Number(row.max_bytes),
+    expiresAt: row.expires_at!,
+  };
+}
+
+/** Step 2: the object is there, so the database reads its real size and type and accepts the file. */
+export async function finaliseUpload(
+  intentId: string,
+): Promise<{ ok: true; fileId: string; bytes: number } | { ok: false; message: string }> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("finalise_upload", { p_intent_id: intentId });
+  const row = data?.[0];
+  if (error || !row || row.status !== "ok") {
+    return { ok: false, message: UPLOAD_REFUSALS[row?.status ?? "error"] ?? UPLOAD_REFUSALS.error };
+  }
+  return { ok: true, fileId: row.file_id!, bytes: Number(row.bytes) };
+}
+
+/** Hands the work in (FR-308). The same attempt identifier can be sent again safely: the receipt does not change. */
+export async function submitTask(
+  taskId: string,
+  files: { fileId: string; requirementId: string | null }[],
+  clientSubmissionId: string,
+): Promise<{ ok: true; receipt: string; version: number; isLate: boolean } | { ok: false; message: string }> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("submit_task", {
+    p_task_id: taskId,
+    p_files: files.map((file) => ({ file_id: file.fileId, requirement_id: file.requirementId })),
+    p_client_submission_id: clientSubmissionId,
+  });
+  const row = data?.[0];
+  if (error || !row || row.status !== "ok") {
+    const refusal = TASK_REFUSALS[row?.status ?? "error"];
+    const message =
+      row?.status === "missing_evidence" && row.detail
+        ? `${row.detail} is still needed before you can submit.`
+        : (refusal?.message ?? "That could not be submitted. Try again.");
+    return { ok: false, message };
+  }
+  revalidatePath(`/learn/tasks/${taskId}`);
+  return { ok: true, receipt: row.receipt_reference!, version: row.version_number!, isLate: row.is_late! };
 }

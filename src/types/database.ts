@@ -23,6 +23,7 @@ export type Database = {
           p_context_type: string
           p_filename: string
           p_media_type: string
+          p_requirement_id?: string
           p_sha256?: string
         }
         Returns: {
@@ -237,6 +238,9 @@ export type Database = {
           due_at: string
           id: string
           late_policy: string
+          latest_is_late: boolean
+          latest_submitted_at: string
+          latest_version: number
           published_at: string
           submission_type: string
           title: string
@@ -251,6 +255,7 @@ export type Database = {
           intent_id: string
           media_type: string
           original_filename: string
+          requirement_id: string
           scan_state: string
         }[]
       }

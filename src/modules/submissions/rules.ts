@@ -137,3 +137,41 @@ export const TASK_REFUSALS: Record<string, { field?: string; message: string }> 
   invalid_requirement_title: { field: "requirements", message: "Every piece of evidence needs a title." },
   too_many_requirements: { field: "requirements", message: "A task asks for at most 20 pieces of evidence." },
 };
+
+/** Plain-language messages for the upload refusals, in the design system's tone: say what to do instead. */
+export const UPLOAD_REFUSALS: Record<string, string> = {
+  forbidden: "This task is not yours to submit.",
+  unauthenticated: "Your session has ended. Sign in again, then choose the file once more.",
+  invalid_filename: "That file name is too long. Rename the file and choose it again.",
+  invalid_checksum: "That file could not be prepared. Choose it again.",
+  rate_limited: "You have uploaded a lot of files in the last hour. Try again later.",
+  not_uploaded: "This file did not finish uploading. Choose it again.",
+  expired: "This upload took too long and has expired. Choose the file again. Nothing was submitted.",
+  too_large: "This file is larger than the limit. Save it as a PDF, or take photos at a lower quality.",
+  type_not_allowed: "This kind of file is not accepted here.",
+  intent_not_found: "This upload is no longer available. Choose the file again.",
+  error: "This file could not be accepted. Choose it again.",
+};
+
+/** A refusal that can name real numbers, for example the size of the file the learner actually chose. */
+export function uploadRefusalMessage(
+  status: string,
+  maxBytes: number | null,
+  file: { filename: string; bytes: number },
+): string {
+  if (status === "too_large" && maxBytes) {
+    return `This file is ${formatBytes(file.bytes)}. The limit is ${formatBytes(maxBytes)}. Save it as a PDF, or take photos at a lower quality.`;
+  }
+  if (status === "type_not_allowed") {
+    return "This kind of file is not accepted. Hand in a PDF, a Word or Excel file, or a photo (JPG or PNG).";
+  }
+  return UPLOAD_REFUSALS[status] ?? UPLOAD_REFUSALS.error;
+}
+
+/** Sizes as a learner reads them, not as bytes. */
+export function formatBytes(bytes: number): string {
+  if (bytes < 1024) return `${bytes} bytes`;
+  const kilobytes = bytes / 1024;
+  if (kilobytes < 1024) return `${Math.round(kilobytes)} KB`;
+  return `${(kilobytes / 1024).toFixed(1)} MB`;
+}
