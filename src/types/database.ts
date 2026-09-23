@@ -128,6 +128,33 @@ export type Database = {
           status: string
         }[]
       }
+      get_marking_item: {
+        Args: { p_instance_id: string }
+        Returns: {
+          assessor_id: string
+          assessor_name: string
+          cohort_name: string
+          criteria: Json
+          decisions: Json
+          draft: Json
+          instance_id: string
+          instance_state: string
+          instance_version: number
+          is_late: boolean
+          learner_name: string
+          learner_number: string
+          moderation_policy: string
+          requirements: Json
+          result_id: string
+          result_state: string
+          submitted_at: string
+          task_brief: string
+          task_id: string
+          task_title: string
+          version_number: number
+          versions: Json
+        }[]
+      }
       get_my_task: {
         Args: { p_task_id: string }
         Returns: {
@@ -231,6 +258,24 @@ export type Database = {
           status: string
         }[]
       }
+      list_marking_queue: {
+        Args: { p_cohort_id?: string }
+        Returns: {
+          assessor_id: string
+          assessor_name: string
+          cohort_id: string
+          cohort_name: string
+          draft_saved_at: string
+          instance_id: string
+          instance_state: string
+          is_late: boolean
+          learner_name: string
+          learner_number: string
+          submitted_at: string
+          task_title: string
+          version_number: number
+        }[]
+      }
       list_my_tasks: {
         Args: never
         Returns: {
@@ -328,6 +373,23 @@ export type Database = {
           status: string
         }[]
       }
+      save_marking_draft: {
+        Args: {
+          p_expected_version: number
+          p_feedback?: string
+          p_instance_id: string
+          p_justification?: string
+          p_outcome?: string
+          p_remediation?: string
+          p_resubmission_days?: number
+          p_scores: Json
+        }
+        Returns: {
+          draft_version: number
+          saved_at: string
+          status: string
+        }[]
+      }
       set_task_audience: {
         Args: { p_audience: string; p_emails?: string[]; p_task_id: string }
         Returns: {
@@ -363,6 +425,13 @@ export type Database = {
           submission_id: string
           submitted_at: string
           version_number: number
+        }[]
+      }
+      take_marking: {
+        Args: { p_instance_id: string }
+        Returns: {
+          instance_version: number
+          status: string
         }[]
       }
       update_task: {

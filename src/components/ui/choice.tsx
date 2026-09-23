@@ -87,6 +87,8 @@ export function Choice({
   meta,
   tone,
   defaultChecked,
+  checked,
+  onChange,
   disabled,
 }: {
   type?: "radio" | "checkbox";
@@ -98,15 +100,20 @@ export function Choice({
   /** Colours the card once chosen, for an outcome: Competent is positive, Not yet competent is caution. */
   tone?: "positive" | "caution";
   defaultChecked?: boolean;
+  /** Controlled use, when a client component owns the value (for example a marking draft). */
+  checked?: boolean;
+  onChange?: () => void;
   disabled?: boolean;
 }) {
   return (
     <label className={cx("choice", tone && `choice--${tone}`)}>
       <input
+        checked={checked}
         className="choice__input"
-        defaultChecked={defaultChecked}
+        defaultChecked={checked === undefined ? defaultChecked : undefined}
         disabled={disabled}
         name={name}
+        onChange={onChange}
         type={type}
         value={value}
       />
