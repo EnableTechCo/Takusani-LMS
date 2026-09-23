@@ -64,6 +64,17 @@ export const criteriaSchema = z
   .max(50, "A rubric has at most 50 criteria.")
   .describe("The rubric rows, in the order marking shows them.");
 
+export const requirementSchema = z.object({
+  title: z.string().trim().min(1, "Give the requirement a title.").max(200, "Use 200 characters or fewer."),
+  guidance: z.string().trim().max(1000, "Use 1 000 characters or fewer.").optional(),
+  mandatory: z.boolean().optional(),
+});
+
+export const requirementsSchema = z
+  .array(requirementSchema)
+  .max(20, "A task asks for at most 20 pieces of evidence.")
+  .describe("What the learner must hand in, in the order the submit screen shows them.");
+
 export const audienceSchema = z
   .object({
     audience: z.enum(["cohort", "named"], { message: "Choose who the task is for." }),
@@ -122,4 +133,7 @@ export const TASK_REFUSALS: Record<string, { field?: string; message: string }> 
   due_date_passed: { field: "dueAt", message: "That due date has passed. Choose a later one before publishing." },
   no_learners: { message: "Nobody is enrolled in this cohort yet, so there is no one to publish to." },
   already_published: { message: "This task is already published." },
+  invalid_requirements: { field: "requirements", message: "The evidence list could not be read. Try again." },
+  invalid_requirement_title: { field: "requirements", message: "Every piece of evidence needs a title." },
+  too_many_requirements: { field: "requirements", message: "A task asks for at most 20 pieces of evidence." },
 };

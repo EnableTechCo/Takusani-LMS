@@ -5,7 +5,14 @@ import { redirect } from "next/navigation";
 import { instantFromSast } from "@/lib/dates";
 import { fieldErrors, type FormState } from "@/lib/form-state";
 import { createClient } from "@/lib/supabase/server";
-import { audienceSchema, criteriaSchema, editTaskSchema, newTaskSchema, TASK_REFUSALS } from "./rules";
+import {
+  audienceSchema,
+  criteriaSchema,
+  editTaskSchema,
+  newTaskSchema,
+  requirementsSchema,
+  TASK_REFUSALS,
+} from "./rules";
 
 const text = (form: FormData, name: string) => String(form.get(name) ?? "");
 
@@ -95,6 +102,43 @@ export async function setTaskCriteria(taskId: string, _: FormState, form: FormDa
   revalidatePath(`/teach/tasks/${taskId}/edit`);
   const count = data![0].criteria_count ?? 0;
   return { done: true, message: count === 1 ? "The rubric has 1 criterion." : `The rubric has ${count} criteria.` };
+}
+
+/** Replaces what the learner must hand in. Posted as JSON, like the rubric, so the order is kept. */
+export async function setTaskRequirements(taskId: string, _: FormState, form: FormData): Promise<FormState> {
+  const raw = text(form, "requirements");
+  let parsedJson: unknown;
+  try {
+    parsedJson = JSON.parse(raw || "[]");
+  } catch {
+    return { errors: { requirements: TASK_REFUSALS.invalid_requirements.message } };
+  }
+  const parsed = requirementsSchema.safeParse(parsedJson);
+  if (!parsed.success) return { errors: { requirements: parsed.error.issues[0]?.message ?? "Check the list." } };
+
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("set_task_requirements", {
+    p_task_id: taskId,
+    p_requirements: parsed.data.map((requirement) => ({
+      title: requirement.title,
+      guidance: requirement.guidance ?? null,
+      mandatory: requirement.mandatory ?? true,
+    })),
+  });
+  const status = error ? "error" : (data?.[0]?.status ?? "error");
+  if (status !== "ok") return refused(status, { requirements: raw });
+
+  revalidatePath(`/teach/tasks/${taskId}/edit`);
+  const count = data![0].requirement_count ?? 0;
+  return {
+    done: true,
+    message:
+      count === 0
+        ? "This task asks for no files."
+        : count === 1
+          ? "The learner hands in 1 piece of evidence."
+          : `The learner hands in ${count} pieces of evidence.`,
+  };
 }
 
 export async function setTaskAudience(taskId: string, _: FormState, form: FormData): Promise<FormState> {

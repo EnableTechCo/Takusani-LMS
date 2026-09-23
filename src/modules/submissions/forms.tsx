@@ -10,7 +10,7 @@ import { TextLink } from "@/components/ui/link";
 import { Banner } from "@/components/ui/status";
 import { formatDateTime } from "@/lib/dates";
 import type { FormState } from "@/lib/form-state";
-import { createTask, publishTask, setTaskAudience, setTaskCriteria, updateTask } from "./actions";
+import { createTask, publishTask, setTaskAudience, setTaskCriteria, setTaskRequirements, updateTask } from "./actions";
 import { LATE_POLICY_LABELS, SUBMISSION_TYPE_LABELS } from "./rules";
 
 const initial: FormState = {};
@@ -212,6 +212,103 @@ export function CriteriaForm({ taskId, criteria }: { taskId: string; criteria: C
           Add criterion
         </Button>
         <SubmitButton pendingLabel="Saving the rubric">Save rubric</SubmitButton>
+      </div>
+    </form>
+  );
+}
+
+export interface Requirement {
+  id?: string;
+  title: string;
+  guidance?: string | null;
+  mandatory?: boolean | null;
+}
+
+/**
+ * What the learner must hand in (FR-311). A requirement marked mandatory blocks the submission until it has a
+ * file, so the learner is told which one is missing rather than finding a disabled button.
+ */
+export function RequirementsForm({ taskId, requirements }: { taskId: string; requirements: Requirement[] }) {
+  const [state, action] = useActionState(setTaskRequirements.bind(null, taskId), initial);
+  const [rows, setRows] = useState<Requirement[]>(requirements);
+
+  const update = (index: number, change: Partial<Requirement>) =>
+    setRows((current) => current.map((row, at) => (at === index ? { ...row, ...change } : row)));
+
+  return (
+    <form action={action} className="stack" noValidate>
+      {state.done && state.message ? <Banner title={state.message} tone="positive" /> : null}
+      {!state.done && state.message ? <Banner title={state.message} tone="critical" /> : null}
+      {state.errors?.requirements ? <Banner title={state.errors.requirements} tone="critical" /> : null}
+      <input
+        name="requirements"
+        type="hidden"
+        value={JSON.stringify(rows.map((row) => ({ ...row, mandatory: row.mandatory ?? true })))}
+      />
+      {rows.length === 0 ? (
+        <p className="text-muted">
+          This task asks for no files. Add a requirement for each thing the learner must hand in.
+        </p>
+      ) : (
+        <ol className="stack">
+          {rows.map((row, index) => (
+            <li className="card" key={index}>
+              <div className="card__body stack stack--sm">
+                <div className="cluster cluster--between">
+                  <p className="text-subheading">Evidence {index + 1}</p>
+                  <IconButton
+                    icon="trash"
+                    label={`Remove evidence ${index + 1}`}
+                    onClick={() => setRows((current) => current.filter((_, at) => at !== index))}
+                  />
+                </div>
+                <Field label="What the learner hands in" name={`requirement-${index}-title`}>
+                  {(control) => (
+                    <input
+                      {...control}
+                      className="input"
+                      name={undefined}
+                      onChange={(event) => update(index, { title: event.target.value })}
+                      value={row.title}
+                    />
+                  )}
+                </Field>
+                <Field
+                  help="Shown beside the file chooser, for example the period it must cover."
+                  label="Guidance"
+                  name={`requirement-${index}-guidance`}
+                  optional
+                >
+                  {(control) => (
+                    <textarea
+                      {...control}
+                      className="textarea"
+                      name={undefined}
+                      onChange={(event) => update(index, { guidance: event.target.value })}
+                      rows={2}
+                      value={row.guidance ?? ""}
+                    />
+                  )}
+                </Field>
+                <label className="check">
+                  <input
+                    checked={row.mandatory ?? true}
+                    className="check__input"
+                    onChange={(event) => update(index, { mandatory: event.target.checked })}
+                    type="checkbox"
+                  />
+                  <span className="check__label">The learner cannot submit without this</span>
+                </label>
+              </div>
+            </li>
+          ))}
+        </ol>
+      )}
+      <div className="cluster">
+        <Button icon="plus" onClick={() => setRows((current) => [...current, { title: "", mandatory: true }])}>
+          Add evidence
+        </Button>
+        <SubmitButton pendingLabel="Saving">Save evidence list</SubmitButton>
       </div>
     </form>
   );

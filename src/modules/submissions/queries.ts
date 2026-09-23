@@ -29,6 +29,15 @@ export async function listWorkCohorts() {
   return data;
 }
 
+/** One task as its learner sees it: the brief, what to hand in, and every version they have submitted. */
+export async function getMyTask(taskId: string) {
+  if (!isUuid(taskId)) return null;
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("get_my_task", { p_task_id: taskId });
+  if (error) throw new Error(`api.get_my_task failed: ${error.message}`);
+  return data?.[0] ?? null;
+}
+
 /** The learner's own published tasks (FR-202: a draft never appears here). */
 export async function listMyTasks() {
   const supabase = await createClient();
