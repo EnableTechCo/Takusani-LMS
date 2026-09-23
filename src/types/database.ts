@@ -35,6 +35,20 @@ export type Database = {
           status: string
         }[]
       }
+      cancel_import_batch: {
+        Args: { p_batch_id: string }
+        Returns: {
+          status: string
+        }[]
+      }
+      claim_import_chunk: {
+        Args: { p_batch_id: string; p_size?: number }
+        Returns: {
+          email: string
+          full_name: string
+          row_number: number
+        }[]
+      }
       claim_notification_deliveries: {
         Args: {
           p_limit?: number
@@ -52,6 +66,15 @@ export type Database = {
           payload: Json
           recipient_name: string
           template_version: number
+        }[]
+      }
+      complete_import_chunk: {
+        Args: { p_batch_id: string; p_results: Json }
+        Returns: {
+          failed: number
+          imported: number
+          remaining: number
+          status: string
         }[]
       }
       create_account: {
@@ -75,6 +98,19 @@ export type Database = {
         }
         Returns: {
           cohort_id: string
+          status: string
+        }[]
+      }
+      create_import_batch: {
+        Args: {
+          p_cohort_id: string
+          p_file_digest: string
+          p_file_name: string
+          p_rows: Json
+        }
+        Returns: {
+          batch_id: string
+          detail: Json
           status: string
         }[]
       }
@@ -163,6 +199,18 @@ export type Database = {
           file_id: string
           media_type: string
           status: string
+        }[]
+      }
+      get_import_rows: {
+        Args: { p_batch_id: string; p_outcome?: string }
+        Returns: {
+          email: string
+          full_name: string
+          invitation_state: string
+          learner_number: string
+          outcome: string
+          problem: string
+          row_number: number
         }[]
       }
       get_marking_item: {
@@ -319,6 +367,33 @@ export type Database = {
           learner_number: string
           profile_id: string
           status: string
+        }[]
+      }
+      list_import_batches: {
+        Args: never
+        Returns: {
+          cohort_name: string
+          created_at: string
+          existing: number
+          failed: number
+          file_name: string
+          id: string
+          imported: number
+          problems: number
+          ready: number
+          reference: string
+          state: string
+          total: number
+          uploaded_by_name: string
+        }[]
+      }
+      list_import_cohorts: {
+        Args: never
+        Returns: {
+          enrolled: number
+          id: string
+          name: string
+          programme_title: string
         }[]
       }
       list_marking_queue: {

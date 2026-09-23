@@ -69,7 +69,15 @@ insert into expected_grants values
   ('function', 'api', 'open_my_notification(p_notification_id uuid)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'mark_my_notifications_read(p_category text)', 'authenticated', 'EXECUTE'),
   -- Learner home (20261006090000): the signed-in learner's own enrolments.
-  ('function', 'api', 'list_my_enrolments()', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'list_my_enrolments()', 'authenticated', 'EXECUTE'),
+  -- Bulk learner import (20261007090000): administrators only, checked inside each function.
+  ('function', 'api', 'create_import_batch(p_cohort_id uuid, p_file_name text, p_file_digest text, p_rows jsonb)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'claim_import_chunk(p_batch_id uuid, p_size integer)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'complete_import_chunk(p_batch_id uuid, p_results jsonb)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'cancel_import_batch(p_batch_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_import_batches()', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'get_import_rows(p_batch_id uuid, p_outcome text)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_import_cohorts()', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (
