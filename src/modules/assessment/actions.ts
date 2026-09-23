@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { deliverSoon } from "@/modules/notifications/run";
 import { draftSchema, FINALISE_MISSING, FINALISE_REFUSALS, MARKING_REFUSALS, type Draft } from "./rules";
 
 /** Takes the item: from here this assessor is its marker and nobody else can mark it at the same time. */
@@ -82,6 +83,8 @@ export async function finaliseDecision(instanceId: string, draftVersion: number)
   }
   revalidatePath(`/assess/instances/${instanceId}`);
   revalidatePath("/assess");
+  // A release queued the learner's email in the same transaction; send it now rather than at the next schedule.
+  if (status === "ok" && row!.result_state === "released") deliverSoon();
   return {
     ok: true,
     resultState: row!.result_state!,

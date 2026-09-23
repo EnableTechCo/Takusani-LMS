@@ -58,6 +58,8 @@ The template also covers:
   `src/lib/supabase/admin.ts`) and later by trusted workers. Create it under Supabase **Settings > API Keys**. It
   must never be exposed to browser code. Locally, use the secret key `npx supabase status` prints.
 - `CRON_SECRET` authenticates Vercel Cron requests. Generate an independent random value of at least 16 characters.
+  Without it the scheduled jobs refuse every call.
+- `EMAIL_PROVIDER`, `EMAIL_FROM` and `RESEND_API_KEY` send notification email (see Notifications below).
 - `NEXT_PUBLIC_APP_URL` is `http://localhost:3000` locally and `https://takusani-lms.vercel.app` on staging. The
   staging URL is live and redirects unauthenticated visits to `/sign-in`.
 
@@ -150,6 +152,34 @@ Rules:
 - Never change a hosted database from the Supabase dashboard.
 - Tables and functions go in their module schema, never in `public` (a pgTAP test fails otherwise). There is no automatic RLS trigger (ADR-028): RLS is a written policy where ADR-005 asks for one. When creating a Supabase project, leave "enable RLS on new tables" unticked.
 - Vercel can deploy the code a few minutes before its migration is applied, so the code already on `main` must keep working against the new schema: add first, switch over, remove later.
+
+## Notifications
+
+Releasing a result and publishing a task notify the learner in the same database transaction: an in-app notification,
+an outbox row and an email delivery, and a message on the `notification_delivery` queue
+(`supabase/migrations/20261004090000_notification_outbox_and_queue.sql`, ADR-025). If the transaction rolls back,
+none of it exists.
+
+The delivery worker (`src/modules/notifications/worker.ts`) sends the emails. It runs:
+
+- straight after the commit, from the server action, once the response has been sent (`deliverSoon`), and
+- on a schedule: Vercel Cron calls `GET /api/internal/jobs/outbox-drain` with `Authorization: Bearer $CRON_SECRET`.
+
+The schedule in `vercel.json` is daily (`0 5 * * *`), which every Vercel plan allows. On Vercel Pro, which the design
+assumes (ADR-027), change it to every minute (`* * * * *`) so retries do not wait for the next day.
+
+Each send carries an idempotency key derived from the outbox deduplication key, so a repeated run never sends a second
+email. A transient failure is retried after 1, 4, 9 and 16 minutes; after five attempts the delivery is recorded as
+failed. With no `EMAIL_PROVIDER`, emails are recorded as skipped ("email is not set up") and the in-app notification
+still stands.
+
+- **Locally:** `EMAIL_PROVIDER=mailpit`. Emails appear in the local mail catcher at http://127.0.0.1:54324.
+- **Staging:** create a Resend account, verify the sending domain, and set `EMAIL_PROVIDER=resend`, `EMAIL_FROM` (an
+  address on the verified domain) and `RESEND_API_KEY` in Vercel. The worker also needs `SUPABASE_SECRET_KEY` and
+  `CRON_SECRET` there. The same Resend account can serve as Supabase's custom SMTP.
+
+`GET /api/health/outbox` returns 503 when the oldest undelivered email or the oldest queue message is more than five
+minutes old. Point the uptime monitor at it and page when it stays 503 for 15 minutes.
 
 ## Health checks
 

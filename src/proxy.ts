@@ -3,8 +3,18 @@ import { NextResponse, type NextRequest } from "next/server";
 import { getPublicEnvironment, hasPublicEnvironment } from "@/config/env";
 import { redirectUrl } from "@/lib/http/redirect-url";
 
-/** Reachable without a session. Everything else sends a signed-out visitor to sign in. */
-const PUBLIC_PATHS = ["/sign-in", "/forgot-password", "/auth/confirm", "/auth/sign-out", "/api/health"];
+/**
+ * Reachable without a session. Everything else sends a signed-out visitor to sign in. Scheduled jobs have no session:
+ * each one checks the cron secret itself.
+ */
+const PUBLIC_PATHS = [
+  "/sign-in",
+  "/forgot-password",
+  "/auth/confirm",
+  "/auth/sign-out",
+  "/api/health",
+  "/api/internal/jobs",
+];
 
 const isPublic = (pathname: string) =>
   PUBLIC_PATHS.some((path) => pathname === path || pathname.startsWith(`${path}/`));
