@@ -15,6 +15,25 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      authorise_upload: {
+        Args: {
+          p_bytes: number
+          p_client_upload_id?: string
+          p_context_id: string
+          p_context_type: string
+          p_filename: string
+          p_media_type: string
+          p_sha256?: string
+        }
+        Returns: {
+          bucket: string
+          expires_at: string
+          intent_id: string
+          max_bytes: number
+          object_key: string
+          status: string
+        }[]
+      }
       create_account: {
         Args: {
           p_full_name: string
@@ -96,6 +115,15 @@ export type Database = {
         Args: { p_cohort_id: string; p_email: string }
         Returns: {
           enrolment_id: string
+          status: string
+        }[]
+      }
+      finalise_upload: {
+        Args: { p_intent_id: string }
+        Returns: {
+          bytes: number
+          file_id: string
+          media_type: string
           status: string
         }[]
       }
@@ -196,6 +224,18 @@ export type Database = {
           published_at: string
           submission_type: string
           title: string
+        }[]
+      }
+      list_my_uploads: {
+        Args: { p_task_id: string }
+        Returns: {
+          accepted_at: string
+          bytes: number
+          file_id: string
+          intent_id: string
+          media_type: string
+          original_filename: string
+          scan_state: string
         }[]
       }
       list_programmes: {

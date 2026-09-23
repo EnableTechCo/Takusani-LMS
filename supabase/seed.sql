@@ -78,3 +78,26 @@ insert into programmes.cohort_moderation_state (cohort_id, moderation_policy)
 values ('10000000-0000-4000-8000-000000000010', 'not_moderated');
 insert into programmes.enrolments (cohort_id, profile_id)
 values ('10000000-0000-4000-8000-000000000010', '00000000-0000-4000-8000-000000000001');
+
+-- One published task for the cohort, so the learner screens and the upload check (scripts/check-resumable-upload.mjs)
+-- have real work to point at. The facilitator set it; the whole cohort is its audience.
+insert into submissions.tasks (
+  id, cohort_id, module_id, title, brief, submission_type, due_at, late_policy, audience, state,
+  created_by, published_at, published_by
+)
+values (
+  '10000000-0000-4000-8000-000000000020', '10000000-0000-4000-8000-000000000010',
+  (select id from programmes.modules where code = 'M3'),
+  'Task 3: Workplace records portfolio',
+  'Collect the access register, the retention schedule and the filing index for your workplace. Hand in one PDF for each requirement, and say in a short note where each record is kept.',
+  'file_upload', '2027-02-05 17:00:00+02', 'accept_and_flag', 'cohort', 'published',
+  '00000000-0000-4000-8000-000000000002', now(), '00000000-0000-4000-8000-000000000002'
+);
+insert into submissions.task_criteria (task_id, ordinal, title, descriptor, points)
+values
+  ('10000000-0000-4000-8000-000000000020', 1, 'Records are complete',
+   'All three records are present and cover the period asked for.', 10),
+  ('10000000-0000-4000-8000-000000000020', 2, 'Retention rules applied',
+   'The retention schedule is cited and matches what is kept.', 5),
+  ('10000000-0000-4000-8000-000000000020', 3, 'Filing is traceable',
+   'Someone else could find a named record from the index alone.', 5);

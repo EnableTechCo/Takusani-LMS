@@ -37,7 +37,13 @@ insert into expected_grants values
   ('function', 'api', 'list_tasks(p_cohort_id uuid)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'get_task(p_task_id uuid)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'list_my_tasks()', 'authenticated', 'EXECUTE'),
-  ('function', 'api', 'list_work_cohorts()', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'list_work_cohorts()', 'authenticated', 'EXECUTE'),
+  -- Uploads (20260926090000): the learner authorises and finalises their own uploads. may_upload_object is the
+  -- storage policy's own check, which Postgres runs as the signed-in role, so that role needs EXECUTE on it.
+  ('function', 'api', 'authorise_upload(p_context_type text, p_context_id uuid, p_filename text, p_media_type text, p_bytes bigint, p_sha256 text, p_client_upload_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'finalise_upload(p_intent_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_my_uploads(p_task_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'submissions', 'may_upload_object(p_profile_id uuid, p_bucket text, p_object_key text)', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (

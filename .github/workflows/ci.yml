@@ -67,6 +67,12 @@ jobs:
         env:
           SUPABASE_CLI: supabase
         run: node scripts/check-data-api-exposure.mjs local
+      # Spike X-5 as a standing check: a 25 MB evidence file goes straight to private Storage with the learner's
+      # own session, survives an interrupted connection, and is only accepted after finalisation.
+      - name: Resumable upload (spike X-5)
+        env:
+          SUPABASE_CLI: supabase
+        run: node scripts/check-resumable-upload.mjs local
       - name: Generated database types are up to date
         run: |
           supabase gen types typescript --local --schema api > /tmp/database.ts
