@@ -35,6 +35,25 @@ export type Database = {
           status: string
         }[]
       }
+      claim_notification_deliveries: {
+        Args: {
+          p_limit?: number
+          p_max_attempts?: number
+          p_visibility_seconds?: number
+        }
+        Returns: {
+          address: string
+          attempt: number
+          delivery_id: string
+          event_type: string
+          idempotency_key: string
+          link: string
+          msg_id: number
+          payload: Json
+          recipient_name: string
+          template_version: number
+        }[]
+      }
       create_account: {
         Args: {
           p_full_name: string
@@ -408,6 +427,16 @@ export type Database = {
           status: string
         }[]
       }
+      notification_outbox_health: {
+        Args: never
+        Returns: {
+          failed_last_hour: number
+          oldest_pending_at: string
+          oldest_queued_seconds: number
+          pending: number
+          queue_length: number
+        }[]
+      }
       provision_account: {
         Args: {
           p_full_name: string
@@ -466,6 +495,20 @@ export type Database = {
         Args: { p_requirements: Json; p_task_id: string }
         Returns: {
           requirement_count: number
+          status: string
+        }[]
+      }
+      settle_notification_delivery: {
+        Args: {
+          p_delivery_id: string
+          p_error?: string
+          p_msg_id: number
+          p_outcome: string
+          p_provider?: string
+          p_provider_message_id?: string
+          p_retry_seconds?: number
+        }
+        Returns: {
           status: string
         }[]
       }

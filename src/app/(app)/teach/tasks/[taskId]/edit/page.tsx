@@ -75,8 +75,8 @@ export default async function EditTaskPage({
         {published ? (
           <Banner title="The task is published" tone="positive">
             <p>
-              {published === "1" ? "1 learner" : `${published} learners`} can see it now. Notifications and calendar
-              entries follow when that part is built.
+              {published === "1" ? "1 learner" : `${published} learners`} can see it now, and each one is told in the
+              LMS.
             </p>
           </Banner>
         ) : null}

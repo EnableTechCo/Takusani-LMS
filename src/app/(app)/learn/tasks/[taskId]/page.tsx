@@ -71,8 +71,8 @@ export default async function LearnTaskPage({
           <Banner title="We have your work" tone="positive">
             <p>
               Version {version} was received. Keep this reference in case you need to ask about it:{" "}
-              <span className="mono">{receipt}</span>. Your work will be assessed, and you will be told here and by
-              email when your result is ready.
+              <span className="mono">{receipt}</span>. Your work will be assessed, and you will be told here when your
+              result is ready.
             </p>
           </Banner>
         ) : null}

@@ -16,3 +16,12 @@ export function createAdminClient() {
     auth: { autoRefreshToken: false, persistSession: false },
   });
 }
+
+/**
+ * Secret-key client for trusted background workers (S2-10). It can call only the functions granted to
+ * `service_role`, such as the notification worker's claim and settle; the database checks nothing about a person,
+ * so never call it on behalf of a request without the caller having been checked.
+ */
+export function createWorkerClient() {
+  return createAdminClient();
+}

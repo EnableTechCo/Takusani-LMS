@@ -244,7 +244,7 @@ function Marks({ result }: { result: ReleasedResult }) {
   );
 }
 
-/** "How you were told" (NFR-11): each channel in words, with its time. Email evidence arrives with S2-10. */
+/** "How you were told" (NFR-11): each channel in words, with its time. The email row is added with the notification centre (S2-11). */
 function HowYouWereTold({ result }: { result: ReleasedResult }) {
   return (
     <>

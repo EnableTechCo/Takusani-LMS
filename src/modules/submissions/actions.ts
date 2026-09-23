@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { instantFromSast } from "@/lib/dates";
 import { fieldErrors, type FormState } from "@/lib/form-state";
 import { createClient } from "@/lib/supabase/server";
+import { deliverSoon } from "@/modules/notifications/run";
 import {
   audienceSchema,
   criteriaSchema,
@@ -173,6 +174,8 @@ export async function publishTask(taskId: string, ...ignored: [FormState, FormDa
   const status = error ? "error" : (data?.[0]?.status ?? "error");
   if (status !== "ok") return refused(status, {});
 
+  // Publishing queued an email for each learner in the same transaction; send them now, after the response.
+  deliverSoon();
   revalidatePath("/teach/tasks");
   redirect(`/teach/tasks/${taskId}/edit?published=${data![0].notified}`);
 }
