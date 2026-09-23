@@ -43,7 +43,11 @@ insert into expected_grants values
   ('function', 'api', 'authorise_upload(p_context_type text, p_context_id uuid, p_filename text, p_media_type text, p_bytes bigint, p_sha256 text, p_client_upload_id uuid)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'finalise_upload(p_intent_id uuid)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'list_my_uploads(p_task_id uuid)', 'authenticated', 'EXECUTE'),
-  ('function', 'submissions', 'may_upload_object(p_profile_id uuid, p_bucket text, p_object_key text)', 'authenticated', 'EXECUTE');
+  ('function', 'submissions', 'may_upload_object(p_profile_id uuid, p_bucket text, p_object_key text)', 'authenticated', 'EXECUTE'),
+  -- Submissions (20260927090000): the learner hands their own work in; requirements are set by whoever sets the work.
+  ('function', 'api', 'set_task_requirements(p_task_id uuid, p_requirements jsonb)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'submit_task(p_task_id uuid, p_files jsonb, p_client_submission_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'get_my_task(p_task_id uuid)', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (

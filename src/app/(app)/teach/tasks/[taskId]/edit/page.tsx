@@ -3,7 +3,15 @@ import { PageHeader } from "@/components/shell/page-header";
 import { TextLink } from "@/components/ui/link";
 import { Banner, Tag } from "@/components/ui/status";
 import { formatDateTime, sastInputValue } from "@/lib/dates";
-import { AudienceForm, CriteriaForm, EditTaskForm, PublishTask, type Criterion } from "@/modules/submissions/forms";
+import {
+  AudienceForm,
+  CriteriaForm,
+  EditTaskForm,
+  PublishTask,
+  RequirementsForm,
+  type Criterion,
+  type Requirement,
+} from "@/modules/submissions/forms";
 import { getTask } from "@/modules/submissions/queries";
 import {
   AUDIENCE_LABELS,
@@ -37,6 +45,7 @@ export default async function EditTaskPage({
 
   const criteria = (task.criteria ?? []) as unknown as Criterion[];
   const named = (task.named_learners ?? []) as unknown as NamedLearner[];
+  const requirements = (task.requirements ?? []) as unknown as Requirement[];
   const isDraft = task.state === "draft";
 
   return (
@@ -105,6 +114,16 @@ export default async function EditTaskPage({
               </p>
               <CriteriaForm criteria={criteria} taskId={task.id} />
             </section>
+            <section aria-labelledby="evidence-h" className="stack">
+              <h2 className="text-heading" id="evidence-h">
+                What the learner hands in
+              </h2>
+              <p className="text-small text-muted">
+                One entry for each file you expect. A learner cannot submit while a required entry has no file; the
+                screen names the one that is missing.
+              </p>
+              <RequirementsForm requirements={requirements} taskId={task.id} />
+            </section>
             <section aria-labelledby="audience-h" className="stack">
               <h2 className="text-heading" id="audience-h">
                 Audience
@@ -142,6 +161,28 @@ export default async function EditTaskPage({
                   </dd>
                 </div>
               </dl>
+            </section>
+            <section aria-labelledby="evidence-h" className="stack">
+              <h2 className="text-heading" id="evidence-h">
+                What the learner hands in
+              </h2>
+              {requirements.length === 0 ? (
+                <p className="text-muted">This task asks for no files.</p>
+              ) : (
+                <ol className="stack stack--sm">
+                  {requirements.map((requirement, index) => (
+                    <li className="card" key={index}>
+                      <div className="card__body stack stack--sm">
+                        <p className="card__title">
+                          {requirement.title}
+                          {requirement.mandatory === false ? " (optional)" : ""}
+                        </p>
+                        {requirement.guidance ? <p className="text-small">{requirement.guidance}</p> : null}
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+              )}
             </section>
             <section aria-labelledby="rubric-h" className="stack">
               <h2 className="text-heading" id="rubric-h">

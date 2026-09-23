@@ -127,6 +127,21 @@ export type Database = {
           status: string
         }[]
       }
+      get_my_task: {
+        Args: { p_task_id: string }
+        Returns: {
+          brief: string
+          cohort_name: string
+          criteria: Json
+          due_at: string
+          id: string
+          late_policy: string
+          requirements: Json
+          submission_type: string
+          title: string
+          versions: Json
+        }[]
+      }
       get_task: {
         Args: { p_task_id: string }
         Returns: {
@@ -141,6 +156,7 @@ export type Database = {
           late_policy: string
           module_id: string
           named_learners: Json
+          requirements: Json
           state: string
           submission_type: string
           title: string
@@ -319,6 +335,29 @@ export type Database = {
         Returns: {
           criteria_count: number
           status: string
+        }[]
+      }
+      set_task_requirements: {
+        Args: { p_requirements: Json; p_task_id: string }
+        Returns: {
+          requirement_count: number
+          status: string
+        }[]
+      }
+      submit_task: {
+        Args: {
+          p_client_submission_id: string
+          p_files: Json
+          p_task_id: string
+        }
+        Returns: {
+          detail: string
+          is_late: boolean
+          receipt_reference: string
+          status: string
+          submission_id: string
+          submitted_at: string
+          version_number: number
         }[]
       }
       update_task: {
