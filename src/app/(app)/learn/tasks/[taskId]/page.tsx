@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/shell/page-header";
 import { ButtonLink, TextLink } from "@/components/ui/link";
 import { Banner, Tag } from "@/components/ui/status";
+import { listMyResults } from "@/modules/assessment/queries";
+import { OUTCOME_LABELS } from "@/modules/assessment/rules";
 import { getMyTask } from "@/modules/submissions/queries";
 import {
   CriteriaList,
@@ -26,8 +28,9 @@ export default async function LearnTaskPage({
   searchParams: Promise<{ receipt?: string; version?: string }>;
 }) {
   const [{ taskId }, { receipt, version }] = await Promise.all([params, searchParams]);
-  const task = await getMyTask(taskId);
+  const [task, results] = await Promise.all([getMyTask(taskId), listMyResults()]);
   if (!task) notFound();
+  const result = results.find((row) => row.task_id === task.id && row.state === "released") ?? null;
 
   const criteria = (task.criteria ?? []) as unknown as Criterion[];
   const requirements = (task.requirements ?? []) as unknown as Requirement[];
@@ -71,6 +74,21 @@ export default async function LearnTaskPage({
               <span className="mono">{receipt}</span>. Your work will be assessed, and you will be told here and by
               email when your result is ready.
             </p>
+          </Banner>
+        ) : null}
+
+        {result ? (
+          <Banner
+            actions={
+              <ButtonLink href={`/learn/results/${result.result_id}`} variant="secondary">
+                See your result
+              </ButtonLink>
+            }
+            role="note"
+            title={`Your result: ${OUTCOME_LABELS[result.outcome]}`}
+            tone={result.outcome === "competent" ? "positive" : "caution"}
+          >
+            <p>Your marks, your assessor&apos;s feedback and the last day to appeal are on your result.</p>
           </Banner>
         ) : null}
 

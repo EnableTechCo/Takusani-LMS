@@ -59,7 +59,10 @@ insert into expected_grants values
   -- Finalising (20261001090000): the allocated assessor only, checked inside the function.
   ('function', 'api', 'finalise_decision(p_instance_id uuid, p_expected_draft_version integer)', 'authenticated', 'EXECUTE'),
   -- Discarding an unsubmitted upload (20261002090000): the uploader only, checked inside the function.
-  ('function', 'api', 'discard_upload(p_file_id uuid)', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'discard_upload(p_file_id uuid)', 'authenticated', 'EXECUTE'),
+  -- The learner's results (20261003090000): the learner's own only, checked inside each function.
+  ('function', 'api', 'get_my_result(p_result_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_my_results()', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (

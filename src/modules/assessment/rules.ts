@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { lastFullDayBefore, sastDaysFromToday } from "@/lib/dates";
 
 /** Marking (FR-403 to FR-405): the shape of a draft, and what each refusal from the database means. */
 
@@ -103,3 +104,49 @@ export const FINALISE_MISSING: Record<string, string> = {
   remediation: "what the learner must do",
   resubmission_days: "the resubmission period",
 };
+
+/**
+ * Where the learner's appeal window stands (SRS 5.3, P-11, FR-603). The deadline is exclusive: the start of the
+ * eighth South African day after release, shown as the last full day before it. `daysLeft` counts whole days after
+ * today up to that last day, so on the last day it is 0.
+ */
+export type AppealWindow =
+  | { state: "open"; lastDay: string; daysLeft: number }
+  | { state: "last_day"; lastDay: string }
+  | { state: "closed"; lastDay: string };
+
+export function appealWindow(appealDeadlineAt: string, now: Date): AppealWindow {
+  const lastDay = lastFullDayBefore(appealDeadlineAt, "long");
+  if (now.getTime() >= new Date(appealDeadlineAt).getTime()) return { state: "closed", lastDay };
+  const lastSecond = new Date(new Date(appealDeadlineAt).getTime() - 1000).toISOString();
+  const daysLeft = sastDaysFromToday(lastSecond, now);
+  return daysLeft <= 0 ? { state: "last_day", lastDay } : { state: "open", lastDay, daysLeft };
+}
+
+/**
+ * What a "not yet competent" learner can do about resubmitting (FR-317). The deadline is the instant the assessor's
+ * period ends, counted from release (CR-14).
+ *   * waiting: a later version is already handed in and being assessed.
+ *   * open: they can hand in a new version now.
+ *   * task_closed: the deadline has not passed, but the task takes no new versions online.
+ *   * ended: the deadline has passed.
+ */
+export type Resubmission = "waiting" | "open" | "task_closed" | "ended";
+
+export function resubmission({
+  deadlineAt,
+  taskClosed,
+  assessedVersion,
+  latestVersion,
+  now,
+}: {
+  deadlineAt: string;
+  taskClosed: boolean;
+  assessedVersion: number;
+  latestVersion: number;
+  now: Date;
+}): Resubmission {
+  if (latestVersion > assessedVersion) return "waiting";
+  if (now.getTime() >= new Date(deadlineAt).getTime()) return "ended";
+  return taskClosed ? "task_closed" : "open";
+}

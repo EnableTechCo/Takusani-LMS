@@ -72,12 +72,32 @@ export function sastDatePlusDays(days: number, from: Date = new Date()): string 
   return new Intl.DateTimeFormat("en-CA", { timeZone: ZONE }).format(date);
 }
 
+const LONG_DAY = new Intl.DateTimeFormat("en-ZA", {
+  weekday: "long",
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+  timeZone: ZONE,
+});
+
+/**
+ * The South African day of an instant as it is said in a sentence, with no comma after the weekday, for example
+ * "Tuesday 29 September 2026" (UX architecture, principle 2).
+ */
+export function formatLongDayOf(iso: string): string {
+  const parts = LONG_DAY.formatToParts(new Date(iso));
+  const part = (type: string) => parts.find((p) => p.type === type)?.value ?? "";
+  return `${part("weekday")} ${part("day")} ${part("month")} ${part("year")}`;
+}
+
 /**
  * The last full South African day before an exclusive deadline instant: an appeal window that closes at the start
- * of 30 September is shown to people as "until the end of 29 September" (P-11).
+ * of 30 September is shown to people as "until the end of 29 September" (P-11). `long` says it in a sentence's words,
+ * "Tuesday 29 September 2026".
  */
-export function lastFullDayBefore(deadlineIso: string): string {
-  return formatDayOf(new Date(new Date(deadlineIso).getTime() - 1000).toISOString());
+export function lastFullDayBefore(deadlineIso: string, style: "short" | "long" = "short"): string {
+  const lastSecond = new Date(new Date(deadlineIso).getTime() - 1000).toISOString();
+  return style === "long" ? formatLongDayOf(lastSecond) : formatDayOf(lastSecond);
 }
 
 /**

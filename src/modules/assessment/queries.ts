@@ -47,3 +47,23 @@ export async function signEvidence(files: EvidenceFile[]): Promise<Record<string
   if (error) throw new Error(`could not sign the evidence links: ${error.message}`);
   return Object.fromEntries((data ?? []).filter((row) => row.signedUrl).map((row) => [row.path, row.signedUrl]));
 }
+
+/**
+ * One result as its learner may read it, or null when it is not theirs. Cached for the request: the page and its
+ * title both ask, and opening a released result records the learner's first view, once.
+ */
+export const getMyResult = cache(async (resultId: string) => {
+  if (!z.string().uuid().safeParse(resultId).success) return null;
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("get_my_result", { p_result_id: resultId });
+  if (error) throw new Error(`api.get_my_result failed: ${error.message}`);
+  return data?.[0] ?? null;
+});
+
+/** The learner's own results: released first, newest release first, then the ones still being assessed. */
+export async function listMyResults() {
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("list_my_results");
+  if (error) throw new Error(`api.list_my_results failed: ${error.message}`);
+  return data;
+}
