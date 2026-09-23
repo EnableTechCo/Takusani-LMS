@@ -12,6 +12,7 @@ import { formatDateTime } from "@/lib/dates";
 import type { FormState } from "@/lib/form-state";
 import { createTask, publishTask, setTaskAudience, setTaskCriteria, setTaskRequirements, updateTask } from "./actions";
 import { LATE_POLICY_LABELS, SUBMISSION_TYPE_LABELS } from "./rules";
+import type { Criterion, RequirementDraft } from "./types";
 
 const initial: FormState = {};
 
@@ -129,12 +130,6 @@ export function EditTaskForm({ task }: { task: TaskDetails }) {
   );
 }
 
-export interface Criterion {
-  title: string;
-  descriptor?: string | null;
-  points?: number | null;
-}
-
 /**
  * The rubric the marker will work through (FR-201). Rows are edited here and posted as JSON, so their order is the
  * order marking shows them in.
@@ -217,22 +212,15 @@ export function CriteriaForm({ taskId, criteria }: { taskId: string; criteria: C
   );
 }
 
-export interface Requirement {
-  id?: string;
-  title: string;
-  guidance?: string | null;
-  mandatory?: boolean | null;
-}
-
 /**
  * What the learner must hand in (FR-311). A requirement marked mandatory blocks the submission until it has a
  * file, so the learner is told which one is missing rather than finding a disabled button.
  */
-export function RequirementsForm({ taskId, requirements }: { taskId: string; requirements: Requirement[] }) {
+export function RequirementsForm({ taskId, requirements }: { taskId: string; requirements: RequirementDraft[] }) {
   const [state, action] = useActionState(setTaskRequirements.bind(null, taskId), initial);
-  const [rows, setRows] = useState<Requirement[]>(requirements);
+  const [rows, setRows] = useState<RequirementDraft[]>(requirements);
 
-  const update = (index: number, change: Partial<Requirement>) =>
+  const update = (index: number, change: Partial<RequirementDraft>) =>
     setRows((current) => current.map((row, at) => (at === index ? { ...row, ...change } : row)));
 
   return (

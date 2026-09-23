@@ -5,7 +5,7 @@
 create extension if not exists pgtap with schema extensions;
 
 begin;
-select plan(18);
+select plan(23);
 
 create function pg_temp.act_as(p_user uuid) returns void language sql as $$
   select set_config('role', 'authenticated', true),
@@ -111,6 +111,26 @@ reset role;
 select pg_temp.act_as(:'facilitator');
 select results_eq(format($$ select status from api.finalise_upload(%L) $$, :'late'),
   $$ values ('intent_not_found'::text) $$, 'another person cannot finalise an intent that is not theirs');
+
+-- Removing a file that was uploaded but not handed in (bug fix: it used to come back after a reload)
+reset role;
+select (select sf.id from submissions.stored_files sf where sf.intent_id = :'intent') as file_id \gset
+select pg_temp.act_as(:'facilitator');
+select results_eq(format($$ select status from api.discard_upload(%L) $$, :'file_id'),
+  $$ values ('not_found'::text) $$, 'nobody else can remove the learner''s file');
+reset role;
+select pg_temp.act_as(:'learner');
+select results_eq(format($$ select status from api.discard_upload(%L) $$, :'file_id'),
+  $$ values ('ok'::text) $$, 'the learner removes a file they have not handed in');
+select is_empty(format($$ select * from api.list_my_uploads(%L) where file_id = %L $$, :'task', :'file_id'),
+  'it is no longer listed, so it does not come back after a reload');
+select results_eq(
+  format($$ select status from api.submit_task(%L, jsonb_build_array(jsonb_build_object('file_id', %L::uuid)),
+           gen_random_uuid()) $$, :'task', :'file_id'),
+  $$ values ('file_not_available'::text) $$, 'and it cannot be handed in');
+select results_eq(format($$ select status from api.discard_upload(%L) $$, :'file_id'),
+  $$ values ('ok'::text) $$, 'removing it twice is harmless');
+reset role;
 
 select * from finish();
 rollback;

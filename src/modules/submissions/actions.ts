@@ -256,3 +256,18 @@ export async function submitTask(
   revalidatePath(`/learn/tasks/${taskId}`);
   return { ok: true, receipt: row.receipt_reference!, version: row.version_number!, isLate: row.is_late! };
 }
+
+/** Removes a file the learner uploaded but has not handed in, so it is no longer offered for submission. */
+export async function discardUpload(fileId: string): Promise<{ ok: true } | { ok: false; message: string }> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("discard_upload", { p_file_id: fileId });
+  const status = error ? "error" : (data?.[0]?.status ?? "error");
+  if (status === "ok") return { ok: true };
+  return {
+    ok: false,
+    message:
+      status === "already_handed_in"
+        ? "This file is already part of a version you submitted, so it stays on record."
+        : "This file could not be removed. Try again.",
+  };
+}

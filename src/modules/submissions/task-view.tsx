@@ -1,26 +1,12 @@
 import { Icon } from "@/components/ui/icons";
 import { Tag } from "@/components/ui/status";
-import { formatDateTime } from "@/lib/dates";
-import { LATE_POLICY_LABELS } from "./rules";
+import { formatDateTime, sastDaysFromToday } from "@/lib/dates";
+import type { Criterion, Requirement } from "./types";
 
 /**
  * The parts of the learner's task page that only display (screen L-03). The due date is written as a sentence with
  * what happens after it, never as a bare timestamp, and a late version is marked in words as well as by tone.
  */
-
-export interface Criterion {
-  ordinal?: number;
-  title: string;
-  descriptor?: string | null;
-  points?: number | null;
-}
-
-export interface Requirement {
-  id: string;
-  title: string;
-  guidance?: string | null;
-  mandatory?: boolean | null;
-}
 
 export interface Version {
   version_number: number;
@@ -30,16 +16,15 @@ export interface Version {
   files: { filename: string; bytes: number; requirement_id: string | null }[];
 }
 
-/** How many whole days from now until the date, in South African time. */
-function daysUntil(iso: string): number {
-  return Math.ceil((new Date(iso).getTime() - Date.now()) / (24 * 60 * 60 * 1000));
-}
-
-/** "Due Friday 4 September 2026 at 17:00 (SAST), in 8 days. Work submitted after 17:00 is marked as late." */
-export function DueLine({ dueAt, latePolicy }: { dueAt: string | null; latePolicy: string }) {
+/**
+ * "Due Friday 4 September 2026 at 17:00 (SAST), in 8 days. Work submitted after 17:00 is marked as late." `now` is
+ * passed in, read once per request by the page, so the component stays a pure function of what it is given.
+ */
+export function DueLine({ dueAt, latePolicy, now }: { dueAt: string | null; latePolicy: string; now: Date }) {
   if (!dueAt) return null;
-  const left = daysUntil(dueAt);
-  const passed = left <= 0;
+  const passed = new Date(dueAt).getTime() <= now.getTime();
+  const days = sastDaysFromToday(dueAt, now);
+  const left = days === 0 ? "today" : days === 1 ? "tomorrow" : `in ${days} days`;
   const closes = latePolicy === "closed_at_due";
   return (
     <p className={passed ? "deadline-line deadline-line--closed" : "deadline-line"}>
@@ -48,7 +33,7 @@ export function DueLine({ dueAt, latePolicy }: { dueAt: string | null; latePolic
         {passed ? "This task was due " : "Due "}
         <span className="deadline-line__date">{formatDateTime(dueAt)}</span> (SAST)
         {passed ? ". " : ", "}
-        {!passed ? <span className="deadline-line__left">{left === 1 ? "tomorrow" : `in ${left} days`}</span> : null}
+        {!passed ? <span className="deadline-line__left">{left}</span> : null}
         {!passed ? ". " : ""}
         {closes
           ? passed
@@ -142,8 +127,4 @@ export function VersionHistory({ versions }: { versions: Version[] }) {
       ))}
     </ol>
   );
-}
-
-export function latePolicySentence(latePolicy: string): string {
-  return LATE_POLICY_LABELS[latePolicy] ?? latePolicy;
 }

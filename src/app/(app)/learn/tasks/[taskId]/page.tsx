@@ -8,10 +8,9 @@ import {
   DueLine,
   RequirementChecklist,
   VersionHistory,
-  type Criterion,
-  type Requirement,
   type Version,
 } from "@/modules/submissions/task-view";
+import type { Criterion, Requirement } from "@/modules/submissions/types";
 
 export async function generateMetadata({ params }: { params: Promise<{ taskId: string }> }) {
   const task = await getMyTask((await params).taskId);
@@ -34,7 +33,8 @@ export default async function LearnTaskPage({
   const requirements = (task.requirements ?? []) as unknown as Requirement[];
   const versions = (task.versions ?? []) as unknown as Version[];
   const latest = versions[0] ?? null;
-  const closed = task.late_policy === "closed_at_due" && task.due_at !== null && new Date(task.due_at) < new Date();
+  const now = new Date();
+  const closed = task.late_policy === "closed_at_due" && task.due_at !== null && new Date(task.due_at) < now;
 
   return (
     <div className="page">
@@ -74,7 +74,7 @@ export default async function LearnTaskPage({
           </Banner>
         ) : null}
 
-        <DueLine dueAt={task.due_at} latePolicy={task.late_policy} />
+        <DueLine dueAt={task.due_at} latePolicy={task.late_policy} now={now} />
 
         <section aria-labelledby="brief-h" className="stack">
           <h2 className="text-heading" id="brief-h">

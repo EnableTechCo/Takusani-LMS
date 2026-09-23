@@ -79,3 +79,23 @@ export function sastDatePlusDays(days: number, from: Date = new Date()): string 
 export function lastFullDayBefore(deadlineIso: string): string {
   return formatDayOf(new Date(new Date(deadlineIso).getTime() - 1000).toISOString());
 }
+
+/**
+ * Whole calendar days from today to an instant, counted in South African dates: 0 is today, 1 is tomorrow, -1 was
+ * yesterday. Not elapsed hours divided by 24, which would call something due in three hours "tomorrow".
+ */
+export function sastDaysFromToday(iso: string, now: Date = new Date()): number {
+  const day = (instant: Date) => new Intl.DateTimeFormat("en-CA", { timeZone: ZONE }).format(instant);
+  const [target, today] = [day(new Date(iso)), day(now)];
+  return Math.round((Date.parse(`${target}T00:00:00Z`) - Date.parse(`${today}T00:00:00Z`)) / 86_400_000);
+}
+
+/** The time of day of an instant in South Africa, for example "12:39". */
+export function formatTime(iso: string): string {
+  return new Intl.DateTimeFormat("en-ZA", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+    timeZone: ZONE,
+  }).format(new Date(iso));
+}

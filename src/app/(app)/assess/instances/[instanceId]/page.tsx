@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/shell/page-header";
 import { TextLink } from "@/components/ui/link";
-import { Tag } from "@/components/ui/status";
+import { Banner, Tag } from "@/components/ui/status";
 import { formatDateTime } from "@/lib/dates";
 import { getMyAccess } from "@/modules/identity/session";
 import { getMarkingItem, signEvidence, type EvidenceFile } from "@/modules/assessment/queries";
@@ -23,7 +23,6 @@ export default async function MarkingPage({ params }: { params: Promise<{ instan
   const versions = (item.versions ?? []) as unknown as (Version & { files: EvidenceFile[] })[];
   const links = await signEvidence(versions.flatMap((version) => version.files));
   const mine = item.assessor_id === access?.profile_id;
-  const open = item.instance_state === "to_mark" || item.instance_state === "marking";
 
   return (
     <div className="page page--full">
@@ -44,8 +43,17 @@ export default async function MarkingPage({ params }: { params: Promise<{ instan
           </>
         }
       />
+      {item.instance_state === "superseded" ? (
+        <Banner title="This version was replaced" tone="info">
+          <p>
+            {item.learner_name} handed in a later version, which is in the queue to be marked. This version and anything
+            drafted on it stay on record, but it is no longer marked.
+          </p>
+        </Banner>
+      ) : null}
       <MarkingWorkspace
-        canMark={open && mine && item.instance_state === "marking"}
+        canMark={mine && item.instance_state === "marking"}
+        canTake={item.instance_state === "to_mark"}
         criteria={(item.criteria ?? []) as unknown as Criterion[]}
         decisions={
           (item.decisions ?? []) as unknown as {

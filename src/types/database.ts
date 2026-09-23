@@ -112,6 +112,12 @@ export type Database = {
           unit_id: string
         }[]
       }
+      discard_upload: {
+        Args: { p_file_id: string }
+        Returns: {
+          status: string
+        }[]
+      }
       enrol_learner: {
         Args: { p_cohort_id: string; p_email: string }
         Returns: {

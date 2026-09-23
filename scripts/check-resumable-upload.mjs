@@ -268,9 +268,13 @@ async function main() {
     Object.keys(fields).join(", "),
   );
 
-  // Leave nothing behind: on staging this would otherwise add 25 MB to the bucket on every run.
+  // Leave nothing behind. First withdraw the file as the learner would, so it is no longer offered for
+  // submission, then delete the object: deleting only the object left a "ready" file pointing at nothing, which
+  // the learner could have handed in. On staging this also keeps 25 MB from piling up in the bucket on every run.
+  const { data: discarded } = await learner.rpc("discard_upload", { p_file_id: file.file_id });
+  record("the check withdraws the file it uploaded", discarded?.[0]?.status === "ok", discarded?.[0]?.status);
   const { error: removeError } = await admin.storage.from("submissions").remove([intent.object_key]);
-  record("the check removes the file it uploaded", !removeError, removeError?.message ?? "");
+  record("and removes the stored object", !removeError, removeError?.message ?? "");
 
   const seconds = ((Date.now() - started) / 1000).toFixed(1);
   const failed = checks.filter((check) => !check.ok).length;

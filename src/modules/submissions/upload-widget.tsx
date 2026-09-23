@@ -6,8 +6,9 @@ import { Button, IconButton } from "@/components/ui/button";
 import { Banner } from "@/components/ui/status";
 import { UploadDrop, UploadRow, type UploadState } from "@/components/ui/upload";
 import { createBrowserSupabase } from "@/lib/supabase/browser";
-import { authoriseUpload, finaliseUpload } from "./actions";
+import { authoriseUpload, discardUpload, finaliseUpload } from "./actions";
 import { formatBytes, UPLOAD_REFUSALS } from "./rules";
+import type { Requirement } from "./types";
 
 /**
  * The learner's upload island (UX flow A, P0-04). The file goes straight from here to private Storage over the
@@ -20,13 +21,6 @@ import { formatBytes, UPLOAD_REFUSALS } from "./rules";
 const MEGABYTE = 1024 * 1024;
 const CHUNK_SIZE = 6 * MEGABYTE; // The resumable endpoint takes 6 MB chunks.
 const RETRY_DELAYS = [0, 3000, 5000, 10000, 20000];
-
-export interface Requirement {
-  id: string;
-  title: string;
-  guidance?: string | null;
-  mandatory?: boolean | null;
-}
 
 export interface UploadedFile {
   fileId: string;
@@ -57,6 +51,12 @@ const ACCEPTED = [
   "image/png",
 ];
 const MAX_BYTES = 25 * MEGABYTE;
+
+/** A refusal from the server, as opposed to a lost connection: a 4xx other than a conflict (409) or a lock (423). */
+function isRefusal(error: Error): boolean {
+  const status = (error as tus.DetailedError).originalResponse?.getStatus() ?? 0;
+  return status >= 400 && status < 500 && status !== 409 && status !== 423;
+}
 
 /** The browser's own view of the connection, read the way React wants an external value read. */
 function subscribeToConnection(onChange: () => void) {
@@ -165,10 +165,13 @@ export function UploadWidget({
           contentType: row.file.type || "application/octet-stream",
         },
         onProgress: (sent) => patch(row.key, { state: "uploading", sent, retryAt: undefined }),
-        onShouldRetry: (_error, attempt) => {
-          // Not a failure: say it is waiting, and when it will try again.
-          patch(row.key, { state: "paused", retryAt: Date.now() + (RETRY_DELAYS[attempt + 1] ?? 20000) });
-          return attempt < RETRY_DELAYS.length - 1;
+        onShouldRetry: (error, attempt) => {
+          // A refusal from Storage (a 4xx other than a conflict or lock) is not a lost connection: do not retry it
+          // and do not call it a pause. This is the TUS client's own rule, kept because this handler replaces it.
+          if (isRefusal(error)) return false;
+          // The client waits RETRY_DELAYS[attempt] before this retry; say so, and that it is not a failure.
+          patch(row.key, { state: "paused", retryAt: Date.now() + RETRY_DELAYS[attempt] });
+          return true;
         },
         onSuccess: async () => {
           patch(row.key, { state: "checking" });
@@ -177,11 +180,15 @@ export function UploadWidget({
           else patch(row.key, { state: "rejected", message: accepted.message });
         },
         onError: (error) => {
-          const expired = new Date(authorised.expiresAt).getTime() < Date.now();
-          patch(row.key, {
-            state: expired ? "expired" : "rejected",
-            message: expired ? UPLOAD_REFUSALS.expired : String(error.message ?? UPLOAD_REFUSALS.error),
-          });
+          if (new Date(authorised.expiresAt).getTime() < Date.now()) {
+            patch(row.key, { state: "expired", message: UPLOAD_REFUSALS.expired });
+          } else if (isRefusal(error)) {
+            patch(row.key, { state: "rejected", message: UPLOAD_REFUSALS.error });
+          } else {
+            // The retries ran out without a connection. Still a pause: it resumes when the device is back online,
+            // or when the learner presses Try now. Never a raw client error on screen.
+            patch(row.key, { state: "paused", retryAt: undefined });
+          }
         },
       });
 
@@ -216,19 +223,57 @@ export function UploadWidget({
     }
   };
 
-  const remove = useCallback((key: string) => {
-    uploads.current.get(key)?.abort();
-    uploads.current.delete(key);
-    setRows((current) => current.filter((row) => row.key !== key));
-  }, []);
+  const remove = useCallback(
+    async (key: string) => {
+      const upload = uploads.current.get(key);
+      uploads.current.delete(key);
+      if (upload) await upload.abort();
+      const row = rows.find((item) => item.key === key);
+      // A finished upload is on the server: discard it there too, or it would come back after a reload and be
+      // handed in with the next submission.
+      if (row?.fileId) {
+        const discarded = await discardUpload(row.fileId);
+        if (!discarded.ok) {
+          patch(key, { state: "rejected", message: discarded.message });
+          return;
+        }
+      }
+      setRows((current) => current.filter((item) => item.key !== key));
+    },
+    [patch, rows],
+  );
 
   const retry = useCallback(
-    (key: string) => {
+    async (key: string) => {
+      // Resume the same upload rather than starting a second one beside it.
+      const upload = uploads.current.get(key);
+      if (upload) {
+        await upload.abort();
+        patch(key, { state: "resuming", retryAt: undefined });
+        upload.start();
+        return;
+      }
       const row = rows.find((item) => item.key === key);
       if (row) void start({ ...row, state: "waiting" });
     },
-    [rows, start],
+    [patch, rows, start],
   );
+
+  // Back online: carry on with any upload that ran out of retries while the connection was gone.
+  const retryRef = useRef(retry);
+  const rowsRef = useRef(rows);
+  useEffect(() => {
+    retryRef.current = retry;
+    rowsRef.current = rows;
+  });
+  useEffect(() => {
+    const resume = () =>
+      rowsRef.current
+        .filter((row) => row.state === "paused" && !row.retryAt)
+        .forEach((row) => void retryRef.current(row.key));
+    window.addEventListener("online", resume);
+    return () => window.removeEventListener("online", resume);
+  }, []);
 
   const slots: { id: string | null; title: string; help: string; mandatory: boolean }[] = requirements.length
     ? requirements.map((requirement) => ({
@@ -309,7 +354,12 @@ function statusText(row: Row, now: number): string {
       return `Uploading ${Math.round((row.sent / Math.max(row.bytes, 1)) * 100)}% · ${formatBytes(row.sent)} of ${formatBytes(row.bytes)}`;
     case "paused": {
       const seconds = row.retryAt ? Math.max(0, Math.ceil((row.retryAt - now) / 1000)) : 0;
-      const when = seconds > 0 ? ` Trying again in ${seconds} ${seconds === 1 ? "second" : "seconds"}.` : "";
+      const when =
+        seconds > 0
+          ? ` Trying again in ${seconds} ${seconds === 1 ? "second" : "seconds"}.`
+          : row.retryAt
+            ? " Trying again now."
+            : "";
       return `Paused at ${Math.round((row.sent / Math.max(row.bytes, 1)) * 100)}%, no connection. It will carry on by itself when you are back online.${when}`;
     }
     case "resuming":
@@ -332,21 +382,25 @@ function RowActions({
   onRetry,
 }: {
   row: Row;
-  onRemove: (key: string) => void;
-  onRetry: (key: string) => void;
+  onRemove: (key: string) => Promise<void>;
+  onRetry: (key: string) => Promise<void>;
 }) {
   if (row.state === "paused") {
     return (
-      <Button onClick={() => onRetry(row.key)} size="sm">
+      <Button onClick={() => void onRetry(row.key)} size="sm">
         Try now
       </Button>
     );
   }
   if (row.state === "expired" || row.state === "rejected") {
-    return <IconButton icon="x" label={`Dismiss ${row.filename}`} onClick={() => onRemove(row.key)} size="sm" />;
+    return <IconButton icon="x" label={`Dismiss ${row.filename}`} onClick={() => void onRemove(row.key)} size="sm" />;
   }
   if (row.state === "uploaded") {
-    return <IconButton icon="trash" label={`Remove ${row.filename}`} onClick={() => onRemove(row.key)} size="sm" />;
+    return (
+      <IconButton icon="trash" label={`Remove ${row.filename}`} onClick={() => void onRemove(row.key)} size="sm" />
+    );
   }
-  return <IconButton icon="x" label={`Stop uploading ${row.filename}`} onClick={() => onRemove(row.key)} size="sm" />;
+  return (
+    <IconButton icon="x" label={`Stop uploading ${row.filename}`} onClick={() => void onRemove(row.key)} size="sm" />
+  );
 }

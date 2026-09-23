@@ -4,7 +4,8 @@ import { TextLink } from "@/components/ui/link";
 import { getMyTask, listMyUploads } from "@/modules/submissions/queries";
 import { LATE_POLICY_LABELS } from "@/modules/submissions/rules";
 import { SubmitForm } from "@/modules/submissions/submit-form";
-import type { Requirement, Version } from "@/modules/submissions/task-view";
+import type { Version } from "@/modules/submissions/task-view";
+import type { Requirement } from "@/modules/submissions/types";
 
 export async function generateMetadata({ params }: { params: Promise<{ taskId: string }> }) {
   const task = await getMyTask((await params).taskId);

@@ -3,7 +3,7 @@
  * weight). The sprite is rendered once in the root layout; use an icon with <Icon name="check" /> or, in ported
  * markup, <svg className="icon" aria-hidden="true"><use href="#i-check" /></svg>.
  */
-export const ICONS = {
+const ICONS = {
   check: "M4.5 12.5l5 5 10-11",
   x: "M6 6l12 12M18 6L6 18",
   plus: "M12 5v14M5 12h14",

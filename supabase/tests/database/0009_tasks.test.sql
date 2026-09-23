@@ -5,7 +5,7 @@
 create extension if not exists pgtap with schema extensions;
 
 begin;
-select plan(32);
+select plan(34);
 
 -- Switch to a signed-in user. Call only as postgres: `reset role` first, since authenticated cannot run it.
 create function pg_temp.act_as(p_user uuid) returns void language sql as $$
@@ -96,6 +96,14 @@ select results_eq(
 select results_eq(
   format($$ select status, audience_size from api.set_task_audience(%L, 'named', array['LEARNER@takusani.test']) $$, :'task'),
   $$ values ('ok'::text, 1) $$, 'named learners are matched by email, ignoring case');
+select results_eq(
+  format($$ select status from api.set_task_audience(%L, 'named', array['learner@takusani.test', 'nobody@takusani.test']) $$,
+    :'task'),
+  $$ values ('learner_not_enrolled'::text) $$, 'one address that is not enrolled refuses the whole change');
+select results_eq(
+  format($$ select audience, audience_size from api.get_task(%L) $$, :'task'),
+  $$ values ('named'::text, 1) $$,
+  'and the refused change leaves the previous named learners exactly as they were (bug fix: it used to empty them)');
 select results_eq(
   format($$ select status, audience_size from api.set_task_audience(%L, 'cohort') $$, :'task'),
   $$ values ('ok'::text, 2) $$, 'the whole cohort is everyone currently enrolled');

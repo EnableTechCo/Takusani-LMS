@@ -8,7 +8,7 @@ import { Banner, StatusLine, Tag } from "@/components/ui/status";
 import { Tabs } from "@/components/ui/tabs";
 import { ConsequenceDialog } from "@/components/ui/dialog";
 import { BlockedReason } from "@/components/ui/link";
-import { formatDateTime, formatDay, lastFullDayBefore, sastDatePlusDays } from "@/lib/dates";
+import { formatDateTime, formatDay, formatTime, lastFullDayBefore, sastDatePlusDays } from "@/lib/dates";
 import { finaliseDecision, saveMarkingDraft, takeMarking } from "./actions";
 import { missingForFinalise, OUTCOME_LABELS, runningTotal, type Draft, type Score } from "./rules";
 
@@ -71,6 +71,7 @@ function initialDraft(criteria: Criterion[], stored: StoredDraft | null): Draft 
 export function MarkingWorkspace({
   instanceId,
   canMark,
+  canTake,
   takenBySomeoneElse,
   criteria,
   versions,
@@ -84,6 +85,8 @@ export function MarkingWorkspace({
   instanceId: string;
   /** This assessor has taken the item and it is open for marking. */
   canMark: boolean;
+  /** Nobody has taken the item yet, so it can be taken. */
+  canTake: boolean;
   /** The name of whoever else is marking it, when it is not this assessor. */
   takenBySomeoneElse: string | null;
   criteria: Criterion[];
@@ -510,7 +513,7 @@ export function MarkingWorkspace({
             ) : dirty ? (
               <StatusLine state="local">Not saved yet</StatusLine>
             ) : savedAt ? (
-              <StatusLine state="saved" time={formatDateTime(savedAt).split(", ")[1]}>
+              <StatusLine state="saved" time={formatTime(savedAt)}>
                 Draft saved
               </StatusLine>
             ) : (
@@ -520,7 +523,7 @@ export function MarkingWorkspace({
               <Button disabled={!dirty} loading={saving} loadingLabel="Saving the draft" onClick={save}>
                 Save draft
               </Button>
-            ) : takenBySomeoneElse || decided ? null : (
+            ) : !canTake ? null : (
               <Button
                 loading={taking}
                 loadingLabel="Taking the item"

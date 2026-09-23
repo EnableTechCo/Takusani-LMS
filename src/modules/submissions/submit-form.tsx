@@ -7,7 +7,8 @@ import { BlockedReason } from "@/components/ui/link";
 import { Banner } from "@/components/ui/status";
 import { submitTask } from "./actions";
 import { formatBytes } from "./rules";
-import { UploadWidget, type Requirement, type UploadedFile } from "./upload-widget";
+import type { Requirement } from "./types";
+import { UploadWidget, type UploadedFile } from "./upload-widget";
 
 /**
  * The submit step of the learner's task (UX flow A, steps 3 to 9). Files go up first; the review line says which

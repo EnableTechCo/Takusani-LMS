@@ -49,7 +49,7 @@ export const newTaskSchema = z.object({
 
 export const editTaskSchema = newTaskSchema.omit({ cohortId: true });
 
-export const criterionSchema = z.object({
+const criterionSchema = z.object({
   title: z.string().trim().min(1, "Give the criterion a title.").max(200, "Use 200 characters or fewer."),
   descriptor: z.string().trim().max(2000, "Use 2 000 characters or fewer.").optional(),
   points: z
@@ -64,7 +64,7 @@ export const criteriaSchema = z
   .max(50, "A rubric has at most 50 criteria.")
   .describe("The rubric rows, in the order marking shows them.");
 
-export const requirementSchema = z.object({
+const requirementSchema = z.object({
   title: z.string().trim().min(1, "Give the requirement a title.").max(200, "Use 200 characters or fewer."),
   guidance: z.string().trim().max(1000, "Use 1 000 characters or fewer.").optional(),
   mandatory: z.boolean().optional(),
