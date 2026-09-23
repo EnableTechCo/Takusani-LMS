@@ -62,7 +62,12 @@ insert into expected_grants values
   ('function', 'api', 'discard_upload(p_file_id uuid)', 'authenticated', 'EXECUTE'),
   -- The learner's results (20261003090000): the learner's own only, checked inside each function.
   ('function', 'api', 'get_my_result(p_result_id uuid)', 'authenticated', 'EXECUTE'),
-  ('function', 'api', 'list_my_results()', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'list_my_results()', 'authenticated', 'EXECUTE'),
+  -- The notification centre (20261005090000): the signed-in person's own notifications only.
+  ('function', 'api', 'list_my_notifications(p_category text, p_page integer, p_page_size integer)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'my_unread_notification_count()', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'open_my_notification(p_notification_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'mark_my_notifications_read(p_category text)', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (

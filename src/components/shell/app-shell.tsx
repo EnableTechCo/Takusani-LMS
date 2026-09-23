@@ -18,11 +18,14 @@ export function AppShell({
   workspaces,
   account,
   theme,
+  unreadNotifications,
   children,
 }: {
   workspaces: Workspace[];
   account: AccountSummary;
   theme: Theme;
+  /** Shown on the bell; 0 shows none. */
+  unreadNotifications: number;
   children: ReactNode;
 }) {
   return (
@@ -45,8 +48,17 @@ export function AppShell({
             </label>
           </form>
           <div className="topbar__actions">
-            <Link aria-label="Notifications" className="btn btn--ghost btn--icon" href="/notifications">
+            <Link
+              aria-label={unreadNotifications > 0 ? `Notifications, ${unreadNotifications} unread` : "Notifications"}
+              className="btn btn--ghost btn--icon"
+              href="/notifications"
+            >
               <Icon name="bell" />
+              {unreadNotifications > 0 ? (
+                <span aria-hidden="true" className="badge-count">
+                  {unreadNotifications > 99 ? "99+" : unreadNotifications}
+                </span>
+              ) : null}
             </Link>
             <AccountMenu account={account} theme={theme} />
           </div>
