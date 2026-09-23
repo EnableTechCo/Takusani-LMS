@@ -374,7 +374,7 @@ export function PublishTask({
       >
         <ul className="modal__list">
           <li>A published task cannot be edited. To change the work, set a new task.</li>
-          <li>Each learner it is for is told in the LMS and by email.</li>
+          <li>Each learner it is for is told in the LMS.</li>
         </ul>
       </ConsequenceDialog>
     </form>

@@ -3,7 +3,7 @@
 create extension if not exists pgtap with schema extensions;
 
 begin;
-select plan(27);
+select plan(31);
 
 create function pg_temp.act_as(p_user uuid) returns void language sql as $$
   select set_config('role', 'authenticated', true),
@@ -64,6 +64,26 @@ end $$;
 -- The seed publishes Task 3 by inserting it, not by the publish command, so nothing is queued yet.
 reset role;
 select is(pg_temp.queued(), 0::bigint, 'nothing is queued before anything happens');
+
+-- Email is off until go-live: publishing still tells the learner in the LMS, and nothing is queued
+select results_eq($$ select email_enabled from notifications.settings $$, $$ values (false) $$,
+  'email starts switched off');
+reset role;
+select pg_temp.act_as(:'facilitator');
+select task_id as quiet_task from api.create_task(:'cohort', 'pgTAP Quiet Task', 'Write it up.', 'file_upload',
+  now() + interval '10 days') \gset
+select is(status, 'ok', 'the facilitator publishes a task while email is off') from api.publish_task(:'quiet_task');
+reset role;
+select results_eq(
+  format($$ select (select count(*)::int from notifications.notifications where event_key = 'task_published:' || %L),
+                   (select count(*)::int from notifications.outbox_messages o
+                    join notifications.notifications n on n.id = o.notification_id
+                    where n.event_key = 'task_published:' || %L) $$, :'quiet_task', :'quiet_task'),
+  $$ values (1, 0) $$, 'with email off the learner is told in the LMS, and no email is recorded');
+select is(pg_temp.queued(), 0::bigint, 'and nothing is queued');
+
+-- Email switched on (as at go-live) for the rest of this file
+update notifications.settings set email_enabled = true;
 
 -- Task published: an in-app notification, an outbox row, a pending email delivery and a queue message per learner
 reset role;

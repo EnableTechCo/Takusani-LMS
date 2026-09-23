@@ -76,7 +76,7 @@ export default async function EditTaskPage({
           <Banner title="The task is published" tone="positive">
             <p>
               {published === "1" ? "1 learner" : `${published} learners`} can see it now, and each one is told in the
-              LMS and by email.
+              LMS.
             </p>
           </Banner>
         ) : null}

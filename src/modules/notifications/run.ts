@@ -17,8 +17,12 @@ export async function runDeliveryWorker(): Promise<DeliverySummary> {
 /**
  * After the response is sent, deliver what a commit has just queued, so the email does not wait for the schedule.
  * Best effort: if it fails, the scheduled run delivers it, and the alert watches the oldest undelivered row.
+ *
+ * Does nothing while email is not set up (no EMAIL_PROVIDER), as on staging until go-live: the database then queues no
+ * email either (notifications.settings), so there is nothing to deliver and no secret key is needed.
  */
 export function deliverSoon(): void {
+  if (!process.env.EMAIL_PROVIDER) return;
   after(async () => {
     try {
       await runDeliveryWorker();

@@ -16,6 +16,10 @@
 --     Every release path notifies, including sign-off (S4) and appeals (S3), without each having to remember to.
 --   * tasks: draft -> published is "task published", for each learner in the audience.
 -- The receipt notification on submit is not in the MVP (S2-10 names "result released" and "task published" first).
+--
+-- Email is switched off until go-live (notifications.settings.email_enabled, default false): the in-app notification
+-- is still written, but no outbox row, delivery or queue message is, so nothing waits and nothing old is sent in a
+-- burst when email is switched on. Switching it on is a reviewed migration at go-live (docs/development/README.md).
 
 create extension if not exists pgmq;
 select pgmq.create('notification_delivery');
@@ -23,6 +27,15 @@ select pgmq.create('notification_delivery');
 -- ---------------------------------------------------------------------------------------------------------------
 -- Tables
 -- ---------------------------------------------------------------------------------------------------------------
+
+-- One row: which channels are on. Email stays off until the provider is chosen, near go-live.
+create table notifications.settings (
+  id boolean primary key default true check (id),
+  email_enabled boolean not null default false,
+  updated_at timestamptz not null default now()
+);
+
+insert into notifications.settings default values;
 
 -- The in-app notification: what the learner reads in the LMS, and the evidence that they were told (NFR-11).
 create table notifications.notifications (
@@ -82,14 +95,15 @@ create table notifications.notification_deliveries (
 -- The alert on the oldest undelivered row reads this.
 create index deliveries_pending_idx on notifications.notification_deliveries (created_at) where state = 'pending';
 
-revoke all on table notifications.notifications, notifications.outbox_messages, notifications.notification_deliveries
-  from public, anon, authenticated, service_role;
+revoke all on table notifications.settings, notifications.notifications, notifications.outbox_messages,
+  notifications.notification_deliveries from public, anon, authenticated, service_role;
 
 -- ---------------------------------------------------------------------------------------------------------------
 -- Enqueue: in-app notification, outbox row, delivery row and queue message, all in the caller's transaction
 -- ---------------------------------------------------------------------------------------------------------------
 
 -- Returns the notification, or null when this event was already recorded for this person (a replay is harmless).
+-- With email switched off, only the in-app notification is written.
 create function notifications.enqueue(
   p_event_type text,
   p_event_key text,
@@ -114,6 +128,7 @@ begin
   on conflict (event_key, recipient_id) do nothing
   returning id into v_notification;
   if v_notification is null then return null; end if;
+  if not coalesce((select st.email_enabled from notifications.settings st), false) then return v_notification; end if;
 
   insert into notifications.outbox_messages (
     notification_id, recipient_id, event_type, channel, template_version, dedupe_key, payload
