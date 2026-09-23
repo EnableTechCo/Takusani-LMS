@@ -73,10 +73,16 @@ async function sessionFor(email) {
   });
 }
 
+/** A command: one row of status and ids. */
 async function call(client, name, args = {}) {
+  return (await rows(client, name, args))[0] ?? {};
+}
+
+/** A query: every row it returns. */
+async function rows(client, name, args = {}) {
   const { data, error } = await client.rpc(name, args);
   if (error) throw new Error(`api.${name} failed: ${error.message}`);
-  return data?.[0] ?? data;
+  return Array.isArray(data) ? data : data ? [data] : [];
 }
 
 /** A due date a month out, at 17:00 South African time, so the task can be published and stays publishable. */
@@ -90,7 +96,7 @@ async function main() {
   const coordinator = await sessionFor("coordinator@takusani.test");
   const facilitator = await sessionFor("facilitator@takusani.test");
 
-  let programme = (await call(coordinator, "list_programmes"))?.find?.((p) => p.code === PROGRAMME.code);
+  let programme = (await rows(coordinator, "list_programmes")).find((p) => p.code === PROGRAMME.code);
   if (!programme) {
     const created = await call(coordinator, "create_programme", {
       p_code: PROGRAMME.code,
@@ -104,8 +110,7 @@ async function main() {
     console.log(`programme ${PROGRAMME.code} already there`);
   }
 
-  const cohorts = await call(coordinator, "list_cohorts");
-  let cohort = (Array.isArray(cohorts) ? cohorts : []).find((c) => c.name === COHORT.name);
+  let cohort = (await rows(coordinator, "list_cohorts")).find((c) => c.name === COHORT.name);
   if (!cohort) {
     const created = await call(coordinator, "create_cohort", {
       p_programme_id: programme.id,
@@ -126,8 +131,7 @@ async function main() {
   }
   console.log(`${LEARNER}: ${enrolled.status === "ok" ? "enrolled" : "already enrolled"}`);
 
-  const tasks = await call(facilitator, "list_tasks", { p_cohort_id: cohort.id });
-  let task = (Array.isArray(tasks) ? tasks : []).find((t) => t.title === TASK.title);
+  let task = (await rows(facilitator, "list_tasks", { p_cohort_id: cohort.id })).find((t) => t.title === TASK.title);
   if (task?.state === "published") {
     console.log(`task "${TASK.title}" already published`);
   } else {
