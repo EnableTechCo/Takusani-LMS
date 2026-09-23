@@ -339,6 +339,22 @@ export type Database = {
           version_number: number
         }[]
       }
+      list_my_notifications: {
+        Args: { p_category?: string; p_page?: number; p_page_size?: number }
+        Returns: {
+          created_at: string
+          email: Json
+          event_type: string
+          first_opened_at: string
+          id: string
+          link: string
+          payload: Json
+          read_at: string
+          template_version: number
+          total_count: number
+          unread_count: number
+        }[]
+      }
       list_my_results: {
         Args: never
         Returns: {
@@ -416,6 +432,13 @@ export type Database = {
           status: string
         }[]
       }
+      mark_my_notifications_read: {
+        Args: { p_category?: string }
+        Returns: {
+          marked: number
+          status: string
+        }[]
+      }
       my_access: {
         Args: never
         Returns: {
@@ -427,6 +450,7 @@ export type Database = {
           status: string
         }[]
       }
+      my_unread_notification_count: { Args: never; Returns: number }
       notification_outbox_health: {
         Args: never
         Returns: {
@@ -435,6 +459,13 @@ export type Database = {
           oldest_queued_seconds: number
           pending: number
           queue_length: number
+        }[]
+      }
+      open_my_notification: {
+        Args: { p_notification_id: string }
+        Returns: {
+          link: string
+          status: string
         }[]
       }
       provision_account: {
