@@ -6,9 +6,9 @@ import { DataTable } from "@/components/ui/table";
 import { listAppealsToCoordinate } from "@/modules/appeals/queries";
 import {
   APPEAL_TYPE_STAFF_LABELS,
-  COORDINATOR_STATE_LABELS,
+  coordinatorStateLabel,
   isOpen,
-  type AppealState,
+  needsCoordinator,
   type AppealType,
 } from "@/modules/appeals/rules";
 
@@ -17,14 +17,14 @@ export const metadata = { title: "Appeals · Coordinating" };
 // C-12 (FR-604): appeals in the cohorts this coordinator runs, open ones first and oldest first.
 export default async function CoordinateAppealsPage() {
   const appeals = await listAppealsToCoordinate();
-  const waiting = appeals.filter((appeal) => appeal.state === "lodged").length;
+  const waiting = appeals.filter((appeal) => needsCoordinator(appeal.type, appeal.state)).length;
   return (
     <div className="page">
       <PageHeader
         lead={
           waiting === 0
             ? "Appeals lodged by learners in the cohorts you coordinate."
-            : `${waiting === 1 ? "1 appeal needs" : `${waiting} appeals need`} your check. Oldest first.`
+            : `${waiting === 1 ? "1 appeal needs" : `${waiting} appeals need`} your action: a check, or a reviewer. Oldest first.`
         }
         title="Appeals"
         workspace="Coordinating"
@@ -76,11 +76,18 @@ export default async function CoordinateAppealsPage() {
               cell: (appeal) => (
                 <Tag
                   shape={isOpen(appeal.state) ? "half" : undefined}
-                  tone={appeal.state === "lodged" ? "caution" : isOpen(appeal.state) ? "info" : "neutral"}
+                  tone={
+                    needsCoordinator(appeal.type, appeal.state) ? "caution" : isOpen(appeal.state) ? "info" : "neutral"
+                  }
                 >
-                  {COORDINATOR_STATE_LABELS[appeal.state as AppealState]}
+                  {coordinatorStateLabel(appeal.type, appeal.state)}
                 </Tag>
               ),
+            },
+            {
+              key: "reviewer",
+              header: "Reviewer",
+              cell: (appeal) => (appeal.type === "remark" ? (appeal.reviewer_name ?? "None yet") : "Not needed"),
             },
             { key: "lodged", header: "Lodged", cell: (appeal) => <DateTime iso={appeal.lodged_at} /> },
           ]}

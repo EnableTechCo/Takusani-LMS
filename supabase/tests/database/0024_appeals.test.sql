@@ -258,9 +258,9 @@ update appeals.appeals set state = 'inadmissible', admissibility = 'inadmissible
   admissibility_decided_by = :'coordinator', admissibility_reason = 'Test'
 where id = :'script';
 insert into appeals.appeals (reference, result_id, learner_id, decision_id, type, grounds, deadline_at, client_appeal_id,
-                             state, admissibility, admissibility_decided_at, admissibility_decided_by)
+                             state, admissibility, admissibility_decided_at, admissibility_decided_by, admissibility_reason)
 select 'APL-TEST-R' || g, r.id, r.learner_id, r.current_decision_id, 'view_script', :grounds, r.appeal_deadline_at,
-  gen_random_uuid(), 'inadmissible', 'inadmissible', now(), :'coordinator'
+  gen_random_uuid(), 'inadmissible', 'inadmissible', now(), :'coordinator', 'Test'
 from assessment.results r, generate_series(1, 8) g where r.id = :'result';
 select pg_temp.act_as(:'learner');
 select is(status, 'rate_limited', 'the eleventh appeal in a day is refused')
