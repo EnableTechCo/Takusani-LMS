@@ -53,6 +53,12 @@ export type Database = {
           status: string
         }[]
       }
+      cancel_notice: {
+        Args: { p_notice_id: string }
+        Returns: {
+          status: string
+        }[]
+      }
       cancel_session: {
         Args: { p_reason: string; p_session_id: string }
         Returns: {
@@ -155,6 +161,22 @@ export type Database = {
         }
         Returns: {
           module_id: string
+          status: string
+        }[]
+      }
+      create_notice: {
+        Args: {
+          p_audience: string
+          p_body: string
+          p_cohort_id?: string
+          p_role?: string
+          p_send_at?: string
+          p_title: string
+        }
+        Returns: {
+          notice_id: string
+          recipients: number
+          scheduled: boolean
           status: string
         }[]
       }
@@ -380,6 +402,23 @@ export type Database = {
           submission_type: string
           title: string
           versions: Json
+        }[]
+      }
+      get_notice: {
+        Args: { p_notice_id: string }
+        Returns: {
+          audience: string
+          body: string
+          can_cancel: boolean
+          cohort_name: string
+          id: string
+          recipients: number
+          role: string
+          send_at: string
+          sender_name: string
+          sent_at: string
+          state: string
+          title: string
         }[]
       }
       get_task: {
@@ -637,6 +676,32 @@ export type Database = {
           scan_state: string
         }[]
       }
+      list_notice_deliveries: {
+        Args: { p_notice_id: string }
+        Returns: {
+          email_state: string
+          learner_number: string
+          read_at: string
+          recipient_name: string
+          told_at: string
+        }[]
+      }
+      list_notices: {
+        Args: never
+        Returns: {
+          audience: string
+          cohort_name: string
+          id: string
+          read_count: number
+          recipients: number
+          role: string
+          send_at: string
+          sender_name: string
+          sent_at: string
+          state: string
+          title: string
+        }[]
+      }
       list_programmes: {
         Args: never
         Returns: {
@@ -739,6 +804,16 @@ export type Database = {
           profile_id: string
           roles: string[]
           status: string
+        }[]
+      }
+      my_notice_audiences: {
+        Args: never
+        Returns: {
+          can_send_wide: boolean
+          cohort_id: string
+          cohort_name: string
+          learners: number
+          programme_title: string
         }[]
       }
       my_unread_notification_count: { Args: never; Returns: number }

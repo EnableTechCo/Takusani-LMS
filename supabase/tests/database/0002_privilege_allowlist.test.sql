@@ -103,7 +103,14 @@ insert into expected_grants values
   ('function', 'api', 'list_task_submission_counts(p_cohort_id uuid)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'list_task_submissions(p_task_id uuid)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'get_learner_submission_history(p_learner_id uuid)', 'authenticated', 'EXECUTE'),
-  ('function', 'api', 'send_task_reminder(p_task_id uuid, p_learner_ids uuid[], p_message text)', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'send_task_reminder(p_task_id uuid, p_learner_ids uuid[], p_message text)', 'authenticated', 'EXECUTE'),
+  -- Coordinator notices (20261011090000): coordinators within scope, checked inside each function.
+  ('function', 'api', 'create_notice(p_title text, p_body text, p_audience text, p_cohort_id uuid, p_role text, p_send_at timestamp with time zone)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'cancel_notice(p_notice_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_notices()', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'get_notice(p_notice_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_notice_deliveries(p_notice_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'my_notice_audiences()', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (
