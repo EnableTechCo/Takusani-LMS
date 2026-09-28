@@ -2,6 +2,7 @@ import "server-only";
 import { cache } from "react";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
+import type { ReleaseRow } from "./release-status";
 
 // Every query answers only within the assessor's scope; an item outside it returns nothing and is audited (FR-401).
 
@@ -10,6 +11,14 @@ export async function listMarkingQueue() {
   const { data, error } = await supabase.rpc("list_marking_queue", {});
   if (error) throw new Error(`api.list_marking_queue failed: ${error.message}`);
   return data;
+}
+
+/** A-03 (FR-409): each of the assessor's decisions in the cohorts they assess, newest first, with where it stands. */
+export async function listMyReleaseStatus(): Promise<ReleaseRow[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("list_my_release_status");
+  if (error) throw new Error(`api.list_my_release_status failed: ${error.message}`);
+  return (data ?? []) as ReleaseRow[];
 }
 
 /**

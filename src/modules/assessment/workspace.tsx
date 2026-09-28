@@ -41,6 +41,16 @@ export interface Version {
   files: VersionFile[];
 }
 
+/** A decision on this result, for the history: when it was made and, if the learner got it, when it was released. */
+export interface HistoryDecision {
+  type: string;
+  outcome: string;
+  acting_role: string;
+  created_at: string;
+  instance_id: string | null;
+  released_at: string | null;
+}
+
 export interface StoredDraft {
   scores: Score[];
   feedback: string | null;
@@ -95,7 +105,7 @@ export function MarkingWorkspace({
   /** Signed links to open each file, by object key. */
   links: Record<string, string>;
   stored: StoredDraft | null;
-  decisions: { type: string; outcome: string; acting_role: string; created_at: string }[];
+  decisions: HistoryDecision[];
   moderated: boolean;
   /** The learner already has a released result for this item (a resubmission being marked). */
   resultReleased: boolean;
@@ -103,6 +113,7 @@ export function MarkingWorkspace({
   /** Where the result stands once this item is decided; null while it is still being marked. */
   decided: {
     resultState: string;
+    decidedAt: string | null;
     releasedAt: string | null;
     appealDeadlineAt: string | null;
     remediationDeadlineAt: string | null;
@@ -275,7 +286,8 @@ export function MarkingWorkspace({
           {decisions.map((decision, index) => (
             <li key={index}>
               {OUTCOME_LABELS[decision.outcome] ?? decision.outcome}, {decision.type} decision by the{" "}
-              {decision.acting_role}, {formatDateTime(decision.created_at)}
+              {decision.acting_role}. Decided {formatDateTime(decision.created_at)}.{" "}
+              {decision.released_at ? `Released ${formatDateTime(decision.released_at)}.` : "Not released."}
             </li>
           ))}
         </ol>
@@ -320,7 +332,8 @@ export function MarkingWorkspace({
         decided.resultState === "released" && decided.releasedAt && decided.appealDeadlineAt ? (
           <Banner title="Decided and released" tone="positive">
             <p>
-              Released {formatDateTime(decided.releasedAt)} (SAST). The appeal window closes at the end of{" "}
+              {decided.decidedAt ? `Decided ${formatDateTime(decided.decidedAt)}. ` : ""}Released{" "}
+              {formatDateTime(decided.releasedAt)} (SAST). The appeal window closes at the end of{" "}
               {lastFullDayBefore(decided.appealDeadlineAt)}.
               {decided.remediationDeadlineAt
                 ? ` Resubmission is due by ${formatDateTime(decided.remediationDeadlineAt)}.`
@@ -328,9 +341,17 @@ export function MarkingWorkspace({
               This record cannot be edited.
             </p>
           </Banner>
+        ) : decided.resultState === "released" ? (
+          <Banner title="Decided, and replaced before release" tone="info">
+            <p>
+              {decided.decidedAt ? `Decided ${formatDateTime(decided.decidedAt)} (SAST). ` : ""}A later decision took
+              its place before {learnerName} saw it. This record cannot be edited.
+            </p>
+          </Banner>
         ) : (
           <Banner title="Decided, and held for moderation" tone="info">
             <p>
+              {decided.decidedAt ? `Decided ${formatDateTime(decided.decidedAt)} (SAST). ` : ""}
               {learnerName} will not see this decision until moderation of this cohort is signed off. It cannot be
               edited; a moderator can return it for re-marking.
             </p>

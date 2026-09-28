@@ -207,7 +207,9 @@ insert into expected_grants values
   ('function', 'api', 'get_my_quiz(p_quiz_id uuid)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'start_quiz_attempt(p_quiz_id uuid)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'submit_quiz_attempt(p_attempt_id uuid, p_answers jsonb)', 'authenticated', 'EXECUTE'),
-  ('function', 'api', 'get_my_quiz_attempt(p_attempt_id uuid)', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'get_my_quiz_attempt(p_attempt_id uuid)', 'authenticated', 'EXECUTE'),
+  -- Assessor release status (20261029090000): the caller's own decisions in cohorts they assess (test 0041).
+  ('function', 'api', 'list_my_release_status()', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (
