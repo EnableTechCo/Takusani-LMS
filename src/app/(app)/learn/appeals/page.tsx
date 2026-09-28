@@ -1,17 +1,72 @@
-import { Block, Screen } from "@/components/skeleton/skeleton";
+import { PageHeader } from "@/components/shell/page-header";
+import { ButtonLink, TextLink } from "@/components/ui/link";
+import { DateTime } from "@/components/ui/records";
+import { EmptyState, Tag } from "@/components/ui/status";
+import { DataTable } from "@/components/ui/table";
+import { listMyAppeals } from "@/modules/appeals/queries";
+import {
+  APPEAL_TYPE_LABELS,
+  isOpen,
+  LEARNER_STATE_LABELS,
+  type AppealState,
+  type AppealType,
+} from "@/modules/appeals/rules";
 
 export const metadata = { title: "Appeals" };
 
-// L-17 skeleton (docs/design/ui/LMS-ux-architecture.md, section 5.1). Replace blocks as the feature is built.
-export default function LearnAppealsPage() {
+// L-17 (FR-612): the learner's appeals, newest first.
+export default async function LearnAppealsPage() {
+  const appeals = await listMyAppeals();
   return (
-    <Screen id="L-17" frs="FR-612" workspace="Learning" title="Appeals" lead="Track your appeals.">
-      <Block
-        label="Your appeals"
-        detail="Reference, item, type, state, lodged date"
-        size="xl"
-        example={{ label: "Example appeal", href: "/learn/appeals/example" }}
-      />
-    </Screen>
+    <div className="page">
+      <PageHeader lead="Every appeal you have lodged, and where it stands." title="Your appeals" workspace="Learning" />
+      {appeals.length === 0 ? (
+        <div className="card">
+          <EmptyState
+            actions={
+              <ButtonLink href="/learn/results" variant="secondary">
+                Your results
+              </ButtonLink>
+            }
+            icon="scales"
+            title="You have not lodged an appeal"
+          >
+            <p>You can appeal a result from its page, within 7 days of its release.</p>
+          </EmptyState>
+        </div>
+      ) : (
+        <DataTable
+          caption="Your appeals, newest first. Times in SAST."
+          columns={[
+            {
+              key: "reference",
+              header: "Appeal",
+              primary: true,
+              cell: (appeal) => (
+                <>
+                  <span className="u-nowrap">
+                    <TextLink href={`/learn/appeals/${appeal.id}`}>{appeal.reference}</TextLink>
+                  </span>
+                  <span className="table__secondary">{appeal.item_title}</span>
+                </>
+              ),
+            },
+            { key: "type", header: "You asked for", cell: (appeal) => APPEAL_TYPE_LABELS[appeal.type as AppealType] },
+            {
+              key: "state",
+              header: "Where it stands",
+              cell: (appeal) => (
+                <Tag shape={isOpen(appeal.state) ? "half" : undefined} tone={isOpen(appeal.state) ? "info" : "neutral"}>
+                  {LEARNER_STATE_LABELS[appeal.state as AppealState]}
+                </Tag>
+              ),
+            },
+            { key: "lodged", header: "Lodged", cell: (appeal) => <DateTime iso={appeal.lodged_at} /> },
+          ]}
+          rowKey={(appeal) => appeal.id}
+          rows={appeals}
+        />
+      )}
+    </div>
   );
 }

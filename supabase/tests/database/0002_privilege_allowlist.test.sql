@@ -110,7 +110,15 @@ insert into expected_grants values
   ('function', 'api', 'list_notices()', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'get_notice(p_notice_id uuid)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'list_notice_deliveries(p_notice_id uuid)', 'authenticated', 'EXECUTE'),
-  ('function', 'api', 'my_notice_audiences()', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'my_notice_audiences()', 'authenticated', 'EXECUTE'),
+  -- Lodging an appeal (20261012090000): the learner's own released results; coordinators within scope, checked
+  -- inside each function.
+  ('function', 'api', 'lodge_appeal(p_result_id uuid, p_type text, p_grounds text, p_client_appeal_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'get_appeal_options(p_result_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_my_appeals()', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'get_my_appeal(p_appeal_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_appeals_to_coordinate()', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'get_appeal_to_coordinate(p_appeal_id uuid)', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (

@@ -24,6 +24,8 @@ const ICONS: Record<string, IconName> = {
   task_published: "clipboard",
   task_reminder: "clock",
   notice: "megaphone",
+  appeal_received: "scales",
+  appeal_lodged: "scales",
   session_scheduled: "video",
   session_changed: "video",
   session_cancelled: "video",
