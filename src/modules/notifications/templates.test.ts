@@ -50,3 +50,18 @@ describe("renderEmail", () => {
     expect(email.html).not.toContain("<b>&</b>");
   });
 });
+
+describe("sign-in lock notices (S3-06, FR-106)", () => {
+  it("say new sign-ins are paused until when, that nothing current is stopped, and how to get in sooner", () => {
+    const locked = renderNotification("sign_in_locked", 1, { locked_until: "2026-09-28T13:15:00Z", failures: 5 });
+    expect(locked.title).toBe("Sign-in to your account is paused");
+    expect(locked.summary).toBe("After 5 wrong passwords, new sign-ins are paused until 15:15 (SAST).");
+    expect(locked.paragraphs[1]).toContain("including an exam");
+    expect(locked.paragraphs[2]).toContain("Forgot your password?");
+  });
+
+  it("say when an administrator opened it again", () => {
+    const unlocked = renderNotification("sign_in_unlocked", 1, { unlocked_at: "2026-09-28T13:05:00Z" });
+    expect(unlocked.summary).toBe("An administrator unlocked it on Monday 28 September 2026 at 15:05 (SAST).");
+  });
+});

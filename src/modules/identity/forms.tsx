@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useActionState, useState } from "react";
+import { Captcha } from "@/components/ui/captcha";
 import { SelectField, TextField } from "@/components/ui/field";
 import { ErrorSummary, SubmitButton } from "@/components/ui/form-feedback";
 import { Banner } from "@/components/ui/status";
@@ -12,7 +13,15 @@ import { ROLES } from "./navigation";
 
 const initial: FormState = {};
 
-export function SignInForm({ next, notice }: { next?: string; notice?: string }) {
+export function SignInForm({
+  next,
+  notice,
+  captchaSiteKey = null,
+}: {
+  next?: string;
+  notice?: string;
+  captchaSiteKey?: string | null;
+}) {
   const [state, action] = useActionState(signIn, initial);
   const [showPassword, setShowPassword] = useState(false);
   return (
@@ -45,6 +54,7 @@ export function SignInForm({ next, notice }: { next?: string; notice?: string })
         />
         <span className="check__label">Show password</span>
       </label>
+      <Captcha resetKey={state} siteKey={captchaSiteKey} />
       <div className="cluster">
         <SubmitButton pendingLabel="Signing in">Sign in</SubmitButton>
         <Link className="link" href="/forgot-password">
@@ -55,7 +65,7 @@ export function SignInForm({ next, notice }: { next?: string; notice?: string })
   );
 }
 
-export function ForgotPasswordForm() {
+export function ForgotPasswordForm({ captchaSiteKey = null }: { captchaSiteKey?: string | null }) {
   const [state, action] = useActionState(requestPasswordReset, initial);
   if (state.done) {
     return (
@@ -84,6 +94,7 @@ export function ForgotPasswordForm() {
         name="email"
         type="email"
       />
+      <Captcha resetKey={state} siteKey={captchaSiteKey} />
       <div className="cluster">
         <SubmitButton pendingLabel="Sending">Send reset link</SubmitButton>
         <Link className="link" href="/sign-in">

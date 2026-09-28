@@ -130,7 +130,12 @@ insert into expected_grants values
   ('function', 'api', 'list_my_reviews()', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'open_appeal_review(p_appeal_id uuid)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'conclude_appeal(p_appeal_id uuid, p_outcome text, p_scores jsonb, p_reasons text, p_remediation text, p_resubmission_days integer, p_command_id uuid)', 'authenticated', 'EXECUTE'),
-  ('function', 'appeals', 'may_read_review_evidence(p_profile_id uuid, p_bucket text, p_object_key text)', 'authenticated', 'EXECUTE');
+  ('function', 'appeals', 'may_read_review_evidence(p_profile_id uuid, p_bucket text, p_object_key text)', 'authenticated', 'EXECUTE'),
+  -- Sign-in lockout (20261017090000): clearing your own lock after email recovery; administrators unlock and list,
+  -- checked inside. The sign-in handler's counting functions are service_role only and so are not listed here.
+  ('function', 'api', 'clear_my_sign_in_lock()', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'unlock_account(p_profile_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_sign_in_locks()', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (

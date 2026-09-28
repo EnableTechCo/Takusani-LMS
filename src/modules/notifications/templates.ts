@@ -295,7 +295,39 @@ function appealConcluded(payload: Payload): Rendered {
   };
 }
 
+/** New sign-ins to the account are paused after wrong passwords (FR-106, ADR-026). Nothing current is stopped. */
+function signInLocked(payload: Payload): Rendered {
+  const until = text(payload, "locked_until");
+  const failures = Number(payload.failures);
+  return {
+    title: "Sign-in to your account is paused",
+    summary: `After ${failures} wrong passwords, new sign-ins are paused until ${formatTime(until)} (SAST).`,
+    paragraphs: [
+      `Someone, perhaps you, entered the wrong password for your account ${failures} times. To protect it, new sign-ins are paused until ${formatLongDayOf(until)} at ${formatTime(until)} (SAST).`,
+      `If you are already signed in, carry on: nothing you are doing is stopped, including an exam.`,
+      `To sign in sooner, choose "Forgot your password?" on the sign-in page and set a new password. If this was not you, reset your password and tell your administrator.`,
+    ],
+    action: "Open your account",
+  };
+}
+
+/** An administrator unlocked the account (FR-106). */
+function signInUnlocked(payload: Payload): Rendered {
+  const at = text(payload, "unlocked_at");
+  return {
+    title: "Sign-in to your account is open again",
+    summary: `An administrator unlocked it on ${formatLongDayOf(at)} at ${formatTime(at)} (SAST).`,
+    paragraphs: [
+      `An administrator unlocked sign-in to your account on ${formatLongDayOf(at)} at ${formatTime(at)} (SAST). You can sign in again.`,
+      `If you did not ask for this, tell your administrator.`,
+    ],
+    action: "Open your account",
+  };
+}
+
 const TEMPLATES: Record<string, Record<number, (payload: Payload) => Rendered>> = {
+  sign_in_locked: { 1: signInLocked },
+  sign_in_unlocked: { 1: signInUnlocked },
   appeal_decided: { 1: appealDecided },
   appeal_concluded: { 1: appealConcluded },
   appeal_admitted: { 1: appealAdmitted },

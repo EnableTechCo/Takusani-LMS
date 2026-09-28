@@ -20,7 +20,11 @@ export async function GET(request: NextRequest) {
   if (tokenHash && type && ALLOWED.includes(type)) {
     const supabase = await createClient();
     const { error } = await supabase.auth.verifyOtp({ type, token_hash: tokenHash });
-    if (!error) return NextResponse.redirect(redirectUrl(request, next));
+    if (!error) {
+      // A reset link proves the mailbox, so it ends a sign-in lock (ADR-026).
+      if (type === "recovery") await supabase.rpc("clear_my_sign_in_lock");
+      return NextResponse.redirect(redirectUrl(request, next));
+    }
   }
 
   return NextResponse.redirect(redirectUrl(request, "/sign-in?reason=link_expired"));

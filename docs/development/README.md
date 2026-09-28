@@ -37,6 +37,10 @@ Accounts are created by an administrator; there is no public sign-up (FR-103). S
 
 **Forgot password.** `/forgot-password` emails a reset link; the reply is the same whether or not the account exists.
 
+**Sign-in lockout (FR-106, ADR-026).** The sign-in form's server action counts wrong passwords with the secret key (`api.sign_in_gate`, `api.record_sign_in_failure`, `api.record_sign_in_success`, service_role only). Five within 15 minutes lock new password sign-ins for 15 minutes; the answer stays "The email or password is not correct." A lock never touches an existing session or an exam. It ends by itself, when a password-reset link signs the person in (`/auth/confirm` calls `api.clear_my_sign_in_lock`), or when an administrator chooses Unlock under Administration, then Accounts. Lock, expiry and unlock are audited, and the person is told. Without `SUPABASE_SECRET_KEY` sign-in still works but nothing is counted, and the server logs `sign-in lockout is off`.
+
+**CAPTCHA.** The sign-in and password-reset forms show Cloudflare Turnstile when `NEXT_PUBLIC_TURNSTILE_SITE_KEY` is set. It is off until go-live: switching it on means setting that key and, at the same time, enabling CAPTCHA in Supabase (Authentication, Attack Protection) with the matching secret, because Supabase then refuses any sign-in without a token.
+
 **How the pieces fit.** `src/proxy.ts` refreshes the session and sends signed-out visitors to `/sign-in`. `/auth/confirm` verifies invitation and reset links (templates in `supabase/email`). The app layout reads the person's access once per request (`src/modules/identity/session.ts`), and each workspace layout returns 404 unless the person holds that workspace. The database checks again: administrator-only functions refuse anyone else, and every account and role change is written to `audit.events` in the same transaction.
 
 **Staging accounts.** Once the identity migration is on staging, `npm run accounts:staging` creates the same seven accounts there. It reads `STAGING_SUPABASE_URL`, `STAGING_SUPABASE_SECRET_KEY` and `STAGING_TEST_ACCOUNT_PASSWORD` from .env.local and is safe to run again.
