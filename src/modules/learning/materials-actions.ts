@@ -21,11 +21,12 @@ export async function createMaterial(_: FormState, form: FormData): Promise<Form
     cohortId: text(form, "cohortId"),
     title: text(form, "title"),
     description: text(form, "description"),
+    category: text(form, "category") === "recording" ? "recording" : "material",
   };
   if (!values.cohortId) return { errors: { cohortId: "Choose the cohort this material is for." }, values };
   if (!values.title) return { errors: { title: "Enter a title." }, values };
   const supabase = await createClient();
-  const { data, error } = await supabase.rpc("create_material", {
+  const { data, error } = await supabase.rpc(values.category === "recording" ? "create_recording" : "create_material", {
     p_cohort_id: values.cohortId,
     p_title: values.title,
     p_description: values.description,
@@ -55,7 +56,15 @@ export async function updateMaterial(materialId: string, _: FormState, form: For
     p_module_id: values.moduleId || undefined,
     p_link_url: values.linkUrl || undefined,
   });
-  const status = error ? "error" : (data?.[0]?.status ?? "error");
+  let status = error ? "error" : (data?.[0]?.status ?? "error");
+  // A recording also says whether captions or a transcript are available (FR-208, accessibility audit 1.2.x).
+  if (status === "ok" && text(form, "category") === "recording") {
+    const { data: captions, error: captionsError } = await supabase.rpc("set_recording_captions", {
+      p_material_id: materialId,
+      p_has_captions: form.get("hasCaptions") === "on",
+    });
+    status = captionsError ? "error" : (captions?.[0]?.status ?? "error");
+  }
   if (status !== "ok") {
     return status === "invalid_link"
       ? { errors: { linkUrl: MATERIAL_REFUSALS.invalid_link }, values }

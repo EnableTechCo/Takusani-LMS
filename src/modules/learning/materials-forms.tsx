@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useRef, useState } from "react";
-import { Radio, Fieldset } from "@/components/ui/choice";
+import { Checkbox, Radio, Fieldset } from "@/components/ui/choice";
 import { SelectField, TextareaField, TextField } from "@/components/ui/field";
 import { ErrorSummary, SubmitButton } from "@/components/ui/form-feedback";
 import { Banner } from "@/components/ui/status";
@@ -15,11 +15,14 @@ import {
   publishMaterial,
   updateMaterial,
 } from "./materials-actions";
-import { MATERIAL_TYPES } from "./materials-rules";
+import { MATERIAL_TYPES, RECORDING_TYPES } from "./materials-rules";
 
 const initial: FormState = {};
 
-/** F-04 new material: the cohort and what it is called. The content and module come next, on the edit page. */
+/**
+ * F-04 new material or recording (FR-204, FR-208): the cohort, what kind it is, and what it is called. The content and
+ * module come next, on the edit page.
+ */
 export function NewMaterialForm({ cohorts }: { cohorts: { id: string; label: string }[] }) {
   const [state, action] = useActionState(createMaterial, initial);
   return (
@@ -35,6 +38,22 @@ export function NewMaterialForm({ cohorts }: { cohorts: { id: string; label: str
         options={cohorts.map((cohort) => ({ value: cohort.id, label: cohort.label }))}
         placeholder="Choose a cohort"
       />
+      <Fieldset legend="What are you adding?">
+        <Radio
+          defaultChecked={state.values?.category !== "recording"}
+          label="Material"
+          help="A document, a presentation, an image or a link."
+          name="category"
+          value="material"
+        />
+        <Radio
+          defaultChecked={state.values?.category === "recording"}
+          label="Lecture recording"
+          help="A link to where the recording is kept is best; an upload is limited in size."
+          name="category"
+          value="recording"
+        />
+      </Fieldset>
       <TextField defaultValue={state.values?.title} error={state.errors?.title} label="Title" name="title" />
       <TextareaField
         defaultValue={state.values?.description}
@@ -51,20 +70,30 @@ export function NewMaterialForm({ cohorts }: { cohorts: { id: string; label: str
   );
 }
 
-/** Title, description, module and (instead of a file) a link. */
+/** Title, description, module and (instead of a file) a link. A recording also says whether it has captions. */
 export function MaterialDetailsForm({
   material,
   modules,
 }: {
-  material: { id: string; title: string; description: string; module_id: string | null; link_url: string | null };
+  material: {
+    id: string;
+    title: string;
+    description: string;
+    module_id: string | null;
+    link_url: string | null;
+    category: string;
+    has_captions: boolean;
+  };
   modules: { id: string; label: string }[];
 }) {
+  const recording = material.category === "recording";
   const [state, action] = useActionState(updateMaterial.bind(null, material.id), initial);
   const values = state.values ?? {
     title: material.title,
     description: material.description,
     moduleId: material.module_id ?? "",
     linkUrl: material.link_url ?? "",
+    hasCaptions: material.has_captions ? "on" : "",
   };
   return (
     <form action={action} className="stack" noValidate>
@@ -85,13 +114,30 @@ export function MaterialDetailsForm({
       <TextField
         defaultValue={values.linkUrl}
         error={state.errors?.linkUrl}
-        help="Instead of a file: a web page, a video or a recording. It must start with https://. Saving a link replaces a file."
+        help={
+          recording
+            ? "Preferred: where the recording is kept, for example Teams, Stream, OneDrive or YouTube. It plays from there. It must start with https://. Saving a link replaces an uploaded file."
+            : "Instead of a file: a web page, a video or a recording. It must start with https://. Saving a link replaces a file."
+        }
         inputMode="text"
-        label="Link"
+        label={recording ? "Link to the recording" : "Link"}
         name="linkUrl"
         optional
         type="url"
       />
+      {recording ? (
+        <>
+          <input name="category" type="hidden" value="recording" />
+          <Fieldset legend="Captions">
+            <Checkbox
+              defaultChecked={values.hasCaptions === "on"}
+              help="Learners are told when a recording has no captions or transcript, so those who need them know before they open it."
+              label="Captions or a transcript are available"
+              name="hasCaptions"
+            />
+          </Fieldset>
+        </>
+      ) : null}
       <div className="cluster">
         <SubmitButton pendingLabel="Saving">Save details</SubmitButton>
       </div>
@@ -100,10 +146,19 @@ export function MaterialDetailsForm({
 }
 
 /**
- * The material's file: the same resumable upload learners use for their work (ADR-007), into the materials bucket.
- * Each file that finishes uploading becomes the material's content; uploading another replaces it.
+ * The material's file: the same resumable upload learners use for their work (ADR-007), into the materials bucket, or
+ * for a recording into the recordings bucket (S3-12). Each file that finishes uploading becomes the material's
+ * content; uploading another replaces it.
  */
-export function MaterialFileUpload({ materialId, maxMb = 25 }: { materialId: string; maxMb?: number }) {
+export function MaterialFileUpload({
+  materialId,
+  maxMb = 25,
+  recording = false,
+}: {
+  materialId: string;
+  maxMb?: number;
+  recording?: boolean;
+}) {
   const router = useRouter();
   const attached = useRef(new Set<string>());
   const [message, setMessage] = useState<string | null>(null);
@@ -122,16 +177,24 @@ export function MaterialFileUpload({ materialId, maxMb = 25 }: { materialId: str
     <div className="stack">
       {message ? <Banner title={message} tone="critical" /> : null}
       <UploadWidget
-        accept={MATERIAL_TYPES}
+        accept={recording ? RECORDING_TYPES : MATERIAL_TYPES}
         already={[]}
         contextId={materialId}
         contextType="material"
         maxMb={maxMb}
-        copy={{
-          slotTitle: "Upload a file",
-          help: `PDF, Word, Excel, PowerPoint, JPG or PNG. Up to ${maxMb} MB. A new file replaces the current one.`,
-          ready: (count) => `${count} ${count === 1 ? "file" : "files"} uploaded.`,
-        }}
+        copy={
+          recording
+            ? {
+                slotTitle: "Upload the recording",
+                help: `MP4 or WebM video, MP3 or M4A audio. Up to ${maxMb} MB, so a short recording only. A link, added under Details, suits anything longer and plays from where it is kept. A new file replaces the current one.`,
+                ready: (count) => `${count} ${count === 1 ? "recording" : "recordings"} uploaded.`,
+              }
+            : {
+                slotTitle: "Upload a file",
+                help: `PDF, Word, Excel, PowerPoint, JPG or PNG. Up to ${maxMb} MB. A new file replaces the current one.`,
+                ready: (count) => `${count} ${count === 1 ? "file" : "files"} uploaded.`,
+              }
+        }
         onChange={onChange}
         removable={false}
         requirements={[]}

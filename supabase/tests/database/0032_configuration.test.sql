@@ -18,7 +18,9 @@ $$;
 select is(audit.config_int('appeal.window_days'), 7, 'the appeal window starts at 7 days');
 select is(audit.config_int('upload.max_mb'), 25, 'the largest upload starts at 25 MB');
 select is(audit.config_text('submission.late_policy'), 'accept_and_flag', 'late work is accepted and marked by default');
-select is((select count(*)::int from audit.configuration_versions where version = 1), 13, 'every setting has a first version');
+select is((select count(*)::int from audit.configuration_keys k
+            where not exists (select 1 from audit.configuration_versions v where v.key = k.key and v.version = 1)), 0,
+  'every setting has a first version');
 
 -- Recording a change (FR-109): value, previous value, effective time, who and why
 select pg_temp.act_as(:'coordinator');

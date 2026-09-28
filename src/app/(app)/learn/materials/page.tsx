@@ -2,7 +2,7 @@ import { PageHeader } from "@/components/shell/page-header";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icons";
 import { TextLink } from "@/components/ui/link";
-import { EmptyState } from "@/components/ui/status";
+import { EmptyState, Tag } from "@/components/ui/status";
 import { DataTable } from "@/components/ui/table";
 import { formatDayOf } from "@/lib/dates";
 import { describeContent } from "@/modules/learning/materials-rules";
@@ -32,7 +32,11 @@ export default async function LearnMaterialsPage({ searchParams }: { searchParam
 
   return (
     <div className="page">
-      <PageHeader lead="Files and links for your programme, by module." title="Materials" workspace="Learning" />
+      <PageHeader
+        lead="Files, links and lecture recordings for your programme, by module."
+        title="Materials"
+        workspace="Learning"
+      />
       <div className="stack stack--lg">
         <form action="/learn/materials" className="cluster" method="get" role="search">
           <label className="input-icon">
@@ -76,7 +80,17 @@ export default async function LearnMaterialsPage({ searchParams }: { searchParam
                     key: "title",
                     header: "Material",
                     primary: true,
-                    cell: (material) => <TextLink href={`/learn/materials/${material.id}`}>{material.title}</TextLink>,
+                    cell: (material) => (
+                      <>
+                        <TextLink href={`/learn/materials/${material.id}`}>{material.title}</TextLink>
+                        {material.category === "recording" ? (
+                          <span className="table__secondary">
+                            <Tag tone="info">Recording</Tag>{" "}
+                            {material.has_captions ? "Captions or transcript available" : "No captions or transcript"}
+                          </span>
+                        ) : null}
+                      </>
+                    ),
                   },
                   { key: "type", header: "Type", cell: (material) => describeContent(material) },
                   { key: "released", header: "Released", cell: (material) => formatDayOf(material.release_at) },

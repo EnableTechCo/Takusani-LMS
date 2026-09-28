@@ -1,15 +1,18 @@
 import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/shell/page-header";
-import { TextLink } from "@/components/ui/link";
+import { ButtonLink, TextLink } from "@/components/ui/link";
 import { Banner, Tag } from "@/components/ui/status";
 import { formatDateTime, formatLongDayOf, formatTime, sastInputValue } from "@/lib/dates";
 import { CancelSessionForm, SessionForm } from "@/modules/learning/sessions-forms";
+import { getRegister } from "@/modules/learning/register-queries";
+import { registerSummary } from "@/modules/learning/register-rules";
 import { getSession } from "@/modules/learning/sessions-queries";
 import { durationText } from "@/modules/notifications/templates";
 
 export const metadata = { title: "Session · Teaching" };
 
-// F-06 (FR-206, FR-207): one session. Change its time or place, or cancel it; either tells the learners.
+// F-06 (FR-206, FR-207): one session. Change its time or place, or cancel it; either tells the learners. Once it has
+// started, its register (F-07, FR-209).
 export default async function SessionPage({
   params,
   searchParams,
@@ -24,6 +27,8 @@ export default async function SessionPage({
   const endsAt = new Date(session.starts_at).getTime() + session.duration_minutes * 60_000;
   const held = endsAt <= new Date().getTime();
   const cancelled = session.state === "cancelled";
+  const started = new Date(session.starts_at).getTime() <= new Date().getTime();
+  const register = started && !cancelled ? await getRegister(session.id) : null;
   const told = notice.told === undefined ? null : Number(notice.told);
   const learners = (count: number) => (count === 1 ? "1 learner" : `${count} learners`);
 
@@ -83,6 +88,42 @@ export default async function SessionPage({
               open the meeting<span className="u-visually-hidden"> (opens Microsoft Teams)</span>
             </a>
           </p>
+        ) : null}
+
+        {register ? (
+          <section aria-labelledby="register-h" className="card">
+            <div className="card__header">
+              <h2 className="card__title" id="register-h">
+                Register
+              </h2>
+              {register.register_version > 0 ? (
+                <Tag shape="dot" tone="positive">
+                  Taken
+                </Tag>
+              ) : (
+                <Tag>Not taken yet</Tag>
+              )}
+            </div>
+            <div className="card__body stack">
+              <p>
+                {register.register_version > 0
+                  ? `${registerSummary(register.roster)}.${
+                      register.amendments.length > 0
+                        ? ` Changed ${register.amendments.length === 1 ? "once" : `${register.amendments.length} times`} since it was taken.`
+                        : ""
+                    }`
+                  : "Mark each learner present or absent. Teams attendance is not read: this register is the record."}
+              </p>
+              <p>
+                <ButtonLink
+                  href={`/teach/sessions/${session.id}/register`}
+                  variant={register.register_version > 0 ? "secondary" : "primary"}
+                >
+                  {register.register_version > 0 ? "Open the register" : "Take the register"}
+                </ButtonLink>
+              </p>
+            </div>
+          </section>
         ) : null}
 
         {cancelled || held ? null : (

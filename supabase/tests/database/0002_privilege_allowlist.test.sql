@@ -162,7 +162,12 @@ insert into expected_grants values
   ('function', 'api', 'get_configuration_key(p_key text)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'list_unit_credit_values()', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'get_unit_credit_history(p_unit_id uuid)', 'authenticated', 'EXECUTE'),
-  ('function', 'api', 'public_settings()', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'public_settings()', 'authenticated', 'EXECUTE'),
+  -- Register and recordings (20261023090000): whoever sets work in the cohort, checked inside each function.
+  ('function', 'api', 'save_register(p_session_id uuid, p_marks jsonb, p_expected_version integer, p_reason text)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'get_register(p_session_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'create_recording(p_cohort_id uuid, p_title text, p_description text, p_module_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'set_recording_captions(p_material_id uuid, p_has_captions boolean)', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (
