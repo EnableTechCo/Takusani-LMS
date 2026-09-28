@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  appealWindowDaysOf,
   formatDateTime,
   formatDateTimeSeconds,
   formatDay,
@@ -9,6 +10,7 @@ import {
   instantFromSast,
   lastFullDayBefore,
   sastDatePlusDays,
+  sastDaysBetween,
   sastDaysFromToday,
   sastInputValue,
 } from "./dates";
@@ -64,5 +66,19 @@ describe("dates in SAST", () => {
 
   it("gives the time of day in South Africa", () => {
     expect(formatTime("2026-09-23T10:39:00Z")).toBe("12:39");
+  });
+});
+
+describe("appeal windows (S3-09)", () => {
+  it("counts calendar days in SAST, not UTC", () => {
+    // 23:30 UTC on 30 Sep is 01:30 on 1 Oct in South Africa.
+    expect(sastDaysBetween("2026-09-30T23:30:00Z", "2026-10-02T08:00:00+02:00")).toBe(1);
+    expect(sastDaysBetween("2026-10-01T10:00:00+02:00", "2026-10-01T23:00:00+02:00")).toBe(0);
+  });
+
+  it("reads the window a result was released with from its deadline", () => {
+    // Released on 1 October with 7 days: open to the end of 8 October, closing at the start of 9 October.
+    expect(appealWindowDaysOf("2026-10-01T10:15:00+02:00", "2026-10-09T00:00:00+02:00")).toBe(7);
+    expect(appealWindowDaysOf("2026-10-01T10:15:00+02:00", "2026-10-16T00:00:00+02:00")).toBe(14);
   });
 });

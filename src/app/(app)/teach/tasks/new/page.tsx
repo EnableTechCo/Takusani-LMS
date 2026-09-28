@@ -1,5 +1,6 @@
 import { PageHeader } from "@/components/shell/page-header";
 import { EmptyState } from "@/components/ui/status";
+import { getPublicSettings } from "@/modules/audit/settings";
 import { NewTaskForm } from "@/modules/submissions/forms";
 import { listWorkCohorts } from "@/modules/submissions/queries";
 
@@ -7,7 +8,7 @@ export const metadata = { title: "New task · Teaching" };
 
 // F-03 create (FR-201, FR-202): the brief and the dates. The rubric and the audience are set on the draft.
 export default async function NewTaskPage({ searchParams }: { searchParams: Promise<{ cohort?: string }> }) {
-  const [{ cohort }, cohorts] = await Promise.all([searchParams, listWorkCohorts()]);
+  const [{ cohort }, cohorts, settings] = await Promise.all([searchParams, listWorkCohorts(), getPublicSettings()]);
 
   return (
     <div className="page page--form">
@@ -25,6 +26,7 @@ export default async function NewTaskPage({ searchParams }: { searchParams: Prom
                 name: item.name,
                 programmeTitle: item.programme_title,
               }))}
+              defaultLatePolicy={settings.latePolicy}
               selected={cohort}
             />
           )}

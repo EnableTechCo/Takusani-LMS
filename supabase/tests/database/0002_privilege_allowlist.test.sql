@@ -152,7 +152,17 @@ insert into expected_grants values
   ('function', 'api', 'reactivate_account(p_profile_id uuid)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'record_password_reset(p_profile_id uuid)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'check_request()', 'anon', 'EXECUTE'),
-  ('function', 'api', 'check_request()', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'check_request()', 'authenticated', 'EXECUTE'),
+  -- Versioned configuration (20261020090000): administrators, checked inside each function; public_settings gives any
+  -- signed-in person the few non-sensitive values the application states (late work, upload size, appeal window).
+  ('function', 'api', 'record_configuration_version(p_key text, p_value text, p_effective_on date, p_reason text)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'cancel_configuration_version(p_key text, p_version integer, p_reason text)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'set_unit_credit_value(p_unit_id uuid, p_credits integer, p_effective_on date, p_reason text)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_configuration()', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'get_configuration_key(p_key text)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_unit_credit_values()', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'get_unit_credit_history(p_unit_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'public_settings()', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (

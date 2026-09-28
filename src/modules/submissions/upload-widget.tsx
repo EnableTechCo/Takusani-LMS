@@ -66,17 +66,18 @@ export interface UploadCopy {
   ready: (count: number) => string;
 }
 
-const TASK_COPY: UploadCopy = {
+const taskCopy = (maxMb: number): UploadCopy => ({
   slotTitle: "Add your work",
-  help: "PDF, Word, Excel, JPG or PNG. Up to 25 MB each.",
+  help: `PDF, Word, Excel, JPG or PNG. Up to ${maxMb} MB each.`,
   ready: (count) => `${count} ${count === 1 ? "file" : "files"} ready to hand in.`,
-};
+});
 
 export function UploadWidget({
   contextId,
   contextType = "task_submission",
   accept = ACCEPTED,
-  copy = TASK_COPY,
+  maxMb = 25,
+  copy = taskCopy(maxMb),
   removable = true,
   requirements,
   already,
@@ -87,6 +88,8 @@ export function UploadWidget({
   contextType?: "task_submission" | "material";
   /** Media types offered and checked before upload; the server checks again against its bucket. */
   accept?: string[];
+  /** The largest file in the configuration (S3-09), for the help text; the server checks it. */
+  maxMb?: number;
   copy?: UploadCopy;
   /** Whether a finished upload can be taken back. A material's file is replaced by uploading another instead. */
   removable?: boolean;
@@ -291,7 +294,7 @@ export function UploadWidget({
     ? requirements.map((requirement) => ({
         id: requirement.id,
         title: `Add evidence for ${requirement.title}`,
-        help: requirement.guidance ?? "PDF, Word, Excel, JPG or PNG. Up to 25 MB each.",
+        help: requirement.guidance ?? `PDF, Word, Excel, JPG or PNG. Up to ${maxMb} MB each.`,
         mandatory: requirement.mandatory !== false,
       }))
     : [{ id: null, title: copy.slotTitle, help: copy.help, mandatory: true }];

@@ -5,6 +5,7 @@ import { formatDateTime, formatLongDayOf } from "@/lib/dates";
 import { listMyResults } from "@/modules/assessment/queries";
 import { requireActiveAccess } from "@/modules/identity/session";
 import { Agenda, agendaItems } from "@/modules/learning/agenda";
+import { getPublicSettings } from "@/modules/audit/settings";
 import { BeingAssessedCard, DoNextTable, NewResultCard } from "@/modules/learning/home";
 import {
   beingAssessed,
@@ -164,7 +165,9 @@ export default async function LearnHomePage() {
             </section>
           ) : null}
 
-          {assessed.length > 0 ? <BeingAssessedCard items={assessed} /> : null}
+          {assessed.length > 0 ? (
+            <BeingAssessedCard appealWindowDays={(await getPublicSettings()).appealWindowDays} items={assessed} />
+          ) : null}
         </div>
       </div>
     </>

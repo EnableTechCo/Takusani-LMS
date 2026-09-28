@@ -3,6 +3,7 @@ import { PageHeader } from "@/components/shell/page-header";
 import { TextLink } from "@/components/ui/link";
 import { Tag } from "@/components/ui/status";
 import { listMyAppeals } from "@/modules/appeals/queries";
+import { getPublicSettings } from "@/modules/audit/settings";
 import { getMyResult } from "@/modules/assessment/queries";
 import {
   HeldResultView,
@@ -49,6 +50,7 @@ export default async function LearnResultPage({ params }: { params: Promise<{ re
         />
         <div className="stack stack--lg">
           <HeldResultView
+            appealWindowDays={(await getPublicSettings()).appealWindowDays}
             itemTitle={result.item_title}
             latestVersion={latestVersion}
             moderated={result.moderated}

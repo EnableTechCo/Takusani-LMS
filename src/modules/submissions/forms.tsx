@@ -28,7 +28,16 @@ const TASK_LABELS = {
 const options = (labels: Record<string, string>) => Object.entries(labels).map(([value, label]) => ({ value, label }));
 
 /** The task's own details. The same fields create a draft and edit it. */
-function TaskFields({ state, task }: { state: FormState; task?: TaskDetails }) {
+function TaskFields({
+  state,
+  task,
+  defaultLatePolicy = "accept_and_flag",
+}: {
+  state: FormState;
+  task?: TaskDetails;
+  /** For a new task: the late-work policy in the configuration (S3-09). */
+  defaultLatePolicy?: string;
+}) {
   return (
     <>
       <TextField
@@ -62,7 +71,7 @@ function TaskFields({ state, task }: { state: FormState; task?: TaskDetails }) {
         type="datetime-local"
       />
       <SelectField
-        defaultValue={state.values?.latePolicy ?? task?.latePolicy ?? "accept_and_flag"}
+        defaultValue={state.values?.latePolicy ?? task?.latePolicy ?? defaultLatePolicy}
         error={state.errors?.latePolicy}
         label={TASK_LABELS.latePolicy}
         name="latePolicy"
@@ -85,9 +94,11 @@ export interface TaskDetails {
 export function NewTaskForm({
   cohorts,
   selected,
+  defaultLatePolicy,
 }: {
   cohorts: { id: string; name: string; programmeTitle: string }[];
   selected?: string;
+  defaultLatePolicy?: string;
 }) {
   const [state, action] = useActionState(createTask, initial);
   return (
@@ -102,7 +113,7 @@ export function NewTaskForm({
         options={cohorts.map((cohort) => ({ value: cohort.id, label: `${cohort.name} (${cohort.programmeTitle})` }))}
         placeholder="Choose a cohort"
       />
-      <TaskFields state={state} />
+      <TaskFields defaultLatePolicy={defaultLatePolicy} state={state} />
       <p className="text-small text-muted">
         The task is created as a draft. Learners see nothing until you publish it, so you can set the rubric and the
         audience first.

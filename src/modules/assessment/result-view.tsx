@@ -4,7 +4,7 @@ import { Banner, Tag } from "@/components/ui/status";
 import { DataTable } from "@/components/ui/table";
 import { cx } from "@/components/ui/cx";
 import { Icon } from "@/components/ui/icons";
-import { formatDateTime, formatLongDayOf, formatTime, sastDaysFromToday } from "@/lib/dates";
+import { appealWindowDaysOf, formatDateTime, formatLongDayOf, formatTime, sastDaysFromToday } from "@/lib/dates";
 import {
   APPEAL_TYPE_LABELS,
   isOpen,
@@ -178,8 +178,9 @@ export function AppealLine({
         <p className="deadline-line deadline-line--closed">
           <Icon name="lock" />
           <span>
-            The time to appeal closed at the end of {window.lastDay}. You had 7 days from the day your result was
-            released, {formatLongDayOf(releasedAt)}.
+            The time to appeal closed at the end of {window.lastDay}. You had{" "}
+            {appealWindowDaysOf(releasedAt, appealDeadlineAt)} days from the day your result was released,{" "}
+            {formatLongDayOf(releasedAt)}.
           </span>
         </p>
         <MyAppeals appeals={appeals} />
@@ -361,7 +362,7 @@ function HowYouWereTold({ result }: { result: ReleasedResult }) {
       <p className="text-small text-muted">
         {result.decidedOnAppeal
           ? `The appeal decision was released on ${formatLongDayOf(result.releasedAt)}.`
-          : `Your 7 days to appeal are counted from the day your result was released: ${formatLongDayOf(result.releasedAt)}.`}{" "}
+          : `Your ${appealWindowDaysOf(result.releasedAt, result.appealDeadlineAt)} days to appeal are counted from the day your result was released: ${formatLongDayOf(result.releasedAt)}.`}{" "}
         Times are South African time.
       </p>
     </>
@@ -480,11 +481,14 @@ export function HeldResultView({
   itemTitle,
   moderated,
   latestVersion,
+  appealWindowDays = 7,
 }: {
   taskId: string;
   itemTitle: string;
   moderated: boolean;
   latestVersion: VersionFacts | null;
+  /** The appeal window in force, in days (S3-09). */
+  appealWindowDays?: number;
 }) {
   return (
     <div className="page-layout">
@@ -506,8 +510,8 @@ export function HeldResultView({
                 {moderated
                   ? "In this programme, results are checked by a second person (a moderator) before anyone sees them, and everyone's results for the same task are released together."
                   : "Your assessor is marking your work."}{" "}
-                You will be told here when your result is ready. Your 7 days to appeal, and any time you are given to
-                resubmit, only start on the day your result is released.
+                You will be told here when your result is ready. Your {appealWindowDays} days to appeal, and any time
+                you are given to resubmit, only start on the day your result is released.
               </p>
             </Banner>
             <div>

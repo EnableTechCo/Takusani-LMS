@@ -1,5 +1,5 @@
 import { INSTITUTION } from "@/config/institution";
-import { formatLongDayOf, formatTime, lastFullDayBefore } from "@/lib/dates";
+import { appealWindowDaysOf, formatLongDayOf, formatTime, lastFullDayBefore } from "@/lib/dates";
 
 /**
  * What each notification says (S2-10). The database stores the facts (payload) and the template version; the words
@@ -39,7 +39,7 @@ function resultReleased(payload: Payload): Rendered {
     paragraphs: [
       `Your result for ${item} (${text(payload, "cohort_name")}) was released on ${formatLongDayOf(releasedAt)} at ${formatTime(releasedAt)} (SAST).`,
       `Sign in to see your outcome, your marks and your assessor's feedback.`,
-      `You can appeal this result until the end of ${lastDay}. The 7 days count from the day it was released, including weekends and public holidays.`,
+      `You can appeal this result until the end of ${lastDay}. The ${appealWindowDaysOf(releasedAt, text(payload, "appeal_deadline_at"))} days count from the day it was released, including weekends and public holidays.`,
     ],
     action: "See your result",
   };

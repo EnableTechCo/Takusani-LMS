@@ -5,6 +5,7 @@ import { TextLink } from "@/components/ui/link";
 import { Banner, Tag } from "@/components/ui/status";
 import { formatDateTime } from "@/lib/dates";
 import { archiveMaterial } from "@/modules/learning/materials-actions";
+import { getPublicSettings } from "@/modules/audit/settings";
 import { MaterialDetailsForm, MaterialFileUpload, PublishForm } from "@/modules/learning/materials-forms";
 import { describeContent, materialState } from "@/modules/learning/materials-rules";
 import { getMaterial, listCohortModules } from "@/modules/learning/materials-queries";
@@ -66,7 +67,7 @@ export default async function EditMaterialPage({ params }: { params: Promise<{ m
           </div>
           {archived ? null : (
             <div className="card__body">
-              <MaterialFileUpload materialId={material.id} />
+              <MaterialFileUpload materialId={material.id} maxMb={(await getPublicSettings()).uploadMaxMb} />
             </div>
           )}
         </section>

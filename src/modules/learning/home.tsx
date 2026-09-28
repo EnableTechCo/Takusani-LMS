@@ -148,7 +148,13 @@ export function DoNextTable({ items, now }: { items: DoNextItem[]; now: Date }) 
 }
 
 /** P0-03 block 4: work handed in with no result yet. No outcome, and no date that hints at one. */
-export function BeingAssessedCard({ items }: { items: AssessedItem[] }) {
+export function BeingAssessedCard({
+  items,
+  appealWindowDays = 7,
+}: {
+  items: AssessedItem[];
+  appealWindowDays?: number;
+}) {
   return (
     <section aria-labelledby="assessed-h" className="card">
       <div className="card__header">
@@ -177,8 +183,8 @@ export function BeingAssessedCard({ items }: { items: AssessedItem[] }) {
           </div>
         ))}
         <p className="text-small text-muted">
-          You will be told here when a result is ready. Your 7 days to appeal, and any time you are given to resubmit,
-          only start on the day a result is released.
+          You will be told here when a result is ready. Your {appealWindowDays} days to appeal, and any time you are
+          given to resubmit, only start on the day a result is released.
         </p>
       </div>
     </section>

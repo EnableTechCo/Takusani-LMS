@@ -4,7 +4,7 @@ import { Icon } from "@/components/ui/icons";
 import { ButtonLink, TextLink } from "@/components/ui/link";
 import { DateTime } from "@/components/ui/records";
 import { Banner, Tag } from "@/components/ui/status";
-import { formatLongDayOf, formatTime } from "@/lib/dates";
+import { appealWindowDaysOf, formatLongDayOf, formatTime } from "@/lib/dates";
 import { LodgeAppealForm, type LodgeFacts } from "@/modules/appeals/forms";
 import { getAppealOptions } from "@/modules/appeals/queries";
 import { coordinatorsText, pointsText } from "@/modules/appeals/rules";
@@ -123,9 +123,10 @@ export default async function LearnAppealNewPage({ params }: { params: Promise<{
             </h2>
             <div className="prose">
               <p>
-                You had 7 days to appeal, counted from {formatLongDayOf(options.released_at)}, the day your result was
-                released and you were told. That time ended at the end of {window.lastDay}. The rule is the same for
-                every learner, so we cannot accept an appeal after that day.
+                You had {appealWindowDaysOf(options.released_at, options.appeal_deadline_at)} days to appeal, counted
+                from {formatLongDayOf(options.released_at)}, the day your result was released and you were told. That
+                time ended at the end of {window.lastDay}. The rule is the same for every learner, so we cannot accept
+                an appeal after that day.
               </p>
               <p>What you can still do:</p>
               <ul>

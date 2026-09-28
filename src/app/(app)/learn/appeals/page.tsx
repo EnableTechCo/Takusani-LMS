@@ -4,6 +4,7 @@ import { DateTime } from "@/components/ui/records";
 import { EmptyState, Tag } from "@/components/ui/status";
 import { DataTable } from "@/components/ui/table";
 import { listMyAppeals } from "@/modules/appeals/queries";
+import { getPublicSettings } from "@/modules/audit/settings";
 import {
   APPEAL_TYPE_LABELS,
   CATEGORY_LEARNER_LABELS,
@@ -18,7 +19,7 @@ export const metadata = { title: "Appeals" };
 
 // L-17 (FR-612): the learner's appeals, newest first.
 export default async function LearnAppealsPage() {
-  const appeals = await listMyAppeals();
+  const [appeals, settings] = await Promise.all([listMyAppeals(), getPublicSettings()]);
   return (
     <div className="page">
       <PageHeader lead="Every appeal you have lodged, and where it stands." title="Your appeals" workspace="Learning" />
@@ -33,7 +34,7 @@ export default async function LearnAppealsPage() {
             icon="scales"
             title="You have not lodged an appeal"
           >
-            <p>You can appeal a result from its page, within 7 days of its release.</p>
+            <p>You can appeal a result from its page, within {settings.appealWindowDays} days of its release.</p>
           </EmptyState>
         </div>
       ) : (
