@@ -40,6 +40,12 @@ export type Database = {
           status: string
         }[]
       }
+      archive_quiz: {
+        Args: { p_quiz_id: string }
+        Returns: {
+          status: string
+        }[]
+      }
       assign_cohort_role: {
         Args: {
           p_cohort_id: string
@@ -321,6 +327,19 @@ export type Database = {
         Args: { p_code: string; p_programme_id: string; p_title: string }
         Returns: {
           qualification_id: string
+          status: string
+        }[]
+      }
+      create_quiz: {
+        Args: {
+          p_attempt_limit?: number
+          p_cohort_id: string
+          p_description?: string
+          p_module_id?: string
+          p_title: string
+        }
+        Returns: {
+          quiz_id: string
           status: string
         }[]
       }
@@ -711,6 +730,33 @@ export type Database = {
           version: number
         }[]
       }
+      get_my_quiz: {
+        Args: { p_quiz_id: string }
+        Returns: {
+          attempt_limit: number
+          attempts: Json
+          description: string
+          id: string
+          questions: Json
+          title: string
+        }[]
+      }
+      get_my_quiz_attempt: {
+        Args: { p_attempt_id: string }
+        Returns: {
+          answers_shown: boolean
+          attempt_id: string
+          attempt_limit: number
+          attempt_number: number
+          items: Json
+          max_score: number
+          quiz_id: string
+          quiz_title: string
+          score: number
+          state: string
+          submitted_at: string
+        }[]
+      }
       get_my_result: {
         Args: { p_result_id: string }
         Returns: {
@@ -763,6 +809,21 @@ export type Database = {
           send_at: string
           sender_name: string
           sent_at: string
+          state: string
+          title: string
+        }[]
+      }
+      get_quiz: {
+        Args: { p_quiz_id: string }
+        Returns: {
+          attempt_limit: number
+          cohort_id: string
+          cohort_name: string
+          description: string
+          id: string
+          programme_id: string
+          published_at: string
+          questions: Json
           state: string
           title: string
         }[]
@@ -1144,6 +1205,21 @@ export type Database = {
           unread_count: number
         }[]
       }
+      list_my_quizzes: {
+        Args: never
+        Returns: {
+          attempt_limit: number
+          attempts_used: number
+          best_max: number
+          best_score: number
+          description: string
+          id: string
+          module_code: string
+          module_title: string
+          questions: number
+          title: string
+        }[]
+      }
       list_my_results: {
         Args: never
         Returns: {
@@ -1269,6 +1345,37 @@ export type Database = {
           id: string
           nqf_level: number
           title: string
+        }[]
+      }
+      list_question_bank: {
+        Args: { p_programme_id: string }
+        Returns: {
+          correct: string[]
+          created_by_name: string
+          feedback_correct: string
+          feedback_incorrect: string
+          id: string
+          in_use: boolean
+          kind: string
+          module_title: string
+          options: Json
+          prompt: string
+          updated_at: string
+        }[]
+      }
+      list_quizzes: {
+        Args: never
+        Returns: {
+          attempt_limit: number
+          average_best_percent: number
+          cohort_name: string
+          id: string
+          learners_tried: number
+          programme_id: string
+          questions: number
+          state: string
+          title: string
+          updated_at: string
         }[]
       }
       list_role_scopes: {
@@ -1514,6 +1621,12 @@ export type Database = {
           status: string
         }[]
       }
+      publish_quiz: {
+        Args: { p_quiz_id: string }
+        Returns: {
+          status: string
+        }[]
+      }
       publish_task: {
         Args: { p_task_id: string }
         Returns: {
@@ -1588,6 +1701,22 @@ export type Database = {
         Returns: {
           draft_version: number
           saved_at: string
+          status: string
+        }[]
+      }
+      save_question: {
+        Args: {
+          p_feedback_correct?: string
+          p_feedback_incorrect?: string
+          p_kind: string
+          p_module_id?: string
+          p_options: Json
+          p_programme_id: string
+          p_prompt: string
+          p_question_id: string
+        }
+        Returns: {
+          question_id: string
           status: string
         }[]
       }
@@ -1696,6 +1825,22 @@ export type Database = {
         }[]
       }
       sign_in_gate: { Args: { p_email: string }; Returns: boolean }
+      start_quiz_attempt: {
+        Args: { p_quiz_id: string }
+        Returns: {
+          attempt_id: string
+          attempt_number: number
+          status: string
+        }[]
+      }
+      submit_quiz_attempt: {
+        Args: { p_answers: Json; p_attempt_id: string }
+        Returns: {
+          max_score: number
+          score: number
+          status: string
+        }[]
+      }
       submit_task: {
         Args: {
           p_client_submission_id: string
@@ -1760,6 +1905,18 @@ export type Database = {
         Returns: {
           status: string
           version: number
+        }[]
+      }
+      update_quiz: {
+        Args: {
+          p_attempt_limit: number
+          p_description: string
+          p_questions: Json
+          p_quiz_id: string
+          p_title: string
+        }
+        Returns: {
+          status: string
         }[]
       }
       update_session: {

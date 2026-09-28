@@ -192,7 +192,22 @@ insert into expected_grants values
   ('function', 'api', 'assign_readiness_item(p_cohort_id uuid, p_item_key text, p_assignee_id uuid, p_due_on date, p_note text)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'confirm_cohort_logistics(p_cohort_id uuid, p_confirmed boolean)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'list_cohort_staff(p_cohort_id uuid)', 'authenticated', 'EXECUTE'),
-  ('function', 'api', 'assign_cohort_role(p_cohort_id uuid, p_email text, p_role text, p_until timestamp with time zone)', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'assign_cohort_role(p_cohort_id uuid, p_email text, p_role text, p_until timestamp with time zone)', 'authenticated', 'EXECUTE'),
+  -- Formative quizzes (20261028090000): facilitators for the bank and quizzes, learners for their own attempts;
+  -- each checked inside. Answer keys are read only inside these functions (test 0040).
+  ('function', 'api', 'save_question(p_question_id uuid, p_programme_id uuid, p_prompt text, p_kind text, p_options jsonb, p_feedback_correct text, p_feedback_incorrect text, p_module_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_question_bank(p_programme_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'create_quiz(p_cohort_id uuid, p_title text, p_description text, p_attempt_limit integer, p_module_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'update_quiz(p_quiz_id uuid, p_title text, p_description text, p_attempt_limit integer, p_questions jsonb)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'publish_quiz(p_quiz_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'archive_quiz(p_quiz_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_quizzes()', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'get_quiz(p_quiz_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_my_quizzes()', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'get_my_quiz(p_quiz_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'start_quiz_attempt(p_quiz_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'submit_quiz_attempt(p_attempt_id uuid, p_answers jsonb)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'get_my_quiz_attempt(p_attempt_id uuid)', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (
