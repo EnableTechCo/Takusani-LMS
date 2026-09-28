@@ -261,6 +261,21 @@ export type Database = {
           row_number: number
         }[]
       }
+      get_learner_submission_history: {
+        Args: { p_learner_id: string }
+        Returns: {
+          cohort_name: string
+          due_at: string
+          full_name: string
+          learner_id: string
+          learner_number: string
+          reminders: Json
+          status: string
+          task_id: string
+          task_title: string
+          versions: Json
+        }[]
+      }
       get_marking_item: {
         Args: { p_instance_id: string }
         Returns: {
@@ -649,6 +664,33 @@ export type Database = {
           version: number
         }[]
       }
+      list_task_submission_counts: {
+        Args: { p_cohort_id: string }
+        Returns: {
+          audience: number
+          due_at: string
+          late: number
+          late_policy: string
+          outstanding: number
+          submitted: number
+          task_id: string
+          title: string
+        }[]
+      }
+      list_task_submissions: {
+        Args: { p_task_id: string }
+        Returns: {
+          files_waiting: boolean
+          full_name: string
+          last_reminder_at: string
+          late_by_seconds: number
+          latest_version: number
+          learner_id: string
+          learner_number: string
+          status: string
+          submitted_at: string
+        }[]
+      }
       list_tasks: {
         Args: { p_cohort_id?: string }
         Returns: {
@@ -761,6 +803,15 @@ export type Database = {
         Returns: {
           draft_version: number
           saved_at: string
+          status: string
+        }[]
+      }
+      send_task_reminder: {
+        Args: { p_learner_ids: string[]; p_message: string; p_task_id: string }
+        Returns: {
+          sent: number
+          skipped_recent: number
+          skipped_submitted: number
           status: string
         }[]
       }

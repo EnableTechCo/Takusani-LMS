@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { csvCell, parseCsv, readIntake } from "./intake";
+import { parseCsv, readIntake } from "./intake";
 
 describe("parseCsv", () => {
   it("reads quoted fields with commas, doubled quotes and line breaks, and CRLF or LF rows", () => {
@@ -41,13 +41,5 @@ describe("readIntake", () => {
   it("refuses more than 5,000 rows", () => {
     const text = `full_name,email\n${"a,b@c.d\n".repeat(5001)}`;
     expect(readIntake(text)).toEqual({ ok: false, problem: "too_many_rows", detail: "5001" });
-  });
-});
-
-describe("csvCell", () => {
-  it("quotes when it must, and never lets a spreadsheet run a cell as a formula", () => {
-    expect(csvCell("plain")).toBe("plain");
-    expect(csvCell("Mokoena, Lerato")).toBe('"Mokoena, Lerato"');
-    expect(csvCell("=HYPERLINK(1)")).toBe("'=HYPERLINK(1)");
   });
 });

@@ -123,9 +123,3 @@ export function readIntake(text: string): IntakeRead {
     })),
   };
 }
-
-/** A CSV cell, quoted when it must be. Cells that a spreadsheet would run as a formula are prefixed with a quote. */
-export function csvCell(value: string): string {
-  const safe = /^[=+\-@\t\r]/.test(value) ? `'${value}` : value;
-  return /[",\r\n]/.test(safe) ? `"${safe.replace(/"/g, '""')}"` : safe;
-}
