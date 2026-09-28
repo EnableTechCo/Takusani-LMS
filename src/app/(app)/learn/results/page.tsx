@@ -24,6 +24,7 @@ function Outcome({ result }: { result: Result }) {
 /** The appeal closing day, or the day it closed. Nothing while the result is held: that time has not started. */
 function Appeal({ result, now }: { result: Result; now: Date }) {
   if (result.state !== "released") return <span className="text-muted">Starts when it is released</span>;
+  if (result.decided_on_appeal) return <>Decided on appeal: final</>;
   const window = appealWindow(result.appeal_deadline_at, now);
   if (window.state === "closed") return <>Closed at the end of {window.lastDay}</>;
   if (window.state === "last_day") return <strong>Today is the last day</strong>;

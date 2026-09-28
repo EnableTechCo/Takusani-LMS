@@ -7,6 +7,7 @@ import {
   groundsError,
   learnerSteps,
   needsCoordinator,
+  outcomeCategory,
   pointsText,
   turnaroundText,
 } from "./rules";
@@ -175,5 +176,44 @@ describe("appeals administration (S3-02)", () => {
     });
     expect(allocated.title).toBe("Appeal APL-2026-0031 to review: Lerato Mokoena");
     expect(allocated.summary).toBe("A re-mark of Task 3 (2026 Intake B). Your decision is final.");
+  });
+});
+
+describe("the reviewer's decision (S3-04, FR-610)", () => {
+  it("follows the outcome first, then the total, as the database does", () => {
+    expect(outcomeCategory("not_yet_competent", 11, "competent", 18)).toBe("amended_up");
+    expect(outcomeCategory("competent", 18, "not_yet_competent", 18)).toBe("amended_down");
+    expect(outcomeCategory("not_yet_competent", 11, "not_yet_competent", 13)).toBe("amended_up");
+    expect(outcomeCategory("competent", 18, "competent", 16)).toBe("amended_down");
+    expect(outcomeCategory("competent", 18, "competent", 18)).toBe("upheld");
+    expect(outcomeCategory("competent", null, "competent", null)).toBe("upheld");
+  });
+
+  it("tells the learner it is decided and final, without naming the reviewer", () => {
+    const decided = renderNotification("appeal_decided", 1, {
+      reference: "APL-2026-0031",
+      item_title: "Task 3",
+      category: "amended_up",
+      outcome: "competent",
+    });
+    expect(decided.title).toBe("Your appeal APL-2026-0031 has been decided");
+    expect(decided.summary).toBe("Mark changed: higher. The decision is final.");
+    expect(decided.paragraphs.join(" ")).toContain("A reviewer who did not mark your work");
+  });
+
+  it("tells the assessor and coordinator the outcome and who decided", () => {
+    const concluded = renderNotification("appeal_concluded", 1, {
+      reference: "APL-2026-0031",
+      learner_name: "Lerato Mokoena",
+      item_title: "Task 3",
+      cohort_name: "2026 Intake B",
+      reviewer_name: "Zanele Khumalo",
+      category: "amended_down",
+      outcome: "not_yet_competent",
+    });
+    expect(concluded.title).toBe("Appeal APL-2026-0031 decided: amended downward");
+    expect(concluded.paragraphs[1]).toBe(
+      "The outcome is now Not yet competent (amended downward). It is released to the learner and is final. The earlier decision stays on record.",
+    );
   });
 });

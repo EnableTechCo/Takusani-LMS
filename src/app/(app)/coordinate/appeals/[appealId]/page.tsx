@@ -9,6 +9,8 @@ import { AdmissibilityForm, ReviewerForm, type Candidate } from "@/modules/appea
 import { getAppealToCoordinate, listAppealReviewerCandidates } from "@/modules/appeals/queries";
 import {
   APPEAL_TYPE_STAFF_LABELS,
+  CATEGORY_STAFF_LABELS,
+  type OutcomeCategory,
   coordinatorStateLabel,
   isOpen,
   needsCoordinator,
@@ -29,6 +31,7 @@ interface AppealEvent {
   reviewer_name: string | null;
   tier: number | null;
   skip_reason: string | null;
+  category: string | null;
 }
 
 interface DecisionRow {
@@ -40,6 +43,7 @@ interface DecisionRow {
   version_number: number | null;
   current: boolean;
   appealed: boolean;
+  justification: string | null;
 }
 
 const DECISION_TYPES: Record<string, string> = {
@@ -63,6 +67,12 @@ function eventWords(entry: AppealEvent, type: AppealType, learnerName: string): 
       return `allocated ${entry.reviewer_name} as reviewer (tier ${entry.tier}).`;
     case "reallocated":
       return `reallocated the review to ${entry.reviewer_name} (tier ${entry.tier}).`;
+    case "review_opened":
+      return "opened the review.";
+    case "concluded":
+      return `decided the appeal: ${entry.category ? CATEGORY_STAFF_LABELS[entry.category as OutcomeCategory].toLowerCase() : "concluded"}. The decision is final and was released at once.`;
+    case "conclusion_refused":
+      return "tried to record a decision. Refused: they took an assessment decision on this work.";
     case "script_viewed":
       return "opened the marked work.";
     case "allocation_refused":
@@ -91,6 +101,7 @@ export default async function CoordinateAppealPage({
   const events = (appeal.events ?? []) as unknown as AppealEvent[];
   const decisions = (appeal.decisions ?? []) as unknown as DecisionRow[];
   const views = events.filter((entry) => entry.event === "script_viewed");
+  const appealDecision = decisions.find((decision) => decision.type === "appeal" && decision.current) ?? null;
   const needsReviewer = type === "remark" && ["admitted", "allocated", "under_review"].includes(state);
   const candidates = needsReviewer ? ((await listAppealReviewerCandidates(appeal.id)) as unknown as Candidate[]) : [];
   const firstName = appeal.learner_name.split(" ")[0];
@@ -332,6 +343,44 @@ export default async function CoordinateAppealPage({
               </div>
             </section>
           ) : null}
+          {state === "concluded" && appeal.outcome_category && appealDecision ? (
+            <section aria-labelledby="out-h" className="card">
+              <div className="card__header">
+                <h2 className="card__title" id="out-h">
+                  Outcome
+                </h2>
+                <Tag tone="neutral">{CATEGORY_STAFF_LABELS[appeal.outcome_category as OutcomeCategory]}</Tag>
+              </div>
+              <div className="card__body stack">
+                <dl className="dl dl--inline">
+                  <div className="dl__row">
+                    <dt>New decision</dt>
+                    <dd>
+                      {OUTCOME_LABELS[appealDecision.outcome]}. It was {OUTCOME_LABELS[appeal.appealed_outcome]}
+                      {points ? `, ${points}` : ""}.
+                    </dd>
+                  </div>
+                  <div className="dl__row">
+                    <dt>Recorded</dt>
+                    <dd>
+                      {formatDateTime(appealDecision.decided_at)} SAST by {appealDecision.actor_name}, as the appeal
+                      reviewer
+                    </dd>
+                  </div>
+                  <div className="dl__row">
+                    <dt>Release</dt>
+                    <dd>Released at once. An appeal decision is never held for moderation, and it is final.</dd>
+                  </div>
+                </dl>
+                {appealDecision.justification ? (
+                  <div>
+                    <p className="text-subheading">The reviewer&apos;s reasons</p>
+                    <p className="prose u-mt-2 whitespace-pre-line">{appealDecision.justification}</p>
+                  </div>
+                ) : null}
+              </div>
+            </section>
+          ) : null}
         </div>
 
         <aside aria-label="Appeal record" className="page-layout__aside stack">
@@ -351,7 +400,7 @@ export default async function CoordinateAppealPage({
                     : entry.event === "allocation_refused"
                       ? "separation_of_duties_conflict"
                       : undefined,
-              marked: entry.event === "allocation_refused",
+              marked: entry.event === "allocation_refused" || entry.event === "conclusion_refused",
             }))}
             label={`Record of appeal ${appeal.reference}, oldest first. Times in SAST.`}
           />

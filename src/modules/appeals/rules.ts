@@ -227,3 +227,53 @@ export function learnerSteps(appeal: {
     })),
   ];
 }
+
+export type OutcomeCategory = "upheld" | "amended_up" | "amended_down";
+
+/** The reviewer's outcome, in the learner's words (UX flow E, step 9). */
+export const CATEGORY_LEARNER_LABELS: Record<OutcomeCategory, string> = {
+  upheld: "Mark upheld",
+  amended_up: "Mark changed: higher",
+  amended_down: "Mark changed: lower",
+};
+
+/** The same, as staff read it. */
+export const CATEGORY_STAFF_LABELS: Record<OutcomeCategory, string> = {
+  upheld: "Upheld",
+  amended_up: "Amended upward",
+  amended_down: "Amended downward",
+};
+
+/**
+ * The database's rule (appeals.outcome_category), for the live preview while the reviewer marks: the outcome first,
+ * then the total. The database decides again when the conclusion is recorded.
+ */
+export function outcomeCategory(
+  oldOutcome: string,
+  oldTotal: number | null,
+  newOutcome: string,
+  newTotal: number | null,
+): OutcomeCategory {
+  if (oldOutcome !== newOutcome) return newOutcome === "competent" ? "amended_up" : "amended_down";
+  if (oldTotal !== newTotal) return (newTotal ?? 0) > (oldTotal ?? 0) ? "amended_up" : "amended_down";
+  return "upheld";
+}
+
+export const CONCLUDE_REFUSALS: Record<string, string> = {
+  unauthenticated: "Your session has ended. Sign in again; nothing was recorded. Copy your reasons first.",
+  not_found: "This appeal is not allocated to you, so nothing was recorded.",
+  already_concluded: "This appeal has already been decided. Nothing was changed.",
+  not_open: "This appeal is not open for review.",
+  separation_of_duties_conflict:
+    "You took an assessment decision on this work, so you cannot decide this appeal. Nothing was recorded. Tell the coordinator, who will reallocate it.",
+  result_changed:
+    "This result has had a new decision since the appeal was lodged. Nothing was recorded. Ask the coordinator what to do.",
+  invalid_outcome: "Choose Competent or Not yet competent.",
+  reasons_required: "Enter your reasons. The learner reads them, and the decision cannot be recorded without them.",
+  reasons_too_long: "Your reasons are longer than 5000 characters. Shorten them and try again.",
+  invalid_scores: "The marks could not be read. Reload the page and try again.",
+  invalid_points: "A mark is more than the criterion is worth. Check the marks.",
+  remediation_required: "Say what the learner must do. A not yet competent decision always carries it.",
+  resubmission_days_required: "Choose a resubmission period between 1 and 90 days.",
+  error: "The decision could not be recorded. Your marks and reasons are still on this page; try again.",
+};

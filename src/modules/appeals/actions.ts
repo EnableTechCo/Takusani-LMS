@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import type { FormState } from "@/lib/form-state";
 import { createClient } from "@/lib/supabase/server";
-import { ADMISSIBILITY_REFUSALS, ALLOCATION_REFUSALS, APPEAL_REFUSALS, groundsError } from "./rules";
+import { ADMISSIBILITY_REFUSALS, ALLOCATION_REFUSALS, APPEAL_REFUSALS, CONCLUDE_REFUSALS, groundsError } from "./rules";
 
 // Lodging an appeal (S3-01, FR-601 to FR-604). The database checks the window under a lock on the result, the one-remark
 // rule and the grounds; the same client_appeal_id makes a retry return the appeal already lodged.
@@ -129,4 +129,68 @@ export async function allocateReviewer(appealId: string, _: AllocateState, form:
   }
   revalidatePath("/coordinate/appeals");
   redirect(`/coordinate/appeals/${appealId}?allocated=1`);
+}
+
+// The reviewer's conclusion (S3-04, FR-610, FR-611). The database re-checks separation of duties under a lock, works
+// out whether the appeal is upheld or amended, and records the decision once for this command id.
+
+export async function concludeAppeal(appealId: string, _: FormState, form: FormData): Promise<FormState> {
+  const ordinals = String(form.get("ordinals") ?? "")
+    .split(",")
+    .filter(Boolean)
+    .map(Number);
+  const scores = ordinals.map((ordinal) => {
+    const points = text(form, `points-${ordinal}`);
+    return {
+      ordinal,
+      points: points === "" ? null : Number(points),
+      comment: text(form, `comment-${ordinal}`),
+    };
+  });
+  const values: Record<string, string> = {
+    outcome: text(form, "outcome"),
+    reasons: text(form, "reasons"),
+    remediation: text(form, "remediation"),
+    resubmissionDays: text(form, "resubmissionDays"),
+  };
+  for (const score of scores) {
+    values[`points-${score.ordinal}`] = score.points === null ? "" : String(score.points);
+    values[`comment-${score.ordinal}`] = score.comment;
+  }
+  const commandId = text(form, "commandId");
+
+  const errors: Record<string, string> = {};
+  if (values.outcome !== "competent" && values.outcome !== "not_yet_competent") {
+    errors.outcome = CONCLUDE_REFUSALS.invalid_outcome;
+  }
+  if (!values.reasons) errors.reasons = CONCLUDE_REFUSALS.reasons_required;
+  if (scores.some((score) => score.points !== null && !Number.isInteger(score.points))) {
+    errors.form = CONCLUDE_REFUSALS.invalid_points;
+  }
+  if (Object.keys(errors).length > 0) return { errors, values };
+
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("conclude_appeal", {
+    p_appeal_id: appealId,
+    p_outcome: values.outcome,
+    p_scores: scores,
+    p_reasons: values.reasons,
+    p_remediation: values.remediation || undefined,
+    p_resubmission_days: values.resubmissionDays ? Number(values.resubmissionDays) : undefined,
+    p_command_id: z.string().uuid().safeParse(commandId).success ? commandId : undefined,
+  });
+  const status = error ? "error" : (data?.[0]?.status ?? "error");
+  if (status !== "ok") {
+    const message = CONCLUDE_REFUSALS[status] ?? CONCLUDE_REFUSALS.error;
+    const field: Record<string, string> = {
+      invalid_outcome: "outcome",
+      reasons_required: "reasons",
+      reasons_too_long: "reasons",
+      remediation_required: "remediation",
+      resubmission_days_required: "resubmissionDays",
+    };
+    return field[status] ? { errors: { [field[status]]: message }, values } : { message, values };
+  }
+  revalidatePath("/review/appeals");
+  redirect(`/review/appeals/${appealId}?concluded=1`);
 }
