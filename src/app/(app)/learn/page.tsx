@@ -4,6 +4,7 @@ import { EmptyState } from "@/components/ui/status";
 import { formatLongDayOf } from "@/lib/dates";
 import { listMyResults } from "@/modules/assessment/queries";
 import { requireActiveAccess } from "@/modules/identity/session";
+import { Agenda, agendaItems } from "@/modules/learning/agenda";
 import { BeingAssessedCard, DoNextTable, NewResultCard } from "@/modules/learning/home";
 import {
   beingAssessed,
@@ -15,24 +16,33 @@ import {
   type HomeResult,
   type HomeTask,
 } from "@/modules/learning/home-rules";
+import { listMySessions } from "@/modules/learning/sessions-queries";
 import { listMyEnrolments } from "@/modules/programmes/queries";
 import { listMyTasks } from "@/modules/submissions/queries";
 
 export const metadata = { title: "Home" };
 
-// L-01 (P0-03; FR-304, FR-305, FR-316, FR-317): what needs the learner now, in one screen. MVP blocks: new results,
-// do next and being assessed. Sessions, the exam window and credits join when those features ship (S2-12).
+// L-01 (P0-03; FR-304, FR-305, FR-316, FR-317): what needs the learner now, in one screen: new results, do next,
+// this week's sessions (S2-15) and being assessed. The exam window and credits join when those features ship.
 export default async function LearnHomePage() {
-  const [access, tasks, results, enrolments] = await Promise.all([
+  const [access, tasks, results, enrolments, sessions] = await Promise.all([
     requireActiveAccess(),
     listMyTasks() as Promise<HomeTask[]>,
     listMyResults() as Promise<HomeResult[]>,
     listMyEnrolments(),
+    listMySessions(),
   ]);
   const now = new Date();
   const fresh = newResults(results, tasks, now);
   const todo = doNext(tasks, results, now);
   const assessed = beingAssessed(tasks, results);
+  // P0-03 block 3: sessions in the next seven days, with their Teams links.
+  const weekAhead = now.getTime() + 7 * 24 * 60 * 60 * 1000;
+  const comingUp = agendaItems(
+    sessions.filter((session) => new Date(session.starts_at).getTime() < weekAhead),
+    [],
+    now,
+  );
   const name = firstName(access.full_name);
   const firstDay = tasks.length === 0 && results.length === 0;
   const enrolment = enrolments[0];
@@ -98,6 +108,20 @@ export default async function LearnHomePage() {
               </div>
             )}
           </section>
+
+          {comingUp.length > 0 ? (
+            <section aria-labelledby="coming-up-h" className="card">
+              <div className="card__header">
+                <h2 className="card__title" id="coming-up-h">
+                  Sessions this week
+                </h2>
+                <TextLink href="/learn/calendar">Open your calendar</TextLink>
+              </div>
+              <div className="card__body">
+                <Agenda items={comingUp} label="Sessions this week" now={now} />
+              </div>
+            </section>
+          ) : null}
 
           {assessed.length > 0 ? <BeingAssessedCard items={assessed} /> : null}
         </div>

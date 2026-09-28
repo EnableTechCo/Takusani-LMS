@@ -1,22 +1,39 @@
-import { Block, Form, Screen } from "@/components/skeleton/skeleton";
+import { PageHeader } from "@/components/shell/page-header";
+import { createClient } from "@/lib/supabase/server";
+import { SessionForm } from "@/modules/learning/sessions-forms";
+import { listWorkCohorts } from "@/modules/submissions/queries";
 
-export const metadata = { title: "New session · Teaching" };
+export const metadata = { title: "Schedule a session · Teaching" };
 
-// F-06 skeleton (docs/design/ui/LMS-ux-architecture.md, section 5.1). Replace blocks as the feature is built.
-export default function TeachSessionsNewPage() {
+// F-06 new session (FR-206): when, how long, and where; the form says how many learners will be told (FR-207).
+export default async function NewSessionPage() {
+  const cohorts = await listWorkCohorts();
+  const supabase = await createClient();
+  const sizes = await Promise.all(
+    cohorts.map(async (cohort) => {
+      const { data } = await supabase.rpc("cohort_audience_size", { p_cohort_id: cohort.id });
+      return data ?? 0;
+    }),
+  );
+
   return (
-    <Screen id="F-06" frs="FR-206" workspace="Teaching" title="New session" actions={["Save session"]} width="form">
-      <Form
-        fields={[
-          { label: "Title" },
-          { label: "Date", type: "date" },
-          { label: "Start time", type: "text", help: "24-hour time, SAST" },
-          { label: "Duration in minutes", type: "number" },
-          { label: "Audience", type: "select" },
-          { label: "Teams link", type: "url", help: "Checked when you enter it (FR-206)" },
-        ]}
+    <div className="page page--form">
+      <PageHeader
+        lead="It goes on the cohort's calendar at once, and every learner in the cohort is told."
+        title="Schedule a session"
+        workspace="Teaching"
       />
-      <Block label="Who will be notified" size="sm" />
-    </Screen>
+      <div className="card">
+        <div className="card__body">
+          <SessionForm
+            cohorts={cohorts.map((cohort, index) => ({
+              id: cohort.id,
+              label: `${cohort.name}, ${cohort.programme_title}`,
+              audience: sizes[index],
+            }))}
+          />
+        </div>
+      </div>
+    </div>
   );
 }

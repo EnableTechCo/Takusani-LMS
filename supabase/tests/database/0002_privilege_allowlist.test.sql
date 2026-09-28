@@ -91,7 +91,14 @@ insert into expected_grants values
   ('function', 'api', 'list_my_materials(p_search text)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'get_my_material(p_material_id uuid)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'log_material_access(p_material_id uuid)', 'authenticated', 'EXECUTE'),
-  ('function', 'learning', 'may_read_material(p_profile_id uuid, p_bucket text, p_object_key text)', 'authenticated', 'EXECUTE');
+  ('function', 'learning', 'may_read_material(p_profile_id uuid, p_bucket text, p_object_key text)', 'authenticated', 'EXECUTE'),
+  -- Sessions (20261009090000): facilitators within their cohorts, learners for their own cohorts, checked inside each.
+  ('function', 'api', 'create_session(p_cohort_id uuid, p_title text, p_starts_at timestamp with time zone, p_duration_minutes integer, p_mode text, p_teams_url text, p_venue text)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'update_session(p_session_id uuid, p_expected_version integer, p_title text, p_starts_at timestamp with time zone, p_duration_minutes integer, p_mode text, p_teams_url text, p_venue text)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'cancel_session(p_session_id uuid, p_reason text)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_sessions()', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'cohort_audience_size(p_cohort_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_my_sessions(p_from timestamp with time zone)', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (

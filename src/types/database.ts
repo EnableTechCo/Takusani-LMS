@@ -53,6 +53,13 @@ export type Database = {
           status: string
         }[]
       }
+      cancel_session: {
+        Args: { p_reason: string; p_session_id: string }
+        Returns: {
+          notified: number
+          status: string
+        }[]
+      }
       claim_import_chunk: {
         Args: { p_batch_id: string; p_size?: number }
         Returns: {
@@ -80,6 +87,7 @@ export type Database = {
           template_version: number
         }[]
       }
+      cohort_audience_size: { Args: { p_cohort_id: string }; Returns: number }
       complete_import_chunk: {
         Args: { p_batch_id: string; p_results: Json }
         Returns: {
@@ -161,6 +169,22 @@ export type Database = {
         Args: { p_code: string; p_programme_id: string; p_title: string }
         Returns: {
           qualification_id: string
+          status: string
+        }[]
+      }
+      create_session: {
+        Args: {
+          p_cohort_id: string
+          p_duration_minutes: number
+          p_mode: string
+          p_starts_at: string
+          p_teams_url?: string
+          p_title: string
+          p_venue?: string
+        }
+        Returns: {
+          notified: number
+          session_id: string
           status: string
         }[]
       }
@@ -554,6 +578,22 @@ export type Database = {
           task_id: string
         }[]
       }
+      list_my_sessions: {
+        Args: { p_from?: string }
+        Returns: {
+          cancel_reason: string
+          cohort_name: string
+          duration_minutes: number
+          facilitator_name: string
+          id: string
+          mode: string
+          starts_at: string
+          state: string
+          teams_url: string
+          title: string
+          venue: string
+        }[]
+      }
       list_my_tasks: {
         Args: never
         Returns: {
@@ -589,6 +629,24 @@ export type Database = {
           id: string
           nqf_level: number
           title: string
+        }[]
+      }
+      list_sessions: {
+        Args: never
+        Returns: {
+          audience: number
+          cancel_reason: string
+          cohort_id: string
+          cohort_name: string
+          duration_minutes: number
+          id: string
+          mode: string
+          starts_at: string
+          state: string
+          teams_url: string
+          title: string
+          venue: string
+          version: number
         }[]
       }
       list_tasks: {
@@ -773,6 +831,22 @@ export type Database = {
           p_title: string
         }
         Returns: {
+          status: string
+        }[]
+      }
+      update_session: {
+        Args: {
+          p_duration_minutes: number
+          p_expected_version: number
+          p_mode: string
+          p_session_id: string
+          p_starts_at: string
+          p_teams_url?: string
+          p_title: string
+          p_venue?: string
+        }
+        Returns: {
+          notified: number
           status: string
         }[]
       }
