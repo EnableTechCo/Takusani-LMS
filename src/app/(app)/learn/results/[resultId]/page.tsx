@@ -79,6 +79,7 @@ export default async function LearnResultPage({ params }: { params: Promise<{ re
     latestVersion: latestVersion ?? assessedVersion,
     firstViewedAt: result.first_viewed_at ?? null,
     appeals,
+    decidedOnAppeal: result.decided_on_appeal,
   };
 
   return (

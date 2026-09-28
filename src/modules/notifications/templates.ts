@@ -250,7 +250,54 @@ function appealReviewAllocated(payload: Payload): Rendered {
   };
 }
 
+const CATEGORY_WORDS: Record<string, string> = {
+  upheld: "Mark upheld",
+  amended_up: "Mark changed: higher",
+  amended_down: "Mark changed: lower",
+};
+
+const STAFF_CATEGORY_WORDS: Record<string, string> = {
+  upheld: "Upheld",
+  amended_up: "Amended upward",
+  amended_down: "Amended downward",
+};
+
+/** The learner's appeal has been decided (FR-611). The outcome and reasons are behind sign-in; the reviewer is not named. */
+function appealDecided(payload: Payload): Rendered {
+  const reference = text(payload, "reference");
+  const item = text(payload, "item_title");
+  return {
+    title: `Your appeal ${reference} has been decided`,
+    summary: `${CATEGORY_WORDS[text(payload, "category")]}. The decision is final.`,
+    paragraphs: [
+      `A reviewer who did not mark your work has decided your appeal ${reference} about ${item}.`,
+      `Sign in to see the outcome and the reviewer's reasons. This decision is final; there is no further appeal.`,
+    ],
+    action: "See the decision",
+  };
+}
+
+/** Staff: an appeal they assessed or coordinate has been decided (FR-611). */
+function appealConcluded(payload: Payload): Rendered {
+  const reference = text(payload, "reference");
+  const learner = text(payload, "learner_name");
+  const item = text(payload, "item_title");
+  const outcome = text(payload, "outcome") === "competent" ? "Competent" : "Not yet competent";
+  const category = STAFF_CATEGORY_WORDS[text(payload, "category")];
+  return {
+    title: `Appeal ${reference} decided: ${category.toLowerCase()}`,
+    summary: `${learner}, ${item} (${text(payload, "cohort_name")}): ${outcome}. Decided by ${text(payload, "reviewer_name")}.`,
+    paragraphs: [
+      `${text(payload, "reviewer_name")} has decided appeal ${reference}: ${learner}, ${item} (${text(payload, "cohort_name")}).`,
+      `The outcome is now ${outcome} (${category.toLowerCase()}). It is released to the learner and is final. The earlier decision stays on record.`,
+    ],
+    action: "Open the appeal",
+  };
+}
+
 const TEMPLATES: Record<string, Record<number, (payload: Payload) => Rendered>> = {
+  appeal_decided: { 1: appealDecided },
+  appeal_concluded: { 1: appealConcluded },
   appeal_admitted: { 1: appealAdmitted },
   appeal_inadmissible: { 1: appealInadmissible },
   appeal_review_allocated: { 1: appealReviewAllocated },

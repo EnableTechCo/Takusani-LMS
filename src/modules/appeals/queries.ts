@@ -66,3 +66,23 @@ export const viewMyMarkedWork = cache(async (appealId: string) => {
   if (error) throw new Error(`api.view_my_marked_work failed: ${error.message}`);
   return data?.[0] ?? null;
 });
+
+/** R-01: the appeals this person reviews now or has reviewed. */
+export async function listMyReviews() {
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("list_my_reviews");
+  if (error) throw new Error(`api.list_my_reviews failed: ${error.message}`);
+  return data;
+}
+
+/**
+ * R-02 for the allocated reviewer. Opening an allocated appeal moves it to "under review" once; cached for the
+ * request, because the page and its title both ask.
+ */
+export const openAppealReview = cache(async (appealId: string) => {
+  if (!isUuid(appealId)) return null;
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("open_appeal_review", { p_appeal_id: appealId });
+  if (error) throw new Error(`api.open_appeal_review failed: ${error.message}`);
+  return data?.[0] ?? null;
+});

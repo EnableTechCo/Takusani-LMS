@@ -29,6 +29,8 @@ const ICONS: Record<string, IconName> = {
   appeal_admitted: "scales",
   appeal_inadmissible: "scales",
   appeal_review_allocated: "scales",
+  appeal_decided: "scales",
+  appeal_concluded: "scales",
   session_scheduled: "video",
   session_changed: "video",
   session_cancelled: "video",

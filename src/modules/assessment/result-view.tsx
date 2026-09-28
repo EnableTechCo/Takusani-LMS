@@ -57,6 +57,8 @@ export interface ReleasedResult {
   firstViewedAt: string | null;
   /** The learner's appeals against this result, newest first. */
   appeals?: MyAppeal[];
+  /** The current decision came from an appeal: final (FR-613), and the reviewer is not named (UX Q7). */
+  decidedOnAppeal?: boolean;
 }
 
 export interface MyAppeal {
@@ -143,13 +145,29 @@ export function AppealLine({
   appealDeadlineAt,
   now,
   appeals = [],
+  decidedOnAppeal = false,
 }: {
   resultId: string;
   releasedAt: string;
   appealDeadlineAt: string;
   now: Date;
   appeals?: MyAppeal[];
+  decidedOnAppeal?: boolean;
 }) {
+  if (decidedOnAppeal) {
+    return (
+      <>
+        <p className="deadline-line deadline-line--closed">
+          <Icon name="scales" />
+          <span>
+            This result was decided on appeal by a reviewer who did not mark your work. The decision is final; there is
+            no further appeal.
+          </span>
+        </p>
+        <MyAppeals appeals={appeals} />
+      </>
+    );
+  }
   const window = appealWindow(appealDeadlineAt, now);
   const bothOpen = ["remark", "view_script"].every((type) =>
     appeals.some((appeal) => appeal.type === type && isOpen(appeal.state)),
@@ -261,11 +279,15 @@ export function MarksTable({
   itemTitle,
   marks,
   outcome,
+  byReviewer = false,
 }: {
   itemTitle: string;
   marks: Mark[];
   outcome: ReleasedResult["outcome"];
+  /** The marks are an appeal reviewer's, not the assessor's. */
+  byReviewer?: boolean;
 }) {
+  const who = byReviewer ? "reviewer" : "assessor";
   if (marks.length === 0) return null;
   const total = markTotal(marks);
   return (
@@ -274,7 +296,7 @@ export function MarksTable({
         Marks for each criterion
       </h2>
       <DataTable
-        caption={`Marks for each criterion of ${itemTitle}, with your assessor's comments`}
+        caption={`Marks for each criterion of ${itemTitle}, with the ${who}'s comments`}
         columns={[
           { key: "criterion", header: "Criterion", primary: true, cell: (mark) => mark.title },
           {
@@ -285,7 +307,7 @@ export function MarksTable({
           },
           {
             key: "comment",
-            header: "Assessor's comment",
+            header: byReviewer ? "Reviewer's comment" : "Assessor's comment",
             cell: (mark) => mark.comment ?? <span className="text-muted">No comment</span>,
           },
         ]}
@@ -303,7 +325,14 @@ export function MarksTable({
 }
 
 function Marks({ result }: { result: ReleasedResult }) {
-  return <MarksTable itemTitle={result.itemTitle} marks={result.marks} outcome={result.outcome} />;
+  return (
+    <MarksTable
+      byReviewer={result.decidedOnAppeal}
+      itemTitle={result.itemTitle}
+      marks={result.marks}
+      outcome={result.outcome}
+    />
+  );
 }
 
 /** "How you were told" (NFR-11): each channel in words, with its time. The email row is added with the notification centre (S2-11). */
@@ -330,7 +359,9 @@ function HowYouWereTold({ result }: { result: ReleasedResult }) {
         </ul>
       </details>
       <p className="text-small text-muted">
-        Your 7 days to appeal are counted from the day your result was released: {formatLongDayOf(result.releasedAt)}.
+        {result.decidedOnAppeal
+          ? `The appeal decision was released on ${formatLongDayOf(result.releasedAt)}.`
+          : `Your 7 days to appeal are counted from the day your result was released: ${formatLongDayOf(result.releasedAt)}.`}{" "}
         Times are South African time.
       </p>
     </>
@@ -406,6 +437,7 @@ export function ReleasedResultView({ result, now }: { result: ReleasedResult; no
             <AppealLine
               appealDeadlineAt={result.appealDeadlineAt}
               appeals={result.appeals}
+              decidedOnAppeal={result.decidedOnAppeal}
               now={now}
               releasedAt={result.releasedAt}
               resultId={result.resultId}
@@ -414,7 +446,11 @@ export function ReleasedResultView({ result, now }: { result: ReleasedResult; no
             <Marks result={result} />
             <section aria-labelledby="feedback-h" className="stack">
               <h2 className="text-subheading" id="feedback-h">
-                {result.assessorName ? `Feedback from your assessor, ${result.assessorName}` : "Feedback"}
+                {result.decidedOnAppeal
+                  ? "The reviewer's reasons"
+                  : result.assessorName
+                    ? `Feedback from your assessor, ${result.assessorName}`
+                    : "Feedback"}
               </h2>
               {result.feedback ? (
                 <Paragraphs text={result.feedback} />

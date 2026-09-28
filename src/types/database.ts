@@ -114,6 +114,22 @@ export type Database = {
           status: string
         }[]
       }
+      conclude_appeal: {
+        Args: {
+          p_appeal_id: string
+          p_command_id?: string
+          p_outcome: string
+          p_reasons: string
+          p_remediation?: string
+          p_resubmission_days?: number
+          p_scores: Json
+        }
+        Returns: {
+          decision_id: string
+          outcome_category: string
+          status: string
+        }[]
+      }
       create_account: {
         Args: {
           p_full_name: string
@@ -325,6 +341,7 @@ export type Database = {
           appealed_outcome: string
           assessor_name: string
           cohort_name: string
+          concluded_at: string
           deadline_at: string
           decisions: Json
           events: Json
@@ -334,11 +351,13 @@ export type Database = {
           learner_name: string
           learner_number: string
           lodged_at: string
+          outcome_category: string
           points_possible: number
           points_scored: number
           reference: string
           released_at: string
           result_id: string
+          review_opened_at: string
           reviewer_id: string
           reviewer_name: string
           reviewer_tier: number
@@ -474,6 +493,7 @@ export type Database = {
           assessed_version: Json
           assessor_name: string
           cohort_name: string
+          decided_on_appeal: boolean
           feedback: string
           first_viewed_at: string
           item_title: string
@@ -765,6 +785,7 @@ export type Database = {
         Returns: {
           appeal_deadline_at: string
           cohort_name: string
+          decided_on_appeal: boolean
           item_title: string
           outcome: string
           released_at: string
@@ -772,6 +793,21 @@ export type Database = {
           result_id: string
           state: string
           task_id: string
+        }[]
+      }
+      list_my_reviews: {
+        Args: never
+        Returns: {
+          allocated_at: string
+          cohort_name: string
+          concluded_at: string
+          id: string
+          item_title: string
+          learner_name: string
+          lodged_at: string
+          outcome_category: string
+          reference: string
+          state: string
         }[]
       }
       list_my_sessions: {
@@ -982,6 +1018,39 @@ export type Database = {
           oldest_queued_seconds: number
           pending: number
           queue_length: number
+        }[]
+      }
+      open_appeal_review: {
+        Args: { p_appeal_id: string }
+        Returns: {
+          allocated_at: string
+          appealed_at: string
+          appealed_feedback: string
+          appealed_outcome: string
+          appealed_remediation: string
+          assessed_version: Json
+          assessor_name: string
+          cohort_name: string
+          concluded_at: string
+          conclusion: Json
+          conflict: boolean
+          decisions: Json
+          files: Json
+          grounds: string
+          item_title: string
+          learner_name: string
+          learner_number: string
+          lodged_at: string
+          marks: Json
+          moderation_findings: Json
+          outcome_category: string
+          reference: string
+          remediation_deadline_at: string
+          result_changed: boolean
+          review_opened_at: string
+          state: string
+          status: string
+          turnaround_working_days: number
         }[]
       }
       open_my_notification: {

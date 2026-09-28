@@ -124,7 +124,13 @@ insert into expected_grants values
   ('function', 'api', 'allocate_appeal_reviewer(p_appeal_id uuid, p_reviewer_id uuid, p_skip_reason text)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'list_appeal_reviewer_candidates(p_appeal_id uuid)', 'authenticated', 'EXECUTE'),
   -- The marked work (20261014090000): the learner's own granted request, checked inside the function.
-  ('function', 'api', 'view_my_marked_work(p_appeal_id uuid)', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'view_my_marked_work(p_appeal_id uuid)', 'authenticated', 'EXECUTE'),
+  -- Appeal review (20261015090000): the allocated reviewer, checked inside each function. The storage rule needs the
+  -- signed-in role to run its check, as with the assessors' evidence rule.
+  ('function', 'api', 'list_my_reviews()', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'open_appeal_review(p_appeal_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'conclude_appeal(p_appeal_id uuid, p_outcome text, p_scores jsonb, p_reasons text, p_remediation text, p_resubmission_days integer, p_command_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'appeals', 'may_read_review_evidence(p_profile_id uuid, p_bucket text, p_object_key text)', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (
