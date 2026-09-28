@@ -860,6 +860,10 @@ th[aria-sort="descending"] .table__sort::after { content: "\2193"; color: var(--
 @media (min-width: 48rem) { .log__item { grid-template-columns: 10rem minmax(0, 1fr); } .log__time { padding-top: 0.15em; } }
 .log--boxed { padding: 0 var(--space-4); background: var(--color-surface); border: var(--border); border-radius: var(--radius-md); }
 
+/* A plain disclosure: a short form or detail tucked under a summary line (for example assigning a readiness item). */
+.disclosure > summary { display: inline-flex; align-items: center; min-height: 2.75rem; font-size: var(--text-sm); font-weight: var(--weight-semibold); color: var(--color-text-strong); text-decoration: underline; text-underline-offset: 0.2em; cursor: pointer; }
+.disclosure[open] > summary { margin-bottom: var(--space-3); }
+
 /* Delivery evidence ("How you were told", NFR-11): a <details> disclosure listing each channel, its state in words
    and its time. Used on notification rows, the released result and the coordinator's appeal detail. */
 .delivery-evidence { border: var(--border); border-radius: var(--radius-md); background: var(--color-surface); font-size: var(--text-sm); }

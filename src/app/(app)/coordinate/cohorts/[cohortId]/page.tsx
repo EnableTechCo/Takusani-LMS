@@ -5,6 +5,8 @@ import { Block, Blocks } from "@/components/skeleton/skeleton";
 import { formatDay } from "@/lib/dates";
 import { getCohort } from "@/modules/programmes/queries";
 import { MODERATION_POLICY_LABELS } from "@/modules/programmes/rules";
+import { COHORT_STATUS_LABELS } from "@/modules/programmes/setup-rules";
+import { TextLink } from "@/components/ui/link";
 
 export async function generateMetadata({ params }: { params: Promise<{ cohortId: string }> }) {
   const cohort = await getCohort((await params).cohortId);
@@ -39,13 +41,23 @@ export default async function CohortOverviewPage({ params }: { params: Promise<{
           <div className="card">
             <div className="card__body">
               <dt className="text-small text-muted">Moderation</dt>
-              <dd>{MODERATION_POLICY_LABELS[cohort.moderation_policy]}</dd>
+              <dd>
+                {cohort.moderation_policy ? MODERATION_POLICY_LABELS[cohort.moderation_policy] : "Not chosen yet"}
+              </dd>
             </div>
           </div>
           <div className="card">
             <div className="card__body">
               <dt className="text-small text-muted">Status</dt>
-              <dd>{cohort.status === "active" ? "Active" : "Archived"}</dd>
+              <dd>
+                {COHORT_STATUS_LABELS[cohort.status] ?? cohort.status}
+                {cohort.status === "setup" ? (
+                  <>
+                    {" "}
+                    <TextLink href={`/coordinate/cohorts/${cohort.id}/setup`}>Continue setup</TextLink>
+                  </>
+                ) : null}
+              </dd>
             </div>
           </div>
         </dl>

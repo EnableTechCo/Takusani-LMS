@@ -15,6 +15,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      activate_cohort: {
+        Args: { p_cohort_id: string }
+        Returns: {
+          learners: number
+          missing: string[]
+          status: string
+        }[]
+      }
       allocate_appeal_reviewer: {
         Args: {
           p_appeal_id: string
@@ -28,6 +36,32 @@ export type Database = {
       }
       archive_material: {
         Args: { p_material_id: string }
+        Returns: {
+          status: string
+        }[]
+      }
+      assign_cohort_role: {
+        Args: {
+          p_cohort_id: string
+          p_email: string
+          p_role: string
+          p_until?: string
+        }
+        Returns: {
+          advisories: Json
+          assignment_id: string
+          profile_id: string
+          status: string
+        }[]
+      }
+      assign_readiness_item: {
+        Args: {
+          p_assignee_id: string
+          p_cohort_id: string
+          p_due_on?: string
+          p_item_key: string
+          p_note?: string
+        }
         Returns: {
           status: string
         }[]
@@ -177,6 +211,12 @@ export type Database = {
         Returns: {
           decision_id: string
           outcome_category: string
+          status: string
+        }[]
+      }
+      confirm_cohort_logistics: {
+        Args: { p_cohort_id: string; p_confirmed: boolean }
+        Returns: {
           status: string
         }[]
       }
@@ -470,6 +510,39 @@ export type Database = {
           state: string
           turnaround_working_days: number
           type: string
+        }[]
+      }
+      get_cohort_readiness: {
+        Args: { p_cohort_id: string }
+        Returns: {
+          assignee_id: string
+          assignee_name: string
+          confirmed_at: string
+          confirmed_by_name: string
+          detail: string
+          done: boolean
+          due_on: string
+          gate: boolean
+          item_key: string
+          note: string
+        }[]
+      }
+      get_cohort_setup: {
+        Args: { p_cohort_id: string }
+        Returns: {
+          activated_at: string
+          activated_by_name: string
+          cohort_id: string
+          ends_on: string
+          held: number
+          learners: number
+          moderation_policy: string
+          name: string
+          policy_version: number
+          programme_title: string
+          starts_on: string
+          status: string
+          waiting: number
         }[]
       }
       get_configuration_key: {
@@ -860,6 +933,19 @@ export type Database = {
           title: string
         }[]
       }
+      list_cohort_staff: {
+        Args: { p_cohort_id: string }
+        Returns: {
+          assignment_id: string
+          email: string
+          ends_at: string
+          full_name: string
+          profile_id: string
+          role: string
+          scope_type: string
+          starts_at: string
+        }[]
+      }
       list_cohorts: {
         Args: never
         Returns: {
@@ -963,6 +1049,20 @@ export type Database = {
           state: string
           title: string
           updated_at: string
+        }[]
+      }
+      list_moderation_policy_history: {
+        Args: { p_cohort_id: string }
+        Returns: {
+          at: string
+          by_name: string
+          held: number
+          kind: string
+          policy: string
+          previous_policy: string
+          reason: string
+          version: number
+          waiting: number
         }[]
       }
       list_my_appeals: {
@@ -1526,6 +1626,20 @@ export type Database = {
           skipped_recent: number
           skipped_submitted: number
           status: string
+        }[]
+      }
+      set_moderation_policy: {
+        Args: {
+          p_cohort_id: string
+          p_expected_version: number
+          p_policy: string
+          p_reason?: string
+        }
+        Returns: {
+          held: number
+          policy_version: number
+          status: string
+          waiting: number
         }[]
       }
       set_recording_captions: {

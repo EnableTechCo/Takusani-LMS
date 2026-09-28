@@ -131,6 +131,21 @@ async function main() {
   }
   console.log(`${LEARNER}: ${enrolled.status === "ok" ? "enrolled" : "already enrolled"}`);
 
+  // A new cohort starts in setup (S4-03): choose its policy (not moderated, as at go-live) and activate it, so the
+  // learner sees it. Both steps are skipped when already done.
+  const policy = await call(coordinator, "set_moderation_policy", {
+    p_cohort_id: cohort.id,
+    p_policy: "not_moderated",
+    p_expected_version: 0,
+  });
+  if (!["ok", "stale", "unchanged"].includes(policy.status))
+    throw new Error(`set_moderation_policy refused: ${policy.status}`);
+  const activated = await call(coordinator, "activate_cohort", { p_cohort_id: cohort.id });
+  if (!["ok", "not_in_setup"].includes(activated.status)) {
+    throw new Error(`activate_cohort refused: ${activated.status} (${(activated.missing ?? []).join(", ")})`);
+  }
+  console.log(`cohort "${COHORT.name}": ${activated.status === "ok" ? "activated" : "already active"}`);
+
   let task = (await rows(facilitator, "list_tasks", { p_cohort_id: cohort.id })).find((t) => t.title === TASK.title);
   if (task?.state === "published") {
     console.log(`task "${TASK.title}" already published`);

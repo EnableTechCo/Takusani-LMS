@@ -53,7 +53,7 @@ export async function createCohort(_: FormState, form: FormData): Promise<FormSt
   const status = error ? "error" : (data?.[0]?.status ?? "error");
   if (status !== "ok") return refused(status, values);
 
-  redirect(`/coordinate/cohorts/${data![0].cohort_id}`);
+  redirect(`/coordinate/cohorts/${data![0].cohort_id}/setup`);
 }
 
 export async function enrolLearner(cohortId: string, _: FormState, form: FormData): Promise<FormState> {
