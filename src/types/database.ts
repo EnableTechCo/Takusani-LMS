@@ -32,6 +32,20 @@ export type Database = {
           status: string
         }[]
       }
+      assign_role: {
+        Args: {
+          p_profile_id: string
+          p_role: string
+          p_scope_key?: string
+          p_scope_type: string
+          p_until?: string
+        }
+        Returns: {
+          advisories: Json
+          assignment_id: string
+          status: string
+        }[]
+      }
       attach_material_file: {
         Args: { p_file_id: string; p_material_id: string }
         Returns: {
@@ -282,6 +296,13 @@ export type Database = {
           status: string
         }[]
       }
+      end_role: {
+        Args: { p_assignment_id: string }
+        Returns: {
+          allocations: Json
+          status: string
+        }[]
+      }
       enrol_learner: {
         Args: { p_cohort_id: string; p_email: string }
         Returns: {
@@ -307,6 +328,17 @@ export type Database = {
           bytes: number
           file_id: string
           media_type: string
+          status: string
+        }[]
+      }
+      get_account: {
+        Args: { p_profile_id: string }
+        Returns: {
+          email: string
+          full_name: string
+          learner_number: string
+          locked_until: string
+          profile_id: string
           status: string
         }[]
       }
@@ -576,6 +608,41 @@ export type Database = {
         }[]
       }
       health_check: { Args: never; Returns: boolean }
+      list_account_history: {
+        Args: { p_profile_id: string }
+        Returns: {
+          action: string
+          actor_name: string
+          after: Json
+          before: Json
+          details: Json
+          id: number
+          occurred_at: string
+        }[]
+      }
+      list_account_open_allocations: {
+        Args: { p_profile_id: string }
+        Returns: {
+          cohort_name: string
+          items: number
+          kind: string
+          oldest_at: string
+        }[]
+      }
+      list_account_role_assignments: {
+        Args: { p_profile_id: string }
+        Returns: {
+          assigned_by_name: string
+          dependent_items: number
+          effective_from: string
+          effective_until: string
+          id: string
+          in_force: boolean
+          role: string
+          scope_label: string
+          scope_type: string
+        }[]
+      }
       list_accounts: {
         Args: never
         Returns: {
@@ -901,6 +968,14 @@ export type Database = {
           id: string
           nqf_level: number
           title: string
+        }[]
+      }
+      list_role_scopes: {
+        Args: never
+        Returns: {
+          label: string
+          scope_key: string
+          scope_type: string
         }[]
       }
       list_sessions: {

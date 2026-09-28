@@ -4,6 +4,12 @@ import { z } from "zod";
 export const ACTION_LABELS: Record<string, string> = {
   "identity.account_created": "Account created",
   "identity.role_assigned": "Role assigned",
+  "identity.role_ended": "Role ended",
+  "identity.role_end_refused": "Role end refused",
+  "identity.sign_in_locked": "Sign-in locked",
+  "identity.sign_in_lock_expired": "Sign-in lock expired",
+  "identity.sign_in_lock_cleared": "Sign-in lock cleared by reset",
+  "identity.sign_in_unlocked": "Sign-in unlocked",
   "programmes.programme_created": "Programme created",
   "programmes.qualification_created": "Qualification created",
   "programmes.unit_created": "Unit created",

@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ButtonLink } from "@/components/ui/link";
+import { ButtonLink, TextLink } from "@/components/ui/link";
 import { Banner, Tag } from "@/components/ui/status";
 import { DataTable } from "@/components/ui/table";
 import { PageHeader } from "@/components/shell/page-header";
@@ -69,7 +69,14 @@ export default async function AccountsPage({
         <DataTable
           caption="Accounts, by name. Times in SAST."
           columns={[
-            { key: "name", header: "Name", primary: true, cell: (account) => account.full_name },
+            {
+              key: "name",
+              header: "Name",
+              primary: true,
+              cell: (account) => (
+                <TextLink href={`/admin/accounts/${account.profile_id}/roles`}>{account.full_name}</TextLink>
+              ),
+            },
             { key: "email", header: "Email", cell: (account) => account.email },
             { key: "roles", header: "Roles", cell: (account) => roleLabels(account.roles).join(", ") || "None" },
             {
