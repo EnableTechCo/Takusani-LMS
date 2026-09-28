@@ -4,7 +4,7 @@
 create extension if not exists pgtap with schema extensions;
 
 begin;
-select plan(28);
+select plan(31);
 
 create function pg_temp.act_as(p_user uuid) returns void language sql as $$
   select set_config('role', 'authenticated', true),
@@ -92,7 +92,7 @@ select pg_temp.act_as(:'assessor');
 select 1 from api.finalise_decision(:'nyc', 1);
 reset role;
 select pg_temp.decision_of(:'nyc') as nyc_decision \gset
-select r.id as result, r.released_at as first_release from assessment.results r
+select r.id as result, r.released_at as first_release, r.release_seq as first_seq from assessment.results r
 join assessment.assessment_instances i on i.result_id = r.id where i.id = :'nyc' \gset
 
 select results_eq(format($$ select decision_id, released_at from assessment.decision_releases where result_id = %L $$, :'result'),
@@ -110,7 +110,8 @@ select ok((select decided_at is not null and item_title is not null and learner_
            from api.list_my_release_status() where decision_id = :'nyc_decision'),
   'with the date it was decided, the item and the learner');
 
--- A resubmission, released at once: its own release, while the first decision keeps the release it had
+-- A resubmission, released at once: its own release, while the first decision keeps the release it had. The result's
+-- release facts move to the resubmission (the release guard, since S2-08); only decision_releases keeps the first.
 reset role;
 select pg_temp.ready_item('competent') as resub \gset
 select pg_temp.act_as(:'assessor');
@@ -119,8 +120,12 @@ reset role;
 select pg_temp.decision_of(:'resub') as resub_decision \gset
 select results_eq(format($$ select count(*)::int from assessment.decision_releases where result_id = %L $$, :'result'),
   $$ values (2) $$, 'the resubmission''s decision has a release of its own');
-select is((select released_at from assessment.results where id = :'result'), :'first_release'::timestamptz,
-  'the result''s first release is unchanged: it is written once');
+select results_eq(
+  format($$ select r.release_seq > %L::bigint, r.released_at = dr.released_at from assessment.results r
+            join assessment.decision_releases dr on dr.decision_id = r.current_decision_id where r.id = %L $$,
+    :'first_seq', :'result'),
+  $$ values (true, true) $$,
+  'the result''s release facts are now the resubmission''s: a new release number, released when it was recorded');
 
 select pg_temp.act_as(:'assessor');
 select results_eq(
@@ -129,6 +134,21 @@ select results_eq(
   format($$ values (%L::uuid, 'replaced'::text, true, 'assessment'::text), (%L::uuid, 'released'::text, true, null::text) $$,
     :'nyc_decision', :'resub_decision'),
   'the first decision reads as replaced by a later assessment, and was released; the resubmission reads as released');
+
+-- The learner reads the resubmission's release, with its own seven-day window (FR-601; product owner, 28 Sep 2026)
+reset role;
+select dr.released_at as resub_release, assessment.appeal_deadline(dr.released_at) as resub_deadline
+from assessment.decision_releases dr where dr.decision_id = :'resub_decision' \gset
+select pg_temp.act_as(:'learner');
+select results_eq(
+  format($$ select outcome, released_at, appeal_deadline_at, remediation_deadline_at from api.get_my_result(%L) $$, :'result'),
+  format($$ values ('competent'::text, %L::timestamptz, %L::timestamptz, null::timestamptz) $$,
+    :'resub_release', :'resub_deadline'),
+  'the learner''s result shows the resubmission''s own release and a window counted from it, with no resubmission deadline left');
+select results_eq(
+  format($$ select released_at, appeal_deadline_at from api.list_my_results() where result_id = %L $$, :'result'),
+  format($$ values (%L::timestamptz, %L::timestamptz) $$, :'resub_release', :'resub_deadline'),
+  'and so does the list of their results');
 
 -- Moderated: held, waiting for a cycle; claimed by one; then released
 reset role;
@@ -213,7 +233,7 @@ select results_eq(
   $$ values ('replaced'::text, 'appeal'::text, true) $$,
   'the assessor''s decision reads as replaced on appeal, and as having been released');
 
--- The backfill's derivation agrees with what the trigger recorded, including a decision made before release
+-- A decision made well before its release (moderated: decided, then released at sign-off)
 reset role;
 select pg_temp.other_learner('00000000-0000-4000-8000-0000000000d2', 'pgTAP Backdated Learner') as backdated \gset
 select result_id as backdated_result from assessment.assessment_instances where id = :'backdated' \gset
@@ -224,12 +244,12 @@ returning id as backdated_decision \gset
 update assessment.assessment_instances set state = 'decided' where id = :'backdated';
 update assessment.results set current_decision_id = :'backdated_decision' where id = :'backdated_result';
 update assessment.results set state = 'released' where id = :'backdated_result';
-select results_eq(
-  format($$ select decision_id, result_id, released_at from assessment.derived_decision_releases()
-            where result_id in (%L, %L, %L) order by decision_id $$, :'result', :'held_result', :'backdated_result'),
-  format($$ select decision_id, result_id, released_at from assessment.decision_releases
-            where result_id in (%L, %L, %L) order by decision_id $$, :'result', :'held_result', :'backdated_result'),
-  'the history implies exactly the releases the trigger recorded, so the backfill is the same record');
+select ok(
+  not exists (select 1 from assessment.results r
+              join assessment.decision_releases dr on dr.decision_id = r.current_decision_id
+              where r.state = 'released' and dr.released_at <> r.released_at),
+  'a released result''s release time is always its current decision''s recorded release');
+select hasnt_function('assessment', 'derived_decision_releases', 'the S4-11 backfill derivation, which assumed the result kept its first release, is gone');
 select ok(
   not exists (select 1 from assessment.results r where r.state = 'released'
               and not exists (select 1 from assessment.decision_releases dr where dr.decision_id = r.current_decision_id)),
