@@ -27,7 +27,7 @@ values (:'local_coordinator', 'coordinator', 'programme', :'programme');
 
 select ok(pg_extension.extname = 'pg_cron', 'the scheduler is installed') from pg_extension where extname = 'pg_cron';
 select results_eq($$ select schedule, command from cron.job where jobname = 'release-scheduled-notices' $$,
-  $$ values ('* * * * *'::text, 'select notifications.release_due_notices()'::text) $$,
+  $$ values ('* * * * *'::text, 'select audit.run_job(''release-scheduled-notices'')'::text) $$,
   'scheduled notices are released by a database job every minute');
 
 -- Who may send

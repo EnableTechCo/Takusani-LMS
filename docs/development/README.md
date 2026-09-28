@@ -199,10 +199,34 @@ failed.
 `update notifications.settings set email_enabled = true;` (a `db reset` switches it off again). Emails appear in the
 local mail catcher at http://127.0.0.1:54324.
 
+## Scheduled database jobs
+
+Work that needs only the database runs on Supabase Cron (pg_cron), not Vercel, so it keeps running when Vercel is
+unreachable and on any plan (`supabase/migrations/20261021090000_scheduled_jobs.sql`, ADR-025).
+
+- Every job is a row in `audit.scheduled_jobs` with a handler function. pg_cron calls `audit.run_job(name)`, which runs
+  the handler and records a heartbeat in `audit.scheduled_runs`: when it ran, how much it did, and any error. A
+  failure is caught and recorded, and the handler's work is undone.
+- A one-shot job acts on one domain object through `audit.run_once(name, object key)` and succeeds at most once per
+  object; uniqueness is by the object, never by clock time. A failed attempt is recorded and tried again next time.
+  Each scheduled notice is released this way, so one failure holds back no other.
+- The jobs: `release-scheduled-notices` (every minute), `expire-upload-intents` (every 10 minutes) and
+  `purge-job-history` (daily, 00:20 UTC).
+- **Adding a job:** in a migration, write a `security definer` handler (`() returns integer` for a recurring job,
+  `(text) returns integer` for a one-shot job), insert its catalogue row with a schedule and heartbeat, and schedule it
+  with `cron.schedule(name, schedule, format('select audit.run_job(%L)', name))`. Test 0033 checks that the catalogue
+  and pg_cron agree.
+- Removing Storage objects of expired or discarded uploads needs the Storage API, so it cannot be a database job; it is
+  still to be built as a Vercel job.
+
 ## Health checks
 
 - `GET /api/health/live`: the process is running.
 - `GET /api/health/ready`: configuration is present and the database answers `api.health_check()` within two seconds; otherwise 503 with `dependency_unavailable`.
+- `GET /api/health/jobs`: every scheduled database job, its last success and failures in the last day. 503 when a job
+  missed its heartbeat (no success within its window, or missing from pg_cron), naming it. Point the uptime monitor
+  at it (needs `SUPABASE_SECRET_KEY` in Vercel); a missed heartbeat is the only sign a pg_cron job has stopped.
+- `GET /api/health/outbox`: see [Notifications](#notifications).
 
 ## Required checks
 
