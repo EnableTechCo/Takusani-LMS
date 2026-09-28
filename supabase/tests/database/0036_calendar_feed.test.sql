@@ -43,8 +43,10 @@ reset role;
 
 select is((select count(*)::int from learning.calendar_feed_tokens where token_hash = extensions.digest(:'first_token', 'sha256')), 1,
   'only the hash is stored');
-select is((select count(*)::int from learning.calendar_feed_tokens t
-           where convert_from(t.token_hash, 'LATIN1') like '%' || :'first_token' || '%'), 0, 'never the token itself');
+-- Every column of every token row, as text (bytea as hex): the token itself appears in none of them. (Converting the
+-- random hash to text instead failed whenever a hash happened to contain a zero byte.)
+select is((select count(*)::int from learning.calendar_feed_tokens t where to_jsonb(t)::text like '%' || :'first_token' || '%'),
+  0, 'never the token itself');
 
 -- ---------------------------------------------------------------------------------------------------------------
 -- The feed: schedule fields only
