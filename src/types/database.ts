@@ -241,6 +241,19 @@ export type Database = {
           status: string
         }[]
       }
+      create_note: {
+        Args: {
+          p_body?: string
+          p_folder?: string
+          p_material_id?: string
+          p_session_id?: string
+          p_title: string
+        }
+        Returns: {
+          note_id: string
+          status: string
+        }[]
+      }
       create_notice: {
         Args: {
           p_audience: string
@@ -335,6 +348,12 @@ export type Database = {
       }
       decide_appeal_admissibility: {
         Args: { p_admit: boolean; p_appeal_id: string; p_reason?: string }
+        Returns: {
+          status: string
+        }[]
+      }
+      delete_note: {
+        Args: { p_note_id: string }
         Returns: {
           status: string
         }[]
@@ -601,6 +620,22 @@ export type Database = {
           module_title: string
           release_at: string
           title: string
+        }[]
+      }
+      get_my_note: {
+        Args: { p_note_id: string }
+        Returns: {
+          body: string
+          created_at: string
+          folder: string
+          id: string
+          link_available: boolean
+          link_title: string
+          material_id: string
+          session_id: string
+          title: string
+          updated_at: string
+          version: number
         }[]
       }
       get_my_result: {
@@ -973,6 +1008,26 @@ export type Database = {
           title: string
         }[]
       }
+      list_my_note_folders: {
+        Args: never
+        Returns: {
+          folder: string
+          notes: number
+        }[]
+      }
+      list_my_notes: {
+        Args: { p_folder?: string; p_search?: string }
+        Returns: {
+          excerpt: string
+          folder: string
+          id: string
+          link_id: string
+          link_kind: string
+          link_title: string
+          title: string
+          updated_at: string
+        }[]
+      }
       list_my_notifications: {
         Args: { p_category?: string; p_page?: number; p_page_size?: number }
         Returns: {
@@ -1061,6 +1116,15 @@ export type Database = {
           original_filename: string
           requirement_id: string
           scan_state: string
+        }[]
+      }
+      list_note_link_targets: {
+        Args: never
+        Returns: {
+          at: string
+          id: string
+          kind: string
+          title: string
         }[]
       }
       list_notice_deliveries: {
@@ -1567,6 +1631,21 @@ export type Database = {
         }
         Returns: {
           status: string
+        }[]
+      }
+      update_note: {
+        Args: {
+          p_body: string
+          p_expected_version: number
+          p_folder?: string
+          p_material_id?: string
+          p_note_id: string
+          p_session_id?: string
+          p_title: string
+        }
+        Returns: {
+          status: string
+          version: number
         }[]
       }
       update_session: {

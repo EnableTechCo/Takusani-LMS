@@ -81,9 +81,10 @@ export default async function LearnMaterialPage({ params }: { params: Promise<{ 
           </p>
         ) : null}
 
-        <p>
+        <div className="cluster cluster--between">
           <TextLink href="/learn/materials">All materials</TextLink>
-        </p>
+          <TextLink href={`/learn/notes/new?about=material:${material.id}`}>Write a note about this</TextLink>
+        </div>
       </div>
     </div>
   );
