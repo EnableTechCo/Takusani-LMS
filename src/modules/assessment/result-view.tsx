@@ -67,7 +67,7 @@ export interface MyAppeal {
 }
 
 /** Text as the assessor wrote it: a blank line starts a paragraph, a single line break is kept. */
-function Paragraphs({ text, className }: { text: string; className?: string }) {
+export function Paragraphs({ text, className }: { text: string; className?: string }) {
   return (
     <div className={cx("prose", className)}>
       {text
@@ -256,17 +256,25 @@ function NextSteps({ result, now }: { result: ReleasedResult; now: Date }) {
   );
 }
 
-function Marks({ result }: { result: ReleasedResult }) {
-  if (result.marks.length === 0) return null;
-  const total = markTotal(result.marks);
-  const outcome = OUTCOME_LABELS[result.outcome];
+/** The marks for each criterion, with comments, and the outcome in words. Shared with the marked-work view (L-18). */
+export function MarksTable({
+  itemTitle,
+  marks,
+  outcome,
+}: {
+  itemTitle: string;
+  marks: Mark[];
+  outcome: ReleasedResult["outcome"];
+}) {
+  if (marks.length === 0) return null;
+  const total = markTotal(marks);
   return (
     <section aria-labelledby="marks-h" className="stack">
       <h2 className="text-subheading" id="marks-h">
         Marks for each criterion
       </h2>
       <DataTable
-        caption={`Marks for each criterion of ${result.itemTitle}, with your assessor's comments`}
+        caption={`Marks for each criterion of ${itemTitle}, with your assessor's comments`}
         columns={[
           { key: "criterion", header: "Criterion", primary: true, cell: (mark) => mark.title },
           {
@@ -282,16 +290,20 @@ function Marks({ result }: { result: ReleasedResult }) {
           },
         ]}
         rowKey={(mark) => String(mark.ordinal)}
-        rows={result.marks}
+        rows={marks}
       />
       {/* Marks never appear without the outcome in words (P0-07). */}
       <p>
         <strong>
-          {total ? `Total: ${total.scored} of ${total.possible}. ` : null}Outcome: {outcome}.
+          {total ? `Total: ${total.scored} of ${total.possible}. ` : null}Outcome: {OUTCOME_LABELS[outcome]}.
         </strong>
       </p>
     </section>
   );
+}
+
+function Marks({ result }: { result: ReleasedResult }) {
+  return <MarksTable itemTitle={result.itemTitle} marks={result.marks} outcome={result.outcome} />;
 }
 
 /** "How you were told" (NFR-11): each channel in words, with its time. The email row is added with the notification centre (S2-11). */

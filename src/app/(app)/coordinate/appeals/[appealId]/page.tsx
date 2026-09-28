@@ -63,6 +63,8 @@ function eventWords(entry: AppealEvent, type: AppealType, learnerName: string): 
       return `allocated ${entry.reviewer_name} as reviewer (tier ${entry.tier}).`;
     case "reallocated":
       return `reallocated the review to ${entry.reviewer_name} (tier ${entry.tier}).`;
+    case "script_viewed":
+      return "opened the marked work.";
     case "allocation_refused":
       return `tried to allocate ${entry.reviewer_name} as reviewer. Refused: they took an assessment decision on this work.`;
     default:
@@ -88,6 +90,7 @@ export default async function CoordinateAppealPage({
   const points = pointsText(appeal.points_scored ?? null, appeal.points_possible ?? null);
   const events = (appeal.events ?? []) as unknown as AppealEvent[];
   const decisions = (appeal.decisions ?? []) as unknown as DecisionRow[];
+  const views = events.filter((entry) => entry.event === "script_viewed");
   const needsReviewer = type === "remark" && ["admitted", "allocated", "under_review"].includes(state);
   const candidates = needsReviewer ? ((await listAppealReviewerCandidates(appeal.id)) as unknown as Candidate[]) : [];
   const firstName = appeal.learner_name.split(" ")[0];
@@ -257,7 +260,12 @@ export default async function CoordinateAppealPage({
             <Banner role="status" title="The view of the marked work was granted" tone="info">
               <p>
                 Granted {appeal.admissibility_decided_at ? formatDateTime(appeal.admissibility_decided_at) : ""} SAST by{" "}
-                {appeal.admissibility_decided_by_name}. {appeal.learner_name} was told.
+                {appeal.admissibility_decided_by_name}. {appeal.learner_name} was told.{" "}
+                {views.length === 0
+                  ? "They have not opened it yet."
+                  : `They first opened it ${formatDateTime(views[0].at)} SAST, and have opened it ${
+                      views.length === 1 ? "once" : `${views.length} times`
+                    }.`}
               </p>
             </Banner>
           ) : null}

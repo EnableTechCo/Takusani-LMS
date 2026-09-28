@@ -1148,6 +1148,29 @@ export type Database = {
           task_id: string
         }[]
       }
+      view_my_marked_work: {
+        Args: { p_appeal_id: string }
+        Returns: {
+          appeal_deadline_at: string
+          assessed_version: Json
+          assessor_name: string
+          cohort_name: string
+          decision_final: boolean
+          feedback: string
+          files: Json
+          first_viewed_at: string
+          item_title: string
+          marks: Json
+          outcome: string
+          reference: string
+          remark_appeal_id: string
+          remark_reference: string
+          remark_standing: string
+          result_id: string
+          status: string
+          views: number
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

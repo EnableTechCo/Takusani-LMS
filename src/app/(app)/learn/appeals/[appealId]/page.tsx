@@ -74,6 +74,21 @@ export default async function LearnAppealPage({
           </Banner>
         ) : null}
 
+        {type === "view_script" && state === "admitted" ? (
+          <Banner
+            actions={
+              <ButtonLink href={`/learn/appeals/${appeal.id}/script`} variant="primary">
+                See your marked work
+              </ButtonLink>
+            }
+            role="status"
+            title="You can now see your marked work"
+            tone="positive"
+          >
+            <p>Your work is shown next to the marks for each criterion and your assessor&apos;s feedback.</p>
+          </Banner>
+        ) : null}
+
         <Receipt
           note={
             <>
