@@ -3,13 +3,14 @@ import { renderNotification } from "./templates";
 
 /** The notification centre's rules (S2-11, G-05): filters, day groups, and the delivery evidence in words (NFR-11). */
 
-export const CATEGORIES = ["all", "results", "deadlines"] as const;
+export const CATEGORIES = ["all", "results", "deadlines", "sessions"] as const;
 export type Category = (typeof CATEGORIES)[number];
 
 export const CATEGORY_LABELS: Record<Category, string> = {
   all: "All",
   results: "Results",
   deadlines: "Deadlines",
+  sessions: "Sessions",
 };
 
 export function parseCategory(value: string | undefined): Category {

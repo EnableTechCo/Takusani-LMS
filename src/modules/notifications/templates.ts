@@ -57,9 +57,66 @@ function taskPublished(payload: Payload): Rendered {
   };
 }
 
+/** "2 hours", "1 hour 30 minutes", "45 minutes". */
+export function durationText(minutes: number): string {
+  const hours = Math.floor(minutes / 60);
+  const rest = minutes % 60;
+  const h = hours === 0 ? "" : hours === 1 ? "1 hour" : `${hours} hours`;
+  const m = rest === 0 ? "" : rest === 1 ? "1 minute" : `${rest} minutes`;
+  return [h, m].filter(Boolean).join(" ");
+}
+
+/** When and where, in one line: "Tuesday 29 September 2026 at 09:00 (SAST), 2 hours, online in Teams". */
+function sessionWhen(payload: Payload): string {
+  const startsAt = text(payload, "starts_at");
+  const minutes = Number(payload.duration_minutes);
+  const place = payload.mode === "online" ? "online in Teams" : `at ${text(payload, "venue")}`;
+  return `${formatLongDayOf(startsAt)} at ${formatTime(startsAt)} (SAST), ${durationText(minutes)}, ${place}`;
+}
+
+function sessionScheduled(payload: Payload): Rendered {
+  const title = text(payload, "title");
+  const when = sessionWhen(payload);
+  return {
+    title: `New session: ${title}`,
+    summary: `${when}.`,
+    paragraphs: [`A session has been scheduled for ${text(payload, "cohort_name")}: ${title}.`, `It is on ${when}.`],
+    action: "Open your calendar",
+  };
+}
+
+function sessionChanged(payload: Payload): Rendered {
+  const title = text(payload, "title");
+  const when = sessionWhen(payload);
+  return {
+    title: `Session changed: ${title}`,
+    summary: `Now ${when}.`,
+    paragraphs: [`The time or place of ${title} has changed.`, `It is now on ${when}.`],
+    action: "Open your calendar",
+  };
+}
+
+function sessionCancelled(payload: Payload): Rendered {
+  const title = text(payload, "title");
+  const startsAt = text(payload, "starts_at");
+  const reason = text(payload, "cancel_reason");
+  return {
+    title: `Session cancelled: ${title}`,
+    summary: `It was on ${formatLongDayOf(startsAt)} at ${formatTime(startsAt)} (SAST). ${reason}`,
+    paragraphs: [
+      `${title}, on ${formatLongDayOf(startsAt)} at ${formatTime(startsAt)} (SAST), has been cancelled.`,
+      `The reason given: ${reason}`,
+    ],
+    action: "Open your calendar",
+  };
+}
+
 const TEMPLATES: Record<string, Record<number, (payload: Payload) => Rendered>> = {
   result_released: { 1: resultReleased },
   task_published: { 1: taskPublished },
+  session_scheduled: { 1: sessionScheduled },
+  session_changed: { 1: sessionChanged },
+  session_cancelled: { 1: sessionCancelled },
 };
 
 export function renderNotification(eventType: string, templateVersion: number, payload: Payload): Rendered {

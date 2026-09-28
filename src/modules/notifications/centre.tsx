@@ -22,6 +22,9 @@ export interface NotificationRow {
 const ICONS: Record<string, IconName> = {
   result_released: "check-circle",
   task_published: "clipboard",
+  session_scheduled: "video",
+  session_changed: "video",
+  session_cancelled: "video",
 };
 
 function Evidence({ row, title }: { row: NotificationRow; title: string }) {
