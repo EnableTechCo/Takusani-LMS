@@ -59,13 +59,37 @@ function isRefusal(error: Error): boolean {
   return status >= 400 && status < 500 && status !== 409 && status !== 423;
 }
 
+/** What the widget says. The defaults are a learner handing in work; material uploads say it their own way. */
+export interface UploadCopy {
+  slotTitle: string;
+  help: string;
+  ready: (count: number) => string;
+}
+
+const TASK_COPY: UploadCopy = {
+  slotTitle: "Add your work",
+  help: "PDF, Word, Excel, JPG or PNG. Up to 25 MB each.",
+  ready: (count) => `${count} ${count === 1 ? "file" : "files"} ready to hand in.`,
+};
+
 export function UploadWidget({
-  taskId,
+  contextId,
+  contextType = "task_submission",
+  accept = ACCEPTED,
+  copy = TASK_COPY,
+  removable = true,
   requirements,
   already,
   onChange,
 }: {
-  taskId: string;
+  /** The task (or material) the files are for. */
+  contextId: string;
+  contextType?: "task_submission" | "material";
+  /** Media types offered and checked before upload; the server checks again against its bucket. */
+  accept?: string[];
+  copy?: UploadCopy;
+  /** Whether a finished upload can be taken back. A material's file is replaced by uploading another instead. */
+  removable?: boolean;
   requirements: Requirement[];
   /** Files uploaded earlier and not yet handed in; they survive a reload because the server remembers them. */
   already: UploadedFile[];
@@ -119,7 +143,8 @@ export function UploadWidget({
       patch(row.key, { state: "waiting", message: undefined });
 
       const authorised = await authoriseUpload({
-        taskId,
+        contextType,
+        contextId,
         requirementId: row.requirementId,
         filename: row.file.name,
         mediaType: row.file.type || "application/octet-stream",
@@ -182,7 +207,7 @@ export function UploadWidget({
       uploads.current.set(row.key, upload);
       upload.start();
     },
-    [patch, taskId],
+    [patch, contextId, contextType],
   );
 
   const choose = (requirementId: string | null, files: FileList) => {
@@ -190,7 +215,7 @@ export function UploadWidget({
       const key = crypto.randomUUID();
       // Checked here first so an obviously wrong file is never uploaded; the server checks again (FR-311).
       const tooBig = file.size > MAX_BYTES;
-      const wrongType = file.type && !ACCEPTED.includes(file.type);
+      const wrongType = file.type && !accept.includes(file.type);
       const row: Row = {
         key,
         requirementId,
@@ -269,7 +294,7 @@ export function UploadWidget({
         help: requirement.guidance ?? "PDF, Word, Excel, JPG or PNG. Up to 25 MB each.",
         mandatory: requirement.mandatory !== false,
       }))
-    : [{ id: null, title: "Add your work", help: "PDF, Word, Excel, JPG or PNG. Up to 25 MB each.", mandatory: true }];
+    : [{ id: null, title: copy.slotTitle, help: copy.help, mandatory: true }];
 
   const working = rows.filter((row) => ["waiting", "uploading", "resuming", "checking"].includes(row.state)).length;
   const done = rows.filter((row) => row.state === "uploaded").length;
@@ -291,13 +316,13 @@ export function UploadWidget({
         ) : done === 0 ? (
           "No files chosen yet."
         ) : (
-          `${done} ${done === 1 ? "file" : "files"} ready to hand in.`
+          copy.ready(done)
         )}
       </p>
 
       {slots.map((slot, index) => (
         <UploadDrop
-          accept={ACCEPTED.join(",")}
+          accept={accept.join(",")}
           help={
             <>
               {slot.help} {slot.mandatory ? "" : "This one is optional."}
@@ -313,7 +338,7 @@ export function UploadWidget({
             .filter((row) => row.requirementId === slot.id)
             .map((row) => (
               <UploadRow
-                actions={<RowActions onRemove={remove} onRetry={retry} row={row} />}
+                actions={<RowActions onRemove={remove} onRetry={retry} removable={removable} row={row} />}
                 indeterminate={row.state === "checking"}
                 key={row.key}
                 name={row.filename}
@@ -367,10 +392,12 @@ function RowActions({
   row,
   onRemove,
   onRetry,
+  removable,
 }: {
   row: Row;
   onRemove: (key: string) => Promise<void>;
   onRetry: (key: string) => Promise<void>;
+  removable: boolean;
 }) {
   if (row.state === "paused") {
     return (
@@ -383,6 +410,7 @@ function RowActions({
     return <IconButton icon="x" label={`Dismiss ${row.filename}`} onClick={() => void onRemove(row.key)} size="sm" />;
   }
   if (row.state === "uploaded") {
+    if (!removable) return null;
     return (
       <IconButton icon="trash" label={`Remove ${row.filename}`} onClick={() => void onRemove(row.key)} size="sm" />
     );

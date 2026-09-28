@@ -77,7 +77,21 @@ insert into expected_grants values
   ('function', 'api', 'cancel_import_batch(p_batch_id uuid)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'list_import_batches()', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'get_import_rows(p_batch_id uuid, p_outcome text)', 'authenticated', 'EXECUTE'),
-  ('function', 'api', 'list_import_cohorts()', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'list_import_cohorts()', 'authenticated', 'EXECUTE'),
+  -- Learning materials (20261008090000): facilitators within their cohorts, learners for released material only,
+  -- each checked inside the function. may_read_material is the storage policy's own check, run as the signed-in role.
+  ('function', 'api', 'create_material(p_cohort_id uuid, p_title text, p_description text, p_module_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'update_material(p_material_id uuid, p_title text, p_description text, p_module_id uuid, p_link_url text)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'attach_material_file(p_material_id uuid, p_file_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'publish_material(p_material_id uuid, p_release_at timestamp with time zone)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'archive_material(p_material_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_materials()', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'get_material(p_material_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_cohort_modules(p_cohort_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_my_materials(p_search text)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'get_my_material(p_material_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'log_material_access(p_material_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'learning', 'may_read_material(p_profile_id uuid, p_bucket text, p_object_key text)', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (

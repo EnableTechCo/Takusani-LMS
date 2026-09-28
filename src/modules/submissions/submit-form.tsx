@@ -81,7 +81,7 @@ export function SubmitForm({
         <h2 className="text-heading" id="files-h">
           Step 1: add your files
         </h2>
-        <UploadWidget already={already} onChange={onChange} requirements={requirements} taskId={taskId} />
+        <UploadWidget already={already} contextId={taskId} onChange={onChange} requirements={requirements} />
       </section>
 
       <section aria-labelledby="review-h" className="stack">

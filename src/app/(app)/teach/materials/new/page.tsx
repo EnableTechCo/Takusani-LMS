@@ -1,28 +1,26 @@
-import { Form, Screen } from "@/components/skeleton/skeleton";
+import { PageHeader } from "@/components/shell/page-header";
+import { NewMaterialForm } from "@/modules/learning/materials-forms";
+import { listWorkCohorts } from "@/modules/submissions/queries";
 
 export const metadata = { title: "New material · Teaching" };
 
-// F-04 skeleton (docs/design/ui/LMS-ux-architecture.md, section 5.1). Replace blocks as the feature is built.
-export default function TeachMaterialsNewPage() {
+// F-04 new material (FR-204): a draft for a cohort. The file or link, module and release come on the next page.
+export default async function NewMaterialPage() {
+  const cohorts = await listWorkCohorts();
   return (
-    <Screen
-      id="F-04"
-      frs="FR-204, FR-208"
-      workspace="Teaching"
-      title="New material"
-      actions={["Publish", "Save draft"]}
-      width="form"
-    >
-      <Form
-        fields={[
-          { label: "Title" },
-          { label: "Module", type: "select" },
-          { label: "File", type: "file" },
-          { label: "Or a link", type: "url", help: "For recordings and outside resources", optional: true },
-          { label: "When learners can see it", type: "radio", options: ["Publish now", "On a date"] },
-          { label: "Release time", type: "datetime-local", optional: true },
-        ]}
+    <div className="page page--form">
+      <PageHeader
+        lead="Start with the cohort and a title. Nothing is visible to learners until you publish it."
+        title="New material"
+        workspace="Teaching"
       />
-    </Screen>
+      <div className="card">
+        <div className="card__body">
+          <NewMaterialForm
+            cohorts={cohorts.map((cohort) => ({ id: cohort.id, label: `${cohort.name}, ${cohort.programme_title}` }))}
+          />
+        </div>
+      </div>
+    </div>
   );
 }
