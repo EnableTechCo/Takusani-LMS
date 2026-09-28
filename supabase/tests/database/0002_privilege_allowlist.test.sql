@@ -174,7 +174,15 @@ insert into expected_grants values
   ('function', 'api', 'revoke_calendar_feed_token()', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'my_calendar_feed()', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'calendar_feed(p_token text, p_client text)', 'anon', 'EXECUTE'),
-  ('function', 'api', 'calendar_feed(p_token text, p_client text)', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'calendar_feed(p_token text, p_client text)', 'authenticated', 'EXECUTE'),
+  -- Learner notes (20261025090000): each acts on the caller's own notes only (FR-307; test 0037 is the contract).
+  ('function', 'api', 'create_note(p_title text, p_body text, p_folder text, p_material_id uuid, p_session_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'update_note(p_note_id uuid, p_expected_version integer, p_title text, p_body text, p_folder text, p_material_id uuid, p_session_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'delete_note(p_note_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_my_notes(p_search text, p_folder text)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_my_note_folders()', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'get_my_note(p_note_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_note_link_targets()', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (
