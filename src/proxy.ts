@@ -14,6 +14,8 @@ const PUBLIC_PATHS = [
   "/auth/sign-out",
   "/api/health",
   "/api/internal/jobs",
+  // The calendar feed: a calendar app has no session; the token in the URL is the credential (ADR-020).
+  "/api/calendar/feeds",
 ];
 
 const isPublic = (pathname: string) =>

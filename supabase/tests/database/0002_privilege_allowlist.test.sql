@@ -167,7 +167,14 @@ insert into expected_grants values
   ('function', 'api', 'save_register(p_session_id uuid, p_marks jsonb, p_expected_version integer, p_reason text)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'get_register(p_session_id uuid)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'create_recording(p_cohort_id uuid, p_title text, p_description text, p_module_id uuid)', 'authenticated', 'EXECUTE'),
-  ('function', 'api', 'set_recording_captions(p_material_id uuid, p_has_captions boolean)', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'set_recording_captions(p_material_id uuid, p_has_captions boolean)', 'authenticated', 'EXECUTE'),
+  -- Calendar feed (20261024090000): the learner manages their own token; the feed itself is authenticated by its token,
+  -- because a calendar app has no session, so anon may call it.
+  ('function', 'api', 'issue_calendar_feed_token()', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'revoke_calendar_feed_token()', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'my_calendar_feed()', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'calendar_feed(p_token text, p_client text)', 'anon', 'EXECUTE'),
+  ('function', 'api', 'calendar_feed(p_token text, p_client text)', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (
