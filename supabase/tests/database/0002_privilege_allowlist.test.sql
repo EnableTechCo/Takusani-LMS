@@ -135,7 +135,16 @@ insert into expected_grants values
   -- checked inside. The sign-in handler's counting functions are service_role only and so are not listed here.
   ('function', 'api', 'clear_my_sign_in_lock()', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'unlock_account(p_profile_id uuid)', 'authenticated', 'EXECUTE'),
-  ('function', 'api', 'list_sign_in_locks()', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'list_sign_in_locks()', 'authenticated', 'EXECUTE'),
+  -- Role administration (20261018090000): administrators, and coordinators within scope for the teaching roles,
+  -- checked inside each function; the account reads are administrators only.
+  ('function', 'api', 'assign_role(p_profile_id uuid, p_role text, p_scope_type text, p_scope_key uuid, p_until timestamp with time zone)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'end_role(p_assignment_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'get_account(p_profile_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_account_role_assignments(p_profile_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_account_open_allocations(p_profile_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_account_history(p_profile_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_role_scopes()', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (
