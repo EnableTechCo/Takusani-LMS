@@ -1,3 +1,4 @@
+import { getCaptchaSiteKey } from "@/config/env";
 import { ForgotPasswordForm } from "@/modules/identity/forms";
 
 export const metadata = { title: "Reset your password" };
@@ -7,7 +8,7 @@ export default function ForgotPasswordPage() {
   return (
     <div className="stack">
       <h1 className="text-title">Reset your password</h1>
-      <ForgotPasswordForm />
+      <ForgotPasswordForm captchaSiteKey={getCaptchaSiteKey()} />
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { getCaptchaSiteKey } from "@/config/env";
 import { safeNextPath } from "@/modules/identity/access";
 import { SignInForm } from "@/modules/identity/forms";
 import { getMyAccess } from "@/modules/identity/session";
@@ -19,7 +20,11 @@ export default async function SignInPage({ searchParams }: { searchParams: Promi
   return (
     <div className="stack">
       <h1 className="text-title">Sign in</h1>
-      <SignInForm next={next} notice={params.reason ? NOTICES[params.reason] : undefined} />
+      <SignInForm
+        captchaSiteKey={getCaptchaSiteKey()}
+        next={next}
+        notice={params.reason ? NOTICES[params.reason] : undefined}
+      />
     </div>
   );
 }

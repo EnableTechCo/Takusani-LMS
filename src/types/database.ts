@@ -104,6 +104,12 @@ export type Database = {
           template_version: number
         }[]
       }
+      clear_my_sign_in_lock: {
+        Args: never
+        Returns: {
+          status: string
+        }[]
+      }
       cohort_audience_size: { Args: { p_cohort_id: string }; Returns: number }
       complete_import_chunk: {
         Args: { p_batch_id: string; p_results: Json }
@@ -915,6 +921,15 @@ export type Database = {
           version: number
         }[]
       }
+      list_sign_in_locks: {
+        Args: never
+        Returns: {
+          failures: number
+          locked_at: string
+          locked_until: string
+          profile_id: string
+        }[]
+      }
       list_task_submission_counts: {
         Args: { p_cohort_id: string }
         Returns: {
@@ -1098,6 +1113,8 @@ export type Database = {
           status: string
         }[]
       }
+      record_sign_in_failure: { Args: { p_email: string }; Returns: undefined }
+      record_sign_in_success: { Args: { p_email: string }; Returns: undefined }
       save_marking_draft: {
         Args: {
           p_expected_version: number
@@ -1159,6 +1176,7 @@ export type Database = {
           status: string
         }[]
       }
+      sign_in_gate: { Args: { p_email: string }; Returns: boolean }
       submit_task: {
         Args: {
           p_client_submission_id: string
@@ -1179,6 +1197,12 @@ export type Database = {
         Args: { p_instance_id: string }
         Returns: {
           instance_version: number
+          status: string
+        }[]
+      }
+      unlock_account: {
+        Args: { p_profile_id: string }
+        Returns: {
           status: string
         }[]
       }

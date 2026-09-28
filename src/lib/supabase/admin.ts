@@ -1,6 +1,6 @@
 import "server-only";
 import { createClient } from "@supabase/supabase-js";
-import { getPublicEnvironment, getServerEnvironment } from "@/config/env";
+import { getPublicEnvironment, getServerEnvironment, hasServerEnvironment } from "@/config/env";
 import type { Database } from "@/types/database";
 
 /**
@@ -23,5 +23,18 @@ export function createAdminClient() {
  * so never call it on behalf of a request without the caller having been checked.
  */
 export function createWorkerClient() {
+  return createAdminClient();
+}
+
+/**
+ * Secret-key client for the sign-in handler's lockout counting (S3-06), which runs before anyone is signed in. Null
+ * when the secret key is not set: sign-in then works without per-account counting (Supabase's per-address limits
+ * still apply), and the gap is logged rather than blocking everyone from signing in.
+ */
+export function createLockoutClient() {
+  if (!hasServerEnvironment()) {
+    console.error("sign-in lockout is off: SUPABASE_SECRET_KEY is not set");
+    return null;
+  }
   return createAdminClient();
 }

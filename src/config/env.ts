@@ -29,6 +29,21 @@ export function getServerEnvironment() {
   return serverEnvironmentSchema.parse({ SUPABASE_SECRET_KEY: process.env.SUPABASE_SECRET_KEY });
 }
 
+/** False when the secret key is not set, as on a deployment still being configured. */
+export function hasServerEnvironment(): boolean {
+  return serverEnvironmentSchema.safeParse({ SUPABASE_SECRET_KEY: process.env.SUPABASE_SECRET_KEY }).success;
+}
+
+/**
+ * CAPTCHA on the sign-in and password-reset forms (S3-06, ADR-026): the Cloudflare Turnstile site key, or null when
+ * CAPTCHA is not set up. It must be switched on in Supabase Auth with the matching secret at the same time, because
+ * Supabase then refuses sign-ins that carry no token.
+ */
+export function getCaptchaSiteKey(): string | null {
+  const key = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+  return key && key.trim() ? key.trim() : null;
+}
+
 /**
  * Email for notifications (S2-10). `EMAIL_PROVIDER` is "resend" on a deployment, "mailpit" locally (the Supabase
  * local stack's mail catcher), or unset, in which case emails are recorded as not sent because email is not set up.
