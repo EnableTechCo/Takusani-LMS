@@ -79,6 +79,7 @@ export function MarkingWorkspace({
   stored,
   decisions,
   moderated,
+  resultReleased,
   learnerName,
   decided,
 }: {
@@ -96,6 +97,8 @@ export function MarkingWorkspace({
   stored: StoredDraft | null;
   decisions: { type: string; outcome: string; acting_role: string; created_at: string }[];
   moderated: boolean;
+  /** The learner already has a released result for this item (a resubmission being marked). */
+  resultReleased: boolean;
   learnerName: string;
   /** Where the result stands once this item is decided; null while it is still being marked. */
   decided: {
@@ -300,7 +303,9 @@ export function MarkingWorkspace({
     });
 
   const consequence = moderated
-    ? `This decision will be held. ${learnerName} will not see it until moderation of this cohort is signed off.`
+    ? resultReleased
+      ? `This decision will be held for moderation. ${learnerName} keeps the result already released to them, and sees this one only when moderation of this cohort is signed off.`
+      : `This decision will be held. ${learnerName} will not see it until moderation of this cohort is signed off.`
     : `This releases the result to ${learnerName} now and starts the seven-day appeal window, which closes at the end of ${formatDay(
         sastDatePlusDays(7),
       )}.${

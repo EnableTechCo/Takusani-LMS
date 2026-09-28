@@ -278,6 +278,8 @@ export const CONCLUDE_REFUSALS: Record<string, string> = {
     "You took an assessment decision on this work, so you cannot decide this appeal. Nothing was recorded. Tell the coordinator, who will reallocate it.",
   result_changed:
     "This result has had a new decision since the appeal was lodged. Nothing was recorded. Ask the coordinator what to do.",
+  decision_pending_moderation:
+    "A later decision on this result is waiting for moderation. Nothing was recorded. Keep your notes: you can decide the appeal once moderation is signed off.",
   invalid_outcome: "Choose Competent or Not yet competent.",
   reasons_required: "Enter your reasons. The learner reads them, and the decision cannot be recorded without them.",
   reasons_too_long: "Your reasons are longer than 5000 characters. Shorten them and try again.",

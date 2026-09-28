@@ -92,8 +92,6 @@ export const FINALISE_REFUSALS: Record<string, string> = {
   ...MARKING_REFUSALS,
   stale_version:
     "The draft changed after this page last saved it. Reload to see the latest before finalising; nothing was decided.",
-  moderated_resubmission_not_yet_supported:
-    "This cohort is moderated and this result was already released. Deciding it again waits for moderation of resubmissions, which is not available yet. Nothing was decided.",
   not_found: "This item is not in your marking scope.",
 };
 
