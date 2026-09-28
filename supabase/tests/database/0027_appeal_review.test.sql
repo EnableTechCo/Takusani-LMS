@@ -4,7 +4,7 @@
 create extension if not exists pgtap with schema extensions;
 
 begin;
-select plan(38);
+select plan(39);
 
 create function pg_temp.act_as(p_user uuid) returns void language sql as $$
   select set_config('role', 'authenticated', true),
@@ -131,6 +131,20 @@ select is(status, 'remediation_required', 'not yet competent carries what to do 
 from api.conclude_appeal(:'appeal', 'not_yet_competent', :remarked, 'Reasons.');
 select is(status, 'resubmission_days_required', 'and, when amended, a new resubmission period')
 from api.conclude_appeal(:'appeal', 'not_yet_competent', :remarked, 'Reasons.', 'Add the index.');
+
+-- A later decision held behind the result for moderation (S4-04) stops the conclusion, which would fork the chain.
+reset role;
+savepoint pending_resubmission;
+insert into assessment.decisions (result_id, type, outcome, actor_id, acting_role, justification, supersedes_decision_id)
+values (:'result', 'assessment', 'competent', '00000000-0000-4000-8000-000000000003', 'assessor', 'Resubmission marked.', :'appealed')
+returning id as held_later \gset
+update assessment.results set pending_decision_id = :'held_later' where id = :'result';
+select pg_temp.act_as(:'staff');
+select is(status, 'decision_pending_moderation', 'an appeal is not concluded while a later decision waits for moderation')
+from api.conclude_appeal(:'appeal', 'competent', :remarked, 'Criterion 2 is met.');
+reset role;
+rollback to savepoint pending_resubmission;
+select pg_temp.act_as(:'staff');
 
 -- Transaction test 9: a reviewer who has since taken an assessment decision on the result is refused
 reset role;

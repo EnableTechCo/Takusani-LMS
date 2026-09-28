@@ -66,6 +66,7 @@ export default async function MarkingPage({ params }: { params: Promise<{ instan
         instanceId={item.instance_id}
         links={links}
         moderated={item.moderation_policy === "moderated"}
+        resultReleased={item.instance_state !== "decided" && item.result_state === "released"}
         stored={(item.draft ?? null) as unknown as StoredDraft | null}
         takenBySomeoneElse={item.assessor_id && !mine ? item.assessor_name : null}
         learnerName={item.learner_name}

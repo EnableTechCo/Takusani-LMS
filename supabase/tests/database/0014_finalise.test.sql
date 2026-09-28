@@ -1,9 +1,9 @@
--- Finalising: hold or release (S2-08, FR-408, BR-04; test plan transaction tests 4, 12 and 13).
+-- Finalising: hold or release (S2-08, S4-04; FR-408, BR-04, P-04; test plan transaction tests 4, 12 and 13).
 -- Uses the local seed: the published task in "2026 Intake B" (not moderated), the enrolled learner, assessor@.
 create extension if not exists pgtap with schema extensions;
 
 begin;
-select plan(27);
+select plan(40);
 
 create function pg_temp.act_as(p_user uuid) returns void language sql as $$
   select set_config('role', 'authenticated', true),
@@ -183,18 +183,71 @@ select results_eq(
   $$ values ('held'::text, null::uuid, null::bigint, true) $$,
   'it waits in the pending pool with no cycle, for the next cycle to claim at freeze');
 
--- A result already released cannot be moved by a moderated resubmission until the hold path exists (S4-04)
-insert into assessment.assessment_instances (result_id, assessor_id, state)
-select r.id, :'assessor', 'marking' from assessment.results r
-join assessment.assessment_instances i on i.result_id = r.id where i.id = :'resubmission'
-returning id as late_instance \gset
-insert into assessment.marking_drafts (instance_id, assessor_id, outcome, justification)
-values (:'late_instance', :'assessor', 'competent', 'Still fine.');
+-- The hold path for a result the learner already has (S4-04, P-04): a later decision waits for the next cycle
+select r.id as released_result, r.current_decision_id as released_decision, r.release_seq as released_seq
+from assessment.results r join assessment.assessment_instances i on i.result_id = r.id where i.id = :'resubmission' \gset
+select count(*)::int as notified_before from notifications.notifications where recipient_id = :'learner' \gset
+-- The learner hands in again, and the assessor marks it Not yet competent.
+select pg_temp.ready_item('not_yet_competent') as late_instance \gset
 select pg_temp.act_as(:'assessor');
-select results_eq(format($$ select status from api.finalise_decision(%L, 1) $$, :'late_instance'),
-  $$ values ('moderated_resubmission_not_yet_supported'::text) $$,
-  'a released result in a moderated cohort is refused with a clear status, not guessed at');
+select results_eq(format($$ select status, result_state, released_at, appeal_deadline_at from api.finalise_decision(%L, 1) $$, :'late_instance'),
+  $$ values ('ok'::text, 'held'::text, null::timestamptz, null::timestamptz) $$,
+  'a later decision on a released result in a moderated cohort is held (P-04, test plan 13)');
 reset role;
+select results_eq(format($$ select r.state, r.current_decision_id, r.release_seq, d.supersedes_decision_id, d.outcome
+                            from assessment.results r join assessment.decisions d on d.id = r.pending_decision_id where r.id = %L $$, :'released_result'),
+  format($$ values ('released'::text, %L::uuid, %L::bigint, %L::uuid, 'not_yet_competent'::text) $$,
+         :'released_decision', :'released_seq', :'released_decision'),
+  'the released outcome stays current, with its release; the new decision waits as the pending decision, superseding it');
+select is((select count(*)::int from notifications.notifications where recipient_id = :'learner'), :'notified_before'::int,
+  'the learner is not told anything');
+select results_eq(format($$ select waiting from programmes.unreleased_results(%L) $$, :'cohort'),
+  $$ values (2) $$, 'the pending pool counts it, beside the held first decision');
+
+select pg_temp.act_as(:'assessor');
+select results_eq(format($$ select result_state, result_released_at from api.get_marking_item(%L) $$, :'late_instance'),
+  $$ values ('held'::text, null::timestamptz) $$, 'staff see the new decision as decided and held, with no release date');
+select results_eq(format($$ select result_state, result_released_at is not null from api.get_marking_item(%L) $$, :'resubmission'),
+  $$ values ('released'::text, true) $$, 'while the decision the learner has still reads as released');
+select results_eq(format($$ select status from api.finalise_decision(%L, 1) $$, :'late_instance'),
+  $$ values ('already_finalised'::text) $$, 'finalising the held decision again adds nothing (test plan 4)');
+reset role;
+select is((select count(*)::int from assessment.decisions where instance_id = :'late_instance'), 1,
+  'one decision for the instance');
+
+select pg_temp.act_as(:'learner');
+select results_eq(format($$ select outcome from api.get_my_result(%L) $$, :'released_result'),
+  $$ values ('competent'::text) $$, 'the learner still reads the released outcome, not the held one');
+reset role;
+
+-- A further resubmission decided before sign-off supersedes the pending decision and takes its place.
+select pending_decision_id as first_pending from assessment.results where id = :'released_result' \gset
+select pg_temp.ready_item('competent') as later_instance \gset
+
+-- Test plan 12 on the hold path: a failure midway leaves nothing behind.
+create function pg_temp.explode_hold() returns trigger language plpgsql as $$
+begin raise exception 'forced failure on the hold path'; end $$;
+create trigger pgtap_explode_hold before insert on audit.events for each row execute function pg_temp.explode_hold();
+select pg_temp.act_as(:'assessor');
+select throws_like(format($$ select * from api.finalise_decision(%L, 1) $$, :'later_instance'),
+  '%forced failure on the hold path%', 'the audit write fails after the held decision was written');
+reset role;
+drop trigger pgtap_explode_hold on audit.events;
+select results_eq(format($$ select (select count(*) from assessment.decisions where instance_id = %L)::int,
+                                   (select pending_decision_id from assessment.results where id = %L) $$, :'later_instance', :'released_result'),
+  format($$ values (0, %L::uuid) $$, :'first_pending'),
+  'and nothing was kept: no decision, and the pending decision is unchanged (test plan 12)');
+
+select pg_temp.act_as(:'assessor');
+select results_eq(format($$ select status from api.finalise_decision(%L, 1) $$, :'later_instance'),
+  $$ values ('ok'::text) $$, 'the later decision is then held');
+reset role;
+select results_eq(format($$ select d.supersedes_decision_id, d.outcome from assessment.results r
+                            join assessment.decisions d on d.id = r.pending_decision_id where r.id = %L $$, :'released_result'),
+  format($$ values (%L::uuid, 'competent'::text) $$, :'first_pending'),
+  'superseding the earlier pending decision, which it replaces');
+select throws_ok(format($$ update assessment.results set state = 'held' where id = %L $$, :'released_result'),
+  '23514', null, 'a released result is never held again: only its later decision waits');
 update programmes.cohort_moderation_state set moderation_policy = 'not_moderated' where cohort_id = :'cohort';
 
 -- Completeness (FR-404, FR-405)
