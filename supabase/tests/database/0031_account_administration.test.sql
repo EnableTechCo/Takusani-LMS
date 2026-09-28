@@ -3,7 +3,7 @@
 create extension if not exists pgtap with schema extensions;
 
 begin;
-select plan(24);
+select plan(25);
 
 create function pg_temp.act_as(p_user uuid) returns void language sql as $$
   select set_config('role', 'authenticated', true),
@@ -153,6 +153,11 @@ select results_eq(
   $$ values (1, 1) $$, 'it is audited and the person is told');
 select pg_temp.act_as(:'coordinator');
 select is(status, 'forbidden', 'only an administrator sends one') from api.record_password_reset(:'learner');
+
+select ok((select bool_and(has_function_privilege(r.rolname, 'api.check_request()', 'execute'))
+           from pg_auth_members m join pg_roles r on r.oid = m.roleid
+           where m.member = 'authenticator'::regrole and r.rolname in ('anon', 'authenticated', 'service_role')),
+  'every role the API switches to can run the check, including server calls with the secret key');
 
 select * from finish();
 rollback;

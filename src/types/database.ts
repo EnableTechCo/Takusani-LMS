@@ -1317,6 +1317,21 @@ export type Database = {
           status: string
         }[]
       }
+      scheduled_job_health: {
+        Args: never
+        Returns: {
+          failures_last_day: number
+          heartbeat_within_seconds: number
+          job_name: string
+          kind: string
+          last_run_at: string
+          last_status: string
+          last_success_at: string
+          overdue: boolean
+          schedule: string
+          scheduled: boolean
+        }[]
+      }
       send_task_reminder: {
         Args: { p_learner_ids: string[]; p_message: string; p_task_id: string }
         Returns: {
