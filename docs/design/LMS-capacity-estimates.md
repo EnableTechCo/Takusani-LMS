@@ -114,7 +114,7 @@ Assume 1,000-10,000 record reads per day: `0.01-0.12 requests/second` average. A
 | Database CPU or I/O | Query tuning and compute upgrade | Sustained above 70% during normal peaks |
 | Connection pool | Most traffic uses the Data API, so watch its pool as well as the SQL pooler used by sign-off and the worker | Wait time above 100 ms or saturation above 80% |
 | Autosave latency budget | One database round trip per save; functions pinned to the database region | Round trip from South African clients leaves under 200 ms for the function |
-| Sign-off duration | Set-based release over the SQL path with an explicit timeout | 1,000 results exceed two seconds in CI |
+| Sign-off duration | Set-based release with a statement timeout declared on the sign-off function (spike X-4: about 500 ms for 1,000 results) | 1,000 results exceed two seconds in CI |
 | Queue lag | Increase bounded worker concurrency | Oldest message above 5 minutes for 15 minutes |
 | Audit/integrity tables | Retention and archival | Maintenance or queries breach SLO after indexing |
 | Object storage | Lifecycle and retention review | Growth exceeds the high projection or recovery cannot meet policy |

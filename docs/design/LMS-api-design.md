@@ -188,7 +188,7 @@ Administrative correction of a released outcome. Requires two distinct authorise
 - **Request:** expected cycle version, sign-off statement.
 - **Response:** signed-off timestamp, released result count, notification count. A signed-off cycle returns the original response.
 - **Validation:** every sample item concluded; no return outstanding (FR-510), with the outstanding items listed in `details`.
-- **Transaction:** `FOR UPDATE` on `cohort_moderation_state` and the cycle; lock the population's results in identifier order; release exactly that population with set-based statements; set appeal deadlines and `release_seq`; resolve remediation deadlines; re-evaluate affected `learner_unit_outcomes` and append credits; notifications, audit, and outbox. It runs over the SQL path with an explicit statement timeout rather than the Data API's default, and releasing 1,000 results within two seconds is a CI performance gate.
+- **Transaction:** `FOR UPDATE` on `cohort_moderation_state` and the cycle; lock the population's results in identifier order; release exactly that population with set-based statements; set appeal deadlines and `release_seq`; resolve remediation deadlines; re-evaluate affected `learner_unit_outcomes` and append credits; notifications, audit, and outbox. The function declares its own statement timeout, which PostgREST applies to the call in place of the `authenticated` role's 8-second default (spike X-4), and releasing 1,000 results within two seconds is a CI performance gate.
 
 ## Appeals
 
