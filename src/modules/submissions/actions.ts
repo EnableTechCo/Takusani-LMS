@@ -6,6 +6,7 @@ import { instantFromSast } from "@/lib/dates";
 import { fieldErrors, type FormState } from "@/lib/form-state";
 import { createClient } from "@/lib/supabase/server";
 import { deliverSoon } from "@/modules/notifications/run";
+import { scanSoon } from "./file-jobs";
 import {
   audienceSchema,
   criteriaSchema,
@@ -233,6 +234,7 @@ export async function finaliseUpload(
   if (error || !row || row.status !== "ok") {
     return { ok: false, message: UPLOAD_REFUSALS[row?.status ?? "error"] ?? UPLOAD_REFUSALS.error };
   }
+  scanSoon();
   return { ok: true, fileId: row.file_id!, bytes: Number(row.bytes) };
 }
 

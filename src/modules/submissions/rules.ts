@@ -136,6 +136,11 @@ export const TASK_REFUSALS: Record<string, { field?: string; message: string }> 
   invalid_requirements: { field: "requirements", message: "The evidence list could not be read. Try again." },
   invalid_requirement_title: { field: "requirements", message: "Every piece of evidence needs a title." },
   too_many_requirements: { field: "requirements", message: "A task asks for at most 20 pieces of evidence." },
+  file_rejected: {
+    message:
+      "One of your files did not pass the file check, so nothing was handed in. Remove it and upload the file again.",
+  },
+  file_not_available: { message: "One of your files is no longer available. Remove it and upload it again." },
 };
 
 /** Plain-language messages for the upload refusals, in the design system's tone: say what to do instead. */
@@ -150,6 +155,8 @@ export const UPLOAD_REFUSALS: Record<string, string> = {
   too_large: "This file is larger than the limit. Save it as a PDF, or take photos at a lower quality.",
   type_not_allowed: "This kind of file is not accepted here.",
   intent_not_found: "This upload is no longer available. Choose the file again.",
+  scan_rejected:
+    "This file is not what its name says, or it changed on the way here. Remove it, then upload it again as a PDF, Word or Excel file, or a photo (JPG or PNG).",
   error: "This file could not be accepted. Choose it again.",
 };
 

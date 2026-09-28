@@ -216,8 +216,32 @@ unreachable and on any plan (`supabase/migrations/20261021090000_scheduled_jobs.
   `(text) returns integer` for a one-shot job), insert its catalogue row with a schedule and heartbeat, and schedule it
   with `cron.schedule(name, schedule, format('select audit.run_job(%L)', name))`. Test 0033 checks that the catalogue
   and pg_cron agree.
-- Removing Storage objects of expired or discarded uploads needs the Storage API, so it cannot be a database job; it is
-  still to be built as a Vercel job.
+- Removing Storage objects needs the Storage API (SQL deletes from `storage.objects` are refused), so the upload
+  clean-up is an application job: see [File scan and clean-up](#file-scan-and-clean-up).
+
+## File scan and clean-up
+
+Storage records no content hash and keeps whatever media type the browser claimed, so every accepted file is scanned
+(`supabase/migrations/20261022090000_file_scan_and_orphan_cleanup.sql`, `src/modules/submissions/file-scan.ts`):
+
+- The scan reads the object, computes the authoritative SHA-256 and detects the media type from the file's own bytes,
+  and records both on `stored_files`. The learner's checksum stays as declared, beside it.
+- States: `pending` -> `clean`, `rejected` (`type_mismatch`, `checksum_mismatch` or `size_mismatch`) or `failed`
+  (`unreadable` after three attempts). A future malware scanner records its own reasons under its own scanner name.
+- A rejected file is shown to the learner as not accepted and cannot be handed in. A file still pending blocks nothing.
+- It runs straight after each upload is finalised (when the secret key is set) and from
+  `GET /api/internal/jobs/file-scan` as the backstop. Overlapping runs are harmless: each file is leased while scanned.
+- `GET /api/internal/jobs/upload-cleanup` removes the Storage objects of uploads that expired unfinalised, or were
+  discarded, more than 24 hours ago; the database records each removal once the object is really gone. A handed-in
+  file or a learning material's file is never touched.
+- Both job routes take `Authorization: Bearer $CRON_SECRET`, like the outbox drain.
+
+**On staging until go-live** there is no secret key or cron secret in Vercel, so files stay `pending` and nothing is
+cleaned up; neither blocks anything. At go-live, with `SUPABASE_SECRET_KEY` and `CRON_SECRET` set, add to
+`vercel.json`: `{ "path": "/api/internal/jobs/file-scan", "schedule": "..." }` and
+`{ "path": "/api/internal/jobs/upload-cleanup", "schedule": "0 3 * * *" }` (Hobby allows daily schedules only; Pro
+allows the file scan every few minutes). Files uploaded before then are scanned on the first run.
+
 
 ## Health checks
 

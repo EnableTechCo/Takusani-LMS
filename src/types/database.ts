@@ -98,6 +98,22 @@ export type Database = {
         }[]
       }
       check_request: { Args: never; Returns: undefined }
+      claim_file_scans: {
+        Args: {
+          p_lease_seconds?: number
+          p_limit?: number
+          p_max_attempts?: number
+        }
+        Returns: {
+          allowed_media_types: string[]
+          attempt: number
+          bucket: string
+          bytes: number
+          declared_sha256: string
+          file_id: string
+          object_key: string
+        }[]
+      }
       claim_import_chunk: {
         Args: { p_batch_id: string; p_size?: number }
         Returns: {
@@ -1022,6 +1038,15 @@ export type Database = {
           title: string
         }[]
       }
+      list_orphan_uploads: {
+        Args: { p_limit?: number }
+        Returns: {
+          bucket: string
+          intent_id: string
+          object_key: string
+          reason: string
+        }[]
+      }
       list_programmes: {
         Args: never
         Returns: {
@@ -1290,6 +1315,25 @@ export type Database = {
           status: string
           version: number
         }[]
+      }
+      record_file_scan: {
+        Args: {
+          p_detected_media_type?: string
+          p_file_id: string
+          p_max_attempts?: number
+          p_outcome: string
+          p_reason?: string
+          p_scanner?: string
+          p_sha256?: string
+        }
+        Returns: {
+          scan_state: string
+          status: string
+        }[]
+      }
+      record_orphans_removed: {
+        Args: { p_intent_ids: string[] }
+        Returns: number
       }
       record_password_reset: {
         Args: { p_profile_id: string }
