@@ -79,6 +79,21 @@ function taskReminder(payload: Payload): Rendered {
   };
 }
 
+/** A coordinator's notice (FR-703): who sent it, its title, and the message itself. */
+function notice(payload: Payload): Rendered {
+  const body = text(payload, "body");
+  const summary = body.length > 160 ? `${body.slice(0, 157).trimEnd()}...` : body;
+  return {
+    title: `Notice from ${text(payload, "sender_name")}: ${text(payload, "title")}`,
+    summary,
+    paragraphs: body
+      .split(/\n\s*\n/)
+      .map((paragraph) => paragraph.trim())
+      .filter(Boolean),
+    action: "Open your notifications",
+  };
+}
+
 /** "2 hours", "1 hour 30 minutes", "45 minutes". */
 export function durationText(minutes: number): string {
   const hours = Math.floor(minutes / 60);
@@ -137,6 +152,7 @@ const TEMPLATES: Record<string, Record<number, (payload: Payload) => Rendered>> 
   result_released: { 1: resultReleased },
   task_published: { 1: taskPublished },
   task_reminder: { 1: taskReminder },
+  notice: { 1: notice },
   session_scheduled: { 1: sessionScheduled },
   session_changed: { 1: sessionChanged },
   session_cancelled: { 1: sessionCancelled },

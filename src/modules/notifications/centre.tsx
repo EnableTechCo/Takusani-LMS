@@ -23,6 +23,7 @@ const ICONS: Record<string, IconName> = {
   result_released: "check-circle",
   task_published: "clipboard",
   task_reminder: "clock",
+  notice: "megaphone",
   session_scheduled: "video",
   session_changed: "video",
   session_cancelled: "video",
