@@ -22,7 +22,7 @@ export default async function TeachMaterialsPage() {
             New material
           </ButtonLink>
         }
-        lead="Files and links for your cohorts, published now or on a schedule. Times are SAST."
+        lead="Files, links and lecture recordings for your cohorts, published now or on a schedule. Times are SAST."
         title="Materials"
         workspace="Teaching"
       />
@@ -51,7 +51,10 @@ export default async function TeachMaterialsPage() {
             {
               key: "kind",
               header: "Type",
-              cell: (material) => (material.kind === "file" ? "File" : material.kind === "link" ? "Link" : "None yet"),
+              cell: (material) => {
+                const content = material.kind === "file" ? "File" : material.kind === "link" ? "Link" : "None yet";
+                return material.category === "recording" ? `Recording: ${content.toLowerCase()}` : content;
+              },
             },
             {
               key: "state",

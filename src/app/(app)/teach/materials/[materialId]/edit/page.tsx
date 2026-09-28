@@ -12,7 +12,8 @@ import { getMaterial, listCohortModules } from "@/modules/learning/materials-que
 
 export const metadata = { title: "Edit material · Teaching" };
 
-// F-04 (FR-204): one material. Its details and module, its content (a file or a link), and when learners see it.
+// F-04 (FR-204, FR-208): one material or recording. Its details and module, its content (a file or a link), and when
+// learners see it. A recording is best added as a link; an upload goes to the recordings bucket, within its own limit.
 export default async function EditMaterialPage({ params }: { params: Promise<{ materialId: string }> }) {
   const { materialId } = await params;
   const material = await getMaterial(materialId);
@@ -20,6 +21,8 @@ export default async function EditMaterialPage({ params }: { params: Promise<{ m
   const modules = await listCohortModules(material.cohort_id);
   const label = materialState(material.state, material.release_at, new Date());
   const archived = label === "Archived";
+  const recording = material.category === "recording";
+  const settings = await getPublicSettings();
   const content = describeContent({
     kind: material.kind,
     link_host: material.link_url ? new URL(material.link_url).host : null,
@@ -33,6 +36,7 @@ export default async function EditMaterialPage({ params }: { params: Promise<{ m
         lead={material.cohort_name}
         meta={
           <>
+            {recording ? <Tag tone="info">Recording</Tag> : null}
             <Tag
               shape={label === "Scheduled" ? "half" : undefined}
               tone={label === "Published" ? "positive" : label === "Scheduled" ? "info" : "neutral"}
@@ -67,7 +71,11 @@ export default async function EditMaterialPage({ params }: { params: Promise<{ m
           </div>
           {archived ? null : (
             <div className="card__body">
-              <MaterialFileUpload materialId={material.id} maxMb={(await getPublicSettings()).uploadMaxMb} />
+              <MaterialFileUpload
+                materialId={material.id}
+                maxMb={recording ? settings.recordingMaxMb : settings.uploadMaxMb}
+                recording={recording}
+              />
             </div>
           )}
         </section>
@@ -98,7 +106,9 @@ export default async function EditMaterialPage({ params }: { params: Promise<{ m
             <div className="card__body stack">
               {material.kind === null ? (
                 <p className="text-muted">
-                  Add a file or a link first. A material with nothing in it cannot be published.
+                  {recording
+                    ? "Add a link to the recording, or upload it, first."
+                    : "Add a file or a link first. A material with nothing in it cannot be published."}
                 </p>
               ) : (
                 <PublishForm materialId={material.id} scheduled={label === "Scheduled"} />

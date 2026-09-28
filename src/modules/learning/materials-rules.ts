@@ -1,6 +1,9 @@
 import { formatBytes } from "@/modules/submissions/rules";
 
-/** Learning materials (S2-14; FR-204, FR-301): states in words, refusals, and a file described for a reader. */
+/**
+ * Learning materials (S2-14; FR-204, FR-301) and recordings (S3-12, FR-208): states in words, refusals, and a file
+ * described for a reader.
+ */
 
 export type MaterialStateLabel = "Draft" | "Scheduled" | "Published" | "Archived";
 
@@ -28,6 +31,8 @@ export const MATERIAL_REFUSALS: Record<string, string> = {
   release_in_past: "Choose a release time from now on.",
   already_released: "This material is already released.",
   file_not_available: "That file cannot be used. Upload it again.",
+  not_a_recording: "Captions apply to recordings only.",
+  invalid_captions: "Say whether captions or a transcript are available.",
   error: "The change could not be saved. Try again.",
 };
 
@@ -40,6 +45,13 @@ const TYPE_NAMES: Record<string, string> = {
   "image/png": "PNG image",
 };
 
+const RECORDING_TYPE_NAMES: Record<string, string> = {
+  "video/mp4": "MP4 video",
+  "video/webm": "WebM video",
+  "audio/mpeg": "MP3 audio",
+  "audio/mp4": "M4A audio",
+};
+
 /** "PDF, 1.2 MB" for a file, or "Link to example.org" for a link. */
 export function describeContent(material: {
   kind: string | null;
@@ -49,7 +61,8 @@ export function describeContent(material: {
 }): string {
   if (material.kind === "link") return material.link_host ? `Link to ${material.link_host}` : "Link";
   if (material.kind === "file") {
-    const type = TYPE_NAMES[material.file_media_type ?? ""] ?? "File";
+    const media = material.file_media_type ?? "";
+    const type = TYPE_NAMES[media] ?? RECORDING_TYPE_NAMES[media] ?? "File";
     return material.file_bytes ? `${type}, ${formatBytes(Number(material.file_bytes))}` : type;
   }
   return "No content yet";
@@ -57,3 +70,6 @@ export function describeContent(material: {
 
 /** Types a facilitator can upload as material: the bucket's list (the server checks again). */
 export const MATERIAL_TYPES = Object.keys(TYPE_NAMES);
+
+/** Types a recording can be uploaded as: the recordings bucket's list (the server checks again). */
+export const RECORDING_TYPES = Object.keys(RECORDING_TYPE_NAMES);

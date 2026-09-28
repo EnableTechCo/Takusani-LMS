@@ -3,7 +3,7 @@ import { PageHeader } from "@/components/shell/page-header";
 import { buttonClass, iconClass } from "@/components/ui/button-class";
 import { Icon } from "@/components/ui/icons";
 import { TextLink } from "@/components/ui/link";
-import { Banner } from "@/components/ui/status";
+import { Banner, Tag } from "@/components/ui/status";
 import { formatLongDayOf } from "@/lib/dates";
 import { AccessLogger } from "@/modules/learning/materials-forms";
 import { describeContent } from "@/modules/learning/materials-rules";
@@ -22,11 +22,21 @@ export default async function LearnMaterialPage({ params }: { params: Promise<{ 
       <AccessLogger materialId={material.id} />
       <PageHeader
         lead={material.module_title ?? undefined}
-        meta={<span>Released {formatLongDayOf(material.release_at)}</span>}
+        meta={
+          <>
+            {material.category === "recording" ? <Tag tone="info">Recording</Tag> : null}
+            <span>Released {formatLongDayOf(material.release_at)}</span>
+          </>
+        }
         title={material.title}
         workspace="Learning"
       />
       <div className="stack stack--lg">
+        {material.category === "recording" && !material.has_captions ? (
+          <Banner role="note" title="This recording has no captions or transcript" tone="info">
+            <p>If you need them, ask your facilitator.</p>
+          </Banner>
+        ) : null}
         {material.description ? (
           <div className="prose">
             {material.description
@@ -64,7 +74,7 @@ export default async function LearnMaterialPage({ params }: { params: Promise<{ 
               target="_blank"
             >
               <Icon className={iconClass()} name="external" />
-              Open the link
+              {material.category === "recording" ? "Open the recording" : "Open the link"}
               <span className="u-visually-hidden"> (opens {host} in a new tab)</span>
             </a>
             <span className="text-small text-muted"> {host}</span>

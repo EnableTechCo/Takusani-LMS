@@ -264,6 +264,18 @@ export type Database = {
           status: string
         }[]
       }
+      create_recording: {
+        Args: {
+          p_cohort_id: string
+          p_description?: string
+          p_module_id?: string
+          p_title: string
+        }
+        Returns: {
+          material_id: string
+          status: string
+        }[]
+      }
       create_session: {
         Args: {
           p_cohort_id: string
@@ -513,6 +525,7 @@ export type Database = {
       get_material: {
         Args: { p_material_id: string }
         Returns: {
+          category: string
           cohort_id: string
           cohort_name: string
           description: string
@@ -520,6 +533,7 @@ export type Database = {
           file_id: string
           file_media_type: string
           file_name: string
+          has_captions: boolean
           id: string
           kind: string
           link_url: string
@@ -566,12 +580,14 @@ export type Database = {
       get_my_material: {
         Args: { p_material_id: string }
         Returns: {
+          category: string
           description: string
           file_bucket: string
           file_bytes: number
           file_key: string
           file_media_type: string
           file_name: string
+          has_captions: boolean
           id: string
           kind: string
           link_url: string
@@ -632,6 +648,22 @@ export type Database = {
           send_at: string
           sender_name: string
           sent_at: string
+          state: string
+          title: string
+        }[]
+      }
+      get_register: {
+        Args: { p_session_id: string }
+        Returns: {
+          amendments: Json
+          captured_at: string
+          captured_by_name: string
+          cohort_name: string
+          duration_minutes: number
+          register_version: number
+          roster: Json
+          session_id: string
+          starts_at: string
           state: string
           title: string
         }[]
@@ -871,7 +903,9 @@ export type Database = {
       list_materials: {
         Args: never
         Returns: {
+          category: string
           cohort_name: string
+          has_captions: boolean
           id: string
           kind: string
           module_title: string
@@ -909,10 +943,12 @@ export type Database = {
       list_my_materials: {
         Args: { p_search?: string }
         Returns: {
+          category: string
           cohort_name: string
           description: string
           file_bytes: number
           file_media_type: string
+          has_captions: boolean
           id: string
           kind: string
           link_host: string
@@ -1280,6 +1316,7 @@ export type Database = {
           appeal_turnaround_working_days: number
           appeal_window_days: number
           late_policy: string
+          recording_max_mb: number
           upload_max_mb: number
         }[]
       }
@@ -1361,6 +1398,19 @@ export type Database = {
           status: string
         }[]
       }
+      save_register: {
+        Args: {
+          p_expected_version: number
+          p_marks: Json
+          p_reason?: string
+          p_session_id: string
+        }
+        Returns: {
+          changed: number
+          register_version: number
+          status: string
+        }[]
+      }
       scheduled_job_health: {
         Args: never
         Returns: {
@@ -1382,6 +1432,12 @@ export type Database = {
           sent: number
           skipped_recent: number
           skipped_submitted: number
+          status: string
+        }[]
+      }
+      set_recording_captions: {
+        Args: { p_has_captions: boolean; p_material_id: string }
+        Returns: {
           status: string
         }[]
       }

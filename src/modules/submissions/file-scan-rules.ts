@@ -32,7 +32,7 @@ function contains(bytes: Uint8Array, text: string, limit = bytes.length): boolea
 }
 
 /**
- * The media type the bytes themselves show, for the types the LMS accepts. An Office file is a ZIP archive whose
+ * The media type the bytes themselves show, for the types the LMS accepts, recordings included (S3-12). An Office file is a ZIP archive whose
  * entry names say which application wrote it. Anything else is "application/octet-stream".
  */
 export function detectMediaType(bytes: Uint8Array): string {
@@ -40,6 +40,14 @@ export function detectMediaType(bytes: Uint8Array): string {
   if (startsWith(bytes, [0xff, 0xd8, 0xff])) return "image/jpeg";
   // A PDF's header may follow a little leading junk; readers look in the first kilobyte.
   if (contains(bytes, "%PDF-", 1024)) return "application/pdf";
+  // ISO media (MP4, M4A): a "ftyp" box at offset 4 whose brand says whether it is audio only.
+  if (startsWith(bytes, [0x66, 0x74, 0x79, 0x70], 4)) {
+    const brand = String.fromCharCode(...bytes.slice(8, 12));
+    return brand === "M4A " || brand === "M4B " ? "audio/mp4" : "video/mp4";
+  }
+  if (startsWith(bytes, [0x1a, 0x45, 0xdf, 0xa3]) && contains(bytes, "webm", 64)) return "video/webm";
+  // MP3: an ID3 tag, or straight into an MPEG audio frame (11 sync bits, layer III).
+  if (startsWith(bytes, [0x49, 0x44, 0x33]) || (bytes[0] === 0xff && (bytes[1] & 0xe6) === 0xe2)) return "audio/mpeg";
   if (startsWith(bytes, [0x50, 0x4b, 0x03, 0x04])) {
     if (contains(bytes, "word/document.xml")) return DOCX;
     if (contains(bytes, "xl/workbook.xml")) return XLSX;
