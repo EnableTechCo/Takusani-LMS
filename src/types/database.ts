@@ -72,6 +72,12 @@ export type Database = {
           status: string
         }[]
       }
+      cancel_configuration_version: {
+        Args: { p_key: string; p_reason: string; p_version: number }
+        Returns: {
+          status: string
+        }[]
+      }
       cancel_import_batch: {
         Args: { p_batch_id: string }
         Returns: {
@@ -412,6 +418,25 @@ export type Database = {
           type: string
         }[]
       }
+      get_configuration_key: {
+        Args: { p_key: string }
+        Returns: {
+          affects: string
+          choices: Json
+          current_version: number
+          description: string
+          does_not_affect: string
+          group_label: string
+          in_use: boolean
+          key: string
+          label: string
+          max_value: number
+          min_value: number
+          unit_label: string
+          value_type: string
+          versions: Json
+        }[]
+      }
       get_import_rows: {
         Args: { p_batch_id: string; p_outcome?: string }
         Returns: {
@@ -615,6 +640,15 @@ export type Database = {
           title: string
         }[]
       }
+      get_unit_credit_history: {
+        Args: { p_unit_id: string }
+        Returns: {
+          programme_title: string
+          unit_code: string
+          unit_title: string
+          versions: Json
+        }[]
+      }
       health_check: { Args: never; Returns: boolean }
       list_account_history: {
         Args: { p_profile_id: string }
@@ -740,6 +774,25 @@ export type Database = {
           programme_title: string
           starts_on: string
           status: string
+        }[]
+      }
+      list_configuration: {
+        Args: never
+        Returns: {
+          choices: Json
+          effective_from: string
+          group_key: string
+          group_label: string
+          in_use: boolean
+          key: string
+          label: string
+          recorded_by_name: string
+          scheduled_from: string
+          scheduled_value: Json
+          unit_label: string
+          value: Json
+          value_type: string
+          version: number
         }[]
       }
       list_enrolments: {
@@ -1057,6 +1110,20 @@ export type Database = {
           title: string
         }[]
       }
+      list_unit_credit_values: {
+        Args: never
+        Returns: {
+          credits: number
+          effective_from: string
+          programme_title: string
+          scheduled_credits: number
+          scheduled_from: string
+          set_by_name: string
+          unit_code: string
+          unit_id: string
+          unit_title: string
+        }[]
+      }
       list_work_cohorts: {
         Args: never
         Returns: {
@@ -1182,6 +1249,15 @@ export type Database = {
         Args: { p_role: string; p_user_id: string }
         Returns: string
       }
+      public_settings: {
+        Args: never
+        Returns: {
+          appeal_turnaround_working_days: number
+          appeal_window_days: number
+          late_policy: string
+          upload_max_mb: number
+        }[]
+      }
       publish_material: {
         Args: { p_material_id: string; p_release_at?: string }
         Returns: {
@@ -1200,6 +1276,19 @@ export type Database = {
         Args: { p_profile_id: string }
         Returns: {
           status: string
+        }[]
+      }
+      record_configuration_version: {
+        Args: {
+          p_effective_on: string
+          p_key: string
+          p_reason: string
+          p_value: string
+        }
+        Returns: {
+          effective_from: string
+          status: string
+          version: number
         }[]
       }
       record_password_reset: {
@@ -1255,6 +1344,18 @@ export type Database = {
         Args: { p_requirements: Json; p_task_id: string }
         Returns: {
           requirement_count: number
+          status: string
+        }[]
+      }
+      set_unit_credit_value: {
+        Args: {
+          p_credits: number
+          p_effective_on: string
+          p_reason: string
+          p_unit_id: string
+        }
+        Returns: {
+          effective_from: string
           status: string
         }[]
       }

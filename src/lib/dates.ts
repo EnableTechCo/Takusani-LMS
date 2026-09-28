@@ -110,6 +110,21 @@ export function sastDaysFromToday(iso: string, now: Date = new Date()): number {
   return Math.round((Date.parse(`${target}T00:00:00Z`) - Date.parse(`${today}T00:00:00Z`)) / 86_400_000);
 }
 
+/** Whole calendar days between two instants' South African dates. */
+export function sastDaysBetween(fromIso: string, toIso: string): number {
+  const day = (iso: string) => new Intl.DateTimeFormat("en-CA", { timeZone: ZONE }).format(new Date(iso));
+  return Math.round((Date.parse(`${day(toIso)}T00:00:00Z`) - Date.parse(`${day(fromIso)}T00:00:00Z`)) / 86_400_000);
+}
+
+/**
+ * A result's appeal window in days: from its release to the end of its last day. Its deadline is the start of the
+ * day after that last day, so the window is the days between them less one (P-11). Read from the result, so it is the
+ * window in force when the result was released, even if the setting has changed since.
+ */
+export function appealWindowDaysOf(releasedAt: string, deadlineAt: string): number {
+  return sastDaysBetween(releasedAt, deadlineAt) - 1;
+}
+
 /** The time of day of an instant in South Africa, for example "12:39". */
 export function formatTime(iso: string): string {
   return new Intl.DateTimeFormat("en-ZA", {

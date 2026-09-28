@@ -114,8 +114,8 @@ export default async function NotificationsPage({
           </>
         )}
         <p className="text-small text-muted">
-          Times are South African time (SAST). The message in the LMS is the record that you were told: your 7 days to
-          appeal a result are counted from its release, even if an email does not arrive.
+          Times are South African time (SAST). The message in the LMS is the record that you were told: your time to
+          appeal a result is counted from its release, even if an email does not arrive.
         </p>
       </div>
     </div>

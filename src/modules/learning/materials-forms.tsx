@@ -103,7 +103,7 @@ export function MaterialDetailsForm({
  * The material's file: the same resumable upload learners use for their work (ADR-007), into the materials bucket.
  * Each file that finishes uploading becomes the material's content; uploading another replaces it.
  */
-export function MaterialFileUpload({ materialId }: { materialId: string }) {
+export function MaterialFileUpload({ materialId, maxMb = 25 }: { materialId: string; maxMb?: number }) {
   const router = useRouter();
   const attached = useRef(new Set<string>());
   const [message, setMessage] = useState<string | null>(null);
@@ -126,9 +126,10 @@ export function MaterialFileUpload({ materialId }: { materialId: string }) {
         already={[]}
         contextId={materialId}
         contextType="material"
+        maxMb={maxMb}
         copy={{
           slotTitle: "Upload a file",
-          help: "PDF, Word, Excel, PowerPoint, JPG or PNG. Up to 25 MB. A new file replaces the current one.",
+          help: `PDF, Word, Excel, PowerPoint, JPG or PNG. Up to ${maxMb} MB. A new file replaces the current one.`,
           ready: (count) => `${count} ${count === 1 ? "file" : "files"} uploaded.`,
         }}
         onChange={onChange}

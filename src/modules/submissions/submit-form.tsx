@@ -22,6 +22,7 @@ export function SubmitForm({
   nextVersion,
   willBeLate,
   latePolicySentence,
+  maxMb = 25,
 }: {
   taskId: string;
   requirements: Requirement[];
@@ -30,6 +31,8 @@ export function SubmitForm({
   /** The due date has passed and late work is accepted: the learner is told before they submit, not after. */
   willBeLate: boolean;
   latePolicySentence: string;
+  /** The largest file in the configuration (S3-09). */
+  maxMb?: number;
 }) {
   const router = useRouter();
   const [files, setFiles] = useState<UploadedFile[]>(already);
@@ -81,7 +84,13 @@ export function SubmitForm({
         <h2 className="text-heading" id="files-h">
           Step 1: add your files
         </h2>
-        <UploadWidget already={already} contextId={taskId} onChange={onChange} requirements={requirements} />
+        <UploadWidget
+          already={already}
+          contextId={taskId}
+          maxMb={maxMb}
+          onChange={onChange}
+          requirements={requirements}
+        />
       </section>
 
       <section aria-labelledby="review-h" className="stack">

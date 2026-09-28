@@ -1,4 +1,5 @@
 import { notFound, redirect } from "next/navigation";
+import { getPublicSettings } from "@/modules/audit/settings";
 import { PageHeader } from "@/components/shell/page-header";
 import { TextLink } from "@/components/ui/link";
 import { getMyTask, listMyUploads } from "@/modules/submissions/queries";
@@ -40,6 +41,7 @@ export default async function SubmitTaskPage({ params }: { params: Promise<{ tas
           bytes: Number(upload.bytes),
         }))}
         latePolicySentence={LATE_POLICY_LABELS[task.late_policy] ?? task.late_policy}
+        maxMb={(await getPublicSettings()).uploadMaxMb}
         nextVersion={(versions[0]?.version_number ?? 0) + 1}
         requirements={requirements}
         taskId={task.id}
