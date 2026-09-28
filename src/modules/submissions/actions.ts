@@ -181,11 +181,12 @@ export async function publishTask(taskId: string, ...ignored: [FormState, FormDa
 }
 
 /**
- * Step 1 of an upload (ADR-007): the database decides whether this learner may upload for this task and hands back
- * one random object key with its limits. The browser then sends the file straight to Storage.
+ * Step 1 of an upload (ADR-007): the database decides whether this person may upload for this task (or material)
+ * and hands back one random object key with its limits. The browser then sends the file straight to Storage.
  */
 export async function authoriseUpload(input: {
-  taskId: string;
+  contextType?: "task_submission" | "material";
+  contextId: string;
   requirementId: string | null;
   filename: string;
   mediaType: string;
@@ -197,8 +198,8 @@ export async function authoriseUpload(input: {
 > {
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("authorise_upload", {
-    p_context_type: "task_submission",
-    p_context_id: input.taskId,
+    p_context_type: input.contextType ?? "task_submission",
+    p_context_id: input.contextId,
     p_filename: input.filename,
     p_media_type: input.mediaType,
     p_bytes: input.bytes,

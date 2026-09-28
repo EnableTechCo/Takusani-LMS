@@ -33,7 +33,7 @@ select results_eq(
 reset role;
 select pg_temp.act_as(:'learner');
 select results_eq(
-  format($$ select status from api.authorise_upload('material', %L, 'notes.pdf', %L, 1024) $$, :'task', :'pdf'),
+  format($$ select status from api.authorise_upload('exam_answer', %L, 'notes.pdf', %L, 1024) $$, :'task', :'pdf'),
   $$ values ('invalid_context'::text) $$, 'only contexts we have built are accepted');
 select results_eq(
   format($$ select status, max_bytes from api.authorise_upload('task_submission', %L, 'walkthrough.mov',

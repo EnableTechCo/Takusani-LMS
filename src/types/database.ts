@@ -15,6 +15,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      archive_material: {
+        Args: { p_material_id: string }
+        Returns: {
+          status: string
+        }[]
+      }
+      attach_material_file: {
+        Args: { p_file_id: string; p_material_id: string }
+        Returns: {
+          status: string
+        }[]
+      }
       authorise_upload: {
         Args: {
           p_bytes: number
@@ -111,6 +123,18 @@ export type Database = {
         Returns: {
           batch_id: string
           detail: Json
+          status: string
+        }[]
+      }
+      create_material: {
+        Args: {
+          p_cohort_id: string
+          p_description?: string
+          p_module_id?: string
+          p_title: string
+        }
+        Returns: {
+          material_id: string
           status: string
         }[]
       }
@@ -243,6 +267,44 @@ export type Database = {
           versions: Json
         }[]
       }
+      get_material: {
+        Args: { p_material_id: string }
+        Returns: {
+          cohort_id: string
+          cohort_name: string
+          description: string
+          file_bytes: number
+          file_id: string
+          file_media_type: string
+          file_name: string
+          id: string
+          kind: string
+          link_url: string
+          module_id: string
+          opened_by: number
+          programme_id: string
+          release_at: string
+          state: string
+          title: string
+        }[]
+      }
+      get_my_material: {
+        Args: { p_material_id: string }
+        Returns: {
+          description: string
+          file_bucket: string
+          file_bytes: number
+          file_key: string
+          file_media_type: string
+          file_name: string
+          id: string
+          kind: string
+          link_url: string
+          module_title: string
+          release_at: string
+          title: string
+        }[]
+      }
       get_my_result: {
         Args: { p_result_id: string }
         Returns: {
@@ -343,6 +405,14 @@ export type Database = {
           scope_type: string
         }[]
       }
+      list_cohort_modules: {
+        Args: { p_cohort_id: string }
+        Returns: {
+          code: string
+          id: string
+          title: string
+        }[]
+      }
       list_cohorts: {
         Args: never
         Returns: {
@@ -414,6 +484,19 @@ export type Database = {
           version_number: number
         }[]
       }
+      list_materials: {
+        Args: never
+        Returns: {
+          cohort_name: string
+          id: string
+          kind: string
+          module_title: string
+          release_at: string
+          state: string
+          title: string
+          updated_at: string
+        }[]
+      }
       list_my_enrolments: {
         Args: never
         Returns: {
@@ -423,6 +506,22 @@ export type Database = {
           nqf_level: number
           programme_title: string
           starts_on: string
+        }[]
+      }
+      list_my_materials: {
+        Args: { p_search?: string }
+        Returns: {
+          cohort_name: string
+          description: string
+          file_bytes: number
+          file_media_type: string
+          id: string
+          kind: string
+          link_host: string
+          module_code: string
+          module_title: string
+          release_at: string
+          title: string
         }[]
       }
       list_my_notifications: {
@@ -518,6 +617,12 @@ export type Database = {
           status: string
         }[]
       }
+      log_material_access: {
+        Args: { p_material_id: string }
+        Returns: {
+          status: string
+        }[]
+      }
       mark_my_notifications_read: {
         Args: { p_category?: string }
         Returns: {
@@ -569,6 +674,13 @@ export type Database = {
       provision_role: {
         Args: { p_role: string; p_user_id: string }
         Returns: string
+      }
+      publish_material: {
+        Args: { p_material_id: string; p_release_at?: string }
+        Returns: {
+          release_at: string
+          status: string
+        }[]
       }
       publish_task: {
         Args: { p_task_id: string }
@@ -649,6 +761,18 @@ export type Database = {
         Args: { p_instance_id: string }
         Returns: {
           instance_version: number
+          status: string
+        }[]
+      }
+      update_material: {
+        Args: {
+          p_description: string
+          p_link_url?: string
+          p_material_id: string
+          p_module_id?: string
+          p_title: string
+        }
+        Returns: {
           status: string
         }[]
       }
