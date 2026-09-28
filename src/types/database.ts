@@ -1220,6 +1220,27 @@ export type Database = {
           title: string
         }[]
       }
+      list_my_release_status: {
+        Args: never
+        Returns: {
+          cohort_id: string
+          cohort_name: string
+          decided_at: string
+          decision_id: string
+          instance_id: string
+          item_id: string
+          item_title: string
+          learner_name: string
+          learner_number: string
+          moderation_policy: string
+          outcome: string
+          released_at: string
+          replaced_at: string
+          replaced_by: string
+          result_id: string
+          stage: string
+        }[]
+      }
       list_my_results: {
         Args: never
         Returns: {
