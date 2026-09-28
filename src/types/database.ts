@@ -15,6 +15,17 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      allocate_appeal_reviewer: {
+        Args: {
+          p_appeal_id: string
+          p_reviewer_id: string
+          p_skip_reason?: string
+        }
+        Returns: {
+          conflicts: Json
+          status: string
+        }[]
+      }
       archive_material: {
         Args: { p_material_id: string }
         Returns: {
@@ -237,6 +248,12 @@ export type Database = {
           unit_id: string
         }[]
       }
+      decide_appeal_admissibility: {
+        Args: { p_admit: boolean; p_appeal_id: string; p_reason?: string }
+        Returns: {
+          status: string
+        }[]
+      }
       discard_upload: {
         Args: { p_file_id: string }
         Returns: {
@@ -300,10 +317,16 @@ export type Database = {
       get_appeal_to_coordinate: {
         Args: { p_appeal_id: string }
         Returns: {
+          admissibility: string
+          admissibility_decided_at: string
+          admissibility_decided_by_name: string
+          admissibility_reason: string
+          allocated_at: string
           appealed_outcome: string
           assessor_name: string
           cohort_name: string
           deadline_at: string
+          decisions: Json
           events: Json
           grounds: string
           id: string
@@ -316,6 +339,9 @@ export type Database = {
           reference: string
           released_at: string
           result_id: string
+          reviewer_id: string
+          reviewer_name: string
+          reviewer_tier: number
           state: string
           turnaround_working_days: number
           type: string
@@ -402,6 +428,7 @@ export type Database = {
       get_my_appeal: {
         Args: { p_appeal_id: string }
         Returns: {
+          admissibility_reason: string
           appealed_outcome: string
           cohort_name: string
           coordinator_names: string[]
@@ -528,6 +555,18 @@ export type Database = {
           status: string
         }[]
       }
+      list_appeal_reviewer_candidates: {
+        Args: { p_appeal_id: string }
+        Returns: {
+          excluded_by: Json
+          full_name: string
+          is_current: boolean
+          open_reviews: number
+          profile_id: string
+          role_label: string
+          tier: number
+        }[]
+      }
       list_appeals_to_coordinate: {
         Args: never
         Returns: {
@@ -539,6 +578,7 @@ export type Database = {
           learner_number: string
           lodged_at: string
           reference: string
+          reviewer_name: string
           state: string
           type: string
         }[]

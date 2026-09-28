@@ -190,7 +190,70 @@ function appealLodged(payload: Payload): Rendered {
   };
 }
 
+/** The appeal was accepted (FR-605): for a re-mark, a reviewer who did not mark the work marks it again. */
+function appealAdmitted(payload: Payload): Rendered {
+  const reference = text(payload, "reference");
+  const item = text(payload, "item_title");
+  if (text(payload, "type") === "view_script") {
+    return {
+      title: `Your request to see your marked work was accepted`,
+      summary: `Appeal ${reference} about ${item}.`,
+      paragraphs: [
+        `Your request ${reference} to see your marked work for ${item} was accepted.`,
+        `You will see your work next to the marks for each criterion and the assessor's feedback on your appeal's page. Seeing it does not give you more time to ask for a re-mark.`,
+      ],
+      action: "See your appeal",
+    };
+  }
+  const days = Number(payload.turnaround_working_days);
+  return {
+    title: `Your appeal ${reference} was accepted`,
+    summary: `A reviewer who did not mark your work will mark ${item} again.`,
+    paragraphs: [
+      `Your appeal ${reference} about ${item} was accepted.`,
+      `A reviewer who did not mark your work will mark it again. The mark can stay the same, go up or go down. That decision is final.`,
+      `You should hear from us within ${days === 1 ? "1 working day" : `${days} working days`} of lodging your appeal.`,
+    ],
+    action: "See your appeal",
+  };
+}
+
+/** The appeal was not accepted (FR-605): the coordinator's reason, word for word. */
+function appealInadmissible(payload: Payload): Rendered {
+  const reference = text(payload, "reference");
+  const reason = text(payload, "reason");
+  return {
+    title: `Your appeal ${reference} was not accepted`,
+    summary: reason.length > 160 ? `${reason.slice(0, 157).trimEnd()}...` : reason,
+    paragraphs: [
+      `Your appeal ${reference} about ${text(payload, "item_title")} was checked and could not be accepted.`,
+      `The reason given: ${reason}`,
+      `If you have a question about this, ask your coordinator.`,
+    ],
+    action: "See your appeal",
+  };
+}
+
+/** A reviewer has been allocated a re-mark (FR-608). Staff see the learner's name (UX Q7). */
+function appealReviewAllocated(payload: Payload): Rendered {
+  const reference = text(payload, "reference");
+  const item = text(payload, "item_title");
+  const learner = text(payload, "learner_name");
+  return {
+    title: `Appeal ${reference} to review: ${learner}`,
+    summary: `A re-mark of ${item} (${text(payload, "cohort_name")}). Your decision is final.`,
+    paragraphs: [
+      `You have been allocated appeal ${reference}: ${learner} asked for ${item} (${text(payload, "cohort_name")}) to be marked again.`,
+      `You took no assessment decision on this work, which is why you were chosen. Your decision is final and can move the mark up or down.`,
+    ],
+    action: "Open the review",
+  };
+}
+
 const TEMPLATES: Record<string, Record<number, (payload: Payload) => Rendered>> = {
+  appeal_admitted: { 1: appealAdmitted },
+  appeal_inadmissible: { 1: appealInadmissible },
+  appeal_review_allocated: { 1: appealReviewAllocated },
   appeal_received: { 1: appealReceived },
   appeal_lodged: { 1: appealLodged },
   result_released: { 1: resultReleased },

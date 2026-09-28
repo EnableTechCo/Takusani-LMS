@@ -45,3 +45,11 @@ export async function getAppealToCoordinate(appealId: string) {
   if (error) throw new Error(`api.get_appeal_to_coordinate failed: ${error.message}`);
   return data?.[0] ?? null;
 }
+
+/** The reviewer list for a coordinator (AS-02): tiers first, then everyone excluded, each with the reason. */
+export async function listAppealReviewerCandidates(appealId: string) {
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("list_appeal_reviewer_candidates", { p_appeal_id: appealId });
+  if (error) throw new Error(`api.list_appeal_reviewer_candidates failed: ${error.message}`);
+  return data;
+}

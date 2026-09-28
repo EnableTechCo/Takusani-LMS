@@ -33,14 +33,22 @@ export const LEARNER_STATE_LABELS: Record<AppealState, string> = {
 };
 
 /** Where the appeal stands, in the coordinator's words: what it needs from them first. */
-export const COORDINATOR_STATE_LABELS: Record<AppealState, string> = {
-  lodged: "Needs your check",
-  admitted: "Accepted",
-  inadmissible: "Not accepted",
-  allocated: "With a reviewer",
-  under_review: "Being reviewed",
-  concluded: "Decided",
-};
+export function coordinatorStateLabel(type: string, state: string): string {
+  if (state === "lodged") return "Needs your check";
+  if (state === "admitted") return type === "remark" ? "Needs a reviewer" : "View granted";
+  const labels: Record<string, string> = {
+    inadmissible: "Not accepted",
+    allocated: "With a reviewer",
+    under_review: "Being reviewed",
+    concluded: "Decided",
+  };
+  return labels[state] ?? state;
+}
+
+/** The coordinator acts on it next: a check, or a reviewer for an accepted re-mark. */
+export function needsCoordinator(type: string, state: string): boolean {
+  return state === "lodged" || (state === "admitted" && type === "remark");
+}
 
 export function isOpen(state: string): boolean {
   return state !== "inadmissible" && state !== "concluded";
@@ -79,6 +87,52 @@ export const APPEAL_REFUSALS: Record<string, string> = {
   error: "The appeal could not be lodged. Your reasons are still on this page; try again.",
 };
 
+export const ADMISSIBILITY_REFUSALS: Record<string, string> = {
+  unauthenticated: "Your session has ended. Sign in again; nothing was recorded.",
+  not_found: "This appeal is not in a cohort you coordinate.",
+  already_decided: "This appeal has already been checked, so nothing was changed. The page now shows the decision.",
+  reason_required:
+    "Enter a reason. An appeal cannot be recorded as inadmissible without one, because the learner must be told why.",
+  reason_too_long: "The reason is longer than 1000 characters. Shorten it and try again.",
+  remark_used: "A re-mark of this result has already been accepted. Only one re-mark is allowed for each result.",
+  error: "The decision could not be recorded. Try again.",
+};
+
+export const ALLOCATION_REFUSALS: Record<string, string> = {
+  unauthenticated: "Your session has ended. Sign in again; nothing was allocated.",
+  not_found: "This appeal is not in a cohort you coordinate.",
+  not_a_remark: "Only a re-mark has a reviewer.",
+  not_admitted: "Accept the appeal before choosing a reviewer.",
+  closed: "This appeal is closed, so its reviewer cannot be changed.",
+  not_eligible:
+    "This person does not hold an assessor or moderator role, so they cannot review appeals. Nothing was allocated.",
+  already_allocated: "This person is already the reviewer. Nothing was changed.",
+  skip_reason_required: "Someone is available in an earlier group. Say why you are passing over them.",
+  invalid_reviewer: "Choose a reviewer.",
+  error: "The reviewer could not be allocated. Try again.",
+};
+
+/** AS-02, in the order the appeals policy sets (P-10). */
+export const TIER_LABELS: Record<number, string> = {
+  1: "Tier 1: independent qualified internal reviewers",
+  2: "Tier 2: cohort moderator",
+  3: "Tier 3: qualified assessors from other cohorts",
+};
+
+/** What each tier means, said once under the reviewer's name once allocated. */
+export const TIER_DESCRIPTIONS: Record<number, string> = {
+  1: "tier 1, an assessor for this cohort who took no assessment decision on this work",
+  2: "tier 2, the cohort moderator, who took no assessment decision on this work",
+  3: "tier 3, an assessor from another cohort, given access to this appeal only",
+};
+
+export interface ExcludingDecision {
+  decision_id: string;
+  decided_at: string;
+  outcome: string;
+  version_number: number | null;
+}
+
 /** "your coordinator, Ayesha Patel", "your coordinators, Ayesha Patel and Zanele Khumalo", or "your coordinator". */
 export function coordinatorsText(names: string[]): string {
   if (names.length === 0) return "your coordinator";
@@ -110,7 +164,14 @@ export interface AppealStep {
  * re-mark With a reviewer, Being reviewed and Decided. Each step is done, current or still to come, never told by
  * colour alone.
  */
-export function learnerSteps(appeal: { type: AppealType; state: AppealState; lodgedAt: string }): AppealStep[] {
+export function learnerSteps(appeal: {
+  type: AppealType;
+  state: AppealState;
+  lodgedAt: string;
+  /** When the coordinator decided admissibility, and when a reviewer was first allocated. */
+  checkedAt?: string | null;
+  allocatedAt?: string | null;
+}): AppealStep[] {
   const received: AppealStep = {
     label: "Received",
     state: "complete",
@@ -122,15 +183,23 @@ export function learnerSteps(appeal: { type: AppealType; state: AppealState; lod
     body: "Your coordinator checks that the appeal is in time and gives reasons. If it is not accepted, you will be told why.",
   };
   if (appeal.state === "inadmissible") {
-    return [received, { ...checking, state: "complete" }, { label: "Not accepted", state: "complete" }];
+    return [
+      received,
+      { ...checking, state: "complete" },
+      { label: "Not accepted", state: "complete", at: appeal.checkedAt ?? undefined },
+    ];
   }
 
   const rest: Omit<AppealStep, "state">[] =
     appeal.type === "remark"
       ? [
           checking,
-          { label: "Accepted" },
-          { label: "With a reviewer", body: "A reviewer who did not mark your work is chosen." },
+          { label: "Accepted", at: appeal.checkedAt ?? undefined },
+          {
+            label: "With a reviewer",
+            body: "A reviewer who did not mark your work is chosen.",
+            at: appeal.allocatedAt ?? undefined,
+          },
           { label: "Being reviewed", body: "The reviewer marks your work again." },
           { label: "Decided", body: "The decision is final. The mark can stay the same, go up or go down." },
         ]
@@ -138,6 +207,7 @@ export function learnerSteps(appeal: { type: AppealType; state: AppealState; lod
           checking,
           {
             label: "Accepted: see your marked work",
+            at: appeal.checkedAt ?? undefined,
             body: "You can see your work next to the marks for each criterion and the assessor's feedback.",
           },
         ];
@@ -152,6 +222,8 @@ export function learnerSteps(appeal: { type: AppealType; state: AppealState; lod
     ...rest.map((step, index): AppealStep => ({
       ...step,
       state: index < complete ? "complete" : index === complete ? "current" : "upcoming",
+      // A time belongs to a step that has happened.
+      at: index < complete ? step.at : undefined,
     })),
   ];
 }

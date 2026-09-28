@@ -1,6 +1,15 @@
 import { describe, expect, it } from "vitest";
 import { renderNotification } from "@/modules/notifications/templates";
-import { coordinatorsText, groundsCount, groundsError, learnerSteps, pointsText, turnaroundText } from "./rules";
+import {
+  coordinatorStateLabel,
+  coordinatorsText,
+  groundsCount,
+  groundsError,
+  learnerSteps,
+  needsCoordinator,
+  pointsText,
+  turnaroundText,
+} from "./rules";
 
 describe("appeal grounds (FR-602)", () => {
   it("are required, at least 50 characters and at most 2000, as the database checks", () => {
@@ -101,5 +110,70 @@ describe("appeal notifications (FR-604)", () => {
     expect(alert.summary).toBe(
       "Lerato Mokoena asked to see the marked work for Task 3 (2026 Intake B). It needs your check.",
     );
+  });
+});
+
+describe("appeals administration (S3-02)", () => {
+  it("tells the coordinator what each appeal needs from them", () => {
+    expect(coordinatorStateLabel("remark", "lodged")).toBe("Needs your check");
+    expect(coordinatorStateLabel("remark", "admitted")).toBe("Needs a reviewer");
+    expect(coordinatorStateLabel("view_script", "admitted")).toBe("View granted");
+    expect(coordinatorStateLabel("remark", "allocated")).toBe("With a reviewer");
+    expect(needsCoordinator("remark", "admitted")).toBe(true);
+    expect(needsCoordinator("view_script", "admitted")).toBe(false);
+    expect(needsCoordinator("remark", "allocated")).toBe(false);
+  });
+
+  it("dates the learner's steps once they have happened", () => {
+    const steps = learnerSteps({
+      type: "remark",
+      state: "allocated",
+      lodgedAt: "2026-09-24T06:14:00Z",
+      checkedAt: "2026-09-25T08:02:00Z",
+      allocatedAt: "2026-09-25T08:20:00Z",
+    });
+    expect(steps.map((step) => [step.label, step.state, step.at ?? null])).toEqual([
+      ["Received", "complete", "2026-09-24T06:14:00Z"],
+      ["Being checked", "complete", null],
+      ["Accepted", "complete", "2026-09-25T08:02:00Z"],
+      ["With a reviewer", "complete", "2026-09-25T08:20:00Z"],
+      ["Being reviewed", "current", null],
+      ["Decided", "upcoming", null],
+    ]);
+    const refused = learnerSteps({
+      type: "view_script",
+      state: "inadmissible",
+      lodgedAt: "2026-09-24T06:14:00Z",
+      checkedAt: "2026-09-25T08:02:00Z",
+    });
+    expect(refused[2]).toMatchObject({ label: "Not accepted", at: "2026-09-25T08:02:00Z" });
+  });
+
+  it("tells the learner the outcome of the check, with the reason word for word (FR-605)", () => {
+    const base = { reference: "APL-2026-0031", item_title: "Task 3", turnaround_working_days: 5 };
+    expect(renderNotification("appeal_admitted", 1, { ...base, type: "remark" }).title).toBe(
+      "Your appeal APL-2026-0031 was accepted",
+    );
+    expect(renderNotification("appeal_admitted", 1, { ...base, type: "view_script" }).title).toBe(
+      "Your request to see your marked work was accepted",
+    );
+    const refused = renderNotification("appeal_inadmissible", 1, {
+      ...base,
+      type: "remark",
+      reason: "It was lodged about a different task.",
+    });
+    expect(refused.title).toBe("Your appeal APL-2026-0031 was not accepted");
+    expect(refused.paragraphs).toContain("The reason given: It was lodged about a different task.");
+  });
+
+  it("tells the reviewer what they have been given", () => {
+    const allocated = renderNotification("appeal_review_allocated", 1, {
+      reference: "APL-2026-0031",
+      item_title: "Task 3",
+      cohort_name: "2026 Intake B",
+      learner_name: "Lerato Mokoena",
+    });
+    expect(allocated.title).toBe("Appeal APL-2026-0031 to review: Lerato Mokoena");
+    expect(allocated.summary).toBe("A re-mark of Task 3 (2026 Intake B). Your decision is final.");
   });
 });

@@ -41,6 +41,9 @@ export default async function LearnAppealPage({
   const appealed = `${OUTCOME_LABELS[appeal.appealed_outcome]}${points ? `, ${points}` : ""}`;
   const lastDay = lastFullDayBefore(appeal.deadline_at, "long");
   const coordinators = coordinatorsText(appeal.coordinator_names ?? []);
+  const events = (appeal.events ?? []) as unknown as { event: string; at: string }[];
+  const checkedAt = events.find((entry) => entry.event === "admitted" || entry.event === "inadmissible")?.at ?? null;
+  const allocatedAt = events.find((entry) => entry.event === "allocated")?.at ?? null;
   const resubmitOpen =
     appeal.remediation_deadline_at && new Date(appeal.remediation_deadline_at).getTime() > new Date().getTime();
 
@@ -60,6 +63,14 @@ export default async function LearnAppealPage({
         {flash.lodged ? (
           <Banner compact role="status" title="Your appeal has been lodged" tone="positive">
             <p>Keep the reference {appeal.reference} in case you need to ask about your appeal.</p>
+          </Banner>
+        ) : null}
+
+        {state === "inadmissible" ? (
+          // FR-605: the coordinator's reason, word for word.
+          <Banner icon="scales" role="status" title="Your appeal was not accepted" tone="readonly">
+            <p className="whitespace-pre-line">{appeal.admissibility_reason}</p>
+            <p className="u-mt-2">If you have a question about this, ask {coordinators}.</p>
           </Banner>
         ) : null}
 
@@ -98,7 +109,7 @@ export default async function LearnAppealPage({
           </h2>
           <Stepper
             label={`Progress of your appeal ${appeal.reference}`}
-            steps={learnerSteps({ type, state, lodgedAt: appeal.lodged_at }).map((step) => ({
+            steps={learnerSteps({ type, state, lodgedAt: appeal.lodged_at, checkedAt, allocatedAt }).map((step) => ({
               label: step.label,
               state: step.state,
               meta: step.at ? formatDateTime(step.at) : undefined,
