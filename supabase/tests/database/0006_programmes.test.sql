@@ -68,8 +68,10 @@ select results_eq(
 select (select cohort_id from api.create_cohort(:'programme', 'pgTAP Intake A', '2027-02-01', '2027-12-15')) as cohort \gset
 reset role;
 select results_eq(
-  format($$ select moderation_policy, policy_version from programmes.cohort_moderation_state where cohort_id = %L $$, :'cohort'),
-  $$ values ('not_moderated'::text, 1) $$, 'every new cohort has its moderation policy row, not moderated at go-live');
+  format($$ select c.status, m.moderation_policy, m.policy_version from programmes.cohort_moderation_state m
+            join programmes.cohorts c on c.id = m.cohort_id where m.cohort_id = %L $$, :'cohort'),
+  $$ values ('setup'::text, null::text, 0) $$,
+  'a new cohort starts in setup, with its moderation policy row and no policy chosen yet (S4-03, P-01)');
 select pg_temp.act_as(:'coordinator');
 select results_eq(
   format($$ select status from api.create_cohort(%L, 'pgTAP Intake A', '2027-02-01', '2027-12-15') $$, :'programme'),
@@ -110,7 +112,8 @@ select results_eq(format($$ select status from api.enrol_learner(%L, ' LEARNER@t
 select results_eq(format($$ select status from api.enrol_learner(%L, 'learner@takusani.test') $$, :'cohort'),
   $$ values ('already_enrolled'::text) $$, 'the same learner is not enrolled twice');
 select results_eq(format($$ select full_name, status from api.list_enrolments(%L) $$, :'cohort'),
-  $$ values ('Lerato Mokoena'::text, 'active'::text) $$, 'the cohort lists its enrolled learner');
+  $$ values ('Lerato Mokoena'::text, 'pending'::text) $$,
+  'the cohort lists its enrolled learner, waiting for the cohort to be activated');
 
 reset role;
 select results_eq(

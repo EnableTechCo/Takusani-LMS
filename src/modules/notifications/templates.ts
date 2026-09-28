@@ -365,8 +365,82 @@ function accountReactivated(payload: Payload): Rendered {
   };
 }
 
+const ROLE_NAMES: Record<string, string> = {
+  learner: "learner",
+  facilitator: "facilitator",
+  assessor: "assessor",
+  moderator: "moderator",
+  coordinator: "coordinator",
+  administrator: "administrator",
+};
+
+/** FR-104: a role was given to the person (S3-07; also from a cohort's People page, S4-03). */
+function roleAssigned(payload: Payload): Rendered {
+  const role = ROLE_NAMES[text(payload, "role")] ?? text(payload, "role");
+  const scope = text(payload, "scope_label");
+  const until = typeof payload.until === "string" && payload.until ? payload.until : null;
+  return {
+    title: `You are now ${/^[aeiou]/.test(role) ? "an" : "a"} ${role}: ${scope}`,
+    summary: until ? `Until the end of ${lastFullDayBefore(until, "long")}.` : "From now, with no end date.",
+    paragraphs: [
+      `You have been given the ${role} role for ${scope}${until ? `, until the end of ${lastFullDayBefore(until, "long")}` : ""}. What you can do in the LMS has changed to match.`,
+    ],
+    action: "Open the LMS",
+  };
+}
+
+/** FR-104: a role of the person's ended. */
+function roleEnded(payload: Payload): Rendered {
+  const role = ROLE_NAMES[text(payload, "role")] ?? text(payload, "role");
+  const scope = text(payload, "scope_label");
+  const at = text(payload, "ended_at");
+  return {
+    title: `Your ${role} role has ended: ${scope}`,
+    summary: `Ended on ${formatLongDayOf(at)}.`,
+    paragraphs: [`Your ${role} role for ${scope} ended on ${formatLongDayOf(at)} at ${formatTime(at)} (SAST).`],
+    action: "Open the LMS",
+  };
+}
+
+const READINESS_ITEM_NAMES: Record<string, string> = {
+  moderation_policy: "confirm the moderation policy",
+  learners: "enrol the learners",
+  facilitator: "assign a facilitator",
+  assessor: "assign an assessor",
+  moderator: "assign a moderator",
+  materials: "publish the learning material",
+  published_tasks: "publish a task",
+  sessions: "schedule a session",
+  logistics: "confirm the logistics",
+};
+
+/** FR-702: a coordinator assigned an open readiness item to the person (S4-03). */
+function readinessItemAssigned(payload: Payload): Rendered {
+  const cohort = text(payload, "cohort_name");
+  const item = READINESS_ITEM_NAMES[text(payload, "item_key")] ?? "a readiness item";
+  const due = typeof payload.due_on === "string" && payload.due_on ? payload.due_on : null;
+  const note = typeof payload.note === "string" && payload.note ? payload.note : null;
+  const by =
+    typeof payload.assigned_by_name === "string" && payload.assigned_by_name
+      ? payload.assigned_by_name
+      : "A coordinator";
+  const dueText = due ? `by ${formatLongDayOf(`${due}T12:00:00+02:00`)}` : null;
+  return {
+    title: `${cohort}: please ${item}`,
+    summary: dueText ? `Due ${dueText}.` : `${by} asked you to.`,
+    paragraphs: [
+      `${by} asked you to ${item} for ${cohort}${dueText ? `, ${dueText}` : ""}, so the cohort is ready.`,
+      ...(note ? [`Their note: "${note}"`] : []),
+    ],
+    action: "Open it in the LMS",
+  };
+}
+
 const TEMPLATES: Record<string, Record<number, (payload: Payload) => Rendered>> = {
   password_reset_sent: { 1: passwordResetSent },
+  role_assigned: { 1: roleAssigned },
+  role_ended: { 1: roleEnded },
+  readiness_item_assigned: { 1: readinessItemAssigned },
   account_deactivated: { 1: accountDeactivated },
   account_reactivated: { 1: accountReactivated },
   sign_in_locked: { 1: signInLocked },

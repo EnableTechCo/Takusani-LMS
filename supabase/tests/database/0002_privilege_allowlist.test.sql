@@ -182,7 +182,17 @@ insert into expected_grants values
   ('function', 'api', 'list_my_notes(p_search text, p_folder text)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'list_my_note_folders()', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'get_my_note(p_note_id uuid)', 'authenticated', 'EXECUTE'),
-  ('function', 'api', 'list_note_link_targets()', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'list_note_link_targets()', 'authenticated', 'EXECUTE'),
+  -- Cohort setup (20261026090000): coordinators of the cohort, checked inside each function.
+  ('function', 'api', 'set_moderation_policy(p_cohort_id uuid, p_policy text, p_expected_version integer, p_reason text)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'get_cohort_setup(p_cohort_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_moderation_policy_history(p_cohort_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'activate_cohort(p_cohort_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'get_cohort_readiness(p_cohort_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'assign_readiness_item(p_cohort_id uuid, p_item_key text, p_assignee_id uuid, p_due_on date, p_note text)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'confirm_cohort_logistics(p_cohort_id uuid, p_confirmed boolean)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_cohort_staff(p_cohort_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'assign_cohort_role(p_cohort_id uuid, p_email text, p_role text, p_until timestamp with time zone)', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (

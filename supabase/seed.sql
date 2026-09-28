@@ -71,11 +71,14 @@ values ('10000000-0000-4000-8000-000000000003', 12);
 insert into programmes.modules (programme_id, unit_id, code, title)
 values ('10000000-0000-4000-8000-000000000001', '10000000-0000-4000-8000-000000000003', 'M3',
   'Records and filing');
-insert into programmes.cohorts (id, programme_id, name, starts_on, ends_on)
+-- Already running: active, with its policy chosen as version 1 (cohort setup, S4-03).
+insert into programmes.cohorts (id, programme_id, name, starts_on, ends_on, status, activated_at)
 values ('10000000-0000-4000-8000-000000000010', '10000000-0000-4000-8000-000000000001', '2026 Intake B',
-  '2026-07-01', '2027-06-30');
+  '2026-07-01', '2027-06-30', 'active', now());
 insert into programmes.cohort_moderation_state (cohort_id, moderation_policy)
 values ('10000000-0000-4000-8000-000000000010', 'not_moderated');
+insert into programmes.moderation_policy_versions (cohort_id, version, policy)
+values ('10000000-0000-4000-8000-000000000010', 1, 'not_moderated');
 insert into programmes.enrolments (cohort_id, profile_id)
 values ('10000000-0000-4000-8000-000000000010', '00000000-0000-4000-8000-000000000001');
 

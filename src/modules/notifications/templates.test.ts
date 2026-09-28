@@ -81,4 +81,30 @@ describe("account notices (S3-08)", () => {
       "Your account is active again",
     );
   });
+
+  it("tells a person about a role given or ended, and a readiness item assigned to them", () => {
+    const assigned = renderNotification("role_assigned", 1, {
+      role: "assessor",
+      scope_label: "2027 Intake A",
+      until: null,
+    });
+    expect(assigned.title).toBe("You are now an assessor: 2027 Intake A");
+    expect(assigned.summary).toBe("From now, with no end date.");
+    const ended = renderNotification("role_ended", 1, {
+      role: "moderator",
+      scope_label: "2027 Intake A",
+      ended_at: "2026-10-05T08:00:00Z",
+    });
+    expect(ended.title).toBe("Your moderator role has ended: 2027 Intake A");
+    const item = renderNotification("readiness_item_assigned", 1, {
+      cohort_name: "2027 Intake A",
+      item_key: "materials",
+      due_on: "2026-10-09",
+      note: "The unit 1 pack.",
+      assigned_by_name: "Ayesha Patel",
+    });
+    expect(item.title).toBe("2027 Intake A: please publish the learning material");
+    expect(item.summary).toBe("Due by Friday 9 October 2026.");
+    expect(item.paragraphs.join(" ")).toContain('Their note: "The unit 1 pack."');
+  });
 });

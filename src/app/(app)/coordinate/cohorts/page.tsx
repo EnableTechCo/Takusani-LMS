@@ -54,14 +54,23 @@ export default async function CohortsPage() {
               {
                 key: "moderation",
                 header: "Moderation",
-                cell: (cohort) => MODERATION_POLICY_LABELS[cohort.moderation_policy],
+                cell: (cohort) =>
+                  cohort.moderation_policy ? MODERATION_POLICY_LABELS[cohort.moderation_policy] : "Not chosen yet",
               },
               { key: "learners", header: "Learners", numeric: true, cell: (cohort) => cohort.enrolment_count },
               {
                 key: "status",
                 header: "Status",
                 cell: (cohort) =>
-                  cohort.status === "active" ? <Tag tone="positive">Active</Tag> : <Tag>Archived</Tag>,
+                  cohort.status === "active" ? (
+                    <Tag tone="positive">Active</Tag>
+                  ) : cohort.status === "setup" ? (
+                    <Tag shape="half" tone="info">
+                      Setting up
+                    </Tag>
+                  ) : (
+                    <Tag>Archived</Tag>
+                  ),
               },
             ]}
             rowKey={(cohort) => cohort.id}
