@@ -33,7 +33,7 @@ These are the working and open decisions. Each is applied in the documents as sh
 | P-06 | Does sign-off release the whole cohort (FR-511 wording) or the sampled population? | The frozen population only; later decisions wait for the next cycle (CR-19) | Quality assurance | Sign-off function |
 | P-07 | How do several assessments roll up to one unit's credit, and may one task serve several units? | Credit when every required item has a released Competent decision; many-to-many allowed; requirement set frozen per cohort | Academic policy, with the AS-03 unit list | Credit functions |
 | P-08 | Is one remark appeal per result the rule? Does a view-script request extend the window? | One remark per result, ever; no extension | Academic policy | Appeal functions |
-| P-09 | After an appeal downgrades a result to NYC, does the learner get remediation and resubmission? | Yes, like any NYC decision | Academic policy | Appeal conclusion function |
+| P-09 | After an appeal downgrades a result to NYC, does the learner get remediation and resubmission? | Yes, like any NYC decision **Confirmed by the owner, 28 Sep 2026** (S3-04: the reviewer records what to do and a resubmission period; an upheld NYC keeps the deadline the learner already had). | Academic policy | Appeal conclusion function |
 | P-10 | Is the appeal reviewer fallback order in SRS AS-02 confirmed? | AS-02 order applied | Academic policy | Reviewer allocation |
 | P-11 | Is the seven-day window calendar days, and is the last day inclusive? | Calendar days; closes at the start of the eighth local day; learner shown the last full day **Go-ahead on the working decision, 23 Sep 2026** (S2-08); formal confirmation by the owner still to be recorded. | Academic policy | Release functions |
 | P-12 | Is there an administrative route to correct a wrongly released outcome? | `correction` decision under dual control, original retained | Academic policy | Correction route only |
@@ -136,7 +136,7 @@ Severity is the reviewers'. "Applied in" names the primary location; related tex
 |---|---|---|---|---|---|
 | H1 | A second remark after the first concludes is a second level of appeal | High | One admitted remark per result, ever; appeal decisions not appealable (CR-15) | Working (P-08) | Data model "Appeals"; test 24 |
 | H2 | "Original assessor" unanchored after re-marks and resubmissions | High | Every actor of an assessment-type decision on the result, computed from `decisions` (CR-16) | Decided | Data model "Identity"; test 16 |
-| H3 | Appeal outcome versus later hold, and downgrade to NYC, unstated | Medium | Appeal and correction decisions release immediately and are never claimed by a cycle; downgrade carries remediation | Decided; remediation is P-09 | ADR-019; API conclusion |
+| H3 | Appeal outcome versus later hold, and downgrade to NYC, unstated | Medium | Appeal and correction decisions release immediately and are never claimed by a cycle; downgrade carries remediation | Decided; remediation is P-09, confirmed 28 Sep 2026 | ADR-019; API conclusion |
 | H4 | Module call graph has cycles and missing edges | Medium | Layered acyclic graph; one recorded upward exception; Appeals reads Moderation findings through a published view | Decided | System design "Module boundaries" |
 | H5 | Allocation stored in up to four places; no reallocation; a departure blocks sign-off | Medium | `role_assignments` is capability scope only; allocation lives on the work item; reallocation commands; deactivation refused while allocations are open | Decided | Data model "Identity"; API allocation; test 21 |
 | H6 | Constraints that do not enforce their invariant | Medium | Exclusion constraint for assignment ranges; lock the profile row; attempt limit snapshotted onto the attempt; `not_started` removed | Decided | Data model |
@@ -230,6 +230,6 @@ Each settles an assumption the corrected design depends on. A failed spike reope
 
 **Can start now:** authentication and session handling; the schema-per-module and privilege regime with its CI check (ADR-024); the database test harness; direct resumable uploads; the exam persistence protocol (ADR-023), apart from the grace value; the platform spikes.
 
-**Waits for owner confirmation:** the finalise, freeze, sign-off, appeal, correction, and credit functions, which encode P-01, P-02, P-04 to P-09, and P-11. They are the functions whose mistakes cannot be undone, because a release cannot be recalled.
+**Waits for owner confirmation:** the finalise, freeze, sign-off, appeal, correction, and credit functions, which encode P-01, P-02, P-04 to P-08, and P-11 (P-09 was confirmed on 28 Sep 2026). They are the functions whose mistakes cannot be undone, because a release cannot be recalled.
 
 **Before production data:** P-14 to P-16 (plans and region), P-18 (retention), P-19 (Storage recovery), the Department agreement, and the POPIA cross-border assessment.

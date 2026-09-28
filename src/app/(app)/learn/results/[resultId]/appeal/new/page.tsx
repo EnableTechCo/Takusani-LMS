@@ -4,7 +4,7 @@ import { Icon } from "@/components/ui/icons";
 import { ButtonLink, TextLink } from "@/components/ui/link";
 import { DateTime } from "@/components/ui/records";
 import { Banner, Tag } from "@/components/ui/status";
-import { formatLongDayOf, lastFullDayBefore } from "@/lib/dates";
+import { formatLongDayOf, formatTime } from "@/lib/dates";
 import { LodgeAppealForm, type LodgeFacts } from "@/modules/appeals/forms";
 import { getAppealOptions } from "@/modules/appeals/queries";
 import { coordinatorsText, pointsText } from "@/modules/appeals/rules";
@@ -25,8 +25,9 @@ export default async function LearnAppealNewPage({ params }: { params: Promise<{
   const resultText = points ? `${outcome}, ${points}` : outcome;
   const resubmitOpen =
     options.remediation_deadline_at && new Date(options.remediation_deadline_at).getTime() > now.getTime();
+  // An exact instant (the assessor's period from release), so the day and the time.
   const resubmitUntil = resubmitOpen
-    ? `the end of ${lastFullDayBefore(options.remediation_deadline_at!, "long")}`
+    ? `${formatLongDayOf(options.remediation_deadline_at!)} at ${formatTime(options.remediation_deadline_at!)} (SAST)`
     : null;
   const coordinators = coordinatorsText(options.coordinator_names ?? []);
   const back = `/learn/results/${options.result_id}`;

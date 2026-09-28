@@ -4,7 +4,7 @@ import { Icon } from "@/components/ui/icons";
 import { TextLink } from "@/components/ui/link";
 import { DateTime, HistoryList } from "@/components/ui/records";
 import { Banner, Tag } from "@/components/ui/status";
-import { formatDateTime, formatLongDayOf, lastFullDayBefore } from "@/lib/dates";
+import { formatDateTime, formatLongDayOf, formatTime } from "@/lib/dates";
 import { openAppealReview } from "@/modules/appeals/queries";
 import { ConcludeForm, type ReviewCriterion } from "@/modules/appeals/review-forms";
 import { CATEGORY_STAFF_LABELS, turnaroundText, type OutcomeCategory } from "@/modules/appeals/rules";
@@ -227,7 +227,7 @@ export default async function ReviewAppealPage({
                   itemTitle={review.item_title}
                   keptDeadline={
                     review.remediation_deadline_at
-                      ? `the end of ${lastFullDayBefore(review.remediation_deadline_at, "long")}`
+                      ? `${formatLongDayOf(review.remediation_deadline_at)} at ${formatTime(review.remediation_deadline_at)} (SAST)`
                       : null
                   }
                   learnerName={review.learner_name}

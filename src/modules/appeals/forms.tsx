@@ -24,7 +24,7 @@ export interface LodgeFacts {
   learnerName: string;
   /** "your coordinator, Ayesha Patel". */
   coordinators: string;
-  /** "the end of Tuesday 6 October 2026", when a resubmission date applies. */
+  /** "Tuesday 6 October 2026 at 14:05 (SAST)", when a resubmission date applies. */
   resubmitUntil: string | null;
   /** Why a re-mark cannot be asked for, when it cannot, with the appeal that decides it. */
   remarkBlocked: { reason: string; appealId: string; reference: string; open: boolean } | null;
