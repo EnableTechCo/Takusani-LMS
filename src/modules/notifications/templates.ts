@@ -57,6 +57,28 @@ function taskPublished(payload: Payload): Rendered {
   };
 }
 
+/** A facilitator's reminder about a task not yet handed in (FR-212): their message, and when it is or was due. */
+function taskReminder(payload: Payload): Rendered {
+  const title = text(payload, "title");
+  const message = text(payload, "message");
+  const dueAt = typeof payload.due_at === "string" ? payload.due_at : null;
+  const due = dueAt
+    ? new Date(dueAt).getTime() > Date.now()
+      ? `It is due ${formatLongDayOf(dueAt)} at ${formatTime(dueAt)} (SAST).`
+      : `It was due ${formatLongDayOf(dueAt)} at ${formatTime(dueAt)} (SAST).`
+    : "";
+  return {
+    title: `Reminder: ${title}`,
+    summary: message,
+    paragraphs: [
+      `A reminder about ${title} (${text(payload, "cohort_name")}), which you have not handed in yet.`,
+      message,
+      due,
+    ].filter(Boolean),
+    action: "Open the task",
+  };
+}
+
 /** "2 hours", "1 hour 30 minutes", "45 minutes". */
 export function durationText(minutes: number): string {
   const hours = Math.floor(minutes / 60);
@@ -114,6 +136,7 @@ function sessionCancelled(payload: Payload): Rendered {
 const TEMPLATES: Record<string, Record<number, (payload: Payload) => Rendered>> = {
   result_released: { 1: resultReleased },
   task_published: { 1: taskPublished },
+  task_reminder: { 1: taskReminder },
   session_scheduled: { 1: sessionScheduled },
   session_changed: { 1: sessionChanged },
   session_cancelled: { 1: sessionCancelled },

@@ -98,7 +98,12 @@ insert into expected_grants values
   ('function', 'api', 'cancel_session(p_session_id uuid, p_reason text)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'list_sessions()', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'cohort_audience_size(p_cohort_id uuid)', 'authenticated', 'EXECUTE'),
-  ('function', 'api', 'list_my_sessions(p_from timestamp with time zone)', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'list_my_sessions(p_from timestamp with time zone)', 'authenticated', 'EXECUTE'),
+  -- Submission dashboard and reminders (20261010090000): facilitators within their cohorts, checked inside each.
+  ('function', 'api', 'list_task_submission_counts(p_cohort_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_task_submissions(p_task_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'get_learner_submission_history(p_learner_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'send_task_reminder(p_task_id uuid, p_learner_ids uuid[], p_message text)', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (

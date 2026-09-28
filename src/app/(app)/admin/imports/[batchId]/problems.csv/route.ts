@@ -1,4 +1,5 @@
-import { csvCell, INTAKE_COLUMNS } from "@/modules/identity/intake";
+import { csvCell } from "@/lib/csv";
+import { INTAKE_COLUMNS } from "@/modules/identity/intake";
 import { getImportBatch, getImportRows } from "@/modules/identity/import-queries";
 
 export const dynamic = "force-dynamic";

@@ -22,6 +22,7 @@ export interface NotificationRow {
 const ICONS: Record<string, IconName> = {
   result_released: "check-circle",
   task_published: "clipboard",
+  task_reminder: "clock",
   session_scheduled: "video",
   session_changed: "video",
   session_cancelled: "video",
