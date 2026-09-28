@@ -325,7 +325,50 @@ function signInUnlocked(payload: Payload): Rendered {
   };
 }
 
+/** FR-106: an administrator sent a link to set a new password. */
+function passwordResetSent(payload: Payload): Rendered {
+  const at = text(payload, "sent_at");
+  return {
+    title: "An administrator sent you a password reset link",
+    summary: `Sent on ${formatLongDayOf(at)} at ${formatTime(at)} (SAST). The link is in your email.`,
+    paragraphs: [
+      `An administrator sent you a link to set a new password, on ${formatLongDayOf(at)} at ${formatTime(at)} (SAST). Look for it in your email; it works once and expires in one hour.`,
+      `If you did not ask for this, you can ignore the link and keep your password, and tell your administrator.`,
+    ],
+    action: "Open your account",
+  };
+}
+
+/** The account was deactivated: an email-only message in practice, since the person can no longer sign in. */
+function accountDeactivated(payload: Payload): Rendered {
+  const at = text(payload, "deactivated_at");
+  return {
+    title: "Your account has been deactivated",
+    summary: `Deactivated on ${formatLongDayOf(at)}. You can no longer sign in.`,
+    paragraphs: [
+      `An administrator deactivated your account on ${formatLongDayOf(at)} at ${formatTime(at)} (SAST). You can no longer sign in, and any session you had open has ended.`,
+      `If you think this is a mistake, contact your administrator.`,
+    ],
+    action: "Go to the sign-in page",
+  };
+}
+
+function accountReactivated(payload: Payload): Rendered {
+  const at = text(payload, "reactivated_at");
+  return {
+    title: "Your account is active again",
+    summary: `Reactivated on ${formatLongDayOf(at)}. You can sign in again.`,
+    paragraphs: [
+      `An administrator reactivated your account on ${formatLongDayOf(at)} at ${formatTime(at)} (SAST). You can sign in again.`,
+    ],
+    action: "Sign in",
+  };
+}
+
 const TEMPLATES: Record<string, Record<number, (payload: Payload) => Rendered>> = {
+  password_reset_sent: { 1: passwordResetSent },
+  account_deactivated: { 1: accountDeactivated },
+  account_reactivated: { 1: accountReactivated },
   sign_in_locked: { 1: signInLocked },
   sign_in_unlocked: { 1: signInUnlocked },
   appeal_decided: { 1: appealDecided },

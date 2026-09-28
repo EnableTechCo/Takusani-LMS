@@ -91,6 +91,7 @@ export type Database = {
           status: string
         }[]
       }
+      check_request: { Args: never; Returns: undefined }
       claim_import_chunk: {
         Args: { p_batch_id: string; p_size?: number }
         Returns: {
@@ -282,6 +283,13 @@ export type Database = {
         Returns: {
           status: string
           unit_id: string
+        }[]
+      }
+      deactivate_account: {
+        Args: { p_profile_id: string; p_reason?: string }
+        Returns: {
+          allocations: Json
+          status: string
         }[]
       }
       decide_appeal_admissibility: {
@@ -1188,6 +1196,19 @@ export type Database = {
           status: string
         }[]
       }
+      reactivate_account: {
+        Args: { p_profile_id: string }
+        Returns: {
+          status: string
+        }[]
+      }
+      record_password_reset: {
+        Args: { p_profile_id: string }
+        Returns: {
+          email: string
+          status: string
+        }[]
+      }
       record_sign_in_failure: { Args: { p_email: string }; Returns: undefined }
       record_sign_in_success: { Args: { p_email: string }; Returns: undefined }
       save_marking_draft: {
@@ -1277,6 +1298,16 @@ export type Database = {
       }
       unlock_account: {
         Args: { p_profile_id: string }
+        Returns: {
+          status: string
+        }[]
+      }
+      update_account: {
+        Args: {
+          p_full_name: string
+          p_learner_number?: string
+          p_profile_id: string
+        }
         Returns: {
           status: string
         }[]

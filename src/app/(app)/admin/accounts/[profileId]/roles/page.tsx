@@ -255,6 +255,9 @@ export default async function AccountRolesPage({
               />
             )}
             <p>
+              <TextLink href={`/admin/accounts/${profileId}`}>Account details</TextLink>
+            </p>
+            <p>
               <TextLink href="/admin/accounts">All accounts</TextLink>
             </p>
           </aside>

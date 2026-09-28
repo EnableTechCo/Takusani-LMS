@@ -90,6 +90,27 @@ export function historySentence(entry: HistoryEntry): string {
     }
     case "identity.role_end_refused":
       return `tried to end ${roleAndScope(entry.before)}. Refused: open work depends on it. Nothing was changed.`;
+    case "identity.account_updated": {
+      const before = entry.before ?? {};
+      const after = entry.after ?? {};
+      const changes = [
+        before.full_name !== after.full_name ? `name from ${text(before.full_name)} to ${text(after.full_name)}` : "",
+        before.learner_number !== after.learner_number
+          ? `learner number from ${text(before.learner_number) || "none"} to ${text(after.learner_number) || "none"}`
+          : "",
+      ].filter(Boolean);
+      return `changed the ${changes.join(" and the ") || "details"}.`;
+    }
+    case "identity.account_deactivated": {
+      const reason = text(entry.details?.reason);
+      return `deactivated the account.${reason ? ` Reason given: ${reason.replace(/\.$/, "")}.` : ""} Previous value: active.`;
+    }
+    case "identity.account_reactivated":
+      return "reactivated the account. Previous value: deactivated.";
+    case "identity.deactivation_refused":
+      return "tried to deactivate the account. Refused: open work is still allocated. Nothing was changed.";
+    case "identity.password_reset_sent":
+      return "sent a password reset link.";
     case "identity.sign_in_locked":
       return "New sign-ins were locked after repeated wrong passwords.";
     case "identity.sign_in_lock_expired":
