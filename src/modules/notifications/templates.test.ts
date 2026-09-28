@@ -65,3 +65,20 @@ describe("sign-in lock notices (S3-06, FR-106)", () => {
     expect(unlocked.summary).toBe("An administrator unlocked it on Monday 28 September 2026 at 15:05 (SAST).");
   });
 });
+
+describe("account notices (S3-08)", () => {
+  it("tell the person a reset link was sent, and what to do if they did not ask", () => {
+    const sent = renderNotification("password_reset_sent", 1, { sent_at: "2026-09-28T13:00:00Z" });
+    expect(sent.title).toBe("An administrator sent you a password reset link");
+    expect(sent.paragraphs[1]).toContain("If you did not ask for this");
+  });
+
+  it("say a deactivated account cannot sign in, and a reactivated one can", () => {
+    expect(renderNotification("account_deactivated", 1, { deactivated_at: "2026-09-28T13:00:00Z" }).summary).toBe(
+      "Deactivated on Monday 28 September 2026. You can no longer sign in.",
+    );
+    expect(renderNotification("account_reactivated", 1, { reactivated_at: "2026-09-28T13:00:00Z" }).title).toBe(
+      "Your account is active again",
+    );
+  });
+});

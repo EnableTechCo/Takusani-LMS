@@ -144,7 +144,15 @@ insert into expected_grants values
   ('function', 'api', 'list_account_role_assignments(p_profile_id uuid)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'list_account_open_allocations(p_profile_id uuid)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'list_account_history(p_profile_id uuid)', 'authenticated', 'EXECUTE'),
-  ('function', 'api', 'list_role_scopes()', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'list_role_scopes()', 'authenticated', 'EXECUTE'),
+  -- Account administration (20261019090000): administrators, checked inside each function. check_request is the
+  -- API's pre-request hook, run as the request's role before every call; it refuses a deactivated account.
+  ('function', 'api', 'update_account(p_profile_id uuid, p_full_name text, p_learner_number text)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'deactivate_account(p_profile_id uuid, p_reason text)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'reactivate_account(p_profile_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'record_password_reset(p_profile_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'check_request()', 'anon', 'EXECUTE'),
+  ('function', 'api', 'check_request()', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (

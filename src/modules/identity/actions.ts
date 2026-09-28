@@ -38,6 +38,8 @@ export async function signIn(_: FormState, form: FormData): Promise<FormState> {
   if (error) {
     // Logged for operators (never shown): wrong details, or a project problem such as the email provider being
     // off, look identical to the person signing in.
+    // A deactivated account is banned in Auth: the same answer, and not counted.
+    if (error.code === "user_banned") return { message: WRONG_DETAILS, values };
     if (error.code === "invalid_credentials") {
       await lockout?.rpc("record_sign_in_failure", { p_email: parsed.data.email });
     } else {
@@ -153,10 +155,13 @@ export async function createAccount(_: FormState, form: FormData): Promise<FormS
  * FR-106: an administrator unlocks an account whose new sign-ins are locked after wrong passwords. The database
  * checks the caller, audits the unlock and tells the person.
  */
-export async function unlockAccount(profileId: string): Promise<void> {
+export async function unlockAccount(profileId: string, returnTo: "list" | "account" = "list"): Promise<void> {
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("unlock_account", { p_profile_id: profileId });
   const status = error ? "error" : (data?.[0]?.status ?? "error");
   revalidatePath("/admin/accounts");
-  redirect(`/admin/accounts?unlock=${status}`);
+  revalidatePath(`/admin/accounts/${profileId}`);
+  redirect(
+    returnTo === "account" ? `/admin/accounts/${profileId}?unlock=${status}` : `/admin/accounts?unlock=${status}`,
+  );
 }

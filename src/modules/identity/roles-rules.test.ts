@@ -56,3 +56,30 @@ describe("advisory and allocation words (U-01, FR-105)", () => {
     ).toBe(139);
   });
 });
+
+describe("account administration in the history (S3-08, FR-107)", () => {
+  const entry = (
+    action: string,
+    before: Record<string, unknown> | null,
+    after: Record<string, unknown> | null,
+    details: Record<string, unknown> | null = null,
+  ) => historySentence({ action, before, after, details });
+
+  it("names each changed detail with its previous value", () => {
+    expect(
+      entry(
+        "identity.account_updated",
+        { full_name: "Lerato Mokoena", learner_number: "KSI-2026-0417" },
+        { full_name: "Lerato Mokoena-Dube", learner_number: "KSI-2026-0417" },
+      ),
+    ).toBe("changed the name from Lerato Mokoena to Lerato Mokoena-Dube.");
+  });
+
+  it("records deactivation with its reason, a refusal as a refusal, and a reset", () => {
+    expect(
+      entry("identity.account_deactivated", { status: "active" }, { status: "deactivated" }, { reason: "Left." }),
+    ).toBe("deactivated the account. Reason given: Left. Previous value: active.");
+    expect(isRefusal("identity.deactivation_refused")).toBe(true);
+    expect(entry("identity.password_reset_sent", null, null)).toBe("sent a password reset link.");
+  });
+});

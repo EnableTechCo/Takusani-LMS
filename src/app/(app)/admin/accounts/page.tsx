@@ -74,7 +74,7 @@ export default async function AccountsPage({
               header: "Name",
               primary: true,
               cell: (account) => (
-                <TextLink href={`/admin/accounts/${account.profile_id}/roles`}>{account.full_name}</TextLink>
+                <TextLink href={`/admin/accounts/${account.profile_id}`}>{account.full_name}</TextLink>
               ),
             },
             { key: "email", header: "Email", cell: (account) => account.email },
@@ -93,7 +93,7 @@ export default async function AccountsPage({
                         <Tag shape="half" tone="caution">
                           Sign-in locked until {formatDateTime(until)}
                         </Tag>
-                        <form action={unlockAccount.bind(null, account.profile_id)}>
+                        <form action={unlockAccount.bind(null, account.profile_id, "list")}>
                           <Button type="submit" variant="secondary">
                             Unlock {account.full_name}
                           </Button>

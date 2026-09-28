@@ -96,6 +96,12 @@ export const newPasswordSchema = z
     path: ["confirm"],
   });
 
+/** X-03: the details an administrator can correct (FR-103). The email is the sign-in and is not changed here. */
+export const accountDetailsSchema = z.object({
+  fullName: z.string().trim().min(1, "Enter the person's full name.").max(200, "Use 200 characters or fewer."),
+  learnerNumber: z.string().trim().max(50, "Use 50 characters or fewer."),
+});
+
 export const newAccountSchema = z.object({
   fullName: z.string().trim().min(1, "Enter the person's full name.").max(200, "Use 200 characters or fewer."),
   email,
