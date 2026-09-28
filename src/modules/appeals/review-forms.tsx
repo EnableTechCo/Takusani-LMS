@@ -56,7 +56,7 @@ export function ConcludeForm({
   appealedOutcome: "competent" | "not_yet_competent";
   criteria: ReviewCriterion[];
   appealedRemediation: string | null;
-  /** "the end of Monday 12 October 2026": what an upheld "not yet competent" keeps. */
+  /** "Monday 12 October 2026 at 13:37 (SAST)": what an upheld "not yet competent" keeps. */
   keptDeadline: string | null;
 }) {
   const [state, action] = useActionState(concludeAppeal.bind(null, appealId), {} as FormState);

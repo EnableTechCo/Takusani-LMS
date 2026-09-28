@@ -217,3 +217,38 @@ describe("the reviewer's decision (S3-04, FR-610)", () => {
     );
   });
 });
+
+describe("the learner's tracker once decided (S3-05, FR-612)", () => {
+  it("dates every step, ending at Decided", () => {
+    const steps = learnerSteps({
+      type: "remark",
+      state: "concluded",
+      lodgedAt: "2026-09-24T06:14:00Z",
+      checkedAt: "2026-09-25T08:02:00Z",
+      allocatedAt: "2026-09-25T08:20:00Z",
+      reviewOpenedAt: "2026-09-28T07:02:00Z",
+      concludedAt: "2026-10-05T13:40:00Z",
+    });
+    expect(steps.every((step) => step.state === "complete")).toBe(true);
+    expect(steps.map((step) => step.at ?? null)).toEqual([
+      "2026-09-24T06:14:00Z",
+      null,
+      "2026-09-25T08:02:00Z",
+      "2026-09-25T08:20:00Z",
+      "2026-09-28T07:02:00Z",
+      "2026-10-05T13:40:00Z",
+    ]);
+  });
+
+  it("does not date a step that has not happened", () => {
+    const steps = learnerSteps({
+      type: "remark",
+      state: "under_review",
+      lodgedAt: "2026-09-24T06:14:00Z",
+      reviewOpenedAt: "2026-09-28T07:02:00Z",
+      concludedAt: null,
+    });
+    expect(steps.find((step) => step.label === "Being reviewed")).toMatchObject({ state: "current", at: undefined });
+    expect(steps.find((step) => step.label === "Decided")).toMatchObject({ state: "upcoming", at: undefined });
+  });
+});

@@ -171,6 +171,8 @@ export function learnerSteps(appeal: {
   /** When the coordinator decided admissibility, and when a reviewer was first allocated. */
   checkedAt?: string | null;
   allocatedAt?: string | null;
+  reviewOpenedAt?: string | null;
+  concludedAt?: string | null;
 }): AppealStep[] {
   const received: AppealStep = {
     label: "Received",
@@ -200,8 +202,16 @@ export function learnerSteps(appeal: {
             body: "A reviewer who did not mark your work is chosen.",
             at: appeal.allocatedAt ?? undefined,
           },
-          { label: "Being reviewed", body: "The reviewer marks your work again." },
-          { label: "Decided", body: "The decision is final. The mark can stay the same, go up or go down." },
+          {
+            label: "Being reviewed",
+            body: "The reviewer marks your work again.",
+            at: appeal.reviewOpenedAt ?? undefined,
+          },
+          {
+            label: "Decided",
+            body: "The decision is final. The mark can stay the same, go up or go down.",
+            at: appeal.concludedAt ?? undefined,
+          },
         ]
       : [
           checking,

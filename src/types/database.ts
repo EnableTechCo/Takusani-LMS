@@ -450,8 +450,13 @@ export type Database = {
           admissibility_reason: string
           appealed_outcome: string
           cohort_name: string
+          concluded_at: string
           coordinator_names: string[]
           deadline_at: string
+          decided_outcome: string
+          decided_points: number
+          decided_remediation: string
+          decided_remediation_deadline_at: string
           events: Json
           grounds: string
           id: string
@@ -459,8 +464,10 @@ export type Database = {
           learner_name: string
           learner_number: string
           lodged_at: string
+          outcome_category: string
           points_possible: number
           points_scored: number
+          reasons: string
           reference: string
           remediation_deadline_at: string
           result_id: string
@@ -731,6 +738,7 @@ export type Database = {
           id: string
           item_title: string
           lodged_at: string
+          outcome_category: string
           reference: string
           result_id: string
           state: string

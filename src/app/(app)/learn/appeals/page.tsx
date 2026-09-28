@@ -6,10 +6,12 @@ import { DataTable } from "@/components/ui/table";
 import { listMyAppeals } from "@/modules/appeals/queries";
 import {
   APPEAL_TYPE_LABELS,
+  CATEGORY_LEARNER_LABELS,
   isOpen,
   LEARNER_STATE_LABELS,
   type AppealState,
   type AppealType,
+  type OutcomeCategory,
 } from "@/modules/appeals/rules";
 
 export const metadata = { title: "Appeals" };
@@ -55,11 +57,17 @@ export default async function LearnAppealsPage() {
             {
               key: "state",
               header: "Where it stands",
-              cell: (appeal) => (
-                <Tag shape={isOpen(appeal.state) ? "half" : undefined} tone={isOpen(appeal.state) ? "info" : "neutral"}>
-                  {LEARNER_STATE_LABELS[appeal.state as AppealState]}
-                </Tag>
-              ),
+              cell: (appeal) =>
+                appeal.outcome_category ? (
+                  <Tag tone="neutral">{CATEGORY_LEARNER_LABELS[appeal.outcome_category as OutcomeCategory]}</Tag>
+                ) : (
+                  <Tag
+                    shape={isOpen(appeal.state) ? "half" : undefined}
+                    tone={isOpen(appeal.state) ? "info" : "neutral"}
+                  >
+                    {LEARNER_STATE_LABELS[appeal.state as AppealState]}
+                  </Tag>
+                ),
             },
             { key: "lodged", header: "Lodged", cell: (appeal) => <DateTime iso={appeal.lodged_at} /> },
           ]}
