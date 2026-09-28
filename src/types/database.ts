@@ -271,6 +271,56 @@ export type Database = {
           status: string
         }[]
       }
+      get_appeal_options: {
+        Args: { p_result_id: string }
+        Returns: {
+          appeal_deadline_at: string
+          assessed_version_number: number
+          cohort_name: string
+          coordinator_names: string[]
+          decision_final: boolean
+          item_title: string
+          learner_name: string
+          learner_number: string
+          open_script_appeal_id: string
+          open_script_reference: string
+          outcome: string
+          points_possible: number
+          points_scored: number
+          released_at: string
+          remark_appeal_id: string
+          remark_lodged_at: string
+          remark_reference: string
+          remark_standing: string
+          remediation_deadline_at: string
+          result_id: string
+          turnaround_working_days: number
+        }[]
+      }
+      get_appeal_to_coordinate: {
+        Args: { p_appeal_id: string }
+        Returns: {
+          appealed_outcome: string
+          assessor_name: string
+          cohort_name: string
+          deadline_at: string
+          events: Json
+          grounds: string
+          id: string
+          item_title: string
+          learner_name: string
+          learner_number: string
+          lodged_at: string
+          points_possible: number
+          points_scored: number
+          reference: string
+          released_at: string
+          result_id: string
+          state: string
+          turnaround_working_days: number
+          type: string
+        }[]
+      }
       get_import_rows: {
         Args: { p_batch_id: string; p_outcome?: string }
         Returns: {
@@ -347,6 +397,30 @@ export type Database = {
           release_at: string
           state: string
           title: string
+        }[]
+      }
+      get_my_appeal: {
+        Args: { p_appeal_id: string }
+        Returns: {
+          appealed_outcome: string
+          cohort_name: string
+          coordinator_names: string[]
+          deadline_at: string
+          events: Json
+          grounds: string
+          id: string
+          item_title: string
+          learner_name: string
+          learner_number: string
+          lodged_at: string
+          points_possible: number
+          points_scored: number
+          reference: string
+          remediation_deadline_at: string
+          result_id: string
+          state: string
+          turnaround_working_days: number
+          type: string
         }[]
       }
       get_my_material: {
@@ -452,6 +526,21 @@ export type Database = {
           profile_id: string
           roles: string[]
           status: string
+        }[]
+      }
+      list_appeals_to_coordinate: {
+        Args: never
+        Returns: {
+          cohort_name: string
+          deadline_at: string
+          id: string
+          item_title: string
+          learner_name: string
+          learner_number: string
+          lodged_at: string
+          reference: string
+          state: string
+          type: string
         }[]
       }
       list_audit_events: {
@@ -573,6 +662,19 @@ export type Database = {
           state: string
           title: string
           updated_at: string
+        }[]
+      }
+      list_my_appeals: {
+        Args: never
+        Returns: {
+          deadline_at: string
+          id: string
+          item_title: string
+          lodged_at: string
+          reference: string
+          result_id: string
+          state: string
+          type: string
         }[]
       }
       list_my_enrolments: {
@@ -779,6 +881,21 @@ export type Database = {
           id: string
           name: string
           programme_title: string
+          status: string
+        }[]
+      }
+      lodge_appeal: {
+        Args: {
+          p_client_appeal_id: string
+          p_grounds: string
+          p_result_id: string
+          p_type: string
+        }
+        Returns: {
+          appeal_id: string
+          deadline_at: string
+          lodged_at: string
+          reference: string
           status: string
         }[]
       }

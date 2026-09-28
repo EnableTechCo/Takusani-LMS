@@ -51,7 +51,7 @@ export function NewResultCard({ item, now }: { item: NewResult; now: Date }) {
             <span>
               {window.state === "last_day" ? (
                 <>
-                  <strong>Today is the last day to appeal this result.</strong> To appeal, contact your coordinator.
+                  <strong>Today is the last day to appeal this result.</strong> You can appeal until the end of today.
                 </>
               ) : (
                 <>

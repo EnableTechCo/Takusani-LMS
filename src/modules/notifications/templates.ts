@@ -148,7 +148,51 @@ function sessionCancelled(payload: Payload): Rendered {
   };
 }
 
+const APPEAL_ASKED: Record<string, string> = {
+  view_script: "to see your work with the marks",
+  remark: "for your work to be marked again",
+};
+
+/** The learner's receipt for an appeal (FR-604): the reference, when it was lodged, and the promised turnaround. */
+function appealReceived(payload: Payload): Rendered {
+  const reference = text(payload, "reference");
+  const item = text(payload, "item_title");
+  const lodgedAt = text(payload, "lodged_at");
+  const days = Number(payload.turnaround_working_days);
+  const within = days === 1 ? "within 1 working day" : `within ${days} working days`;
+  return {
+    title: `We have received your appeal ${reference}`,
+    summary: `About ${item}. You should hear from us ${within}.`,
+    paragraphs: [
+      `We received your appeal ${reference} about ${item} on ${formatLongDayOf(lodgedAt)} at ${formatTime(lodgedAt)} (SAST). It was lodged in time.`,
+      `You asked ${APPEAL_ASKED[text(payload, "type")]}. Your coordinator checks the appeal first. You should hear from us ${within}.`,
+      `Keep the reference ${reference} in case you need to ask about your appeal.`,
+    ],
+    action: "See your appeal",
+  };
+}
+
+/** A coordinator's alert that a learner in their cohort has lodged an appeal, which needs their check. */
+function appealLodged(payload: Payload): Rendered {
+  const reference = text(payload, "reference");
+  const learner = text(payload, "learner_name");
+  const item = text(payload, "item_title");
+  const remark = text(payload, "type") === "remark";
+  const asked = remark ? `for a re-mark of ${item}` : `to see the marked work for ${item}`;
+  return {
+    title: `New appeal ${reference} from ${learner}`,
+    summary: `${learner} asked ${asked} (${text(payload, "cohort_name")}). It needs your check.`,
+    paragraphs: [
+      `${learner} lodged appeal ${reference} about ${item} (${text(payload, "cohort_name")}) on ${formatLongDayOf(text(payload, "lodged_at"))} at ${formatTime(text(payload, "lodged_at"))} (SAST).`,
+      `They asked ${remark ? "for a re-mark" : "to see the marked work"}. The appeal needs your check before anything else happens.`,
+    ],
+    action: "Open the appeal",
+  };
+}
+
 const TEMPLATES: Record<string, Record<number, (payload: Payload) => Rendered>> = {
+  appeal_received: { 1: appealReceived },
+  appeal_lodged: { 1: appealLodged },
   result_released: { 1: resultReleased },
   task_published: { 1: taskPublished },
   task_reminder: { 1: taskReminder },

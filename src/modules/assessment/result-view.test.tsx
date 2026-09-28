@@ -43,7 +43,7 @@ describe("ReleasedResultView", () => {
     const { container } = render(<ReleasedResultView now={dayAfterRelease} result={nyc} />);
     expect(screen.getAllByText("Not yet competent").length).toBeGreaterThan(0);
     expect(container).toHaveTextContent(
-      "You can appeal this result until the end of Tuesday 29 September 2026. 6 days left, including weekends and public holidays. To appeal, contact your coordinator.",
+      "You can appeal this result until the end of Tuesday 29 September 2026. 6 days left, including weekends and public holidays.",
     );
     expect(container).toHaveTextContent("You can resubmit until Tuesday 6 October 2026 at 14:05 (SAST).");
     expect(screen.getByText("Upload the access register.")).toBeInTheDocument();

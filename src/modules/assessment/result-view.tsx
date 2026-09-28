@@ -5,6 +5,13 @@ import { DataTable } from "@/components/ui/table";
 import { cx } from "@/components/ui/cx";
 import { Icon } from "@/components/ui/icons";
 import { formatDateTime, formatLongDayOf, formatTime, sastDaysFromToday } from "@/lib/dates";
+import {
+  APPEAL_TYPE_LABELS,
+  isOpen,
+  LEARNER_STATE_LABELS,
+  type AppealState,
+  type AppealType,
+} from "@/modules/appeals/rules";
 import { formatBytes } from "@/modules/submissions/rules";
 import { appealWindow, OUTCOME_LABELS, resubmission } from "./rules";
 
@@ -48,6 +55,15 @@ export interface ReleasedResult {
   assessedVersion: VersionFacts;
   latestVersion: VersionFacts;
   firstViewedAt: string | null;
+  /** The learner's appeals against this result, newest first. */
+  appeals?: MyAppeal[];
+}
+
+export interface MyAppeal {
+  id: string;
+  reference: string;
+  type: string;
+  state: string;
 }
 
 /** Text as the assessor wrote it: a blank line starts a paragraph, a single line break is kept. */
@@ -94,31 +110,62 @@ function daysLeftText(days: number): string {
   return days === 1 ? "1 day left" : `${days} days left`;
 }
 
+/** The learner's appeals against this result, each linked to its page. */
+function MyAppeals({ appeals }: { appeals: MyAppeal[] }) {
+  if (appeals.length === 0) return null;
+  return (
+    <div className="stack stack--sm">
+      <p className="text-small">
+        {appeals.length === 1 ? "Your appeal on this result:" : "Your appeals on this result:"}
+      </p>
+      <ul className="stack stack--sm">
+        {appeals.map((appeal) => (
+          <li key={appeal.id}>
+            <TextLink href={`/learn/appeals/${appeal.id}`}>{appeal.reference}</TextLink>
+            <span className="text-muted">
+              {" "}
+              · {APPEAL_TYPE_LABELS[appeal.type as AppealType]} · {LEARNER_STATE_LABELS[appeal.state as AppealState]}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 /**
  * The appeal clock, on the page and never behind a click (SRS 5.3). Written as the last full day, never a midnight
- * time (P-11). Until online appeals ship (S3-01), the learner is told to contact their coordinator.
+ * time (P-11). The learner lodges the appeal online (S3-01) and sees the appeals already lodged.
  */
 export function AppealLine({
   resultId,
   releasedAt,
   appealDeadlineAt,
   now,
+  appeals = [],
 }: {
   resultId: string;
   releasedAt: string;
   appealDeadlineAt: string;
   now: Date;
+  appeals?: MyAppeal[];
 }) {
   const window = appealWindow(appealDeadlineAt, now);
+  const bothOpen = ["remark", "view_script"].every((type) =>
+    appeals.some((appeal) => appeal.type === type && isOpen(appeal.state)),
+  );
   if (window.state === "closed") {
     return (
-      <p className="deadline-line deadline-line--closed">
-        <Icon name="lock" />
-        <span>
-          The time to appeal closed at the end of {window.lastDay}. You had 7 days from the day your result was
-          released, {formatLongDayOf(releasedAt)}.
-        </span>
-      </p>
+      <>
+        <p className="deadline-line deadline-line--closed">
+          <Icon name="lock" />
+          <span>
+            The time to appeal closed at the end of {window.lastDay}. You had 7 days from the day your result was
+            released, {formatLongDayOf(releasedAt)}.
+          </span>
+        </p>
+        <MyAppeals appeals={appeals} />
+      </>
     );
   }
   return (
@@ -137,15 +184,18 @@ export function AppealLine({
               <span className="deadline-line__left">{daysLeftText(window.daysLeft)}</span>, including weekends and
               public holidays.
             </>
-          )}{" "}
-          To appeal, contact your coordinator.
+          )}
         </span>
       </p>
-      <p>
-        <ButtonLink href={`/learn/results/${resultId}/appeal/new`} variant="secondary">
-          Appeal this result
-        </ButtonLink>
-      </p>
+      <MyAppeals appeals={appeals} />
+      {/* With an open appeal of each kind there is nothing more to lodge, so the button is not offered. */}
+      {bothOpen ? null : (
+        <p>
+          <ButtonLink href={`/learn/results/${resultId}/appeal/new`} variant="secondary">
+            Appeal this result
+          </ButtonLink>
+        </p>
+      )}
     </>
   );
 }
@@ -343,6 +393,7 @@ export function ReleasedResultView({ result, now }: { result: ReleasedResult; no
             {/* First screenful, in order (P0-07): outcome, the appeal clock (SRS 5.3), then the next step (FR-317). */}
             <AppealLine
               appealDeadlineAt={result.appealDeadlineAt}
+              appeals={result.appeals}
               now={now}
               releasedAt={result.releasedAt}
               resultId={result.resultId}

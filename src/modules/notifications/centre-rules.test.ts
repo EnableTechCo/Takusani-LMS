@@ -77,7 +77,8 @@ describe("parseCategory", () => {
   it("accepts the known filters and falls back to all", () => {
     expect(parseCategory("results")).toBe("results");
     expect(parseCategory("deadlines")).toBe("deadlines");
-    expect(parseCategory("appeals")).toBe("all");
+    expect(parseCategory("appeals")).toBe("appeals");
+    expect(parseCategory("exams")).toBe("all");
     expect(parseCategory(undefined)).toBe("all");
   });
 });

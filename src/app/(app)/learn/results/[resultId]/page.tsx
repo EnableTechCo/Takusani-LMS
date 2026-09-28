@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/shell/page-header";
 import { TextLink } from "@/components/ui/link";
 import { Tag } from "@/components/ui/status";
+import { listMyAppeals } from "@/modules/appeals/queries";
 import { getMyResult } from "@/modules/assessment/queries";
 import {
   HeldResultView,
@@ -60,6 +61,7 @@ export default async function LearnResultPage({ params }: { params: Promise<{ re
   }
 
   const assessedVersion = result.assessed_version as unknown as VersionFacts;
+  const appeals = (await listMyAppeals()).filter((appeal) => appeal.result_id === result.result_id);
   const released: ReleasedResult = {
     resultId: result.result_id,
     taskId: result.task_id,
@@ -76,6 +78,7 @@ export default async function LearnResultPage({ params }: { params: Promise<{ re
     assessedVersion,
     latestVersion: latestVersion ?? assessedVersion,
     firstViewedAt: result.first_viewed_at ?? null,
+    appeals,
   };
 
   return (
