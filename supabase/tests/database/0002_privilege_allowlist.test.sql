@@ -122,7 +122,9 @@ insert into expected_grants values
   -- Appeals administration (20261013090000): coordinators of the appeal's cohort, checked inside each function.
   ('function', 'api', 'decide_appeal_admissibility(p_appeal_id uuid, p_admit boolean, p_reason text)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'allocate_appeal_reviewer(p_appeal_id uuid, p_reviewer_id uuid, p_skip_reason text)', 'authenticated', 'EXECUTE'),
-  ('function', 'api', 'list_appeal_reviewer_candidates(p_appeal_id uuid)', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'list_appeal_reviewer_candidates(p_appeal_id uuid)', 'authenticated', 'EXECUTE'),
+  -- The marked work (20261014090000): the learner's own granted request, checked inside the function.
+  ('function', 'api', 'view_my_marked_work(p_appeal_id uuid)', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (

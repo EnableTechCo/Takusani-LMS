@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 
@@ -53,3 +54,15 @@ export async function listAppealReviewerCandidates(appealId: string) {
   if (error) throw new Error(`api.list_appeal_reviewer_candidates failed: ${error.message}`);
   return data;
 }
+
+/**
+ * The learner's marked work for a granted request (FR-606). Every call records an opening, so it is cached for the
+ * request: the page and its title both ask, and one visit is one opening.
+ */
+export const viewMyMarkedWork = cache(async (appealId: string) => {
+  if (!isUuid(appealId)) return null;
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("view_my_marked_work", { p_appeal_id: appealId });
+  if (error) throw new Error(`api.view_my_marked_work failed: ${error.message}`);
+  return data?.[0] ?? null;
+});
