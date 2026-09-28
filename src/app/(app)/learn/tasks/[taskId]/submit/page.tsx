@@ -39,6 +39,7 @@ export default async function SubmitTaskPage({ params }: { params: Promise<{ tas
           requirementId: upload.requirement_id,
           filename: upload.original_filename,
           bytes: Number(upload.bytes),
+          rejected: upload.scan_state === "rejected",
         }))}
         latePolicySentence={LATE_POLICY_LABELS[task.late_policy] ?? task.late_policy}
         maxMb={(await getPublicSettings()).uploadMaxMb}

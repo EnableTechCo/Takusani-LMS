@@ -35,7 +35,7 @@ export function SubmitForm({
   maxMb?: number;
 }) {
   const router = useRouter();
-  const [files, setFiles] = useState<UploadedFile[]>(already);
+  const [files, setFiles] = useState<UploadedFile[]>(() => already.filter((file) => !file.rejected));
   const [message, setMessage] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   // The same attempt identifier for every retry of this submission (UX flow A, E7).

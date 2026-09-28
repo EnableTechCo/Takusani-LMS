@@ -28,6 +28,8 @@ export interface UploadedFile {
   requirementId: string | null;
   filename: string;
   bytes: number;
+  /** The file scan rejected it (S3-11): shown as not accepted, and never handed in. */
+  rejected?: boolean;
 }
 
 interface Row {
@@ -104,7 +106,8 @@ export function UploadWidget({
       requirementId: file.requirementId,
       filename: file.filename,
       bytes: file.bytes,
-      state: "uploaded" as UploadState,
+      state: (file.rejected ? "rejected" : "uploaded") as UploadState,
+      message: file.rejected ? UPLOAD_REFUSALS.scan_rejected : undefined,
       sent: file.bytes,
       fileId: file.fileId,
     })),
