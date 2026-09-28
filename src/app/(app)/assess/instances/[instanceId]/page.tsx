@@ -30,8 +30,8 @@ export default async function MarkingPage({ params }: { params: Promise<{ instan
   const links = await signEvidence(versions.flatMap((version) => version.files));
   const mine = item.assessor_id === access?.profile_id;
   const decisions = (item.decisions ?? []) as unknown as HistoryDecision[];
-  // This item's own decision: its date, and when it reached the learner, which for a resubmission is not the result's
-  // first release.
+  // This item's own decision: its date, and when it reached the learner. Once a later decision replaces it, the
+  // result's release facts are the later decision's, so the earlier release comes from the decision's own record.
   const own = decisions.find((decision) => decision.type === "assessment" && decision.instance_id === item.instance_id);
 
   return (
