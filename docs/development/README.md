@@ -243,7 +243,25 @@ cleaned up; neither blocks anything. At go-live, with `SUPABASE_SECRET_KEY` and 
 allows the file scan every few minutes). Files uploaded before then are scanned on the first run.
 
 
-## Health checks
+## Calendar feed
+
+A learner can subscribe to their schedule from a phone or computer calendar (`/learn/calendar/subscribe`, FR-304,
+ADR-020, `supabase/migrations/20261024090000_calendar_feed.sql`):
+
+- The feed is `GET /api/calendar/feeds/<token>.ics`. The token is 256 random bits, shown once and stored only as its
+  SHA-256 hash; it is the credential, so the route needs no session. A new link rotates the old one out; the learner
+  can turn it off; deactivating the account revokes it. Anything else answers 404.
+- Schedule fields only: sessions (an online one says "Online") and task due dates, each with a link into the LMS.
+  Never Teams join links, results, feedback, notices or notes.
+- `Cache-Control: private, max-age=900` and an ETag (a repeat poll gets 304). A revoked link can still be served for
+  up to 15 minutes from the subscriber's own cache, never from a shared one.
+- Limits, counted in `audit.rate_buckets` (purged hourly by `purge-rate-buckets`): 60 fetches an hour per token, and
+  30 unknown tokens an hour per client address. A known but revoked token is answered without counting, so a calendar
+  provider still polling it cannot lock out others behind the same address.
+- **The token is in the path, so request logs contain it.** The application never logs it. At go-live, configure the
+  log drain to redact the segment after `/api/calendar/feeds/`, and keep access to Vercel's own request logs to the
+  team.
+
 
 - `GET /api/health/live`: the process is running.
 - `GET /api/health/ready`: configuration is present and the database answers `api.health_check()` within two seconds; otherwise 503 with `dependency_unavailable`.

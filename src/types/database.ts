@@ -72,6 +72,13 @@ export type Database = {
           status: string
         }[]
       }
+      calendar_feed: {
+        Args: { p_client?: string; p_token: string }
+        Returns: {
+          events: Json
+          status: string
+        }[]
+      }
       cancel_configuration_version: {
         Args: { p_key: string; p_reason: string; p_version: number }
         Returns: {
@@ -698,6 +705,14 @@ export type Database = {
         }[]
       }
       health_check: { Args: never; Returns: boolean }
+      issue_calendar_feed_token: {
+        Args: never
+        Returns: {
+          created_at: string
+          status: string
+          token: string
+        }[]
+      }
       list_account_history: {
         Args: { p_profile_id: string }
         Returns: {
@@ -1233,6 +1248,14 @@ export type Database = {
           status: string
         }[]
       }
+      my_calendar_feed: {
+        Args: never
+        Returns: {
+          active: boolean
+          created_at: string
+          last_used_at: string
+        }[]
+      }
       my_notice_audiences: {
         Args: never
         Returns: {
@@ -1381,6 +1404,12 @@ export type Database = {
       }
       record_sign_in_failure: { Args: { p_email: string }; Returns: undefined }
       record_sign_in_success: { Args: { p_email: string }; Returns: undefined }
+      revoke_calendar_feed_token: {
+        Args: never
+        Returns: {
+          status: string
+        }[]
+      }
       save_marking_draft: {
         Args: {
           p_expected_version: number

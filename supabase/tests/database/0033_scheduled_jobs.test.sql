@@ -16,7 +16,7 @@ select set_eq(
   $$ select name, schedule, format('select audit.run_job(%L)', name) from audit.scheduled_jobs where kind = 'recurring' $$,
   'every recurring job is scheduled in pg_cron, through the wrapper, on its catalogue schedule');
 select set_eq($$ select name from audit.scheduled_jobs order by name $$,
-  $$ values ('expire-upload-intents'), ('purge-job-history'), ('release-notice'), ('release-scheduled-notices') $$,
+  $$ values ('expire-upload-intents'), ('purge-job-history'), ('purge-rate-buckets'), ('release-notice'), ('release-scheduled-notices') $$,
   'the first jobs are registered');
 select is_empty($$
   select name from audit.scheduled_jobs j
