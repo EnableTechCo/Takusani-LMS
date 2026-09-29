@@ -2,8 +2,8 @@ import { appealWindow } from "@/modules/assessment/rules";
 
 /**
  * Learner home (L-01, P0-03): "what needs me now?" in one screen. Pure rules over the learner's own tasks and
- * results, so the page is only layout. Block order (P0-03): new results, do next, being assessed. Sessions, the exam
- * window and credit progress join when those features exist.
+ * results, so the page is only layout. Block order (P0-03): new results, do next, being assessed. Sessions and
+ * credit progress (S6-02) are read on the page itself; exams are deprecated.
  */
 
 export interface HomeTask {

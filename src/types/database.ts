@@ -894,6 +894,26 @@ export type Database = {
           type: string
         }[]
       }
+      get_my_credits: {
+        Args: never
+        Returns: {
+          awarded: boolean
+          awarded_at: string
+          cohort_id: string
+          cohort_name: string
+          cohort_status: string
+          credits: number
+          earned: number
+          items: Json
+          nqf_level: number
+          programme_id: string
+          programme_title: string
+          requirements_set: boolean
+          unit_code: string
+          unit_id: string
+          unit_title: string
+        }[]
+      }
       get_my_material: {
         Args: { p_material_id: string }
         Returns: {
@@ -1590,6 +1610,19 @@ export type Database = {
           starts_at: string
           title: string
           venue: string
+        }[]
+      }
+      list_my_credit_history: {
+        Args: never
+        Returns: {
+          cause: string
+          created_at: string
+          credits: number
+          entry_id: number
+          entry_type: string
+          total: number
+          unit_code: string
+          unit_title: string
         }[]
       }
       list_my_enrolments: {

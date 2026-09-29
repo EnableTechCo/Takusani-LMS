@@ -3,6 +3,8 @@ import { OfflineBanner } from "@/components/ui/offline-banner";
 import { EmptyState, Meter } from "@/components/ui/status";
 import { formatDateTime, formatLongDayOf } from "@/lib/dates";
 import { listMyResults } from "@/modules/assessment/queries";
+import { getMyCredits } from "@/modules/credits/record-queries";
+import { byProgramme, summarySentence } from "@/modules/credits/record-rules";
 import { requireActiveAccess } from "@/modules/identity/session";
 import { Agenda, agendaItems } from "@/modules/learning/agenda";
 import { getPublicSettings } from "@/modules/audit/settings";
@@ -28,10 +30,10 @@ import { listMyTasks } from "@/modules/submissions/queries";
 export const metadata = { title: "Home" };
 
 // L-01 (P0-03; FR-304, FR-305, FR-316, FR-317): what needs the learner now, in one screen: new results, do next,
-// this week's sessions (S2-15) with "I'm here" while one is on (FR-209), attendance so far, and being assessed. The
-// credits join when that feature ships. Exams are deprecated and in the backlog.
+// this week's sessions (S2-15) with "I'm here" while one is on (FR-209), attendance so far, being assessed, and
+// credit progress (S6-02). Exams are deprecated and in the backlog.
 export default async function LearnHomePage() {
-  const [access, tasks, results, enrolments, sessions, noticeRows, attendance] = await Promise.all([
+  const [access, tasks, results, enrolments, sessions, noticeRows, attendance, creditRows] = await Promise.all([
     requireActiveAccess(),
     listMyTasks() as Promise<HomeTask[]>,
     listMyResults() as Promise<HomeResult[]>,
@@ -39,8 +41,10 @@ export default async function LearnHomePage() {
     listMySessions(),
     listMyNotifications("notices", 1),
     listMyAttendance(),
+    getMyCredits(),
   ]);
   const rate = attendanceRate(attendance);
+  const credits = byProgramme(creditRows).filter((programme) => programme.total > 0);
   const now = new Date();
   const fresh = newResults(results, tasks, now);
   const todo = doNext(tasks, results, now);
@@ -199,6 +203,30 @@ export default async function LearnHomePage() {
 
           {assessed.length > 0 ? (
             <BeingAssessedCard appealWindowDays={(await getPublicSettings()).appealWindowDays} items={assessed} />
+          ) : null}
+
+          {credits.length > 0 ? (
+            <section aria-labelledby="credits-h" className="card">
+              <div className="card__header">
+                <h2 className="card__title" id="credits-h">
+                  Your credits
+                </h2>
+                <TextLink href="/learn/credits">Every unit</TextLink>
+              </div>
+              <div className="card__body stack">
+                {credits.map((programme) => (
+                  <div className="stack stack--sm" key={programme.programmeId}>
+                    <p>{summarySentence(programme)}</p>
+                    <Meter
+                      label={credits.length > 1 ? `Credits earned: ${programme.title}` : "Credits earned"}
+                      max={programme.total}
+                      value={programme.earned}
+                      valueText={`${programme.earned} of ${programme.total}`}
+                    />
+                  </div>
+                ))}
+              </div>
+            </section>
           ) : null}
         </div>
       </div>
