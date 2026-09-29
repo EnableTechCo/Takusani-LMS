@@ -79,6 +79,19 @@ export async function planCycle(cohortId: string, _: FormState, form: FormData):
   redirect(`/coordinate/cohorts/${cohortId}/moderation?planned=${row!.cycle_id}`);
 }
 
+/** Freezes a planned cycle and draws its sample, in one transaction (FR-506). A retry answers with the same sample. */
+export async function freezeCycle(cohortId: string, cycleId: string, version: number): Promise<FormState> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("freeze_moderation_cycle", {
+    p_cycle_id: cycleId,
+    p_expected_version: version,
+  });
+  const status = error ? "error" : (data?.[0]?.status ?? "error");
+  if (status !== "ok") return { message: MODERATION_REFUSALS[status] ?? MODERATION_REFUSALS.error };
+  revalidatePath(`/coordinate/cohorts/${cohortId}/moderation`);
+  redirect(`/coordinate/cohorts/${cohortId}/moderation?frozen=${cycleId}`);
+}
+
 /** Cancels a planned cycle, with the reason kept; the results it would have claimed stay waiting. */
 export async function cancelCycle(
   cohortId: string,

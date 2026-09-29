@@ -4,12 +4,13 @@ import { useActionState, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox, Choice, ChoiceGroup, Fieldset, Radio } from "@/components/ui/choice";
 import { ConflictPanel } from "@/components/ui/conflict";
+import { ConsequenceDialog } from "@/components/ui/dialog";
 import { TextareaField, TextField } from "@/components/ui/field";
 import { ErrorSummary, SubmitButton } from "@/components/ui/form-feedback";
 import { TextLink } from "@/components/ui/link";
 import { Banner } from "@/components/ui/status";
 import type { FormState } from "@/lib/form-state";
-import { cancelCycle, planCycle } from "./cycle-actions";
+import { cancelCycle, freezeCycle, planCycle } from "./cycle-actions";
 import { CYCLE_STATE_LABELS, type CycleState, type PoolRow } from "./cycle-rules";
 
 const initial: FormState = {};
@@ -238,6 +239,54 @@ export function PlanCycleForm({
       <div className="form__actions">
         <SubmitButton pendingLabel="Planning">Plan cycle</SubmitButton>
       </div>
+    </form>
+  );
+}
+
+/**
+ * Freeze and sample (FR-506): irreversible, so it confirms with the consequence in numbers. The form itself has no
+ * fields; the dialog's confirm button submits it.
+ */
+export function FreezeCycleForm({
+  cohortId,
+  cycleId,
+  version,
+  name,
+  waiting,
+}: {
+  cohortId: string;
+  cycleId: string;
+  version: number;
+  name: string;
+  /** Results waiting in the cycle's scope now: what the freeze locks. */
+  waiting: number;
+}) {
+  const [state, action] = useActionState(freezeCycle.bind(null, cohortId, cycleId, version), initial);
+  const formId = `freeze-${cycleId}`;
+  return (
+    <form action={action} className="stack" id={formId} noValidate>
+      {state.message ? <Banner title={state.message} tone="critical" /> : null}
+      <ConsequenceDialog
+        cancelLabel="Not yet"
+        confirmLabel="Freeze and sample"
+        consequence={
+          waiting === 0
+            ? "Nothing is waiting in this cycle's scope right now, so there is nothing to lock."
+            : `This locks the ${waiting === 1 ? "1 result that is" : `${waiting} results that are`} waiting now and draws the sample. It cannot be undone or redrawn.`
+        }
+        form={formId}
+        title={`Freeze "${name}" and draw its sample?`}
+        trigger={{ label: "Freeze and sample now" }}
+      >
+        <ul className="modal__list">
+          <li>Decisions finalised after this moment wait for the next cycle.</li>
+          <li>
+            Every Not yet competent decision and every first-time assessor&rsquo;s decisions are sampled; the rest at
+            the configured percentage, by assessor, outcome and unit.
+          </li>
+          <li>Sampled items go to the cohort&rsquo;s moderators, never to one who assessed the result.</li>
+        </ul>
+      </ConsequenceDialog>
     </form>
   );
 }

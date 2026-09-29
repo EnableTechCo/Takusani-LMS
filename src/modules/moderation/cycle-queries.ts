@@ -1,7 +1,7 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import { isUuid } from "@/modules/programmes/rules";
-import type { CycleRow, PoolRow, PoolSummary } from "./cycle-rules";
+import type { CycleRow, PoolRow, PoolSummary, SampleRecord } from "./cycle-rules";
 
 // Moderation planning reads (C-06). Each answers only for cohorts the signed-in coordinator covers; the database
 // decides, and returns nothing for anyone else.
@@ -21,6 +21,15 @@ export async function getModerationPool(cohortId: string): Promise<PoolRow[]> {
   const { data, error } = await supabase.rpc("get_moderation_pool", { p_cohort_id: cohortId });
   if (error) throw new Error(`api.get_moderation_pool failed: ${error.message}`);
   return (data ?? []) as unknown as PoolRow[];
+}
+
+/** The sample record of a frozen cycle, or null while it is planned or outside the coordinator's scope. */
+export async function getModerationSample(cycleId: string): Promise<SampleRecord | null> {
+  if (!isUuid(cycleId)) return null;
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("get_moderation_sample", { p_cycle_id: cycleId });
+  if (error) throw new Error(`api.get_moderation_sample failed: ${error.message}`);
+  return (data?.[0] as unknown as SampleRecord | undefined) ?? null;
 }
 
 /** The figures at the top of the page and the settings in force, or null outside the coordinator's scope. */

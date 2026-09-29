@@ -227,7 +227,10 @@ insert into expected_grants values
   ('function', 'api', 'cancel_moderation_cycle(p_cycle_id uuid, p_expected_version integer, p_reason text)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'list_moderation_cycles(p_cohort_id uuid)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'get_moderation_pool(p_cohort_id uuid)', 'authenticated', 'EXECUTE'),
-  ('function', 'api', 'get_moderation_summary(p_cohort_id uuid)', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'get_moderation_summary(p_cohort_id uuid)', 'authenticated', 'EXECUTE'),
+  -- Freeze and sample (20261108090000): coordinators in scope, checked inside (test 0048).
+  ('function', 'api', 'freeze_moderation_cycle(p_cycle_id uuid, p_expected_version integer, p_seed text)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'get_moderation_sample(p_cycle_id uuid)', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (
