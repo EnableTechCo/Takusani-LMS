@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { CohortNav } from "@/components/shell/cohort-nav";
 import { PageHeader } from "@/components/shell/page-header";
-import { TextLink } from "@/components/ui/link";
+import { ButtonLink, TextLink } from "@/components/ui/link";
 import { Banner, EmptyState, Meter, Tag } from "@/components/ui/status";
 import { DataTable } from "@/components/ui/table";
 import { formatDateTime, formatDateTimeSeconds, formatDayOf } from "@/lib/dates";
@@ -353,6 +353,17 @@ export default async function ModerationPlanningPage({
                           : cycle.state === "cancelled"
                             ? `Cancelled by ${cycle.cancelled_by_name}, ${formatDayOf(cycle.cancelled_at!)}: ${cycle.cancel_reason}`
                             : `${cycle.held} held · ${cycle.sampled} sampled`,
+                    },
+                    {
+                      key: "open",
+                      header: "Actions",
+                      actions: true,
+                      cell: (cycle) =>
+                        cycle.state === "frozen" || cycle.state === "signed_off" ? (
+                          <ButtonLink href={`/coordinate/cohorts/${cohortId}/moderation/cycles/${cycle.id}`} size="sm">
+                            View<span className="u-visually-hidden"> {cycle.name}</span>
+                          </ButtonLink>
+                        ) : null,
                     },
                   ]}
                   rowKey={(cycle) => cycle.id}
