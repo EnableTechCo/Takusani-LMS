@@ -5,13 +5,14 @@ import { Banner, EmptyState, Tag } from "@/components/ui/status";
 import { formatDateTime, formatLongDayOf, formatTime } from "@/lib/dates";
 import { RegisterForm } from "@/modules/learning/register-forms";
 import { getRegister } from "@/modules/learning/register-queries";
-import { amendmentText, registerSummary } from "@/modules/learning/register-rules";
+import { amendmentText, checkinSummary, registerSummary } from "@/modules/learning/register-rules";
 import { durationText } from "@/modules/notifications/templates";
 
 export const metadata = { title: "Register · Teaching" };
 
-// F-07 (FR-209, CR-03): mark each learner present or absent, then amend with a reason. Teams attendance is never read;
-// the register is what the facilitator records here, and every change after the first save is logged.
+// F-07 (FR-209, CR-03): confirm the register from the learners' own check-ins, changing any mark that is wrong, then
+// amend with a reason. Teams attendance is never read; the register is what the facilitator confirms here, and every
+// change after the confirmation is logged.
 export default async function RegisterPage({
   params,
   searchParams,
@@ -37,10 +38,10 @@ export default async function RegisterPage({
               <Tag tone="caution">Cancelled</Tag>
             ) : captured ? (
               <Tag shape="dot" tone="positive">
-                Taken
+                Confirmed
               </Tag>
             ) : (
-              <Tag>Not taken yet</Tag>
+              <Tag>Not confirmed yet</Tag>
             )}
             <span>
               {formatLongDayOf(register.starts_at)}, {formatTime(register.starts_at)} (SAST),{" "}
@@ -57,7 +58,7 @@ export default async function RegisterPage({
             <Banner
               compact
               role="status"
-              title={flash.saved === "1" ? "Register saved" : "Changes saved"}
+              title={flash.saved === "1" ? "Register confirmed" : "Changes saved"}
               tone="positive"
             >
               <p>{registerSummary(register.roster)}.</p>
@@ -69,10 +70,10 @@ export default async function RegisterPage({
               <p>A cancelled session has no register.</p>
             </Banner>
           ) : !started ? (
-            <Banner role="note" title="The register opens when the session starts" tone="info">
+            <Banner role="note" title="The register can be confirmed once the session starts" tone="info">
               <p>
-                {formatLongDayOf(register.starts_at)} at {formatTime(register.starts_at)} (SAST). Come back then to mark
-                who is there.
+                {formatLongDayOf(register.starts_at)} at {formatTime(register.starts_at)} (SAST). Learners can check in
+                from ten minutes before; {checkinSummary(register.roster)} so far.
               </p>
             </Banner>
           ) : register.roster.length === 0 ? (
@@ -85,12 +86,13 @@ export default async function RegisterPage({
             <>
               {captured ? (
                 <p className="text-small text-muted">
-                  Taken by {register.captured_by_name} on {formatDateTime(register.captured_at!)} (SAST). A change now
-                  is an amendment: it needs a reason, and the mark it replaces stays on record.
+                  Confirmed by {register.captured_by_name} on {formatDateTime(register.captured_at!)} (SAST). A change
+                  now is an amendment: it needs a reason, and the mark it replaces stays on record.
                 </p>
               ) : (
                 <p className="text-small text-muted">
-                  Mark every learner, then save. Teams attendance is not read: this register is the record.
+                  Learners who checked in are marked present, the rest absent. Change any mark that is wrong, then
+                  confirm. Teams attendance is not read: the register you confirm is the record.
                 </p>
               )}
               <RegisterForm
@@ -116,7 +118,9 @@ export default async function RegisterPage({
             <div className="card__body">
               {register.amendments.length === 0 ? (
                 <p className="text-small text-muted">
-                  {captured ? "No changes since the register was taken." : "Changes after the first save appear here."}
+                  {captured
+                    ? "No changes since the register was confirmed."
+                    : "Changes after the first save appear here."}
                 </p>
               ) : (
                 <ol className="stack" role="list">

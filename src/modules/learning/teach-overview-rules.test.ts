@@ -22,6 +22,11 @@ const session = (over: Partial<OverviewSession>): OverviewSession => ({
   venue: null,
   state: "scheduled",
   audience: 20,
+  register_version: 0,
+  checkin_state: "not_open",
+  checked_in: 0,
+  present: 0,
+  absent: 0,
   ...over,
 });
 
@@ -88,6 +93,9 @@ describe("workSummary and teachLead", () => {
     expect(teachLead(1, items)).toBe("1 session today, and 2 tasks with work outstanding, 1 past due.");
     expect(teachLead(0, items.slice(1))).toBe("1 task with work outstanding.");
     expect(teachLead(2, [])).toBe("2 sessions today.");
-    expect(teachLead(0, [])).toBe("No sessions today, and every assignment set has been handed in.");
+    expect(teachLead(0, [])).toBe(
+      "No sessions today, every register is confirmed, and every assignment set has been handed in.",
+    );
+    expect(teachLead(1, [], 2)).toBe("1 session today, and 2 registers to confirm.");
   });
 });

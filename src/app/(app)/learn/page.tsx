@@ -1,11 +1,13 @@
 import { TextLink } from "@/components/ui/link";
 import { OfflineBanner } from "@/components/ui/offline-banner";
-import { EmptyState } from "@/components/ui/status";
+import { EmptyState, Meter } from "@/components/ui/status";
 import { formatDateTime, formatLongDayOf } from "@/lib/dates";
 import { listMyResults } from "@/modules/assessment/queries";
 import { requireActiveAccess } from "@/modules/identity/session";
 import { Agenda, agendaItems } from "@/modules/learning/agenda";
 import { getPublicSettings } from "@/modules/audit/settings";
+import { listMyAttendance } from "@/modules/learning/attendance-queries";
+import { attendanceRate, attendanceText } from "@/modules/learning/attendance-rules";
 import { BeingAssessedCard, DoNextTable, NewResultCard } from "@/modules/learning/home";
 import {
   beingAssessed,
@@ -26,16 +28,19 @@ import { listMyTasks } from "@/modules/submissions/queries";
 export const metadata = { title: "Home" };
 
 // L-01 (P0-03; FR-304, FR-305, FR-316, FR-317): what needs the learner now, in one screen: new results, do next,
-// this week's sessions (S2-15) and being assessed. The exam window and credits join when those features ship.
+// this week's sessions (S2-15) with "I'm here" while one is on (FR-209), attendance so far, and being assessed. The
+// exam window and credits join when those features ship.
 export default async function LearnHomePage() {
-  const [access, tasks, results, enrolments, sessions, noticeRows] = await Promise.all([
+  const [access, tasks, results, enrolments, sessions, noticeRows, attendance] = await Promise.all([
     requireActiveAccess(),
     listMyTasks() as Promise<HomeTask[]>,
     listMyResults() as Promise<HomeResult[]>,
     listMyEnrolments(),
     listMySessions(),
     listMyNotifications("notices", 1),
+    listMyAttendance(),
   ]);
+  const rate = attendanceRate(attendance);
   const now = new Date();
   const fresh = newResults(results, tasks, now);
   const todo = doNext(tasks, results, now);
@@ -161,6 +166,33 @@ export default async function LearnHomePage() {
               </div>
               <div className="card__body">
                 <Agenda items={comingUp} label="Sessions this week" now={now} />
+              </div>
+            </section>
+          ) : null}
+
+          {attendance.length > 0 ? (
+            <section aria-labelledby="attendance-h" className="card">
+              <div className="card__header">
+                <h2 className="card__title" id="attendance-h">
+                  Your attendance
+                </h2>
+                <TextLink href="/learn/attendance">Every session</TextLink>
+              </div>
+              <div className="card__body stack">
+                <p>
+                  {rate.percent === null
+                    ? "No register has been confirmed yet. Your attendance appears here once your facilitator confirms one."
+                    : `${attendanceText(rate)}.`}
+                </p>
+                {rate.percent !== null ? (
+                  <Meter
+                    caution={rate.percent < 50}
+                    label="Sessions you were present at"
+                    max={rate.sessions}
+                    value={rate.present}
+                    valueText={`${rate.present} of ${rate.sessions}`}
+                  />
+                ) : null}
               </div>
             </section>
           ) : null}

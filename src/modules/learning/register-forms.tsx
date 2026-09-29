@@ -6,14 +6,23 @@ import { TextareaField } from "@/components/ui/field";
 import { ErrorSummary } from "@/components/ui/form-feedback";
 import { Banner, Tag } from "@/components/ui/status";
 import { DataTable } from "@/components/ui/table";
+import { formatTime } from "@/lib/dates";
 import type { FormState } from "@/lib/form-state";
 import { saveRegister } from "./register-actions";
-import { MARK_LABELS, registerSummary, type Mark, type RosterEntry } from "./register-rules";
+import {
+  checkinSummary,
+  initialMarks,
+  MARK_LABELS,
+  registerSummary,
+  type Mark,
+  type RosterEntry,
+} from "./register-rules";
 
 /**
- * F-07 register (FR-209). Before it is captured, every learner is marked and saved at once; "Mark everyone present"
- * helps with a full room. Once captured, a change is an amendment: only the marks that differ are saved, with the
- * reason, and the version the facilitator saw stops them saving over someone else's changes.
+ * F-07 register (FR-209). Before it is confirmed, the learners' own check-ins fill it in (checked in: present;
+ * not: absent), the facilitator changes any mark that is wrong, and every learner is confirmed at once. Once
+ * confirmed, a change is an amendment: only the marks that differ are saved, with the reason, and the version the
+ * facilitator saw stops them saving over someone else's changes.
  */
 export function RegisterForm({
   sessionId,
@@ -29,8 +38,12 @@ export function RegisterForm({
   const saved = new Map(roster.map((entry) => [entry.learner_id, entry.status]));
   const [marks, setMarks] = useState<Map<string, Mark | null>>(() => {
     const values = state.values ?? {};
+    const initial = initialMarks(roster, captured);
     return new Map(
-      roster.map((entry) => [entry.learner_id, (values[`mark:${entry.learner_id}`] as Mark) ?? entry.status]),
+      roster.map((entry) => [
+        entry.learner_id,
+        (values[`mark:${entry.learner_id}`] as Mark) ?? initial.get(entry.learner_id) ?? null,
+      ]),
     );
   });
   const changed = roster.filter((entry) => marks.get(entry.learner_id) !== saved.get(entry.learner_id)).length;
@@ -53,6 +66,7 @@ export function RegisterForm({
 
       <div className="cluster cluster--between">
         <p aria-live="polite" className="text-small">
+          {captured ? "" : `${checkinSummary(roster)}. `}
           {registerSummary(roster.map((entry) => ({ status: marks.get(entry.learner_id) ?? null })))}
           {captured && changed > 0 ? `. ${changed} ${changed === 1 ? "change" : "changes"} not saved yet.` : "."}
         </p>
@@ -72,7 +86,7 @@ export function RegisterForm({
       </div>
 
       <DataTable
-        caption="The session's roster: each learner present or absent."
+        caption="The session's roster: each learner's check-in, and present or absent."
         // One table at every width: the card list would repeat each learner's radios under the same name, and two
         // radio groups sharing a name fight over which one is checked.
         cards={false}
@@ -90,6 +104,18 @@ export function RegisterForm({
                 </span>
               </>
             ),
+          },
+          {
+            key: "checkin",
+            header: "Checked in",
+            cell: (entry) =>
+              entry.checked_in_at ? (
+                <Tag shape="check" tone="info">
+                  {formatTime(entry.checked_in_at)}
+                </Tag>
+              ) : (
+                <span className="text-muted">No</span>
+              ),
           },
           {
             key: "mark",
@@ -138,8 +164,8 @@ export function RegisterForm({
       ) : null}
 
       <div className="cluster">
-        <Button loading={pending} loadingLabel="Saving" type="submit" variant="primary">
-          {captured ? (changed === 1 ? "Save the change" : "Save the changes") : "Save register"}
+        <Button loading={pending} loadingLabel={captured ? "Saving" : "Confirming"} type="submit" variant="primary">
+          {captured ? (changed === 1 ? "Save the change" : "Save the changes") : "Confirm register"}
         </Button>
         {!captured && unmarked > 0 ? (
           <span className="text-small text-muted">

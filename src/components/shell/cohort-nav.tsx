@@ -5,6 +5,7 @@ const PAGES = [
   { segment: "/setup", label: "Setup" },
   { segment: "/people", label: "People" },
   { segment: "/readiness", label: "Readiness" },
+  { segment: "/attendance", label: "Attendance" },
   { segment: "/moderation", label: "Moderation" },
 ] as const;
 
