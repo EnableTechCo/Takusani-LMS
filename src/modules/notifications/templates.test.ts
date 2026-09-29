@@ -147,6 +147,19 @@ describe("renderNotification", () => {
     const remarked = renderNotification("moderation_item_remarked", 1, base);
     expect(remarked.title).toBe("Re-marked, review again: Lerato Mokoena, Task 3: Workplace records portfolio");
     expect(remarked.action).toBe("Review the item");
+    const signed = renderNotification("moderation_cycle_signed_off", 1, {
+      cycle_id: "c1",
+      cycle_name: "Term 3 assignments",
+      cohort_name: "2026 Intake B",
+      signed_off_by: "Thabo Nkosi",
+      signed_off_at: "2026-09-29T12:05:00Z",
+      released: 96,
+      notified: 96,
+    });
+    expect(signed.title).toBe("Signed off: Term 3 assignments. 96 results released");
+    expect(signed.summary).toBe(
+      "2026 Intake B. Signed off by Thabo Nkosi on Tuesday 29 September 2026 at 14:05 (SAST).",
+    );
   });
 
   it("refuses an unknown template or a payload missing a fact, rather than sending a broken email", () => {

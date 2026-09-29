@@ -67,7 +67,13 @@ export default async function ModerateHomePage() {
               header: "State",
               cell: (cycle) =>
                 cycle.state === "signed_off" ? (
-                  <Tag tone="positive">Signed off</Tag>
+                  <Tag tone="positive">
+                    Signed off. {cycle.released_count ?? 0} {cycle.released_count === 1 ? "result" : "results"} released
+                  </Tag>
+                ) : cycle.open_returns > 0 ? (
+                  <Tag tone="caution">Waiting for re-marks ({cycle.open_returns} outstanding)</Tag>
+                ) : cycle.total_concluded === cycle.total_items ? (
+                  <Tag tone="positive">Ready to sign off</Tag>
                 ) : cycle.my_concluded === cycle.my_items ? (
                   <Tag tone="positive">Your items are concluded</Tag>
                 ) : (
@@ -81,9 +87,20 @@ export default async function ModerateHomePage() {
               header: "Actions",
               actions: true,
               cell: (cycle) => (
-                <ButtonLink href={`/moderate/cycles/${cycle.cycle_id}`} size="sm">
-                  Open<span className="u-visually-hidden"> {cycle.name}</span>
-                </ButtonLink>
+                <span className="cluster">
+                  <ButtonLink href={`/moderate/cycles/${cycle.cycle_id}`} size="sm">
+                    Open<span className="u-visually-hidden"> {cycle.name}</span>
+                  </ButtonLink>
+                  {cycle.state === "frozen" && cycle.may_sign ? (
+                    <ButtonLink
+                      href={`/moderate/cycles/${cycle.cycle_id}/sign-off`}
+                      size="sm"
+                      variant={cycle.total_concluded === cycle.total_items ? "primary" : "secondary"}
+                    >
+                      Sign off<span className="u-visually-hidden"> {cycle.name}</span>
+                    </ButtonLink>
+                  ) : null}
+                </span>
               ),
             },
           ]}

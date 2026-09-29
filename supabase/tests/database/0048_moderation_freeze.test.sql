@@ -62,8 +62,9 @@ values ('10000000-0000-4000-8000-000000000124', :'cohort', 'task', '10000000-000
 \set item5 10000000-0000-4000-8000-000000000125
 
 -- Nomsa (assessor@) has history: a signed-off cycle elsewhere lists a decision of hers, so she is not first-time.
-insert into moderation.cycles (id, cohort_id, name, state, frozen_at, planned_by)
-values ('90000000-0000-4000-8000-0000000000a1', :'cohort', 'Earlier cycle', 'signed_off', now() - interval '60 days', :'coordinator');
+insert into moderation.cycles (id, cohort_id, name, state, frozen_at, planned_by, signed_off_at, signed_off_by, sign_off_statement, released_count, notified_count)
+values ('90000000-0000-4000-8000-0000000000a1', :'cohort', 'Earlier cycle', 'signed_off', now() - interval '60 days', :'coordinator',
+        now() - interval '50 days', :'moderator', 'Reviewed.', 1, 1);
 insert into moderation.populations (cycle_id, size, digest, basis)
 values ('90000000-0000-4000-8000-0000000000a1', 1, repeat('a', 64),
         jsonb_build_array(jsonb_build_object('result_id', gen_random_uuid(), 'assessor_id', :'assessor', 'outcome', 'competent')));

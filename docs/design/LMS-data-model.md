@@ -190,6 +190,7 @@ The domain function inserts the outbox row and sends the queue message in the sa
 | Decision chain | root -> superseded by successor -> ... | Updating a decision; two successors of one decision; appealing an appeal decision |
 | Moderation cycle | planned -> frozen_and_sampled -> in_review <-> corrections_pending -> signed_off; planned -> cancelled | Resampling a frozen population; sign-off with returns open; cancelling after freeze; two non-terminal cycles over one item |
 | Sample item | allocated -> in_review -> agreed, or returned -> remarked -> in_review; allocated or in_review -> reallocated | Moderator who assessed the result; abandoning an item when its moderator leaves |
+| Moderation release | one row per result released by a sign-off (`moderation.releases`: cycle, result, decision, release sequence, moment); append-only | Releasing a result outside the frozen population; a second release row for one result in one cycle |
 | Appeal | lodged -> admissibility_review -> admitted or inadmissible -> allocated -> under_review -> concluded | Reviewer took an assessment decision on the result; appeal at or after the deadline instant; second remark appeal on one result |
 | Notification | pending -> queued -> accepted -> delivered or failed | Re-enqueueing with a different payload under the same deduplication key |
 | Cohort | active -> completion_review -> archivable -> archived | Archive while any result is pending or held, an appeal window is open, or an appeal is unresolved |

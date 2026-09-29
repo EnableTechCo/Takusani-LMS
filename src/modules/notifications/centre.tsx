@@ -51,6 +51,7 @@ const ICONS: Record<string, IconName> = {
   moderation_item_returned: "scales",
   moderation_return_logged: "scales",
   moderation_item_remarked: "scales",
+  moderation_cycle_signed_off: "scales",
 };
 
 function Evidence({ row, title }: { row: NotificationRow; title: string }) {

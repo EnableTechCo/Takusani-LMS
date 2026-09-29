@@ -35,6 +35,9 @@ export interface CycleRow {
   sampled: number;
   /** Items returned to an assessor and not yet re-marked; sign-off waits for them (FR-510). */
   returned: number;
+  signed_off_at: string | null;
+  signed_off_by_name: string | null;
+  released_count: number | null;
 }
 
 export interface SampleRecord {
@@ -117,7 +120,8 @@ const count = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : 
 
 /** "Planned. Starts by itself on 14 Sep 2026, 09:00" or "Planned. Freezes when you choose". */
 export function cycleStateText(
-  cycle: Pick<CycleRow, "state" | "scheduled_start_at" | "held"> & { returned?: number },
+  cycle: Pick<CycleRow, "state" | "scheduled_start_at" | "held"> &
+    Partial<Pick<CycleRow, "returned" | "signed_off_at" | "signed_off_by_name" | "released_count">>,
 ): string {
   switch (cycle.state) {
     case "planned":
@@ -129,7 +133,9 @@ export function cycleStateText(
         ? `Frozen and sampled. ${count(cycle.held, "result held", "results held")}; waiting for ${count(cycle.returned, "re-mark", "re-marks")}`
         : `Frozen and sampled. ${count(cycle.held, "result held", "results held")}`;
     case "signed_off":
-      return "Signed off";
+      return cycle.signed_off_at
+        ? `Signed off by ${cycle.signed_off_by_name ?? "a moderator"}, ${formatDateTime(cycle.signed_off_at)}. ${count(cycle.released_count ?? 0, "result released", "results released")}`
+        : "Signed off";
     default:
       return CYCLE_STATE_LABELS.cancelled;
   }

@@ -41,16 +41,34 @@ export default async function ModerateCyclePage({ params }: { params: Promise<{ 
     <div className="page">
       <PageHeader
         actions={
-          next ? (
-            <ButtonLink href={`/moderate/cycles/${cycleId}/items/${next.item_id}`} variant="primary">
-              Open the next item
-            </ButtonLink>
-          ) : undefined
+          <>
+            {next ? (
+              <ButtonLink href={`/moderate/cycles/${cycleId}/items/${next.item_id}`} variant="primary">
+                Open the next item
+              </ButtonLink>
+            ) : null}
+            {cycle.state === "frozen" ? (
+              <ButtonLink
+                href={`/moderate/cycles/${cycleId}/sign-off`}
+                variant={
+                  !next && cycle.total_concluded === cycle.total_items && cycle.may_sign ? "primary" : "secondary"
+                }
+              >
+                {cycle.total_concluded === cycle.total_items ? "Sign off and release" : "Sign-off readiness"}
+              </ButtonLink>
+            ) : null}
+          </>
         }
         lead={`${cycle.cohort_name}. ${progressText(cycle.my_concluded, cycle.my_items)}${cycle.my_returned > 0 ? ` ${cycle.my_returned} ${cycle.my_returned === 1 ? "is" : "are"} with the assessor for re-marking.` : ""}${cycle.frozen_at ? ` Frozen ${formatDateTime(cycle.frozen_at)} (SAST); ${cycle.total_items} items in all.` : ""}`}
         meta={
           signedOff ? (
-            <Tag tone="positive">Signed off</Tag>
+            <Tag tone="positive">
+              Signed off. {cycle.released_count ?? 0} {cycle.released_count === 1 ? "result" : "results"} released
+            </Tag>
+          ) : cycle.open_returns > 0 ? (
+            <Tag tone="caution">Waiting for re-marks ({cycle.open_returns} outstanding)</Tag>
+          ) : cycle.total_concluded === cycle.total_items ? (
+            <Tag tone="positive">Ready to sign off</Tag>
           ) : cycle.my_concluded === cycle.my_items ? (
             <Tag tone="positive">Your items are concluded</Tag>
           ) : (
