@@ -56,6 +56,7 @@ const ICONS: Record<string, IconName> = {
   correction_proposed: "pencil",
   correction_concluded: "pencil",
   credit_reconciliation_differences: "chart",
+  report_export_ready: "download",
 };
 
 function Evidence({ row, title }: { row: NotificationRow; title: string }) {

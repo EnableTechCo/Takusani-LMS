@@ -678,6 +678,23 @@ function creditReconciliationDifferences(payload: Payload): Rendered {
   };
 }
 
+/** A coordinator's report export has been built in the background (S6-04, FR-708, R-20). */
+function reportExportReady(payload: Payload): Rendered {
+  const rows = typeof payload.rows === "number" ? payload.rows : Number(text(payload, "rows"));
+  const until =
+    typeof payload.expires_at === "string" && payload.expires_at ? formatLongDayOf(payload.expires_at) : null;
+  return {
+    title: `Your export is ready: ${text(payload, "report_title")}`,
+    summary: `${rows} ${rows === 1 ? "row" : "rows"}. Download it from Reports.`,
+    paragraphs: [
+      `The ${text(payload, "report_title").toLowerCase()} export you asked for is ready, with ${rows} ${rows === 1 ? "row" : "rows"}.${
+        until ? ` You can download it until ${until}; after that it is removed.` : ""
+      }`,
+    ],
+    action: "Open your exports",
+  };
+}
+
 /** A coordinator's alert that a stakeholder query was routed to them (S6-03, FR-704). */
 function queryAssigned(payload: Payload): Rendered {
   const reference = text(payload, "reference");
@@ -724,6 +741,7 @@ const TEMPLATES: Record<string, Record<number, (payload: Payload) => Rendered>> 
   correction_proposed: { 1: correctionProposed },
   correction_concluded: { 1: correctionConcluded },
   credit_reconciliation_differences: { 1: creditReconciliationDifferences },
+  report_export_ready: { 1: reportExportReady },
   account_deactivated: { 1: accountDeactivated },
   account_reactivated: { 1: accountReactivated },
   sign_in_locked: { 1: signInLocked },

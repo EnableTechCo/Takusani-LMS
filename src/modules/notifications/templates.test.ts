@@ -207,6 +207,20 @@ describe("renderNotification", () => {
     );
   });
 
+  it("tells a coordinator their report export is ready, and until when", () => {
+    const ready = renderNotification("report_export_ready", 1, {
+      export_id: "e1",
+      report_title: "Attendance",
+      rows: 12,
+      expires_at: "2026-10-06T19:00:00Z",
+    });
+    expect(ready.title).toBe("Your export is ready: Attendance");
+    expect(ready.summary).toBe("12 rows. Download it from Reports.");
+    expect(ready.paragraphs[0]).toMatch(
+      /^The attendance export you asked for is ready, with 12 rows\. You can download it until /,
+    );
+  });
+
   it("refuses an unknown template or a payload missing a fact, rather than sending a broken email", () => {
     expect(() => renderNotification("result_released", 2, released)).toThrow("no template");
     expect(() => renderNotification("result_released", 1, { ...released, item_title: "" })).toThrow("item_title");

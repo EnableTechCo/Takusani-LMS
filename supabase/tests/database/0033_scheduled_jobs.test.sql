@@ -17,7 +17,7 @@ select set_eq(
   'every recurring job is scheduled in pg_cron, through the wrapper, on its catalogue schedule');
 select set_eq($$ select name from audit.scheduled_jobs order by name $$,
   $$ values ('expire-upload-intents'), ('freeze-due-moderation-cycles'), ('freeze-moderation-cycle'), ('purge-job-history'),
-            ('purge-rate-buckets'), ('reconcile-credits'), ('release-notice'), ('release-scheduled-notices') $$,
+            ('build-report-exports'), ('purge-rate-buckets'), ('reconcile-credits'), ('release-notice'), ('release-scheduled-notices') $$,
   'the first jobs are registered');
 select is_empty($$
   select name from audit.scheduled_jobs j

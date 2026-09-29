@@ -275,7 +275,14 @@ insert into expected_grants values
   ('function', 'api', 'get_credit_reconciliation()', 'authenticated', 'EXECUTE'),
   -- The learner's credits record (20261116090000): their own units and ledger only.
   ('function', 'api', 'get_my_credits()', 'authenticated', 'EXECUTE'),
-  ('function', 'api', 'list_my_credit_history()', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'list_my_credit_history()', 'authenticated', 'EXECUTE'),
+  -- Reports and exports (20261117090000): coordinators, scoped to the cohorts they coordinate; an export is the
+  -- requester's own.
+  ('function', 'api', 'list_report_types()', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'run_report(p_type text, p_programme_id uuid, p_cohort_id uuid, p_from date, p_to date)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'request_report_export(p_type text, p_programme_id uuid, p_cohort_id uuid, p_from date, p_to date)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_my_report_exports()', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'download_report_export(p_export_id uuid)', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (

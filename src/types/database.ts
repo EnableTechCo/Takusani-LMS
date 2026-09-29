@@ -472,6 +472,14 @@ export type Database = {
           status: string
         }[]
       }
+      download_report_export: {
+        Args: { p_export_id: string }
+        Returns: {
+          content: string
+          filename: string
+          status: string
+        }[]
+      }
       end_role: {
         Args: { p_assignment_id: string }
         Returns: {
@@ -1748,6 +1756,24 @@ export type Database = {
           stage: string
         }[]
       }
+      list_my_report_exports: {
+        Args: never
+        Returns: {
+          cohort_name: string
+          content_bytes: number
+          expires_at: string
+          export_id: string
+          finished_at: string
+          from_on: string
+          programme_title: string
+          report_title: string
+          report_type: string
+          requested_at: string
+          row_count: number
+          state: string
+          to_on: string
+        }[]
+      }
       list_my_results: {
         Args: never
         Returns: {
@@ -1949,6 +1975,16 @@ export type Database = {
           state: string
           title: string
           updated_at: string
+        }[]
+      }
+      list_report_types: {
+        Args: never
+        Returns: {
+          columns: Json
+          date_basis: string
+          description: string
+          report_type: string
+          title: string
         }[]
       }
       list_role_scopes: {
@@ -2439,6 +2475,19 @@ export type Database = {
       }
       record_sign_in_failure: { Args: { p_email: string }; Returns: undefined }
       record_sign_in_success: { Args: { p_email: string }; Returns: undefined }
+      request_report_export: {
+        Args: {
+          p_cohort_id?: string
+          p_from?: string
+          p_programme_id: string
+          p_to?: string
+          p_type: string
+        }
+        Returns: {
+          export_id: string
+          status: string
+        }[]
+      }
       revoke_calendar_feed_token: {
         Args: never
         Returns: {
@@ -2449,6 +2498,21 @@ export type Database = {
         Args: { p_note?: string; p_owner_id: string; p_query_id: string }
         Returns: {
           status: string
+        }[]
+      }
+      run_report: {
+        Args: {
+          p_cohort_id?: string
+          p_from?: string
+          p_programme_id: string
+          p_to?: string
+          p_type: string
+        }
+        Returns: {
+          rows: Json
+          status: string
+          total: number
+          truncated: boolean
         }[]
       }
       save_marking_draft: {
