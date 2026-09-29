@@ -11,7 +11,7 @@ import { TextLink } from "@/components/ui/link";
 import { Banner } from "@/components/ui/status";
 import type { FormState } from "@/lib/form-state";
 import { cancelCycle, freezeCycle, planCycle } from "./cycle-actions";
-import { CYCLE_STATE_LABELS, type CycleState, type PoolRow } from "./cycle-rules";
+import { CYCLE_STATE_LABELS, noModeratorText, type CycleState, type PoolRow } from "./cycle-rules";
 
 const initial: FormState = {};
 
@@ -46,11 +46,14 @@ export function PlanCycleForm({
   items,
   units,
   samplingRule,
+  moderators,
 }: {
   cohortId: string;
   items: PoolRow[];
   units: UnitOption[];
   samplingRule: string;
+  /** The moderators available, in words (moderatorsText). */
+  moderators: string;
 }) {
   const [state, action] = useActionState(planCycle.bind(null, cohortId), initial);
   const values = state.values ?? {};
@@ -59,6 +62,19 @@ export function PlanCycleForm({
   const [omitted, setOmitted] = useState<string[]>([]);
   const chosenItems = (values.items ?? "").split(",").filter(Boolean);
   const chosenUnits = (values.units ?? "").split(",").filter(Boolean);
+  // What is ticked now, for the no-moderator warning (BR-01); the form itself still reads the checkboxes.
+  const [tickedItems, setTickedItems] = useState<string[]>(chosenItems);
+  const [tickedUnits, setTickedUnits] = useState<string[]>(chosenUnits);
+  const inScope =
+    scopeBy === "items"
+      ? items.filter((item) => tickedItems.includes(item.item_id) && !omitted.includes(item.item_id))
+      : items.filter((item) => item.unit_id !== null && tickedUnits.includes(item.unit_id));
+  const noModerator = noModeratorText(inScope);
+  const track = (setter: (update: (current: string[]) => string[]) => void) => (event: React.FormEvent) => {
+    const target = event.target as HTMLInputElement;
+    if (target.type !== "checkbox") return;
+    setter((current) => (target.checked ? [...current, target.value] : current.filter((id) => id !== target.value)));
+  };
   const conflict = values.conflictCycleName
     ? {
         itemId: values.conflictItemId,
@@ -126,57 +142,61 @@ export function PlanCycleForm({
             When the cycle freezes it locks every waiting result for these assignments. An assignment can be in one open
             cycle at a time.
           </p>
-          {items.length === 0 ? (
-            <p className="text-muted">No assignment in this cohort has been handed in yet.</p>
-          ) : (
-            items.map((item) => {
-              const covered = item.open_cycle_name !== null;
-              const unit = item.unit_code ? `Unit ${item.unit_code}` : "No unit";
-              return (
-                <Checkbox
-                  defaultChecked={chosenItems.includes(item.item_id) && !omitted.includes(item.item_id)}
-                  disabled={covered}
-                  help={
-                    covered
-                      ? `Already in "${item.open_cycle_name}", which is ${CYCLE_STATE_LABELS[item.open_cycle_state as CycleState]?.toLowerCase() ?? "open"}.`
-                      : `${unit} · ${item.waiting} waiting now${item.released > 0 ? ` · ${item.released} released` : ""}`
-                  }
-                  key={item.item_id}
-                  label={item.title}
-                  name="items"
-                  value={item.item_id}
-                />
-              );
-            })
-          )}
+          <div onChange={track(setTickedItems)}>
+            {items.length === 0 ? (
+              <p className="text-muted">No assignment in this cohort has been handed in yet.</p>
+            ) : (
+              items.map((item) => {
+                const covered = item.open_cycle_name !== null;
+                const unit = item.unit_code ? `Unit ${item.unit_code}` : "No unit";
+                return (
+                  <Checkbox
+                    defaultChecked={chosenItems.includes(item.item_id) && !omitted.includes(item.item_id)}
+                    disabled={covered}
+                    help={
+                      covered
+                        ? `Already in "${item.open_cycle_name}", which is ${CYCLE_STATE_LABELS[item.open_cycle_state as CycleState]?.toLowerCase() ?? "open"}.`
+                        : `${unit} · ${item.waiting} waiting now${item.released > 0 ? ` · ${item.released} released` : ""}`
+                    }
+                    key={item.item_id}
+                    label={item.title}
+                    name="items"
+                    value={item.item_id}
+                  />
+                );
+              })
+            )}
+          </div>
         </Fieldset>
       ) : (
         <Fieldset error={state.errors?.units} legend={LABELS.units}>
           <p className="text-small text-muted">
             Every assignment in the unit joins the cycle, including any published after it is planned.
           </p>
-          {units.length === 0 ? (
-            <p className="text-muted">No assignment in this cohort belongs to a unit yet.</p>
-          ) : (
-            units.map((unit) => {
-              const covered = unit.openCycleName !== null;
-              return (
-                <Checkbox
-                  defaultChecked={chosenUnits.includes(unit.id)}
-                  disabled={covered}
-                  help={
-                    covered
-                      ? `An assignment in this unit is already in "${unit.openCycleName}".`
-                      : `${unit.items} ${unit.items === 1 ? "assignment" : "assignments"} · ${unit.waiting} waiting now`
-                  }
-                  key={unit.id}
-                  label={`Unit ${unit.code ?? ""}${unit.title ? `: ${unit.title}` : ""}`}
-                  name="units"
-                  value={unit.id}
-                />
-              );
-            })
-          )}
+          <div onChange={track(setTickedUnits)}>
+            {units.length === 0 ? (
+              <p className="text-muted">No assignment in this cohort belongs to a unit yet.</p>
+            ) : (
+              units.map((unit) => {
+                const covered = unit.openCycleName !== null;
+                return (
+                  <Checkbox
+                    defaultChecked={chosenUnits.includes(unit.id)}
+                    disabled={covered}
+                    help={
+                      covered
+                        ? `An assignment in this unit is already in "${unit.openCycleName}".`
+                        : `${unit.items} ${unit.items === 1 ? "assignment" : "assignments"} · ${unit.waiting} waiting now`
+                    }
+                    key={unit.id}
+                    label={`Unit ${unit.code ?? ""}${unit.title ? `: ${unit.title}` : ""}`}
+                    name="units"
+                    value={unit.id}
+                  />
+                );
+              })
+            )}
+          </div>
         </Fieldset>
       )}
 
@@ -234,6 +254,16 @@ export function PlanCycleForm({
           Set by the administrator under Configuration. The cycle keeps the version in force when it freezes.
         </p>
         <p className="text-small">{samplingRule}</p>
+      </div>
+
+      <div className="field">
+        <p className="field__label">Moderators available</p>
+        <p className="text-small">{moderators}</p>
+        {noModerator ? (
+          <Banner compact role="status" title="An item in this scope has results nobody could moderate" tone="caution">
+            <p>{noModerator}</p>
+          </Banner>
+        ) : null}
       </div>
 
       <div className="form__actions">

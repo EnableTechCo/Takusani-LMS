@@ -740,6 +740,7 @@ export type Database = {
           unit_code: string
           unit_id: string
           unit_title: string
+          unmoderatable: number
           waiting: number
         }[]
       }
@@ -1382,6 +1383,7 @@ export type Database = {
           cancel_reason: string
           cancelled_at: string
           cancelled_by_name: string
+          concluded: number
           frozen_at: string
           held: number
           id: string
@@ -1401,6 +1403,15 @@ export type Database = {
           unit_ids: string[]
           version: number
           waiting: number
+        }[]
+      }
+      list_moderation_moderators: {
+        Args: { p_cohort_id: string }
+        Returns: {
+          assessed_waiting: number
+          full_name: string
+          holds_open: number
+          profile_id: string
         }[]
       }
       list_moderation_observations: {

@@ -33,6 +33,8 @@ export interface CycleRow {
   waiting: number;
   held: number;
   sampled: number;
+  /** Sample items agreed, on the original decision or on a re-mark. */
+  concluded: number;
   /** Items returned to an assessor and not yet re-marked; sign-off waits for them (FR-510). */
   returned: number;
   signed_off_at: string | null;
@@ -100,6 +102,17 @@ export interface PoolRow {
   open_cycle_name: string | null;
   open_cycle_state: string | null;
   open_cycle_scheduled_start_at: string | null;
+  /** Waiting results that every eligible moderator assessed: nobody could be allocated them (BR-01). */
+  unmoderatable: number;
+}
+
+export interface ModeratorRow {
+  profile_id: string;
+  full_name: string;
+  /** Waiting results in the cohort this moderator assessed, and so can never be given. */
+  assessed_waiting: number;
+  /** Items they hold in frozen cycles that are not concluded. */
+  holds_open: number;
 }
 
 export interface PoolSummary {
@@ -242,6 +255,120 @@ export function samplingRuleText(
       ? "stratified by assessor, outcome and unit"
       : (summary.sampling_rule ?? "not set");
   return `Version ${summary.sampling_rule_version ?? "?"}: ${summary.sampling_percentage ?? "?"}% of Competent results at random, ${rule}; every Not yet competent decision and every first-time assessor's decisions.`;
+}
+
+/**
+ * The moderators available to a cycle, each with what they cannot be given: "Thabo Nkosi assessed none of the 96
+ * waiting results, so can be given any of them. Zanele Khumalo assessed 3, so cannot be given those."
+ */
+export function moderatorsText(moderators: ModeratorRow[], waiting: number): string {
+  if (moderators.length === 0)
+    return "No moderator's role covers this cohort. The coordinator must assign one before a cycle can be sampled.";
+  return moderators
+    .map((moderator) =>
+      moderator.assessed_waiting === 0
+        ? `${moderator.full_name} assessed none of the ${count(waiting, "waiting result", "waiting results")}, so can be given any of them`
+        : `${moderator.full_name} assessed ${moderator.assessed_waiting}, so cannot be given those`,
+    )
+    .join(". ")
+    .concat(".");
+}
+
+/** The warning for items whose waiting results every moderator assessed (BR-01), or null. */
+export function noModeratorText(items: Pick<PoolRow, "title" | "unmoderatable">[]): string | null {
+  const affected = items.filter((item) => item.unmoderatable > 0);
+  if (affected.length === 0) return null;
+  const total = affected.reduce((sum, item) => sum + item.unmoderatable, 0);
+  return `${count(total, "waiting result has", "waiting results have")} no eligible moderator: every moderator of the cohort assessed ${total === 1 ? "it" : "them"} (${affected.map((item) => `${item.unmoderatable} for ${item.title}`).join("; ")}). If sampled, ${total === 1 ? "it waits" : "they wait"} for a moderator and block sign-off until the coordinator assigns one who assessed none of them.`;
+}
+
+/** The P-03 alert: what has waited longer than the configured maximum hold, or null. */
+export function holdAlertText(summary: PoolSummary, now: Date): string | null {
+  const max = summary.max_hold_days;
+  if (max === null) return null;
+  const waiting = summary.oldest_waiting_at !== null && holdDays(summary.oldest_waiting_at, now) > max;
+  const held = summary.oldest_held_at !== null && holdDays(summary.oldest_held_at, now) > max;
+  if (!waiting && !held) return null;
+  const parts: string[] = [];
+  if (waiting)
+    parts.push(
+      `the oldest result waiting for a cycle was decided ${count(holdDays(summary.oldest_waiting_at!, now), "day", "days")} ago`,
+    );
+  if (held)
+    parts.push(
+      `the oldest result held in a frozen cycle was decided ${count(holdDays(summary.oldest_held_at!, now), "day", "days")} ago`,
+    );
+  return `Past the ${max}-day maximum hold: ${parts.join(", and ")}. ${waiting ? "Plan and freeze a cycle that covers it. " : ""}${held ? "The cycle holding it must be signed off." : ""}`.trim();
+}
+
+/** A cycle's progress as steps for the Stepper, from the row the coordinator reads. */
+export function cycleSteps(
+  cycle: Pick<
+    CycleRow,
+    | "state"
+    | "planned_by_name"
+    | "planned_at"
+    | "frozen_at"
+    | "scheduled_start_at"
+    | "sampled"
+    | "held"
+    | "concluded"
+    | "returned"
+    | "signed_off_at"
+    | "signed_off_by_name"
+    | "released_count"
+    | "cancelled_at"
+    | "cancelled_by_name"
+  >,
+): { label: string; state: "complete" | "current" | "blocked" | "upcoming" | "skipped"; meta?: string }[] {
+  const frozen = cycle.state === "frozen" || cycle.state === "signed_off";
+  const signed = cycle.state === "signed_off";
+  const reviewDone = frozen && cycle.concluded === cycle.sampled;
+  if (cycle.state === "cancelled") {
+    return [
+      {
+        label: "Planned",
+        state: "complete",
+        meta: `${cycle.planned_by_name}, ${formatDay(cycle.planned_at.slice(0, 10))}`,
+      },
+      {
+        label: "Cancelled",
+        state: "current",
+        meta: cycle.cancelled_at
+          ? `${cycle.cancelled_by_name ?? ""}, ${formatDateTime(cycle.cancelled_at)}`
+          : undefined,
+      },
+      { label: "Frozen and sampled", state: "skipped" },
+      { label: "In review", state: "skipped" },
+      { label: "Signed off", state: "skipped" },
+    ];
+  }
+  return [
+    { label: "Planned", state: "complete", meta: `${cycle.planned_by_name}, ${formatDateTime(cycle.planned_at)}` },
+    {
+      label: "Frozen and sampled",
+      state: frozen ? "complete" : "current",
+      meta:
+        frozen && cycle.frozen_at
+          ? `${formatDateTime(cycle.frozen_at)} · ${cycle.sampled} of ${cycle.held}`
+          : startText(cycle.scheduled_start_at),
+    },
+    {
+      label: cycle.returned > 0 ? "Waiting for re-marks" : "In review",
+      state: signed || reviewDone ? "complete" : frozen ? (cycle.returned > 0 ? "blocked" : "current") : "upcoming",
+      meta: frozen
+        ? `${cycle.concluded} of ${cycle.sampled} concluded${cycle.returned > 0 ? ` · ${cycle.returned} returned` : ""}`
+        : undefined,
+    },
+    {
+      label: "Signed off",
+      state: signed ? "complete" : reviewDone ? "current" : "upcoming",
+      meta:
+        signed && cycle.signed_off_at
+          ? `${cycle.signed_off_by_name ?? ""}, ${formatDateTime(cycle.signed_off_at)} · ${count(cycle.released_count ?? 0, "result released", "results released")}`
+          : `Releases ${frozen ? `all ${cycle.held}` : "the frozen"} results`,
+    },
+  ];
 }
 
 export const MODERATION_REFUSALS: Record<string, string> = {
