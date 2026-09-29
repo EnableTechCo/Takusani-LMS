@@ -15,6 +15,10 @@ import {
   scopeText,
   startText,
   type PoolSummary,
+  cycleSteps,
+  holdAlertText,
+  moderatorsText,
+  noModeratorText,
 } from "./cycle-rules";
 
 // 29 September 2026, 10:00 SAST.
@@ -33,6 +37,80 @@ const summary = (over: Partial<PoolSummary> = {}): PoolSummary => ({
   planned_cycles: 0,
   frozen_cycles: 0,
   ...over,
+});
+
+describe("planning on real data (S4-10)", () => {
+  it("names the moderators with what they cannot be given (BR-01)", () => {
+    expect(
+      moderatorsText(
+        [
+          { profile_id: "a", full_name: "Anil Naidoo", assessed_waiting: 0, holds_open: 0 },
+          { profile_id: "z", full_name: "Zanele Khumalo", assessed_waiting: 3, holds_open: 2 },
+        ],
+        96,
+      ),
+    ).toBe(
+      "Anil Naidoo assessed none of the 96 waiting results, so can be given any of them. Zanele Khumalo assessed 3, so cannot be given those.",
+    );
+    expect(moderatorsText([], 4)).toMatch(/^No moderator's role covers this cohort/);
+    expect(noModeratorText([{ title: "Task 3", unmoderatable: 0 }])).toBeNull();
+    expect(
+      noModeratorText([
+        { title: "Task 3", unmoderatable: 2 },
+        { title: "Task 4", unmoderatable: 0 },
+      ]),
+    ).toBe(
+      "2 waiting results have no eligible moderator: every moderator of the cohort assessed them (2 for Task 3). If sampled, they wait for a moderator and block sign-off until the coordinator assigns one who assessed none of them.",
+    );
+  });
+
+  it("raises the hold-age alert only past the maximum (P-03)", () => {
+    const now = new Date("2026-09-29T10:00:00Z");
+    const base = {
+      moderation_policy: "moderated",
+      max_hold_days: 21,
+      sampling_percentage: 10,
+      sampling_rule: "stratified",
+      sampling_rule_version: 1,
+      waiting: 1,
+      oldest_waiting_at: "2026-09-20T10:00:00Z",
+      held: 1,
+      oldest_held_at: "2026-09-01T10:00:00Z",
+      planned_cycles: 0,
+      frozen_cycles: 1,
+    };
+    expect(holdAlertText(base, now)).toBe(
+      "Past the 21-day maximum hold: the oldest result held in a frozen cycle was decided 28 days ago. The cycle holding it must be signed off.",
+    );
+    expect(holdAlertText({ ...base, oldest_held_at: null }, now)).toBeNull();
+    expect(holdAlertText({ ...base, max_hold_days: null }, now)).toBeNull();
+  });
+
+  it("lays out a cycle's progress", () => {
+    const steps = cycleSteps({
+      state: "frozen",
+      planned_by_name: "Ayesha Patel",
+      planned_at: "2026-09-07T06:30:00Z",
+      frozen_at: "2026-09-14T07:00:00Z",
+      scheduled_start_at: "2026-09-14T07:00:00Z",
+      sampled: 22,
+      held: 96,
+      concluded: 9,
+      returned: 2,
+      signed_off_at: null,
+      signed_off_by_name: null,
+      released_count: null,
+      cancelled_at: null,
+      cancelled_by_name: null,
+    });
+    expect(steps.map((step) => `${step.label}:${step.state}`)).toEqual([
+      "Planned:complete",
+      "Frozen and sampled:complete",
+      "Waiting for re-marks:blocked",
+      "Signed off:upcoming",
+    ]);
+    expect(steps[2].meta).toBe("9 of 22 concluded · 2 returned");
+  });
 });
 
 describe("cycle wording", () => {

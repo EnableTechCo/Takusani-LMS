@@ -3,6 +3,7 @@ import { CohortNav } from "@/components/shell/cohort-nav";
 import { PageHeader } from "@/components/shell/page-header";
 import { TextLink } from "@/components/ui/link";
 import { Log } from "@/components/ui/records";
+import { Stepper } from "@/components/ui/process";
 import { Banner, EmptyState, Tag } from "@/components/ui/status";
 import { DataTable } from "@/components/ui/table";
 import { formatDateTime, formatDateTimeSeconds } from "@/lib/dates";
@@ -11,6 +12,7 @@ import { getModerationSample, listModerationCycles } from "@/modules/moderation/
 import {
   allocationsText,
   cycleStateText,
+  cycleSteps,
   mandatoryText,
   periodText,
   sampleShareText,
@@ -77,6 +79,7 @@ export default async function CycleDetailPage({
       />
       <CohortNav cohortId={cohortId} current="Moderation" />
       <div className="stack stack--lg">
+        <Stepper horizontal label={`${cycle.name}: moderation cycle progress`} steps={cycleSteps(cycle)} />
         {notice.reallocated ? (
           <Banner compact role="status" title="The item is reallocated" tone="positive">
             <p>The new moderator has been told.</p>

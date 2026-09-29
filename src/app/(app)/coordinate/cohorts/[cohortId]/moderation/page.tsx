@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { CohortNav } from "@/components/shell/cohort-nav";
 import { PageHeader } from "@/components/shell/page-header";
+import { CopyButton } from "@/components/ui/copy-button";
 import { ButtonLink, TextLink } from "@/components/ui/link";
 import { Banner, EmptyState, Meter, Tag } from "@/components/ui/status";
 import { DataTable } from "@/components/ui/table";
@@ -11,16 +12,20 @@ import {
   getModerationSample,
   getModerationSummary,
   listModerationCycles,
+  listModerationModerators,
 } from "@/modules/moderation/cycle-queries";
 import {
   allocationsText,
   assessorsText,
   cycleStateText,
+  holdAlertText,
   holdCaution,
   holdDays,
   holdText,
   itemFateText,
   mandatoryText,
+  moderatorsText,
+  noModeratorText,
   periodText,
   poolLead,
   sampleShareText,
@@ -41,8 +46,9 @@ function cycleTone(state: string): "info" | "positive" | "neutral" | undefined {
   return "neutral";
 }
 
-// C-06 (P0-15; FR-501, FR-506; ADR-019; P-02): the pending pool by assignment with its age against the maximum
-// hold, the cohort's cycles, and planning or cancelling one. Freeze and sampling arrive with S4-06.
+// C-06 (P0-15; FR-501, FR-506; ADR-019; P-02, P-03; BR-01): the pending pool by assignment with its age against the
+// maximum hold and the alert past it, the cohort's cycles with their progress, the moderators available, the sample
+// record of each frozen cycle, and planning, freezing or cancelling a cycle.
 export default async function ModerationPlanningPage({
   params,
   searchParams,
@@ -51,13 +57,16 @@ export default async function ModerationPlanningPage({
   searchParams: Promise<{ planned?: string; cancelled?: string; frozen?: string }>;
 }) {
   const [{ cohortId }, notice] = await Promise.all([params, searchParams]);
-  const [cohort, summary, pool, cycles] = await Promise.all([
+  const [cohort, summary, pool, cycles, moderators] = await Promise.all([
     getCohort(cohortId),
     getModerationSummary(cohortId),
     getModerationPool(cohortId),
     listModerationCycles(cohortId),
+    listModerationModerators(cohortId),
   ]);
   if (!cohort || !summary) notFound();
+  const moderatorsLine = moderatorsText(moderators, summary.waiting);
+  const holdAlert = holdAlertText(summary, new Date());
   const frozenCycles = cycles.filter((cycle) => cycle.state === "frozen" || cycle.state === "signed_off");
   const samples = await Promise.all(frozenCycles.map((cycle) => getModerationSample(cycle.id)));
 
@@ -152,6 +161,12 @@ export default async function ModerationPlanningPage({
           </Banner>
         ) : null}
 
+        {moderated && holdAlert ? (
+          <Banner role="alert" title="Results have waited longer than the maximum hold" tone="caution">
+            <p>{holdAlert}</p>
+          </Banner>
+        ) : null}
+
         {!moderated ? (
           <Banner role="note" title="This cohort is not moderated" tone="readonly">
             <p>
@@ -173,7 +188,7 @@ export default async function ModerationPlanningPage({
                 <div className="stat" role="listitem">
                   <span className="stat__label">Waiting for a cycle</span>
                   <span className="stat__value">
-                    {summary.waiting} <span className="stat__unit">results</span>
+                    {summary.waiting} <span className="stat__unit">{summary.waiting === 1 ? "result" : "results"}</span>
                   </span>
                   <span className="stat__meta">
                     {summary.waiting === 0
@@ -205,7 +220,7 @@ export default async function ModerationPlanningPage({
                 <div className="stat" role="listitem">
                   <span className="stat__label">Held in a frozen cycle</span>
                   <span className="stat__value">
-                    {summary.held} <span className="stat__unit">results</span>
+                    {summary.held} <span className="stat__unit">{summary.held === 1 ? "result" : "results"}</span>
                   </span>
                   <span className="stat__meta">
                     {summary.held === 0
@@ -287,6 +302,15 @@ export default async function ModerationPlanningPage({
                   rows={pool}
                 />
               )}
+              <p className="text-small text-muted">
+                Learners see &ldquo;Being assessed&rdquo; for all of these. The maximum hold is set by the administrator
+                under Configuration. Moderators available: {moderatorsLine}
+              </p>
+              {noModeratorText(pool) ? (
+                <Banner compact role="status" title="Some waiting results have no eligible moderator" tone="caution">
+                  <p>{noModeratorText(pool)}</p>
+                </Banner>
+              ) : null}
             </section>
 
             <section aria-labelledby="cycles-h" className="stack">
@@ -406,6 +430,10 @@ export default async function ModerationPlanningPage({
                         <dt>Sampling rule in force</dt>
                         <dd>{samplingRuleText(summary)}</dd>
                       </div>
+                      <div className="dl__row">
+                        <dt>Moderators</dt>
+                        <dd>{moderatorsLine}</dd>
+                      </div>
                     </dl>
                     <FreezeCycleForm
                       cohortId={cohortId}
@@ -429,9 +457,16 @@ export default async function ModerationPlanningPage({
                     <h3 className="card__title" id={`sample-${cycle.id}`}>
                       {cycle.name}: sample record
                     </h3>
-                    <span className="text-small text-muted">
-                      Drawn {formatDateTimeSeconds(sample.frozen_at)} (SAST)
-                      {sample.frozen_by_name ? ` by ${sample.frozen_by_name}` : " at the scheduled start"}
+                    <span className="cluster">
+                      <span className="text-small text-muted">
+                        Drawn {formatDateTimeSeconds(sample.frozen_at)} (SAST)
+                        {sample.frozen_by_name ? ` by ${sample.frozen_by_name}` : " at the scheduled start"}
+                      </span>
+                      <CopyButton
+                        copiedTitle="Sample record copied"
+                        label="Copy"
+                        text={`${cycle.name} (${cohort.name}): frozen ${sample.frozen_at}; population ${sample.population}; sample ${sample.sample_size}; rule v${sample.rule_version} at ${sample.percentage}%; seed ${sample.seed}; sampler ${sample.algorithm_version}; digest sha256:${sample.digest}`}
+                      />
                     </span>
                   </div>
                   <div className="card__body stack">
@@ -511,6 +546,7 @@ export default async function ModerationPlanningPage({
                 <PlanCycleForm
                   cohortId={cohortId}
                   items={pool}
+                  moderators={moderatorsLine}
                   samplingRule={samplingRuleText(summary)}
                   units={units}
                 />

@@ -254,7 +254,9 @@ insert into expected_grants values
   -- Sign-off and release (20261112090000): a moderator of the cohort who assessed none of the population, checked
   -- inside (test 0052).
   ('function', 'api', 'get_sign_off(p_cycle_id uuid)', 'authenticated', 'EXECUTE'),
-  ('function', 'api', 'sign_off_moderation_cycle(p_cycle_id uuid, p_expected_version integer, p_statement text)', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'sign_off_moderation_cycle(p_cycle_id uuid, p_expected_version integer, p_statement text)', 'authenticated', 'EXECUTE'),
+  -- Moderation planning (20261113090000): coordinators of the cohort, checked inside (test 0054).
+  ('function', 'api', 'list_moderation_moderators(p_cohort_id uuid)', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (
