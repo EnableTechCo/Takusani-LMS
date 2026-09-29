@@ -272,7 +272,10 @@ insert into expected_grants values
   ('function', 'api', 'discard_requirement_draft(p_cohort_id uuid)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'freeze_requirement_set(p_cohort_id uuid, p_requirement_set_id uuid, p_reason text)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'get_cohort_credit_requirements(p_cohort_id uuid)', 'authenticated', 'EXECUTE'),
-  ('function', 'api', 'get_credit_reconciliation()', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'get_credit_reconciliation()', 'authenticated', 'EXECUTE'),
+  -- The learner's credits record (20261116090000): their own units and ledger only.
+  ('function', 'api', 'get_my_credits()', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_my_credit_history()', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (
