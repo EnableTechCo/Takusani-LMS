@@ -32,6 +32,10 @@ export const READINESS_ITEMS: Record<string, ReadinessItem> = {
     label: "Logistics arranged",
     help: "The venue, catering and equipment for every upcoming in-person session, arranged under Logistics.",
   },
+  unit_requirements: {
+    label: "Unit credit requirements frozen",
+    help: "Choose which assessments each unit needs before its credits are awarded, then freeze the list under Credits.",
+  },
 };
 
 /** "3 learners", "1 assessor": what the checklist counted. */
@@ -43,6 +47,7 @@ export function readinessDetail(key: string, detail: string | null, policy: stri
     const [arranged, total] = detail.split("/").map(Number);
     return `${arranged} of ${total} in-person ${total === 1 ? "session" : "sessions"} arranged`;
   }
+  if (key === "unit_requirements") return `Version ${detail} in force`;
   const count = Number(detail);
   if (key === "moderator" && policy === "not_moderated" && count === 0) return "Not needed: not moderated";
   const nouns: Record<string, [string, string]> = {

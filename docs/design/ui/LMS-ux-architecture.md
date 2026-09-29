@@ -332,6 +332,7 @@ Every node carries the FR identifiers it serves. "(assumption)" marks a route wi
 │       ├── /moderation                    C-06  FR-501, FR-506; plan, cancel, freeze and sample; pending pool
 │       │   ├── /cycles/new                C-06  FR-501 (manual or scheduled start)
 │       │   └── /cycles/[cycleId]          C-07  FR-502, FR-503, FR-504, FR-505 (seed, rule version, strata, inclusion reasons, allocations, reallocation)
+│       ├── /credits                       C-16  FR-801, P-07 (which assessments each unit requires; draft, freeze, versions)
 │       └── /exams/[examId]/attempts       C-08  FR-314, NFR-07, P-13 (void and regrant after a sustained outage)
 ├── /coordinate/appeals                    C-12  FR-604
 │   └── /coordinate/appeals/[appealId]     C-12  FR-605, FR-606 (grant view-script), FR-608
@@ -361,7 +362,8 @@ Every node carries the FR identifiers it serves. "(assumption)" marks a route wi
 ├── /admin/integration                     X-07  FR-110, FR-1002 (rejected requests visible)
 │   └── /admin/integration/access-log      X-08  FR-110, FR-1006
 ├── /admin/audit                           X-09  FR-107, NFR-02
-└── /admin/cohorts                         X-10  FR-111, FR-112
+├── /admin/cohorts                         X-10  FR-111, FR-112
+└── /admin/credits                         X-11  FR-801 to FR-804, ADR-022 (credit reconciliation; read-only)
 ```
 
 ### 4.8 FR coverage check
@@ -517,6 +519,7 @@ Priority: **P0** must be prototyped (18 screens, chosen to prove the design acro
 | C-13 | Reports | `/coordinate/reports`, `/[reportType]` | Coordinator | Run and export scoped reports | Export | Report types in FR-708, scope (programme, cohort, date range), asynchronous export status | FR-708 | P1 |
 | C-14 | Result corrections | `/coordinate/corrections`, `/[correctionId]`; for administrators `/admin/corrections`, `/[correctionId]` | Coordinator proposes; a different coordinator of the cohort or an administrator approves | Propose and approve a correction under dual control | Propose; Approve and release; Decline | Current decision, proposed decision, proposer, approver, reason; why a result cannot be corrected (held, waiting for moderation, decided on appeal); why the reader cannot approve (own proposal, took a decision, result changed) | BR-03, P-12 | P2 |
 | C-15 | Cohort attendance | `/coordinate/cohorts/[cohortId]/attendance` | Coordinator | Read the cohort's attendance by learner and by register | Open register (none: read-only) | Same figures and tables as F-12; the cohort overview (C-02) carries the average | FR-209, FR-701 | P2 |
+| C-16 | Unit credit requirements | `/coordinate/cohorts/[cohortId]/credits` | Coordinator | Choose which of the cohort's assessments each unit of the programme requires, and freeze the list | Save draft; Freeze version; Discard the draft | Version in force (who froze it, when, why), each unit's required assessments, credit value and learners awarded; the draft with its changes against the version in force; every version with its reason and the awards made under it. A change needs a reason; awards already made stand | FR-801, P-07, ADR-022 | P1 |
 
 #### System Administrator
 
@@ -532,6 +535,7 @@ Priority: **P0** must be prototyped (18 screens, chosen to prove the design acro
 | X-08 | API access log | `/admin/integration/access-log` | Administrator | Review what the Department read | Filter; export | Time, credential, route, status, record count, request ID | FR-110, FR-1006 | P2 |
 | X-09 | Audit log | `/admin/audit` | Administrator | Reconstruct who changed what | Filter | Actor, acting role and scope, action, object, before and after, time | FR-107, NFR-02 | P1 |
 | X-10 | Cohort archive | `/admin/cohorts` | Administrator | Archive when preconditions hold; otherwise see what blocks it | Archive cohort | Preconditions checklist: moderation signed off, no pending or held results, all appeal windows closed, no open appeal | FR-111, FR-112 | P2 |
+| X-11 | Credit reconciliation | `/admin/credits` | Administrator | See whether the credit ledger agrees with the awards and the requirements | None (read-only; nothing is repaired automatically) | The last run and its outcome; each difference by learner, unit and kind. Administrators are told in the LMS when a run finds any | FR-801 to FR-804, ADR-022 | P2 |
 
 ### 5.2 P0 screen specifications
 

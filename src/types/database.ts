@@ -460,6 +460,12 @@ export type Database = {
           status: string
         }[]
       }
+      discard_requirement_draft: {
+        Args: { p_cohort_id: string }
+        Returns: {
+          status: string
+        }[]
+      }
       discard_upload: {
         Args: { p_file_id: string }
         Returns: {
@@ -511,6 +517,19 @@ export type Database = {
           population: number
           sample: number
           status: string
+        }[]
+      }
+      freeze_requirement_set: {
+        Args: {
+          p_cohort_id: string
+          p_reason: string
+          p_requirement_set_id: string
+        }
+        Returns: {
+          awarded: number
+          missing: string[]
+          status: string
+          version: number
         }[]
       }
       get_account: {
@@ -599,6 +618,17 @@ export type Database = {
           sessions: number
         }[]
       }
+      get_cohort_credit_requirements: {
+        Args: { p_cohort_id: string }
+        Returns: {
+          cohort_id: string
+          cohort_name: string
+          cohort_status: string
+          items: Json
+          sets: Json
+          units: Json
+        }[]
+      }
       get_cohort_readiness: {
         Args: { p_cohort_id: string }
         Returns: {
@@ -681,6 +711,16 @@ export type Database = {
           result_changed: boolean
           result_id: string
           state: string
+        }[]
+      }
+      get_credit_reconciliation: {
+        Args: never
+        Returns: {
+          differences: Json
+          last_differences: number
+          last_run_at: string
+          last_status: string
+          last_success_at: string
         }[]
       }
       get_import_rows: {
@@ -2422,6 +2462,14 @@ export type Database = {
           changed: number
           register_version: number
           status: string
+        }[]
+      }
+      save_requirement_draft: {
+        Args: { p_cohort_id: string; p_requirements: Json }
+        Returns: {
+          requirement_set_id: string
+          status: string
+          version: number
         }[]
       }
       save_session_logistics: {

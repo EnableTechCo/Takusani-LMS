@@ -7,6 +7,7 @@ const PAGES = [
   { segment: "/readiness", label: "Readiness" },
   { segment: "/attendance", label: "Attendance" },
   { segment: "/moderation", label: "Moderation" },
+  { segment: "/credits", label: "Credits" },
 ] as const;
 
 /** The pages of one cohort (UX architecture 4.6). The cohort is the object of work, so it is in the path. */

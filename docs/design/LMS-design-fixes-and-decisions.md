@@ -31,7 +31,7 @@ These are the working and open decisions. Each is applied in the documents as sh
 | P-04 | Must resubmission decisions (NYC to Competent) be moderated? | Yes, by the next cycle, like any decision in a moderated cohort **Go-ahead on the working decision, 23 Sep 2026** (S2-08); formal confirmation by the owner still to be recorded. | Quality assurance | Finalise function |
 | P-05 | Who may sign off a cycle? | A moderator who took no assessment decision on any result in the frozen population (not only the sampled ones: sign-off releases the whole population, so the signer must have assessed none of it) **Confirmed by the owner, 29 Sep 2026, tightened from "any sampled result"** (S4-09). | Quality assurance | Sign-off function |
 | P-06 | Does sign-off release the whole cohort (FR-511 wording) or the sampled population? | The frozen population only; later decisions wait for the next cycle (CR-19) **Confirmed by the owner, 29 Sep 2026** (S4-09). | Quality assurance | Sign-off function |
-| P-07 | How do several assessments roll up to one unit's credit, and may one task serve several units? | Credit when every required item has a released Competent decision; many-to-many allowed; requirement set frozen per cohort | Academic policy, with the AS-03 unit list | Credit functions |
+| P-07 | How do several assessments roll up to one unit's credit, and may one task serve several units? | Credit when every required item has a released Competent decision; many-to-many allowed; requirement set frozen per cohort **Confirmed by the owner, 29 Sep 2026** (S6-01: a coordinator freezes the cohort's set; a later version needs a reason and is the audited re-evaluation; an award stands while the version it was made under is met, and is reversed by a new ledger entry when a required result becomes Not yet competent). | Academic policy, with the AS-03 unit list | Credit functions |
 | P-08 | Is one remark appeal per result the rule? Does a view-script request extend the window? | One remark per result, ever; no extension | Academic policy | Appeal functions |
 | P-09 | After an appeal downgrades a result to NYC, does the learner get remediation and resubmission? | Yes, like any NYC decision **Confirmed by the owner, 28 Sep 2026** (S3-04: the reviewer records what to do and a resubmission period; an upheld NYC keeps the deadline the learner already had). | Academic policy | Appeal conclusion function |
 | P-10 | Is the appeal reviewer fallback order in SRS AS-02 confirmed? | AS-02 order applied | Academic policy | Reviewer allocation |
@@ -75,7 +75,7 @@ Severity is the reviewers'. "Applied in" names the primary location; related tex
 | ID | Finding | Sev. | Decision | Status | Applied in |
 |---|---|---|---|---|---|
 | C1 | "Un-reversed award" partial index cannot exist on an append-only table | High | Removed; uniqueness on `(learner, unit, award_seq, entry_type)` | Decided | ADR-022; data model |
-| C2 | Per-decision uniqueness breaks when one item serves two units | High | Awards keyed per learner and unit, not per decision | Working (P-07) | ADR-022 |
+| C2 | Per-decision uniqueness breaks when one item serves two units | High | Awards keyed per learner and unit, not per decision | Fixed (S6-01; P-07 confirmed) | ADR-022 |
 | C3 | Concurrent releases can each miss the other and award nothing | High | `learner_unit_outcomes` row locked during evaluation | Decided | ADR-022; tests 17 |
 | C4 | Requirement sets unversioned; awards not reconstructable | High | Versioned set frozen per cohort; ledger stores contributing decisions and set version; reconciliation job | Decided | ADR-022; test 25 |
 | C5 | ADR-016 still described per-decision award; roll-up had no ADR | Medium | ADR-022 written; ADR-016 status names it | Decided | ADR-016, ADR-022 |
@@ -175,7 +175,7 @@ Requirements that had no specific design element, or an incomplete one. Several 
 | S-04 | FR-106 | Lockout assumed a Supabase feature that does not exist | ADR-026 (corrected by D1, D2) | Working (P-14, P-17) |
 | S-05 | FR-104, FR-105 | Conflict not rejected or named at assignment time | Enforced in allocation commands, which name the conflict; role change refused while allocations are open (corrected by H5) | Decided |
 | S-06 | FR-501, FR-506, FR-408, BR-04 | Results could be released before sampling | ADR-019 (first draft corrected by A1-A5) | Working (P-01, P-02) |
-| S-07 | FR-801, FR-1003 | Credit per unit versus decisions per item | ADR-022 (first draft corrected by C1-C4) | Working (P-07) |
+| S-07 | FR-801, FR-1003 | Credit per unit versus decisions per item | ADR-022 (first draft corrected by C1-C4) | Fixed (S6-01; P-07 confirmed) |
 | S-08 | FR-313 | Expiry did not clearly enter assessment | Expiry is an automatic submission with a receipt | Decided |
 | S-09 | FR-406 | `assessor_judgements` referenced but undefined | Entity added | Decided |
 | S-10 | FR-904, FR-905 | Grace period and threshold unspecified | Integrity configuration snapshotted on the attempt; advisory flag only | Decided |
@@ -230,6 +230,6 @@ Each settles an assumption the corrected design depends on. A failed spike reope
 
 **Can start now:** authentication and session handling; the schema-per-module and privilege regime with its CI check (ADR-024); the database test harness; direct resumable uploads; the exam persistence protocol (ADR-023), apart from the grace value; the platform spikes.
 
-**Waits for owner confirmation:** the finalise, freeze, sign-off, appeal, correction, and credit functions, which encode P-01, P-04, P-07, P-08, and P-11 (P-09 was confirmed on 28 Sep 2026; P-02, P-05, P-06 and P-12 on 29 Sep 2026). They are the functions whose mistakes cannot be undone, because a release cannot be recalled.
+**Waits for owner confirmation:** the finalise, freeze, sign-off, appeal, correction, and credit functions, which encode P-01, P-04, P-07, P-08, and P-11 (P-09 was confirmed on 28 Sep 2026; P-02, P-05, P-06, P-07 and P-12 on 29 Sep 2026). They are the functions whose mistakes cannot be undone, because a release cannot be recalled.
 
 **Before production data:** P-14 to P-16 (plans and region), P-18 (retention), P-19 (Storage recovery), the Department agreement, and the POPIA cross-border assessment.

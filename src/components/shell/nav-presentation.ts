@@ -43,6 +43,7 @@ export const NAV_ICONS: Record<string, IconName> = {
   "/admin/audit": "clipboard",
   "/admin/cohorts": "archive",
   "/admin/corrections": "pencil",
+  "/admin/credits": "chart",
 };
 
 const BOTTOM_TABS = new Set<string>([

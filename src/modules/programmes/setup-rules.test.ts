@@ -11,6 +11,8 @@ describe("cohort setup wording", () => {
     expect(readinessDetail("logistics", "1/3", null)).toBe("1 of 3 in-person sessions arranged");
     expect(readinessDetail("logistics", "0/1", null)).toBe("0 of 1 in-person session arranged");
     expect(readinessDetail("logistics", "none_in_person", null)).toBe("No in-person sessions, so nothing to arrange");
+    expect(readinessDetail("unit_requirements", "2", null)).toBe("Version 2 in force");
+    expect(readinessDetail("unit_requirements", null, null)).toBeNull();
   });
 
   it("says a moderator is not needed for a cohort that is not moderated", () => {
