@@ -6,7 +6,8 @@ import { formatDateTime, formatLongDayOf, formatTime, sastInputValue } from "@/l
 import { CancelSessionForm, SessionForm } from "@/modules/learning/sessions-forms";
 import { getRegister } from "@/modules/learning/register-queries";
 import { registerSummary } from "@/modules/learning/register-rules";
-import { getSession } from "@/modules/learning/sessions-queries";
+import { seriesLabel, seriesSentence, type SeriesRepeat } from "@/modules/learning/series-rules";
+import { listSessions } from "@/modules/learning/sessions-queries";
 import { durationText } from "@/modules/notifications/templates";
 
 export const metadata = { title: "Session · Teaching" };
@@ -18,11 +19,25 @@ export default async function SessionPage({
   searchParams,
 }: {
   params: Promise<{ sessionId: string }>;
-  searchParams: Promise<{ told?: string; changed?: string; cancelled?: string }>;
+  searchParams: Promise<{ told?: string; changed?: string; cancelled?: string; series?: string }>;
 }) {
   const [{ sessionId }, notice] = await Promise.all([params, searchParams]);
-  const session = await getSession(sessionId);
+  const sessions = await listSessions();
+  const session = sessions.find((row) => row.id === sessionId) ?? null;
   if (!session) notFound();
+  // The rest of the series, for the label and for cancelling the later ones together.
+  const siblings = session.series_id ? sessions.filter((row) => row.series_id === session.series_id) : [];
+  const laterInSeries = siblings.filter(
+    (row) => row.series_seq! > session.series_seq! && row.state === "scheduled" && new Date(row.starts_at) > new Date(),
+  ).length;
+  // The rhythm is not stored: a week apart is weekly, anything more is fortnightly.
+  const seriesRepeat = (rows: typeof sessions): SeriesRepeat =>
+    rows.length > 1 &&
+    new Date(rows[1].starts_at).getTime() - new Date(rows[0].starts_at).getTime() > 8 * 24 * 3_600_000
+      ? "fortnightly"
+      : "weekly";
+  const seriesMade = notice.series === undefined ? null : Number(notice.series);
+  const cancelledCount = notice.cancelled === undefined ? null : Number(notice.cancelled);
 
   const endsAt = new Date(session.starts_at).getTime() + session.duration_minutes * 60_000;
   const held = endsAt <= new Date().getTime();
@@ -50,6 +65,9 @@ export default async function SessionPage({
               {durationText(session.duration_minutes)}
             </span>
             <span>{session.mode === "online" ? "Online in Teams" : session.venue}</span>
+            {session.series_seq && session.series_count ? (
+              <Tag shape="half">{seriesLabel(session.series_seq, session.series_count)}</Tag>
+            ) : null}
           </>
         }
         title={session.title}
@@ -60,12 +78,25 @@ export default async function SessionPage({
           <Banner
             compact
             role="status"
-            title={notice.cancelled ? "Cancelled" : notice.changed ? "Saved" : "Scheduled"}
+            title={
+              cancelledCount !== null && cancelledCount > 1
+                ? `${cancelledCount} sessions cancelled`
+                : notice.cancelled
+                  ? "Cancelled"
+                  : notice.changed
+                    ? "Saved"
+                    : seriesMade
+                      ? `Series of ${seriesMade} scheduled`
+                      : "Scheduled"
+            }
             tone="positive"
           >
+            {seriesMade && session.series_count ? (
+              <p>{seriesSentence(siblings[0].starts_at, seriesRepeat(siblings), session.series_count)}</p>
+            ) : null}
             <p>
               {told > 0
-                ? `${learners(told)} ${told === 1 ? "was" : "were"} told in the LMS.`
+                ? `${learners(told)} ${told === 1 ? "was" : "were"} told in the LMS${seriesMade || (cancelledCount ?? 0) > 1 ? ", once, about all of them" : ""}.`
                 : "Only the title changed, so nobody was told."}
             </p>
           </Banner>
@@ -163,7 +194,7 @@ export default async function SessionPage({
                   The {learners(session.audience)} in the cohort are told, and the session stays on their calendar,
                   marked cancelled.
                 </p>
-                <CancelSessionForm sessionId={session.id} />
+                <CancelSessionForm laterInSeries={laterInSeries} sessionId={session.id} />
               </div>
             </section>
           </>

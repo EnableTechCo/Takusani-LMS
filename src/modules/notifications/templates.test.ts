@@ -46,6 +46,36 @@ describe("renderNotification", () => {
     expect(renderNotification("readiness_item_assigned", 1, item).title).toBe("2026 Intake B: please publish a task");
   });
 
+  it("tells the learner about a series of sessions once, and about the rest of one being cancelled", () => {
+    const series = renderNotification("session_series_scheduled", 1, {
+      session_id: "s1",
+      series_id: "x",
+      title: "Weekly class",
+      cohort_name: "2026 Intake B",
+      starts_at: "2026-10-06T07:00:00Z",
+      last_starts_at: "2026-11-10T07:00:00Z",
+      duration_minutes: 120,
+      mode: "online",
+      repeat: "weekly",
+      count: 6,
+    });
+    expect(series.title).toBe("New sessions: Weekly class");
+    expect(series.summary).toBe(
+      "6 sessions, every week from Tuesday 6 October 2026 to Tuesday 10 November 2026, each at 09:00 (SAST).",
+    );
+    const cancelled = renderNotification("session_series_cancelled", 1, {
+      session_id: "s4",
+      series_id: "x",
+      title: "Weekly class",
+      cohort_name: "2026 Intake B",
+      starts_at: "2026-10-27T07:00:00Z",
+      count: 3,
+      cancel_reason: "The venue closed",
+    });
+    expect(cancelled.summary).toBe("3 sessions from Tuesday 27 October 2026 are cancelled.");
+    expect(cancelled.paragraphs[1]).toBe('The reason given: "The venue closed"');
+  });
+
   it("refuses an unknown template or a payload missing a fact, rather than sending a broken email", () => {
     expect(() => renderNotification("result_released", 2, released)).toThrow("no template");
     expect(() => renderNotification("result_released", 1, { ...released, item_title: "" })).toThrow("item_title");

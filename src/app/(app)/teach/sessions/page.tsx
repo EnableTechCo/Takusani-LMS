@@ -4,6 +4,7 @@ import { EmptyState, Tag } from "@/components/ui/status";
 import { DataTable } from "@/components/ui/table";
 import { formatDateTime } from "@/lib/dates";
 import { listSessions } from "@/modules/learning/sessions-queries";
+import { seriesLabel } from "@/modules/learning/series-rules";
 import { durationText } from "@/modules/notifications/templates";
 
 export const metadata = { title: "Sessions · Teaching" };
@@ -22,7 +23,12 @@ function SessionTable({ caption, sessions }: { caption: string; sessions: Sessio
           cell: (session) => (
             <>
               <TextLink href={`/teach/sessions/${session.id}`}>{session.title}</TextLink>
-              <span className="table__secondary">{session.cohort_name}</span>
+              <span className="table__secondary">
+                {session.cohort_name}
+                {session.series_seq && session.series_count
+                  ? ` · ${seriesLabel(session.series_seq, session.series_count)}`
+                  : ""}
+              </span>
             </>
           ),
         },

@@ -95,7 +95,8 @@ insert into expected_grants values
   -- Sessions (20261009090000): facilitators within their cohorts, learners for their own cohorts, checked inside each.
   ('function', 'api', 'create_session(p_cohort_id uuid, p_title text, p_starts_at timestamp with time zone, p_duration_minutes integer, p_mode text, p_teams_url text, p_venue text)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'update_session(p_session_id uuid, p_expected_version integer, p_title text, p_starts_at timestamp with time zone, p_duration_minutes integer, p_mode text, p_teams_url text, p_venue text)', 'authenticated', 'EXECUTE'),
-  ('function', 'api', 'cancel_session(p_session_id uuid, p_reason text)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'cancel_session(p_session_id uuid, p_reason text, p_rest_of_series boolean)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'create_session_series(p_cohort_id uuid, p_title text, p_starts_at timestamp with time zone, p_duration_minutes integer, p_mode text, p_repeat text, p_count integer, p_teams_url text, p_venue text)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'list_sessions()', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'cohort_audience_size(p_cohort_id uuid)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'list_my_sessions(p_from timestamp with time zone)', 'authenticated', 'EXECUTE'),

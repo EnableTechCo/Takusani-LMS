@@ -1,13 +1,14 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { Fieldset, Radio } from "@/components/ui/choice";
+import { Checkbox, Fieldset, Radio } from "@/components/ui/choice";
 import { SelectField, TextareaField, TextField } from "@/components/ui/field";
 import { ErrorSummary, SubmitButton } from "@/components/ui/form-feedback";
 import { Banner } from "@/components/ui/status";
 import type { FormState } from "@/lib/form-state";
 import { durationText } from "@/modules/notifications/templates";
 import { cancelSession, createSession, updateSession } from "./sessions-actions";
+import { parseSeriesCount, REPEATS, seriesSentence, SERIES_COUNT, type Repeat } from "./series-rules";
 import { DURATIONS, isTeamsLink } from "./sessions-rules";
 
 const initial: FormState = {};
@@ -20,6 +21,8 @@ const LABELS = {
   teamsUrl: "Teams meeting link",
   venue: "Venue",
   reason: "Reason",
+  repeat: "Repeats",
+  count: "Number of sessions",
 };
 
 export interface SessionValues {
@@ -51,10 +54,20 @@ export function SessionForm({
   const [state, formAction] = useActionState(action, initial);
   const values = { ...(session?.values ?? {}), ...(state.values ?? {}) } as Partial<SessionValues> & {
     cohortId?: string;
+    repeat?: Repeat;
+    count?: string;
   };
   const [mode, setMode] = useState<"online" | "in_person">(values.mode ?? "online");
   const [cohortId, setCohortId] = useState(values.cohortId ?? "");
   const [link, setLink] = useState(values.teamsUrl ?? "");
+  const [startsAt, setStartsAt] = useState(values.startsAt ?? "");
+  const [repeat, setRepeat] = useState<Repeat>(values.repeat ?? "none");
+  const [count, setCount] = useState(values.count ?? "6");
+  const seriesCount = parseSeriesCount(count);
+  const preview =
+    repeat !== "none" && seriesCount !== null && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(startsAt)
+      ? seriesSentence(`${startsAt}:00+02:00`, repeat, seriesCount)
+      : null;
   const linkProblem = mode === "online" && link.trim() !== "" && !isTeamsLink(link);
   const told = session ? audience : cohorts?.find((cohort) => cohort.id === cohortId)?.audience;
 
@@ -79,14 +92,16 @@ export function SessionForm({
         </div>
       ) : null}
       <TextField defaultValue={values.title} error={state.errors?.title} label={LABELS.title} name="title" />
-      <TextField
-        defaultValue={values.startsAt}
-        error={state.errors?.startsAt}
-        help="South African time."
-        label={LABELS.startsAt}
-        name="startsAt"
-        type="datetime-local"
-      />
+      <div onChange={(event) => setStartsAt((event.target as HTMLInputElement).value)}>
+        <TextField
+          defaultValue={values.startsAt}
+          error={state.errors?.startsAt}
+          help="South African time."
+          label={LABELS.startsAt}
+          name="startsAt"
+          type="datetime-local"
+        />
+      </div>
       <SelectField
         defaultValue={values.duration ?? "120"}
         error={state.errors?.duration}
@@ -119,22 +134,64 @@ export function SessionForm({
       ) : (
         <TextField defaultValue={values.venue} error={state.errors?.venue} label={LABELS.venue} name="venue" />
       )}
+      {session ? null : (
+        <Fieldset legend={LABELS.repeat}>
+          <div onChange={(event) => setRepeat((event.target as HTMLInputElement).value as Repeat)}>
+            {REPEATS.map((option) => (
+              <Radio
+                defaultChecked={repeat === option.value}
+                key={option.value}
+                label={option.label}
+                name="repeat"
+                value={option.value}
+              />
+            ))}
+          </div>
+          {repeat !== "none" ? (
+            <>
+              <div onChange={(event) => setCount((event.target as HTMLInputElement).value)}>
+                <TextField
+                  defaultValue={count}
+                  error={state.errors?.count}
+                  help={`From ${SERIES_COUNT.min} to ${SERIES_COUNT.max}. Each session is scheduled on its own, so any one can be changed or cancelled later.`}
+                  inputMode="numeric"
+                  label={LABELS.count}
+                  name="count"
+                  type="number"
+                />
+              </div>
+              {preview ? <p className="text-small text-muted">{preview}</p> : null}
+            </>
+          ) : null}
+        </Fieldset>
+      )}
       {told !== undefined ? (
         <p className="text-small text-muted">
           {session
             ? `A change of time, length or place tells the ${told === 1 ? "1 learner" : `${told} learners`} in the cohort. A new title alone does not.`
-            : `${told === 1 ? "1 learner" : `${told} learners`} in this cohort will be told in the LMS.`}
+            : repeat !== "none"
+              ? `${told === 1 ? "1 learner" : `${told} learners`} in this cohort will be told once, about the whole series.`
+              : `${told === 1 ? "1 learner" : `${told} learners`} in this cohort will be told in the LMS.`}
         </p>
       ) : null}
       <div className="cluster">
-        <SubmitButton pendingLabel="Saving">{session ? "Save changes" : "Schedule session"}</SubmitButton>
+        <SubmitButton pendingLabel="Saving">
+          {session ? "Save changes" : repeat !== "none" ? "Schedule the series" : "Schedule session"}
+        </SubmitButton>
       </div>
     </form>
   );
 }
 
 /** Cancelling says why; the learners are told the reason, and the session stays on their calendar, marked. */
-export function CancelSessionForm({ sessionId }: { sessionId: string }) {
+export function CancelSessionForm({
+  sessionId,
+  laterInSeries = 0,
+}: {
+  sessionId: string;
+  /** How many later sessions of the same series are still scheduled; they can be cancelled with this one. */
+  laterInSeries?: number;
+}) {
   const [state, action] = useActionState(cancelSession.bind(null, sessionId), initial);
   return (
     <form action={action} className="stack" noValidate>
@@ -146,6 +203,17 @@ export function CancelSessionForm({ sessionId }: { sessionId: string }) {
         name="reason"
         rows={2}
       />
+      {laterInSeries > 0 ? (
+        <Checkbox
+          help="With the same reason. The learners are told once, about all of them."
+          label={
+            laterInSeries === 1
+              ? "Also cancel the later session in this series"
+              : `Also cancel the ${laterInSeries} later sessions in this series`
+          }
+          name="restOfSeries"
+        />
+      ) : null}
       <div className="cluster">
         <SubmitButton pendingLabel="Cancelling">Cancel this session</SubmitButton>
       </div>
