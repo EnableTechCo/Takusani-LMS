@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { render, screen, within } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import "./test-dom";
 import { Stepper } from "./process";
 import { Log } from "./records";
@@ -107,10 +107,20 @@ describe("DataTable", () => {
     expect(within(card).getByText("2").tagName).toBe("DD");
   });
 
-  it("scrolls a two-dimensional table inside a focusable, labelled region instead of making cards", () => {
+  it("scrolls a two-dimensional table inside a focusable, labelled region when it is wider than its box (A11Y-12)", () => {
+    const width = vi.spyOn(HTMLElement.prototype, "scrollWidth", "get").mockReturnValue(1200);
+    const box = vi.spyOn(HTMLElement.prototype, "clientWidth", "get").mockReturnValue(600);
     render(<DataTable cards={false} caption="Audit entries" columns={columns} rowKey={(row) => row.id} rows={rows} />);
     expect(screen.getByRole("region", { name: "Audit entries" })).toHaveAttribute("tabindex", "0");
     expect(screen.queryByRole("list")).not.toBeInTheDocument();
+    width.mockRestore();
+    box.mockRestore();
+  });
+
+  it("adds no tab stop and no region when the table fits", () => {
+    render(<DataTable cards={false} caption="Audit entries" columns={columns} rowKey={(row) => row.id} rows={rows} />);
+    expect(screen.queryByRole("region")).not.toBeInTheDocument();
+    expect(screen.getByRole("table").parentElement).not.toHaveAttribute("tabindex");
   });
 });
 

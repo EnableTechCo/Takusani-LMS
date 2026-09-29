@@ -41,7 +41,7 @@ export default async function LearnAppealNewPage({ params }: { params: Promise<{
           reference: options.remark_reference!,
           reason:
             options.remark_standing === "open"
-              ? `You lodged appeal ${options.remark_reference} on ${formatLongDayOf(options.remark_lodged_at!)}, and it is being dealt with.`
+              ? `You sent appeal ${options.remark_reference} on ${formatLongDayOf(options.remark_lodged_at!)}, and it is being dealt with.`
               : `Appeal ${options.remark_reference} was a re-mark of this result.`,
         };
   const scriptBlocked: LodgeFacts["scriptBlocked"] = options.open_script_appeal_id
@@ -55,7 +55,7 @@ export default async function LearnAppealNewPage({ params }: { params: Promise<{
         lead={
           window.state === "closed" || options.decision_final
             ? undefined
-            : "An appeal asks us to look again at how your work was marked. Lodging an appeal does not count against you."
+            : "An appeal asks us to look again at how your work was marked. The appeals policy calls this lodging an appeal. Appealing does not count against you."
         }
         title={`Appeal your result for ${options.item_title}`}
         workspace="Learning"
@@ -75,7 +75,7 @@ export default async function LearnAppealNewPage({ params }: { params: Promise<{
                 <p>
                   <Tag tone={options.outcome === "competent" ? "positive" : "caution"}>{outcome}</Tag>{" "}
                   <span className="text-muted">
-                    {points ? `${points} · ` : ""}released <DateTime iso={options.released_at} />
+                    {points ? `${points} · ` : ""}ready on <DateTime iso={options.released_at} />
                   </span>
                 </p>
               </div>
@@ -93,13 +93,12 @@ export default async function LearnAppealNewPage({ params }: { params: Promise<{
               <span>
                 {window.state === "last_day" ? (
                   <>
-                    <strong>Today is the last day to appeal.</strong> You can lodge an appeal{" "}
+                    <strong>Today is the last day to appeal.</strong> You can appeal{" "}
                     <span className="deadline-line__date">until the end of today, {window.lastDay}</span>.
                   </>
                 ) : (
                   <>
-                    You can lodge an appeal{" "}
-                    <span className="deadline-line__date">until the end of {window.lastDay}</span>.{" "}
+                    You can appeal <span className="deadline-line__date">until the end of {window.lastDay}</span>.{" "}
                     <span className="deadline-line__left">
                       {window.daysLeft === 1 ? "1 day" : `${window.daysLeft} days`} left
                     </span>
@@ -119,7 +118,7 @@ export default async function LearnAppealNewPage({ params }: { params: Promise<{
           // FR-603: the form is replaced by the rule and what the learner can still do.
           <section aria-labelledby="closed-h" className="stack">
             <h2 className="text-heading" id="closed-h">
-              An appeal can no longer be lodged for this result
+              You can no longer appeal this result
             </h2>
             <div className="prose">
               <p>
@@ -145,12 +144,7 @@ export default async function LearnAppealNewPage({ params }: { params: Promise<{
             </div>
           </section>
         ) : nothingLeft ? (
-          <Banner
-            icon="scales"
-            role="status"
-            title="There is no other appeal you can lodge for this result"
-            tone="info"
-          >
+          <Banner icon="scales" role="status" title="There is no other appeal you can make for this result" tone="info">
             <p>
               {remarkBlocked.reason} You also asked to see your work with the marks, and that request is still open.{" "}
               <TextLink href={`/learn/appeals/${remarkBlocked.appealId}`}>

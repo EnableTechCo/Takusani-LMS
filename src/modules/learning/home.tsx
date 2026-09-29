@@ -84,7 +84,7 @@ export function NewResultCard({ item, now }: { item: NewResult; now: Date }) {
 const STATUS: Record<DoNextItem["status"], { label: string; tone: "neutral" | "caution" }> = {
   not_started: { label: "Not started", tone: "neutral" },
   overdue: { label: "Overdue, still accepted", tone: "caution" },
-  resubmission_open: { label: "Resubmission open", tone: "caution" },
+  resubmission_open: { label: "You can resubmit", tone: "caution" },
 };
 
 function Deadline({ item, now }: { item: DoNextItem; now: Date }) {
@@ -183,8 +183,8 @@ export function BeingAssessedCard({
           </div>
         ))}
         <p className="text-small text-muted">
-          You will be told here when a result is ready. Your {appealWindowDays} days to appeal, and any time you are
-          given to resubmit, only start on the day a result is released.
+          We will tell you here when a result is ready. Your {appealWindowDays} days to appeal, and any time to
+          resubmit, start on the day a result is ready.
         </p>
       </div>
     </section>

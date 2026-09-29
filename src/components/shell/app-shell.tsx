@@ -7,6 +7,7 @@ import type { AccountSummary } from "@/modules/identity/access";
 import type { Workspace } from "@/modules/identity/navigation";
 import { AccountMenu } from "./account-menu";
 import { BottomTabs } from "./bottom-tabs";
+import { IdleSignOut } from "./idle-sign-out";
 import { Brand } from "./brand";
 import { SideNav } from "./side-nav";
 
@@ -19,6 +20,7 @@ export function AppShell({
   account,
   theme,
   unreadNotifications,
+  idleMinutes = 0,
   children,
 }: {
   workspaces: Workspace[];
@@ -26,6 +28,8 @@ export function AppShell({
   theme: Theme;
   /** Shown on the bell; 0 shows none. */
   unreadNotifications: number;
+  /** Sign out after this long doing nothing, with a warning first (A11Y-07); 0 for no limit. */
+  idleMinutes?: number;
   children: ReactNode;
 }) {
   return (
@@ -74,6 +78,7 @@ export function AppShell({
 
         <BottomTabs workspaces={workspaces} />
       </div>
+      <IdleSignOut idleMinutes={idleMinutes} />
     </>
   );
 }

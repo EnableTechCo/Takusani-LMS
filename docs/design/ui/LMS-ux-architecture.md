@@ -1453,6 +1453,8 @@ Target: **WCAG 2.2 level AA** for every screen, including exam mode. The criteri
 | Exam low-time thresholds | `role="status"`, polite | Once each |
 | Integrity overlay, takeover screen, "cannot keep a safety copy" | `role="alertdialog"` or `role="alert"` | Immediately |
 | Upload progress | `role="status"` plus a progress element with a text value | At 25% steps, on pause, on resume, on completion |
+| Upload not accepted or expired | `role="alert"`, one region per upload list that is always on the page | Once, when it happens: the file name, the reason and what to do (A11Y-11) |
+| Inactivity warning | `role="alertdialog"`, "Stay signed in" focused | Two minutes before the inactivity limit; as often as needed (A11Y-07) |
 | Draft saved (marking, forms) | `role="status"`, polite | On first save and after recovery from an error; otherwise silent with visible text |
 | Filter and search result counts | `role="status"`, polite | After results update: "23 learners shown" |
 | Toast confirmations | `role="status"`, polite | Once; content also remains available on the page where it matters |

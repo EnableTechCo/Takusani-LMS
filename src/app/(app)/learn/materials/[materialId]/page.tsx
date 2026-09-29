@@ -25,7 +25,7 @@ export default async function LearnMaterialPage({ params }: { params: Promise<{ 
         meta={
           <>
             {material.category === "recording" ? <Tag tone="info">Recording</Tag> : null}
-            <span>Released {formatLongDayOf(material.release_at)}</span>
+            <span>Available from {formatLongDayOf(material.release_at)}</span>
           </>
         }
         title={material.title}

@@ -9,9 +9,10 @@ import { Icon } from "./icons";
  * the bar only support it. The wording is fixed by the design system, so it is kept here rather than at each call
  * site: a pause is never called a failure, and a rejection says what to do instead.
  *
- * Announcements (audit finding A11Y-11): a row that becomes "Not accepted" or "Expired" is something the learner
- * must act on, so those rows are announced at once; progress is announced politely from one status line, not from
- * every row.
+ * Announcements (audit finding A11Y-11) belong to the list that owns the rows, not to the rows: a row that becomes
+ * "Not accepted" or "Expired" is announced at once from one alert region that is always on the page (a role added to
+ * a row as it changes is announced unreliably, and would break the list); progress, pauses and resumption are
+ * announced politely from one status line.
  */
 
 export type UploadState =
@@ -30,13 +31,10 @@ export interface UploadRowProps {
   actions?: ReactNode;
 }
 
-const NEEDS_ATTENTION: UploadState[] = ["rejected", "expired"];
-
 export function UploadRow({ state, name, status, percent, indeterminate, actions }: UploadRowProps) {
-  const urgent = NEEDS_ATTENTION.includes(state);
   const barLabel = `${name}, ${typeof status === "string" ? status : state}`;
   return (
-    <li className={cx("upload-row", `upload-row--${state}`)} role={urgent ? "alert" : undefined}>
+    <li className={cx("upload-row", `upload-row--${state}`)}>
       <Icon className="icon upload-row__icon" name="file" />
       <span className="upload-row__name">{name}</span>
       <span className="upload-row__status">

@@ -98,7 +98,11 @@ export default async function ReadinessPage({ params }: { params: Promise<{ coho
                     ) : null}
                     {!item.done && people.length > 0 ? (
                       <details className="disclosure">
-                        <summary>{item.assignee_name ? "Reassign this item" : "Assign this item"}</summary>
+                        {/* A11Y-18: one of these per item, so each says which item it is. */}
+                        <summary>
+                          {item.assignee_name ? "Reassign this item" : "Assign this item"}
+                          <span className="u-visually-hidden">: {meta?.label ?? item.item_key}</span>
+                        </summary>
                         <AssignItemForm
                           assigneeId={item.assignee_id}
                           cohortId={cohort.cohort_id}

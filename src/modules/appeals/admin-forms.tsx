@@ -202,6 +202,7 @@ export function ReviewerForm({
   const eligible = candidates.filter((candidate) => candidate.tier !== null && !candidate.is_current);
   const excluded = candidates.filter((candidate) => candidate.tier === null);
   const current = candidates.find((candidate) => candidate.is_current) ?? null;
+  const cannotCount = excluded.length + (current ? 1 : 0);
   const best = eligible.length ? Math.min(...eligible.map((candidate) => candidate.tier!)) : null;
   const selected = eligible.find((candidate) => candidate.profile_id === chosen) ?? null;
   const skipping = selected !== null && best !== null && selected.tier! > best;
@@ -245,9 +246,21 @@ export function ReviewerForm({
         available. Anyone who took an assessment decision on this work is shown, but cannot be chosen.
       </p>
       <input name="reviewerName" type="hidden" value={selected?.full_name ?? ""} />
+      {/* A11Y-21: people who cannot be chosen are not disabled options (a screen reader moving through the choices
+          would never hear of them); the legend says how many there are, and they are listed after the choices with
+          the reason. */}
       <fieldset className="candidate-list" id={fieldId("reviewerId")}>
         <legend className="fieldset__legend">
           Reviewer for appeal {reference} ({learnerName}, {itemTitle})
+          {cannotCount > 0 ? (
+            <span className="u-visually-hidden">
+              .{" "}
+              {cannotCount === 1
+                ? "1 person cannot be chosen; they are"
+                : `${cannotCount} people cannot be chosen; they are`}{" "}
+              listed after the choices, with the reason.
+            </span>
+          ) : null}
         </legend>
         {[1, 2, 3].map((tier) => {
           const people = eligible.filter((candidate) => candidate.tier === tier);
@@ -279,44 +292,35 @@ export function ReviewerForm({
             </div>
           );
         })}
-        {excluded.length > 0 || current ? (
-          <div className="candidate-list__tier">
-            <h3 className="candidate-list__tier-title">Cannot be chosen</h3>
+      </fieldset>
+      {cannotCount > 0 ? (
+        <section aria-labelledby={`${formId}-excluded`} className="candidate-list__tier">
+          <h3 className="candidate-list__tier-title" id={`${formId}-excluded`}>
+            Cannot be chosen
+          </h3>
+          <ul className="stack stack--sm">
             {current ? (
-              <div className="candidate is-excluded">
-                <input
-                  aria-describedby={`current-${current.profile_id}`}
-                  aria-label={`${current.full_name}, cannot be chosen`}
-                  className="candidate__input"
-                  disabled
-                  type="radio"
-                />
+              <li className="candidate is-excluded cursor-default grid-cols-[minmax(0,1fr)_auto]">
                 <span className="candidate__name">{current.full_name}</span>
-                <span className="candidate__reason" id={`current-${current.profile_id}`}>
-                  Already the reviewer of this appeal.
-                </span>
-              </div>
+                <span className="candidate__reason col-[1/-1]">Already the reviewer of this appeal.</span>
+              </li>
             ) : null}
             {excluded.map((candidate) => (
-              <div className="candidate is-excluded" key={candidate.profile_id}>
-                <input
-                  aria-describedby={`excluded-${candidate.profile_id}`}
-                  aria-label={`${candidate.full_name}, cannot be chosen`}
-                  className="candidate__input"
-                  disabled
-                  type="radio"
-                />
+              <li
+                className="candidate is-excluded cursor-default grid-cols-[minmax(0,1fr)_auto]"
+                key={candidate.profile_id}
+              >
                 <span className="candidate__name">{candidate.full_name}</span>
                 {candidate.role_label ? <Tag tone="neutral">{candidate.role_label}</Tag> : null}
-                <span className="candidate__reason" id={`excluded-${candidate.profile_id}`}>
+                <span className="candidate__reason col-[1/-1]">
                   Marked this work: {(candidate.excluded_by ?? []).map(decisionText).join("; ")}. Anyone who took an
                   assessment decision on the work cannot review an appeal against it. Rule BR-02.
                 </span>
-              </div>
+              </li>
             ))}
-          </div>
-        ) : null}
-      </fieldset>
+          </ul>
+        </section>
+      ) : null}
 
       {skipping ? (
         <Field

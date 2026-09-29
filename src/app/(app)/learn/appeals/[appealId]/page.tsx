@@ -75,7 +75,7 @@ export default async function LearnAppealPage({
       />
       <div className="stack stack--lg">
         {flash.lodged ? (
-          <Banner compact role="status" title="Your appeal has been lodged" tone="positive">
+          <Banner compact role="status" title="We have your appeal" tone="positive">
             <p>Keep the reference {appeal.reference} in case you need to ask about your appeal.</p>
           </Banner>
         ) : null}
@@ -178,7 +178,7 @@ export default async function LearnAppealPage({
             { label: "Result", value: `${appeal.item_title}: ${appealed}` },
             { label: "You asked for", value: APPEAL_TYPE_LABELS[type] },
             {
-              label: "Lodged",
+              label: "Sent",
               value: (
                 <time dateTime={appeal.lodged_at}>
                   {formatLongDayOf(appeal.lodged_at)} at {formatTime(appeal.lodged_at)} (SAST)
@@ -223,7 +223,7 @@ export default async function LearnAppealPage({
             </div>
           </div>
           <p className="text-small text-muted">
-            Lodged <DateTime iso={appeal.lodged_at} zone />. The reasons cannot be changed once lodged.
+            Sent <DateTime iso={appeal.lodged_at} zone />. The reasons cannot be changed once sent.
           </p>
         </section>
 

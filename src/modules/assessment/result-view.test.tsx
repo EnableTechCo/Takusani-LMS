@@ -70,9 +70,9 @@ describe("ReleasedResultView", () => {
 
   it("says how the learner was told, and when they first opened it (NFR-11)", () => {
     const { container } = render(<ReleasedResultView now={dayAfterRelease} result={nyc} />);
-    expect(container).toHaveTextContent("Released in the LMS");
+    expect(container).toHaveTextContent("Ready in the LMS");
     expect(container).toHaveTextContent("First opened by you");
-    expect(container).toHaveTextContent("Released on Tuesday 22 September 2026 at 14:05 (SAST).");
+    expect(container).toHaveTextContent("Ready on Tuesday 22 September 2026 at 14:05 (SAST).");
   });
 
   it("says when it is the last day to appeal", () => {
@@ -84,7 +84,7 @@ describe("ReleasedResultView", () => {
   it("once the window has closed, says so and offers no appeal (FR-603)", () => {
     const { container } = render(<ReleasedResultView now={new Date("2026-09-30T00:00:00+02:00")} result={nyc} />);
     expect(container).toHaveTextContent(
-      "The time to appeal closed at the end of Tuesday 29 September 2026. You had 7 days from the day your result was released, Tuesday 22 September 2026.",
+      "The time to appeal closed at the end of Tuesday 29 September 2026. You had 7 days from the day your result was ready, Tuesday 22 September 2026.",
     );
     expect(screen.queryByRole("link", { name: "Appeal this result" })).toBeNull();
   });
@@ -129,7 +129,7 @@ describe("HeldResultView", () => {
       />,
     );
     expect(screen.getByText("Being assessed")).toBeInTheDocument();
-    expect(container).toHaveTextContent("checked by a second person (a moderator)");
+    expect(container).toHaveTextContent("A second person, called a moderator, checks results before anyone sees them.");
     expect(container).not.toHaveTextContent("Not yet competent");
     expect(container).not.toHaveTextContent(/until the end of/);
     expect(screen.queryByRole("link", { name: "Appeal this result" })).toBeNull();

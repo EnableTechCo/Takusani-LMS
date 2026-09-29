@@ -104,13 +104,16 @@ export default function ComponentsPage() {
             <IconButton icon="printer" label="Print receipt" size="sm" variant="secondary" />
             <ButtonLink href="/components">A link styled as a button</ButtonLink>
           </div>
-          <div className="cluster">
-            <Button aria-describedby="blocked-1" disabled variant="primary">
-              Sign off and release
-            </Button>
+          {/* A11Y-21: the reason comes before the disabled control, so it is read first. */}
+          <div className="stack stack--sm">
             <BlockedReason id="blocked-1">
               You cannot sign off yet: 1 returned item is still open. It is listed below.
             </BlockedReason>
+            <div>
+              <Button aria-describedby="blocked-1" disabled variant="primary">
+                Sign off and release
+              </Button>
+            </div>
           </div>
           <p>
             Inline link: read the <TextLink href="/components">late submission policy</TextLink> before you submit.

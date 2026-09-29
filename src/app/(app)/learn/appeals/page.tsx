@@ -22,7 +22,7 @@ export default async function LearnAppealsPage() {
   const [appeals, settings] = await Promise.all([listMyAppeals(), getPublicSettings()]);
   return (
     <div className="page">
-      <PageHeader lead="Every appeal you have lodged, and where it stands." title="Your appeals" workspace="Learning" />
+      <PageHeader lead="Every appeal you have sent, and where it stands." title="Your appeals" workspace="Learning" />
       {appeals.length === 0 ? (
         <div className="card">
           <EmptyState
@@ -32,9 +32,11 @@ export default async function LearnAppealsPage() {
               </ButtonLink>
             }
             icon="scales"
-            title="You have not lodged an appeal"
+            title="You have not sent an appeal"
           >
-            <p>You can appeal a result from its page, within {settings.appealWindowDays} days of its release.</p>
+            <p>
+              You can appeal a result from its page, within {settings.appealWindowDays} days of the day it was ready.
+            </p>
           </EmptyState>
         </div>
       ) : (
@@ -70,7 +72,7 @@ export default async function LearnAppealsPage() {
                   </Tag>
                 ),
             },
-            { key: "lodged", header: "Lodged", cell: (appeal) => <DateTime iso={appeal.lodged_at} /> },
+            { key: "lodged", header: "Sent", cell: (appeal) => <DateTime iso={appeal.lodged_at} /> },
           ]}
           rowKey={(appeal) => appeal.id}
           rows={appeals}

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { ScrollRegion } from "@/components/ui/scroll-region";
 
 /**
  * Screen skeletons. Every route in the UX architecture's screen inventory renders one: the real page frame,
@@ -279,7 +280,9 @@ export function Workspace({
     <>
       <div className="workspace">
         <div className="workspace__evidence">{evidence}</div>
-        <div className="workspace__panel">{panel}</div>
+        <ScrollRegion as="section" className="workspace__panel" label="Review panel" landmark>
+          {panel}
+        </ScrollRegion>
       </div>
       <div className="decision-bar">
         <p className="decision-bar__summary">{decision.summary}</p>

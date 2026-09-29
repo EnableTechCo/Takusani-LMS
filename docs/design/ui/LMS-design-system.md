@@ -588,7 +588,7 @@ Building 23 screens on this system, and auditing them, found gaps and defects. T
 | Meter | `.meter`, `.meter__bar`, `.meter--caution` | Held-result age against the maximum hold; `.progress` is for a task moving to completion, not a measured value. Always paired with visible text |
 | Advisory conflict panel | `.conflict--advisory` | A role assignment that succeeds with a separation-of-duties advisory (decision U-01) must not look like a refusal. Uses `role="status"` |
 
-**Still missing:** a number input with a unit ("14 days from release"); a button reset for `.bottom-tabs__item` so that "More" can be a real button; a session-expiry warning dialog (audit finding A11Y-07).
+**Still missing:** a number input with a unit ("14 days from release"); a button reset for `.bottom-tabs__item` so that "More" can be a real button. The session-expiry warning (A11Y-07) is built in the app as an alert dialog on `.modal` (`src/components/shell/idle-sign-out.tsx`).
 
 **Defects fixed**
 
@@ -598,7 +598,7 @@ Building 23 screens on this system, and auditing them, found gaps and defects. T
 | The bulk bar feeds `scroll-padding-bottom`, so a focused row is not hidden under it | A11Y-04 |
 | Buttons may wrap; only icon buttons stay on one line | A11Y-19 |
 | Standalone links are 44px tall on phones | A11Y-20 |
-| Row headers (`tbody th`) are styled, including in card mode, so tables can use real row headers | A11Y-10 (pattern only; pages not yet converted) |
+| Row headers (`tbody th`) are styled, including in card mode, so tables can use real row headers | A11Y-10 (every table in the app uses them through `DataTable`) |
 | Forced-colours rules for the segmented control, filter chip, pagination, answered question, progress and chart bars, tag shapes | A11Y-13 (from CSS inspection; not yet rendered in a Windows contrast theme) |
 | A hidden action or decision bar no longer hides the bottom tabs or reserves space | Builder report |
 | Classed lists can keep their markers: `ol.prose`, `ul.prose`, `.list--numbered`, `.list--bulleted` | Builder report |
