@@ -40,6 +40,13 @@ export type Database = {
           status: string
         }[]
       }
+      archive_cohort: {
+        Args: { p_cohort_id: string }
+        Returns: {
+          blockers: Json
+          status: string
+        }[]
+      }
       archive_material: {
         Args: { p_material_id: string }
         Returns: {
@@ -1323,6 +1330,29 @@ export type Database = {
           request_id: string
           scope_key: string
           scope_type: string
+        }[]
+      }
+      list_cohort_archival: {
+        Args: never
+        Returns: {
+          appeal_window_until: string
+          archivable: boolean
+          archived_at: string
+          archived_by_name: string
+          cohort_id: string
+          cohort_name: string
+          ends_on: string
+          held: number
+          learners: number
+          not_assessed: number
+          open_appeals: number
+          open_corrections: number
+          open_cycles: number
+          pending: number
+          programme_title: string
+          resubmissions: number
+          starts_on: string
+          status: string
         }[]
       }
       list_cohort_modules: {
