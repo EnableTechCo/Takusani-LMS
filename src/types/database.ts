@@ -1006,6 +1006,39 @@ export type Database = {
           idle_minutes: number
         }[]
       }
+      get_sign_off: {
+        Args: { p_cycle_id: string }
+        Returns: {
+          after_freeze: number
+          appeal_window_days: number
+          assessed_by_me: number
+          blockers: Json
+          cohort_id: string
+          cohort_name: string
+          competent: number
+          concluded: number
+          cycle_id: string
+          frozen_at: string
+          frozen_by_name: string
+          may_sign: boolean
+          name: string
+          not_yet_competent: number
+          notified_count: number
+          observations: number
+          other_signers: Json
+          planned_at: string
+          planned_by_name: string
+          population: number
+          released_count: number
+          sample: number
+          sign_off_statement: string
+          signed_off_at: string
+          signed_off_by_name: string
+          state: string
+          unallocated: number
+          version: number
+        }[]
+      }
       get_stakeholder_query: {
         Args: { p_query_id: string }
         Returns: {
@@ -1358,9 +1391,12 @@ export type Database = {
           period_to: string
           planned_at: string
           planned_by_name: string
+          released_count: number
           returned: number
           sampled: number
           scheduled_start_at: string
+          signed_off_at: string
+          signed_off_by_name: string
           state: string
           unit_ids: string[]
           version: number
@@ -1457,12 +1493,17 @@ export type Database = {
           cohort_name: string
           cycle_id: string
           frozen_at: string
+          may_sign: boolean
           my_concluded: number
           my_items: number
           my_remarked: number
           my_returned: number
           name: string
+          open_returns: number
+          released_count: number
+          signed_off_at: string
           state: string
+          total_concluded: number
           total_items: number
         }[]
       }
@@ -2384,6 +2425,20 @@ export type Database = {
         }[]
       }
       sign_in_gate: { Args: { p_email: string }; Returns: boolean }
+      sign_off_moderation_cycle: {
+        Args: {
+          p_cycle_id: string
+          p_expected_version: number
+          p_statement: string
+        }
+        Returns: {
+          details: Json
+          notified: number
+          released: number
+          signed_off_at: string
+          status: string
+        }[]
+      }
       start_quiz_attempt: {
         Args: { p_quiz_id: string }
         Returns: {

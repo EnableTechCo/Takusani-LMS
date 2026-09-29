@@ -82,6 +82,19 @@ export default async function CycleDetailPage({
             <p>The new moderator has been told.</p>
           </Banner>
         ) : null}
+        {cycle.state === "signed_off" && cycle.signed_off_at ? (
+          <Banner
+            role="note"
+            title={`Signed off ${formatDateTime(cycle.signed_off_at)} (SAST) by ${cycle.signed_off_by_name ?? "a moderator"}`}
+            tone="positive"
+          >
+            <p>
+              {cycle.released_count ?? 0} {cycle.released_count === 1 ? "result" : "results"} of the frozen population{" "}
+              {cycle.released_count === 1 ? "was" : "were"} released to learners at that moment, each told in the LMS.
+              Decisions finalised after the freeze were not released; they wait in the pending pool for the next cycle.
+            </p>
+          </Banner>
+        ) : null}
 
         {!sample ? (
           <div className="card">

@@ -598,6 +598,22 @@ function moderationItemRemarked(payload: Payload): Rendered {
   };
 }
 
+/** A coordinator's note that a cycle of theirs was signed off and its population released (S4-09, FR-511). */
+function moderationCycleSignedOff(payload: Payload): Rendered {
+  const released = typeof payload.released === "number" ? payload.released : Number(text(payload, "released"));
+  const results = `${released} ${released === 1 ? "result" : "results"}`;
+  const at = text(payload, "signed_off_at");
+  return {
+    title: `Signed off: ${text(payload, "cycle_name")}. ${results} released`,
+    summary: `${text(payload, "cohort_name")}. Signed off by ${text(payload, "signed_off_by")} on ${formatLongDayOf(at)} at ${formatTime(at)} (SAST).`,
+    paragraphs: [
+      `${text(payload, "signed_off_by")} signed off "${text(payload, "cycle_name")}" (${text(payload, "cohort_name")}) on ${formatLongDayOf(at)} at ${formatTime(at)} (SAST). ${results} in its frozen population ${released === 1 ? "was" : "were"} released to learners, each told in the LMS.`,
+      "Decisions finalised after the freeze were not released; they wait in the pending pool for the next cycle.",
+    ],
+    action: "Open the cycle",
+  };
+}
+
 /** A coordinator's alert that a stakeholder query was routed to them (S6-03, FR-704). */
 function queryAssigned(payload: Payload): Rendered {
   const reference = text(payload, "reference");
@@ -639,6 +655,7 @@ const TEMPLATES: Record<string, Record<number, (payload: Payload) => Rendered>> 
   moderation_item_returned: { 1: moderationItemReturned },
   moderation_return_logged: { 1: moderationReturnLogged },
   moderation_item_remarked: { 1: moderationItemRemarked },
+  moderation_cycle_signed_off: { 1: moderationCycleSignedOff },
   account_deactivated: { 1: accountDeactivated },
   account_reactivated: { 1: accountReactivated },
   sign_in_locked: { 1: signInLocked },
