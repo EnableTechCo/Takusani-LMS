@@ -10,7 +10,9 @@ export const metadata = { title: "Configuration · Administration" };
 // X-05 (FR-108, FR-109, NFR-09): the settings that shape outcomes, each with the value in force, since when, and who
 // recorded it. A setting is never edited; a change is a new version.
 export default async function ConfigurationPage() {
-  const { settings, units } = await listConfiguration();
+  const { settings: every, units } = await listConfiguration();
+  // Exams are deprecated and in the backlog (29 Sep 2026): their settings stay recorded but are not shown.
+  const settings = every.filter((setting) => setting.group_key !== "exam");
   const groups = [...new Map(settings.map((setting) => [setting.group_key, setting.group_label])).entries()];
   const scheduled = settings.filter((setting) => setting.scheduled_from).length;
 
@@ -31,9 +33,8 @@ export default async function ConfigurationPage() {
       <div className="stack stack--lg">
         <Banner role="note" title="A change never reaches back" tone="info">
           <p>
-            A released result keeps the appeal closing day it was given. An upload keeps the limit it started with. An
-            exam attempt will keep the integrity settings it started with, and a moderation cycle the sampling rule it
-            was frozen with. Credits already awarded keep their value.
+            A released result keeps the appeal closing day it was given. An upload keeps the limit it started with. A
+            moderation cycle keeps the sampling rule it was frozen with. Credits already awarded keep their value.
           </p>
         </Banner>
 
@@ -95,7 +96,7 @@ export default async function ConfigurationPage() {
                         The LMS, now
                       </Tag>
                     ) : (
-                      <Tag shape="half">When {setting.group_key === "exam" ? "exams are" : "moderation is"} built</Tag>
+                      <Tag shape="half">When moderation is built</Tag>
                     ),
                 },
                 {

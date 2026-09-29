@@ -15,7 +15,12 @@ export const MODULES = [
     label: "Assignments & submissions",
     summary: "Assignments, upload intents, immutable versions, and receipts.",
   },
-  { id: "exams", label: "Exams", summary: "Attempts, leases, batched autosave, expiry, submission, and recovery." },
+  {
+    id: "exams",
+    label: "Exams",
+    // Deprecated 2026-09-29: no exam route, function or table exists; the empty schema keeps the boundary reserved.
+    summary: "Deprecated and in the backlog until further notice. The schema is reserved and empty; no routes exist.",
+  },
   { id: "assessment", label: "Assessment", summary: "Allocations, evidence, immutable decisions, and results." },
   {
     id: "moderation",

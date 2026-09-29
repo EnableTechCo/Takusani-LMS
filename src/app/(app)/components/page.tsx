@@ -33,7 +33,7 @@ const QUEUE = [
     id: "2",
     name: "Sipho Zulu",
     number: "KSI-2026-0398",
-    item: "Unit 2 summative exam",
+    item: "Unit 2 portfolio",
     at: "2026-09-02T11:00:00+02:00",
     late: false,
     version: 1,
@@ -342,7 +342,7 @@ export default function ComponentsPage() {
             tabs={[
               { id: "rubric", label: "Rubric", content: <p>The rubric rows for Unit 3 appear here.</p> },
               { id: "feedback", label: "Feedback", content: <p>Overall feedback, written for the learner.</p> },
-              { id: "integrity", label: "Integrity", count: 2, content: <p>Integrity is shown for exams only.</p> },
+              { id: "integrity", label: "Integrity", count: 2, content: <p>Integrity events, when there are any.</p> },
               { id: "history", label: "History", count: 2, content: <p>Version 2 is current.</p> },
             ]}
           />
@@ -459,7 +459,7 @@ export default function ComponentsPage() {
                 event: "submitted the attempt when time ran out.",
               },
             ]}
-            label="Exam record for Sipho Zulu, oldest first. Times in SAST."
+            label="Record for Sipho Zulu, oldest first. Times in SAST."
           />
         </Section>
       </div>

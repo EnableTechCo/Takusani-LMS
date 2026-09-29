@@ -29,7 +29,7 @@ export const metadata = { title: "Home" };
 
 // L-01 (P0-03; FR-304, FR-305, FR-316, FR-317): what needs the learner now, in one screen: new results, do next,
 // this week's sessions (S2-15) with "I'm here" while one is on (FR-209), attendance so far, and being assessed. The
-// exam window and credits join when those features ship.
+// credits join when that feature ships. Exams are deprecated and in the backlog.
 export default async function LearnHomePage() {
   const [access, tasks, results, enrolments, sessions, noticeRows, attendance] = await Promise.all([
     requireActiveAccess(),

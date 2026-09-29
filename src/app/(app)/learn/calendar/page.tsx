@@ -10,8 +10,8 @@ import { listMyTasks } from "@/modules/submissions/queries";
 export const metadata = { title: "Calendar" };
 
 // L-07 (FR-304, FR-305, FR-207, FR-203): the learner's sessions and due dates, as a month grid for orientation and an
-// agenda of what is coming up. The Teams link is on the agenda, so a learner joins from the calendar. Exam windows
-// join when exams are built. The phone-calendar feed is L-08.
+// agenda of what is coming up. The Teams link is on the agenda, so a learner joins from the calendar. Exams are
+// deprecated and in the backlog. The phone-calendar feed is L-08.
 export default async function LearnCalendarPage({ searchParams }: { searchParams: Promise<{ month?: string }> }) {
   const { month: asked } = await searchParams;
   const now = new Date();

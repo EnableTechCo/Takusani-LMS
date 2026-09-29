@@ -244,6 +244,8 @@ Every node carries the FR identifiers it serves. "(assumption)" marks a route wi
 
 ### 4.2 Learner (`/learn`, `/exam`)
 
+> **Exams are deprecated and in the backlog until further notice (29 September 2026).** No exam route exists in the app: `/learn/exams`, `/exam/[attemptId]`, `/teach/exams` and `/coordinate/cohorts/[cohortId]/exams` are closed and return "not found". The rows and specifications below (L-10 to L-13, F-11, C-08, P0-05, P0-06, section 8) are kept for when the work returns; nothing in them is built or served.
+
 ```text
 /learn                                     L-01  FR-304 (what is due), FR-305, FR-316 (result card with appeal closing day), FR-317, FR-318 (credit summary)
 ├── /learn/tasks                           L-02  FR-308, FR-309
