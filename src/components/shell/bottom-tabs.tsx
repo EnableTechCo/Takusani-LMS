@@ -31,7 +31,7 @@ export function BottomTabs({ workspaces }: { workspaces: Workspace[] }) {
           {tab.label}
         </Link>
       ))}
-      <Link className="bottom-tabs__item" href={workspaces.length > 1 ? "/home" : `/${workspace.segment}`}>
+      <Link className="bottom-tabs__item" href={`/${workspace.segment}`}>
         <Icon name="menu" />
         More
       </Link>

@@ -45,9 +45,9 @@ export function toNavigationSubject(access: MyAccess | null): NavigationSubject 
 }
 
 /**
- * Where a person goes after signing in or opening the site (UX section 3.3): signed out to /sign-in, learner only
- * to /learn, any staff role to /home, and someone signed in with no roles yet to their account page rather than
- * back to sign-in.
+ * Where a person goes after signing in or opening the site (UX section 3.3): signed out to /sign-in, anyone with a
+ * role to the overview of their first workspace, and someone signed in with no roles yet to their account page
+ * rather than back to sign-in.
  */
 export function homePathFor(access: MyAccess | null): string {
   const subject = toNavigationSubject(access);
