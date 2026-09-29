@@ -5,14 +5,14 @@ import { DataTable } from "@/components/ui/table";
 import { formatDateTime } from "@/lib/dates";
 import { OUTCOME_LABELS } from "@/modules/assessment/rules";
 import { listMySampleItems } from "@/modules/moderation/review-queries";
-import { INCLUSION_LABELS, ITEM_STATE_LABELS, itemStateTone } from "@/modules/moderation/review-rules";
+import { INCLUSION_LABELS, ITEM_STATE_LABELS, itemStateTone, needsReview } from "@/modules/moderation/review-rules";
 
 export const metadata = { title: "My sample items · Moderating" };
 
 // The moderator's items across every cycle, those still to review first.
 export default async function ModerateItemsPage() {
   const items = await listMySampleItems();
-  const rows = [...items].sort((a, b) => Number(a.state === "agreed") - Number(b.state === "agreed"));
+  const rows = [...items].sort((a, b) => Number(!needsReview(a.state)) - Number(!needsReview(b.state)));
 
   return (
     <div className="page">
@@ -74,7 +74,7 @@ export default async function ModerateItemsPage() {
               actions: true,
               cell: (item) => (
                 <ButtonLink href={`/moderate/cycles/${item.cycle_id}/items/${item.item_id}`} size="sm">
-                  {item.state === "agreed" ? "View" : "Review"}
+                  {needsReview(item.state) ? "Review" : "View"}
                   <span className="u-visually-hidden"> {item.learner_name}</span>
                 </ButtonLink>
               ),

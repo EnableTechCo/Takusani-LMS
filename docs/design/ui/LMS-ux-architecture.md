@@ -483,7 +483,7 @@ Priority: **P0** must be prototyped (18 screens, chosen to prove the design acro
 | A-01 | Marking queue | `/assess` | Assessor | Work list within assigned cohorts | Open next | Learner, item, version, submitted, late, integrity flag, state | FR-401, FR-905 | P1 |
 | A-02 | Marking workspace | `/assess/instances/[instanceId]` | Assessor | Review evidence, score rubric, judge integrity log, decide | Finalise decision | Submission and evidence viewer, version history, rubric scoring, feedback, integrity log and judgement, outcome, justification, remediation, held or released state | FR-402 to FR-408, FR-410 | **P0** |
 | A-03 | Cohort release status | `/assess/cohorts` | Assessor | Which cohorts are held, what is outstanding with the moderator, what is released | Open outstanding item | Per cohort and cycle: decided, held, sampled, returned to me, released | FR-409 | P1 |
-| A-04 | Returned to me | `/assess/returned` | Assessor | Items a moderator returned, with corrections and deadline | Re-mark | Moderator's required corrections, deadline, original decision | FR-410, FR-509 | P1 |
+| A-04 | Returned to me | `/assess/returned` | Assessor | Items a moderator returned, with corrections and deadline, soonest due first | Re-mark | Moderator's required corrections, deadline with overdue tag, original decision, re-mark in progress, "a later version arrived" | FR-410, FR-509 | P1 |
 
 #### Moderator and appeal reviewer
 
@@ -1055,7 +1055,7 @@ The explanation addresses the need to know that something is happening. Whether 
 | `reallocated` | Reallocated to [name] (read-only for the previous moderator) | Sampled, with moderator | Reallocated from [name] to [name], reason |
 | Derived: no eligible moderator | Not shown | Sampled, waiting for a moderator | Needs a moderator (blocks sign-off) |
 
-Disagreement is a finding, not an item state. Whether an item can be concluded with a recorded disagreement and no return is section 12, Q3.
+Disagreement is a finding, not an item state: a disagreement always returns the item (S4-08), so an item is concluded only by agreement, on the original decision or on a re-mark. Section 12, Q3 is settled that way.
 
 ### 7.6 Appeal
 

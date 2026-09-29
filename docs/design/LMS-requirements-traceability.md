@@ -113,7 +113,7 @@ The matrix below is an ownership map: it shows which component, data family, and
 | FR-506 | Moderation | moderation_rules, cycles, populations, samples, findings | Sample, finding, return, sign-off commands | Deterministic sampling, independence, release hold | MOD-506 |
 | FR-507 | Moderation | moderation_rules, cycles, populations, samples, findings | Sample, finding, return, sign-off commands | Deterministic sampling, independence, release hold | MOD-507 |
 | FR-508 | Moderation | moderation_rules, cycles, populations, samples, findings | Sample, finding, return, sign-off commands | Deterministic sampling, independence, release hold | MOD-508 |
-| FR-509 | Moderation | moderation_rules, cycles, populations, samples, findings | Sample, finding, return, sign-off commands | Deterministic sampling, independence, release hold | MOD-509 |
+| FR-509 | Moderation | moderation_rules, cycles, populations, samples, findings, returns | Sample, finding, return, sign-off commands | Deterministic sampling, independence, release hold; a return notifies assessor and coordinators and blocks sign-off | MOD-509 |
 | FR-510 | Moderation | moderation_rules, cycles, populations, samples, findings | Sample, finding, return, sign-off commands | Deterministic sampling, independence, release hold | MOD-510 |
 | FR-511 | Moderation | moderation_rules, cycles, populations, samples, findings | Sample, finding, return, sign-off commands | Deterministic sampling, independence, release hold | MOD-511 |
 | FR-601 | Appeals | appeals, appeal_events, decisions | Appeal lodge/admit/allocate/conclude routes | Release-based deadline, reviewer independence, immutable outcome | APPEAL-601 |

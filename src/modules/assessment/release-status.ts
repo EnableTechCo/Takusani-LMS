@@ -2,11 +2,11 @@ import { formatDayOf } from "@/lib/dates";
 
 /**
  * Where an assessor's decisions stand (A-03, FR-409; UX spec 7.3 and 7.4). Staff always see "decided" and "released"
- * as two facts with two dates. "Sampled" and "returned to you" come with the moderation cycle (S4-05 to S4-08); until
- * then a held decision is either waiting for a cycle or in one.
+ * as two facts with two dates. A held decision is waiting for a cycle, in one, or returned to the assessor for
+ * re-marking (FR-509) with a deadline.
  */
 
-export type ReleaseStage = "waiting_for_cycle" | "in_moderation" | "released" | "replaced";
+export type ReleaseStage = "waiting_for_cycle" | "in_moderation" | "returned" | "released" | "replaced";
 
 export interface ReleaseRow {
   decision_id: string;
@@ -25,6 +25,7 @@ export interface ReleaseRow {
   released_at: string | null;
   replaced_by: string | null;
   replaced_at: string | null;
+  return_due_on?: string | null;
 }
 
 const REPLACED_BY: Record<string, string> = {
@@ -35,16 +36,22 @@ const REPLACED_BY: Record<string, string> = {
 };
 
 export function isHeld(row: Pick<ReleaseRow, "stage">): boolean {
-  return row.stage === "waiting_for_cycle" || row.stage === "in_moderation";
+  return row.stage === "waiting_for_cycle" || row.stage === "in_moderation" || row.stage === "returned";
 }
 
 /** Where the decision stands, in the words of UX spec 7.3 and 7.4. */
-export function stageText(row: Pick<ReleaseRow, "stage" | "released_at" | "replaced_by" | "replaced_at">): string {
+export function stageText(
+  row: Pick<ReleaseRow, "stage" | "released_at" | "replaced_by" | "replaced_at" | "return_due_on">,
+): string {
   switch (row.stage) {
     case "waiting_for_cycle":
       return "Held: waiting for a moderation cycle";
     case "in_moderation":
       return "Held: in moderation";
+    case "returned":
+      return row.return_due_on
+        ? `Held: returned to you for re-marking, due ${formatDayOf(row.return_due_on)}`
+        : "Held: returned to you for re-marking";
     case "released":
       return row.released_at ? `Released ${formatDayOf(row.released_at)}` : "Released";
     case "replaced": {
@@ -118,7 +125,7 @@ export function summarise(rows: ReleaseRow[]): CohortSummary[] {
     item.decided += 1;
     cohort.decided += 1;
     if (row.stage === "waiting_for_cycle") item.waiting += 1;
-    if (row.stage === "in_moderation") item.inModeration += 1;
+    if (row.stage === "in_moderation" || row.stage === "returned") item.inModeration += 1;
     if (isHeld(row)) cohort.held += 1;
     if (row.stage === "released") {
       item.released += 1;

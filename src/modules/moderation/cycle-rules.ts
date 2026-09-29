@@ -33,6 +33,8 @@ export interface CycleRow {
   waiting: number;
   held: number;
   sampled: number;
+  /** Items returned to an assessor and not yet re-marked; sign-off waits for them (FR-510). */
+  returned: number;
 }
 
 export interface SampleRecord {
@@ -114,14 +116,18 @@ export interface PoolSummary {
 const count = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
 
 /** "Planned. Starts by itself on 14 Sep 2026, 09:00" or "Planned. Freezes when you choose". */
-export function cycleStateText(cycle: Pick<CycleRow, "state" | "scheduled_start_at" | "held">): string {
+export function cycleStateText(
+  cycle: Pick<CycleRow, "state" | "scheduled_start_at" | "held"> & { returned?: number },
+): string {
   switch (cycle.state) {
     case "planned":
       return cycle.scheduled_start_at
         ? `Planned. Starts by itself on ${formatDateTime(cycle.scheduled_start_at)}`
         : "Planned. Freezes when you choose";
     case "frozen":
-      return `Frozen and sampled. ${count(cycle.held, "result held", "results held")}`;
+      return cycle.returned
+        ? `Frozen and sampled. ${count(cycle.held, "result held", "results held")}; waiting for ${count(cycle.returned, "re-mark", "re-marks")}`
+        : `Frozen and sampled. ${count(cycle.held, "result held", "results held")}`;
     case "signed_off":
       return "Signed off";
     default:

@@ -185,7 +185,7 @@ The domain function inserts the outbox row and sends the queue message in the sa
 | Submission version | upload_pending -> finalised -> submitted (immutable) | Editing an accepted version; skipping version allocation |
 | Exam attempt | active -> submitted or expired; active or terminal -> voided by coordinator command | Saving after `accept_until`; trusting client expiry; an integrity event ending an attempt; a stale lease writing |
 | Quiz attempt | in_progress -> submitted | Exceeding the attempt limit; a learner writing a score |
-| Assessment instance | queued -> marking -> finalised; finalised -> returned -> marking -> finalised (re-mark, new decision) | Marking by a non-allocated assessor; finalising twice from one version |
+| Assessment instance | queued -> marking -> finalised; finalised -> returned -> marking -> finalised (re-mark, new decision on the same instance, superseding the returned one) | Marking by a non-allocated assessor; finalising twice from one draft (the instance is locked and must be marking; a decision supersedes exactly one other) |
 | Result | (created at first finalisation) held -> released; released -> released with a new current decision on appeal, correction, or resubmission | Releasing a held result outside sign-off; releasing twice; held against a terminal cycle |
 | Decision chain | root -> superseded by successor -> ... | Updating a decision; two successors of one decision; appealing an appeal decision |
 | Moderation cycle | planned -> frozen_and_sampled -> in_review <-> corrections_pending -> signed_off; planned -> cancelled | Resampling a frozen population; sign-off with returns open; cancelling after freeze; two non-terminal cycles over one item |

@@ -553,6 +553,51 @@ function moderationItemReallocated(payload: Payload): Rendered {
   };
 }
 
+/** An assessor's item returned by a moderator, with the corrections and the deadline (S4-08, FR-509). */
+function moderationItemReturned(payload: Payload): Rendered {
+  const item = text(payload, "item_title");
+  const learner = text(payload, "learner_name");
+  const due = formatLongDayOf(`${text(payload, "due_on")}T12:00:00+02:00`);
+  return {
+    title: `Returned for re-marking: ${learner}, ${item}`,
+    summary: `Due ${due}. ${text(payload, "moderator_name")} has set out what to correct.`,
+    paragraphs: [
+      `${text(payload, "moderator_name")}, moderating "${text(payload, "cycle_name")}" (${text(payload, "cohort_name")}), returned your decision on ${item} for ${learner}. Re-mark it by ${due}.`,
+      `Required corrections: ${text(payload, "corrections")}`,
+      "Your re-mark is a new decision; the original stays on record. The result stays held until the cycle is signed off.",
+    ],
+    action: "Open the item",
+  };
+}
+
+/** A coordinator's note that a moderator returned an item in a cycle of theirs (S4-08, FR-509). */
+function moderationReturnLogged(payload: Payload): Rendered {
+  const item = text(payload, "item_title");
+  const due = formatLongDayOf(`${text(payload, "due_on")}T12:00:00+02:00`);
+  return {
+    title: `An item was returned for re-marking: ${text(payload, "cycle_name")}`,
+    summary: `${text(payload, "learner_name")}, ${item}. Due ${due}.`,
+    paragraphs: [
+      `${text(payload, "moderator_name")} returned ${item} for ${text(payload, "learner_name")} to its assessor in "${text(payload, "cycle_name")}" (${text(payload, "cohort_name")}), due ${due}.`,
+      "The cycle cannot be signed off until the item is re-marked and reviewed again.",
+    ],
+    action: "Open the cycle",
+  };
+}
+
+/** A moderator's returned item, re-marked and back for review (S4-08, FR-509). */
+function moderationItemRemarked(payload: Payload): Rendered {
+  const item = text(payload, "item_title");
+  return {
+    title: `Re-marked, review again: ${text(payload, "learner_name")}, ${item}`,
+    summary: `"${text(payload, "cycle_name")}" (${text(payload, "cohort_name")}).`,
+    paragraphs: [
+      `The assessor re-marked ${item} for ${text(payload, "learner_name")} after your return. The revised decision is ready for your review; the original stays on record beside it.`,
+    ],
+    action: "Review the item",
+  };
+}
+
 /** A coordinator's alert that a stakeholder query was routed to them (S6-03, FR-704). */
 function queryAssigned(payload: Payload): Rendered {
   const reference = text(payload, "reference");
@@ -591,6 +636,9 @@ const TEMPLATES: Record<string, Record<number, (payload: Payload) => Rendered>> 
   query_assigned: { 1: queryAssigned },
   moderation_items_allocated: { 1: moderationItemsAllocated },
   moderation_item_reallocated: { 1: moderationItemReallocated },
+  moderation_item_returned: { 1: moderationItemReturned },
+  moderation_return_logged: { 1: moderationReturnLogged },
+  moderation_item_remarked: { 1: moderationItemRemarked },
   account_deactivated: { 1: accountDeactivated },
   account_reactivated: { 1: accountReactivated },
   sign_in_locked: { 1: signInLocked },

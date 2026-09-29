@@ -3,7 +3,14 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { deliverSoon } from "@/modules/notifications/run";
-import { draftSchema, FINALISE_MISSING, FINALISE_REFUSALS, MARKING_REFUSALS, type Draft } from "./rules";
+import {
+  draftSchema,
+  FINALISE_MISSING,
+  FINALISE_REFUSALS,
+  MARKING_REFUSALS,
+  REMARK_REFUSALS,
+  type Draft,
+} from "./rules";
 
 /** Takes the item: from here this assessor is its marker and nobody else can mark it at the same time. */
 export async function takeMarking(instanceId: string): Promise<{ ok: true } | { ok: false; message: string }> {
@@ -13,6 +20,17 @@ export async function takeMarking(instanceId: string): Promise<{ ok: true } | { 
   if (status !== "ok") return { ok: false, message: MARKING_REFUSALS[status] ?? MARKING_REFUSALS.error };
   revalidatePath(`/assess/instances/${instanceId}`);
   revalidatePath("/assess");
+  return { ok: true };
+}
+
+/** Opens a returned item for re-marking (FR-410): the draft starts from the decision that was returned. */
+export async function startRemark(instanceId: string): Promise<{ ok: true } | { ok: false; message: string }> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("start_remark", { p_instance_id: instanceId });
+  const status = error ? "error" : (data?.[0]?.status ?? "error");
+  if (status !== "ok") return { ok: false, message: REMARK_REFUSALS[status] ?? REMARK_REFUSALS.error };
+  revalidatePath(`/assess/instances/${instanceId}`);
+  revalidatePath("/assess/returned");
   return { ok: true };
 }
 

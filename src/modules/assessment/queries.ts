@@ -14,6 +14,14 @@ export async function listMarkingQueue() {
 }
 
 /** A-03 (FR-409): each of the assessor's decisions in the cohorts they assess, newest first, with where it stands. */
+/** A-04 (FR-509, FR-410): the items a moderator returned to this assessor and not yet re-marked, soonest due first. */
+export async function listMyReturnedItems() {
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("list_my_returned_items");
+  if (error) throw new Error(`api.list_my_returned_items failed: ${error.message}`);
+  return data ?? [];
+}
+
 export async function listMyReleaseStatus(): Promise<ReleaseRow[]> {
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("list_my_release_status");

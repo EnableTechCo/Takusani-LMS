@@ -181,7 +181,11 @@ export default async function AccountRolesPage({
                       primary: true,
                       cell: (row) => (
                         <>
-                          {row.kind === "marking" ? "Items to mark" : "Appeal reviews"}
+                          {row.kind === "marking"
+                            ? "Items to mark"
+                            : row.kind === "remark"
+                              ? "Items returned for re-marking"
+                              : "Appeal reviews"}
                           {row.cohort_name ? <span className="table__secondary">{row.cohort_name}</span> : null}
                         </>
                       ),
@@ -190,7 +194,7 @@ export default async function AccountRolesPage({
                       key: "role",
                       header: "Depends on",
                       cell: (row) =>
-                        row.kind === "marking"
+                        row.kind === "marking" || row.kind === "remark"
                           ? `An assessor role covering ${row.cohort_name}`
                           : "Given for one appeal at a time",
                     },

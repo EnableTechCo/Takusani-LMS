@@ -13,6 +13,15 @@ export const INSTANCE_STATE_LABELS: Record<string, string> = {
   marking: "Marking",
   decided: "Decided",
   superseded: "Replaced by a later version",
+  returned: "Returned for re-marking",
+};
+
+export const REMARK_REFUSALS: Record<string, string> = {
+  unauthenticated: "Your session has ended. Sign in again.",
+  not_found: "This item is not in your marking scope.",
+  not_your_item: "Only the assessor who made the decision can re-mark it.",
+  not_returned: "This item was not returned for re-marking.",
+  error: "The re-mark could not be started. Try again.",
 };
 
 export interface Score {

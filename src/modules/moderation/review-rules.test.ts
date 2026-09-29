@@ -1,5 +1,15 @@
 import { describe, expect, it } from "vitest";
-import { conflictText, inclusionText, itemPositionText, itemStateTone, progressText } from "./review-rules";
+import {
+  conflictText,
+  dueText,
+  earliestDueOn,
+  inclusionText,
+  isOverdue,
+  itemPositionText,
+  itemStateTone,
+  needsReview,
+  progressText,
+} from "./review-rules";
 
 describe("review wording", () => {
   it("says why an item is in the sample", () => {
@@ -19,11 +29,25 @@ describe("review wording", () => {
     expect(progressText(0, 0)).toBe("You hold no items in this cycle.");
   });
 
-  it("gives each state its tone", () => {
+  it("gives each state its tone, and says which still need the moderator", () => {
     expect(itemStateTone("agreed")).toBe("positive");
-    expect(itemStateTone("disagreed")).toBe("caution");
+    expect(itemStateTone("returned")).toBe("caution");
     expect(itemStateTone("allocated")).toBe("info");
+    expect(itemStateTone("remarked")).toBe("info");
     expect(itemStateTone("unallocated")).toBe("neutral");
+    expect(["allocated", "remarked"].every(needsReview)).toBe(true);
+    expect(["agreed", "returned", "unallocated"].some(needsReview)).toBe(false);
+  });
+
+  it("puts a return's deadline into words, by the South African day", () => {
+    const now = new Date("2026-09-29T23:30:00Z"); // already 30 September in Johannesburg
+    expect(dueText("2026-10-06", now)).toBe("Due 06 Oct 2026");
+    expect(dueText("2026-09-30", now)).toBe("Due today");
+    expect(dueText("2026-09-29", now)).toBe("1 day overdue");
+    expect(dueText("2026-09-27", now)).toBe("3 days overdue");
+    expect(isOverdue("2026-09-29", now)).toBe(true);
+    expect(isOverdue("2026-09-30", now)).toBe(false);
+    expect(earliestDueOn(now)).toBe("2026-10-01");
   });
 
   it("names the conflicting decision", () => {

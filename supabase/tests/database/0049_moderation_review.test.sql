@@ -134,15 +134,15 @@ select results_eq(format($$ select status from api.record_moderation_finding(%L,
   $$ values ('reasons_required'::text) $$, 'and always has reasons');
 select results_eq(format($$ select status from api.record_moderation_finding(%L, 'agree', 'Fine') $$, :'zanele_item'),
   $$ values ('not_found'::text) $$, 'only on an item the moderator holds');
-select results_eq(format($$ select status, finding_id is not null from api.record_moderation_finding(%L, 'disagree', 'AC 3.1 is met by the test sheet.') $$, :'thabo_item'),
-  $$ values ('ok'::text, true) $$, 'a disagreement is recorded');
-select results_eq(format($$ select state from api.open_sample_item(%L) $$, :'thabo_item'),
-  $$ values ('disagreed'::text) $$, 'and the item says so');
-select results_eq(format($$ select status from api.record_moderation_finding(%L, 'agree', 'On reflection the index suffices.') $$, :'thabo_item'),
+select results_eq(format($$ select status from api.record_moderation_finding(%L, 'disagree', 'AC 3.1 is met by the test sheet.') $$, :'thabo_item'),
+  $$ values ('corrections_required'::text) $$, 'a disagreement returns the item, so it needs the corrections (S4-08, test 0051)');
+select results_eq(format($$ select status, finding_id is not null from api.record_moderation_finding(%L, 'agree', 'The index suffices.') $$, :'thabo_item'),
+  $$ values ('ok'::text, true) $$, 'an agreement is recorded');
+select results_eq(format($$ select status from api.record_moderation_finding(%L, 'agree', 'On reflection, still so.') $$, :'thabo_item'),
   $$ values ('ok'::text) $$, 'a later finding is added, never edited');
 select results_eq(
   format($$ select jsonb_array_length(findings), findings -> 0 ->> 'finding', findings -> 1 ->> 'finding', state, my_concluded from api.open_sample_item(%L) $$, :'thabo_item'),
-  $$ values (2, 'agree'::text, 'disagree'::text, 'agreed'::text, 1) $$, 'the item shows every finding, newest first, and counts as concluded');
+  $$ values (2, 'agree'::text, 'agree'::text, 'agreed'::text, 1) $$, 'the item shows every finding, newest first, and counts as concluded');
 select results_eq(format($$ select status from api.record_moderation_observation(%L, 'Assessors apply AC 3.2 inconsistently.') $$, :'cycle'),
   $$ values ('ok'::text) $$, 'a cohort-level observation is recorded');
 select results_eq(format($$ select moderator_name, body, mine from api.list_moderation_observations(%L) $$, :'cycle'),

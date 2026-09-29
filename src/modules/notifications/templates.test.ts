@@ -125,6 +125,30 @@ describe("renderNotification", () => {
     expect(one.summary).toBe('Reallocated to you in "Term 3 assignments" (2026 Intake B).');
   });
 
+  it("tells the assessor, the coordinator and then the moderator about a return and its re-mark", () => {
+    const base = {
+      cycle_name: "Term 3 assignments",
+      cohort_name: "2026 Intake B",
+      item_title: "Task 3: Workplace records portfolio",
+      learner_name: "Lerato Mokoena",
+      moderator_name: "Thabo Nkosi",
+      due_on: "2026-10-06",
+    };
+    const returned = renderNotification("moderation_item_returned", 1, {
+      ...base,
+      corrections: "Mark AC 3.1 against the test sheet.",
+    });
+    expect(returned.title).toBe("Returned for re-marking: Lerato Mokoena, Task 3: Workplace records portfolio");
+    expect(returned.summary).toBe("Due Tuesday 6 October 2026. Thabo Nkosi has set out what to correct.");
+    expect(returned.paragraphs[1]).toBe("Required corrections: Mark AC 3.1 against the test sheet.");
+    const logged = renderNotification("moderation_return_logged", 1, base);
+    expect(logged.title).toBe("An item was returned for re-marking: Term 3 assignments");
+    expect(logged.action).toBe("Open the cycle");
+    const remarked = renderNotification("moderation_item_remarked", 1, base);
+    expect(remarked.title).toBe("Re-marked, review again: Lerato Mokoena, Task 3: Workplace records portfolio");
+    expect(remarked.action).toBe("Review the item");
+  });
+
   it("refuses an unknown template or a payload missing a fact, rather than sending a broken email", () => {
     expect(() => renderNotification("result_released", 2, released)).toThrow("no template");
     expect(() => renderNotification("result_released", 1, { ...released, item_title: "" })).toThrow("item_title");

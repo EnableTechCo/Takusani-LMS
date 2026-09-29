@@ -4,7 +4,7 @@ import { ConflictPanel } from "@/components/ui/conflict";
 import { ButtonLink, TextLink } from "@/components/ui/link";
 import { DateTime, HistoryList } from "@/components/ui/records";
 import { Banner, Tag } from "@/components/ui/status";
-import { formatDateTime } from "@/lib/dates";
+import { formatDateTime, formatDay } from "@/lib/dates";
 import { signEvidence, type EvidenceFile } from "@/modules/assessment/queries";
 import { MarksTable, Paragraphs, type Mark, type VersionFacts } from "@/modules/assessment/result-view";
 import { OUTCOME_LABELS } from "@/modules/assessment/rules";
@@ -12,8 +12,10 @@ import { getMyAccess } from "@/modules/identity/session";
 import { FindingForm } from "@/modules/moderation/review-forms";
 import { openSampleItem } from "@/modules/moderation/review-queries";
 import {
+  dueText,
   FINDING_LABELS,
   INCLUSION_LABELS,
+  isOverdue,
   ITEM_STATE_LABELS,
   inclusionText,
   itemPositionText,
@@ -49,9 +51,19 @@ interface FindingRow {
   on_current: boolean;
 }
 
-// M-03 (P0-12; FR-507, FR-508; BR-01): everything about one sampled item on one route: why it is in the sample, the
-// work and its evidence, the assessor's decision, the marks, the finding form and the findings so far. A moderator
-// who assessed the work sees the conflict named and no evidence.
+interface ReturnRow {
+  return_id: string;
+  corrections: string;
+  due_on: string;
+  returned_at: string;
+  remarked_at: string | null;
+  moderator_name: string;
+  assessor_name: string;
+}
+
+// M-03 (P0-12; FR-507, FR-508, FR-509; BR-01): everything about one sampled item on one route: why it is in the
+// sample, the work and its evidence, the assessor's decision, the marks, the finding form with the return, and the
+// findings and returns so far. A moderator who assessed the work sees the conflict named and no evidence.
 export default async function SampleItemPage({
   params,
   searchParams,
@@ -115,10 +127,13 @@ export default async function SampleItemPage({
   const version = item.assessed_version as unknown as VersionFacts | null;
   const decisions = (item.decisions ?? []) as unknown as DecisionRow[];
   const findings = (item.findings ?? []) as unknown as FindingRow[];
+  const returns = (item.returns ?? []) as unknown as ReturnRow[];
+  const openReturn = returns.find((row) => row.remarked_at === null) ?? null;
   const outcome = item.outcome as "competent" | "not_yet_competent";
   const concluded = item.state === "agreed";
   const open = item.cycle_state === "frozen";
   const revised = decisions.length > 1;
+  const now = new Date();
 
   return (
     <div className="page">
@@ -137,7 +152,7 @@ export default async function SampleItemPage({
             title={
               flash.recorded === "agree"
                 ? "You agreed with the decision. This item is concluded."
-                : "Your disagreement is recorded."
+                : `Returned to ${item.assessor_name ?? "the assessor"} for re-marking. They and the coordinator have been told.`
             }
             tone="positive"
           >
@@ -148,6 +163,30 @@ export default async function SampleItemPage({
               ) : (
                 <TextLink href={`/moderate/cycles/${cycleId}`}>Back to the cycle</TextLink>
               )}
+            </p>
+          </Banner>
+        ) : null}
+
+        {openReturn ? (
+          <Banner
+            role="note"
+            title={`Returned to ${openReturn.assessor_name}: ${dueText(openReturn.due_on, now)}`}
+            tone={isOverdue(openReturn.due_on, now) ? "caution" : "info"}
+          >
+            <p>
+              Returned {formatDateTime(openReturn.returned_at)} (SAST). Nothing more can be recorded until they finalise
+              the re-mark; you are told when they do. The cohort cannot be signed off while this is open.
+            </p>
+            <p className="whitespace-pre-line">
+              <strong>Required corrections:</strong> {openReturn.corrections}
+            </p>
+          </Banner>
+        ) : item.state === "remarked" && returns[0] ? (
+          <Banner role="note" title="Re-marked: review the revised decision" tone="info">
+            <p>
+              {returns[0].assessor_name} re-marked it on {formatDateTime(returns[0].remarked_at!)} (SAST), after your
+              return of {formatDateTime(returns[0].returned_at)}. The original decision is below, kept on record. Agree
+              with the revised decision, or return it again.
             </p>
           </Banner>
         ) : null}
@@ -280,13 +319,19 @@ export default async function SampleItemPage({
                   <p className="text-muted">
                     You agreed with this decision. It is concluded; the result is released when the cycle is signed off.
                   </p>
+                ) : openReturn ? (
+                  <p className="text-muted">
+                    This item is with {openReturn.assessor_name} for re-marking. {dueText(openReturn.due_on, now)}. You
+                    review it again once they finalise.
+                  </p>
                 ) : (
                   <>
                     <p className="text-small text-muted">
                       A finding is never edited: each one is added to the item&apos;s history. Reasons are required
-                      whether you agree or disagree.
+                      whether you agree or disagree; disagreeing returns the item to the assessor.
                     </p>
                     <FindingForm
+                      assessorName={item.assessor_name ?? "the assessor"}
                       cycleId={cycleId}
                       itemId={itemId}
                       moderatorName={access?.full_name ?? "you"}
@@ -316,6 +361,25 @@ export default async function SampleItemPage({
                 label="Findings, newest first"
               />
             )}
+            {returns.length > 0 ? (
+              <>
+                <h2 className="text-heading" id="returns-h">
+                  Returns
+                </h2>
+                <HistoryList
+                  entries={returns.map((row, index) => ({
+                    id: row.return_id,
+                    badge: String(returns.length - index),
+                    title: row.remarked_at
+                      ? `Re-marked ${formatDateTime(row.remarked_at)}`
+                      : `With ${row.assessor_name}, ${dueText(row.due_on, now)}`,
+                    meta: `Returned ${formatDateTime(row.returned_at)} by ${row.moderator_name}, due ${formatDay(row.due_on)} · "${row.corrections}"`,
+                    current: row.remarked_at === null,
+                  }))}
+                  label="Returns, newest first"
+                />
+              </>
+            ) : null}
           </aside>
         </div>
       </div>

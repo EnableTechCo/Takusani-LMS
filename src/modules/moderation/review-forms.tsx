@@ -3,7 +3,7 @@
 import { useActionState, useState } from "react";
 import { Choice, ChoiceGroup } from "@/components/ui/choice";
 import { ConflictPanel } from "@/components/ui/conflict";
-import { SelectField, TextareaField } from "@/components/ui/field";
+import { SelectField, TextareaField, TextField } from "@/components/ui/field";
 import { ErrorSummary, SubmitButton } from "@/components/ui/form-feedback";
 import { Banner } from "@/components/ui/status";
 import { formatDateTime } from "@/lib/dates";
@@ -14,18 +14,21 @@ import { conflictText } from "./review-rules";
 const initial: FormState = {};
 
 /**
- * M-03 (FR-508): agree or disagree with the assessor's decision, with reasons either way. A finding is never edited;
- * each one is added to the item's history. Return for re-marking follows a disagreement (S4-08).
+ * M-03 (FR-508, FR-509): agree or disagree with the assessor's decision, with reasons either way. Disagreeing
+ * returns the item to the assessor: the required corrections and a deadline go with it, and the assessor and the
+ * coordinator are told. A finding is never edited; each one is added to the item's history.
  */
 export function FindingForm({
   cycleId,
   itemId,
   moderatorName,
+  assessorName,
   revised,
 }: {
   cycleId: string;
   itemId: string;
   moderatorName: string;
+  assessorName: string;
   /** The decision under review replaced an earlier one (after a re-mark). */
   revised: boolean;
 }) {
@@ -35,7 +38,10 @@ export function FindingForm({
   return (
     <form action={action} className="stack" id="ws-finding" noValidate>
       {state.message ? <Banner title={state.message} tone="critical" /> : null}
-      <ErrorSummary errors={state.errors} labels={{ finding: "Your finding", reasons: "Reasons" }} />
+      <ErrorSummary
+        errors={state.errors}
+        labels={{ finding: "Your finding", reasons: "Reasons", corrections: "Required corrections", dueOn: "Deadline" }}
+      />
       <div onChange={(event) => setFinding((event.target as HTMLInputElement).value)}>
         <ChoiceGroup columns={2} legend={`Do you agree with the assessor's ${revised ? "revised " : ""}decision?`}>
           <Choice
@@ -48,9 +54,9 @@ export function FindingForm({
           />
           <Choice
             defaultChecked={finding === "disagree"}
-            description="Something must be corrected. The coordinator and the assessor can read your reasons."
+            description="Something must be corrected: the item goes back to the assessor with your corrections and a deadline."
             name="finding"
-            title="Disagree"
+            title="Disagree and return"
             tone="caution"
             value="disagree"
           />
@@ -65,14 +71,35 @@ export function FindingForm({
         rows={5}
       />
       {finding === "disagree" ? (
-        <p className="text-small text-muted">
-          Returning the item to the assessor with required corrections and a deadline arrives with the next release.
-          Your disagreement is recorded now and the item stays open.
-        </p>
+        <fieldset className="fieldset stack">
+          <legend className="fieldset__legend">Return to {assessorName}</legend>
+          <TextareaField
+            defaultValue={values.corrections}
+            error={state.errors?.corrections}
+            help="What must change before you review it again: the criteria to re-judge, the evidence to weigh. The assessor reads this."
+            label="Required corrections"
+            name="corrections"
+            rows={4}
+          />
+          <TextField
+            defaultValue={values.dueOn}
+            error={state.errors?.dueOn}
+            help="A date after today, within ninety days. The cohort cannot be signed off until the item is re-marked and you have reviewed it again."
+            label="Deadline"
+            name="dueOn"
+            type="date"
+          />
+          <p className="text-small text-muted">
+            {assessorName} and the coordinator are told. The result stays held. The re-mark is a new decision; the
+            original stays on record.
+          </p>
+        </fieldset>
       ) : null}
       <div className="cluster cluster--between">
         <span className="text-small text-muted">You are recording this finding as the moderator: {moderatorName}</span>
-        <SubmitButton pendingLabel="Recording">Record finding</SubmitButton>
+        <SubmitButton pendingLabel="Recording">
+          {finding === "disagree" ? "Record and return to the assessor" : "Record finding"}
+        </SubmitButton>
       </div>
     </form>
   );

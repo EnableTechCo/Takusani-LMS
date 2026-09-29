@@ -21,6 +21,7 @@ function StageTag({ row }: { row: ReleaseRow }) {
       </Tag>
     );
   if (row.stage === "waiting_for_cycle") return <Tag tone="info">{stageText(row)}</Tag>;
+  if (row.stage === "returned") return <Tag tone="caution">{stageText(row)}</Tag>;
   return <Tag plain>{stageText(row)}</Tag>;
 }
 
