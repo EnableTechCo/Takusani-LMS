@@ -43,6 +43,9 @@ const ICONS: Record<string, IconName> = {
   session_scheduled: "video",
   session_changed: "video",
   session_cancelled: "video",
+  session_series_scheduled: "video",
+  session_series_changed: "video",
+  session_series_cancelled: "video",
 };
 
 function Evidence({ row, title }: { row: NotificationRow; title: string }) {

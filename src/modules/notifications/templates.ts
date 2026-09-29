@@ -421,6 +421,66 @@ function roleEnded(payload: Payload): Rendered {
   };
 }
 
+/** F-06: a series of sessions, told once: how many, how often, from when to when (S6-series). */
+const RHYTHMS: Record<string, string> = {
+  daily: "every day",
+  weekly: "every week",
+  fortnightly: "every two weeks",
+  monthly: "every month",
+};
+
+function sessionSeriesScheduled(payload: Payload): Rendered {
+  const title = text(payload, "title");
+  const count = typeof payload.count === "number" ? String(payload.count) : text(payload, "count");
+  const rhythm = RHYTHMS[text(payload, "repeat")] ?? "every week";
+  const first = text(payload, "starts_at");
+  const last = text(payload, "last_starts_at");
+  const span = `from ${formatLongDayOf(first)} to ${formatLongDayOf(last)}, each at ${formatTime(first)} (SAST)`;
+  return {
+    title: `New sessions: ${title}`,
+    summary: `${count} sessions, ${rhythm} ${span}.`,
+    paragraphs: [
+      `${count} sessions have been scheduled for ${text(payload, "cohort_name")}: ${title}.`,
+      `One ${rhythm}, ${span}${text(payload, "mode") === "online" ? ", online in Teams" : ""}.`,
+    ],
+    action: "Open your calendar",
+  };
+}
+
+/** The rest of a series changed together: the new time or place of the first, and how many follow it. */
+function sessionSeriesChanged(payload: Payload): Rendered {
+  const title = text(payload, "title");
+  const count = typeof payload.count === "number" ? String(payload.count) : text(payload, "count");
+  const rhythm = RHYTHMS[text(payload, "repeat")] ?? "every week";
+  const when = sessionWhen(payload);
+  return {
+    title: `Sessions changed: ${title}`,
+    summary: `${count} sessions, now from ${when}.`,
+    paragraphs: [
+      `The time or place of ${count} sessions of ${title} (${text(payload, "cohort_name")}) has changed.`,
+      `The first is now on ${when}; the others follow ${rhythm} at the same time.`,
+    ],
+    action: "Open your calendar",
+  };
+}
+
+/** The rest of a series cancelled together, with the reason. */
+function sessionSeriesCancelled(payload: Payload): Rendered {
+  const title = text(payload, "title");
+  const count = typeof payload.count === "number" ? String(payload.count) : text(payload, "count");
+  const from = text(payload, "starts_at");
+  return {
+    title: `Sessions cancelled: ${title}`,
+    summary: `${count} sessions from ${formatLongDayOf(from)} are cancelled.`,
+    paragraphs: [
+      `${count} sessions of ${title} (${text(payload, "cohort_name")}) are cancelled, from ${formatLongDayOf(from)} at ${formatTime(from)} (SAST).`,
+      `The reason given: "${text(payload, "cancel_reason")}"`,
+      "They stay on your calendar, marked cancelled.",
+    ],
+    action: "Open your calendar",
+  };
+}
+
 const READINESS_ITEM_NAMES: Record<string, string> = {
   moderation_policy: "confirm the moderation policy",
   learners: "enrol the learners",
@@ -516,6 +576,9 @@ const TEMPLATES: Record<string, Record<number, (payload: Payload) => Rendered>> 
   session_scheduled: { 1: sessionScheduled },
   session_changed: { 1: sessionChanged },
   session_cancelled: { 1: sessionCancelled },
+  session_series_scheduled: { 1: sessionSeriesScheduled },
+  session_series_changed: { 1: sessionSeriesChanged },
+  session_series_cancelled: { 1: sessionSeriesCancelled },
 };
 
 export function renderNotification(eventType: string, templateVersion: number, payload: Payload): Rendered {

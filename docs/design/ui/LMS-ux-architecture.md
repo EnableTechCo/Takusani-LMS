@@ -24,14 +24,14 @@
 | Institution | Khanya Skills Institute (fictional) |
 | Programme | Certificate in Business Administration, NQF Level 4, 140 credits (fictional unit list) |
 | Cohorts | "2026 Intake B" (`moderated`), "2026 Intake C" (`moderated`), "2026 Short Course 2" (`not_moderated`, used only to show immediate release). Corrected 21 September 2026: Intake C was first listed as `not_moderated`, which contradicted Thandiwe moderating it, because a cohort that is not moderated has no held results, cycles, or sign-off (ADR-019). |
-| Intake C moderation cycle | "Unit 3 portfolios", assessor Nomvula Mahlangu, frozen Friday 18 September 2026, population 64, sample 18, signed off Monday 28 September 2026 at 10:40. Thandiwe cannot sign off Intake B's "Term 3 tasks" because she assessed sampled results there (P-05). |
+| Intake C moderation cycle | "Unit 3 portfolios", assessor Nomvula Mahlangu, frozen Friday 18 September 2026, population 64, sample 18, signed off Monday 28 September 2026 at 10:40. Thandiwe cannot sign off Intake B's "Term 3 assignments" because she assessed sampled results there (P-05). |
 | Learners | Lerato Mokoena, Sipho Zulu, Ayesha Patel, Johan Botha, Naledi Khoza |
 | Facilitator | Pieter van Wyk |
 | Assessors | Thandiwe Nkosi (assesses Intake B, moderates Intake C); Bongani Sithole (Intake B); Nomvula Mahlangu (Intake C only) |
 | Moderator | Anil Naidoo (Intake B) |
 | Coordinator | Zanele Dlamini |
 | System Administrator | Sibusiso Khumalo |
-| Task | "Task 3: Workplace records portfolio", Unit 3 (8 credits), due Friday 4 September 2026 at 17:00; Lerato's version 2 submitted at 17:42 (late); decided 10 September; cycle "Term 3 tasks" frozen 14 September |
+| Assignment | "Task 3: Workplace records portfolio", Unit 3 (8 credits), due Friday 4 September 2026 at 17:00; Lerato's version 2 submitted at 17:42 (late); decided 10 September; cycle "Term 3 assignments" frozen 14 September |
 | Moderation sign-off / release | Tuesday 22 September 2026 at 14:05 |
 | Appeal window for that release | Last full day Tuesday 29 September 2026; closes at 00:00 on Wednesday 30 September 2026 (P-11). Thursday 24 September (Heritage Day) counts; the window is calendar days. |
 | Resubmission period | 14 days from release, so end of day Tuesday 6 October 2026 (end-of-day rule is an assumption, by analogy with P-11) |
@@ -61,7 +61,7 @@ Grounded in SRS 2.2. One paragraph each: context of use, device, anxiety, and wh
 
 **Learner: Lerato Mokoena.** Works part time and studies from home in Soweto on a mid-range Android phone with prepaid data; uses a shared laptop at the training centre for exams. Connectivity drops without warning and load-shedding is a fact of planning. Moderate technical confidence: comfortable with WhatsApp, less so with file formats and browser settings. Anxious about three things: "Did my upload actually go through?", "Will the exam throw me out if my connection dips?", and "What did I get, and what can I do about it?". Done means: a receipt she can screenshot, a result she understands without asking anyone, and a clear next step with a date.
 
-**Facilitator: Pieter van Wyk.** Delivers sessions in Microsoft Teams and sets tasks; works on a laptop between sessions and checks his phone in the evening. Anxious about learners silently falling behind and about a task going out with the wrong due date. Done means: one glance tells him who has not submitted Task 3, and two taps send those learners a reminder that is logged against their record (FR-210, FR-212).
+**Facilitator: Pieter van Wyk.** Delivers sessions in Microsoft Teams and sets assignments; works on a laptop between sessions and checks his phone in the evening. Anxious about learners silently falling behind and about a assignment going out with the wrong due date. Done means: one glance tells him who has not submitted Task 3, and two taps send those learners a reminder that is logged against their record (FR-210, FR-212).
 
 **Assessor: Thandiwe Nkosi.** Marks in long sittings on a laptop with a second monitor when she has one; occasionally reviews evidence on a tablet. She assesses Intake B and moderates Intake C, so she lives in two workspaces. Accountable under external audit (SRS 2.2), so her anxiety is defensibility: "Can I show why I decided this, and did I look at everything, including the integrity log?". Done means: every criterion scored, justification written, decision finalised, and an unambiguous statement of whether the learner can see it yet (FR-408, FR-409).
 
@@ -164,8 +164,8 @@ Phone (< 768 px)
 
 | Workspace | Items | Phone tabs |
 |---|---|---|
-| Learning | Home, Tasks, Exams, Materials, Calendar, Results, Credits, Notes | Home, Tasks, Materials, Results, More |
-| Teaching | Overview, Tasks, Materials, Quizzes, Sessions, Submissions | Overview, Tasks, Sessions, Submissions, More |
+| Learning | Home, Assignments, Exams, Materials, Calendar, Results, Credits, Notes | Home, Assignments, Materials, Results, More |
+| Teaching | Overview, Assignments, Materials, Quizzes, Sessions, Submissions | Overview, Assignments, Sessions, Submissions, More |
 | Assessing | Queue, Returned to me, Cohort release status | Queue, Returned, Status |
 | Moderating | Cycles, My sample items | Cycles, Items |
 | Appeal reviews | Reviews | Reviews |
@@ -202,8 +202,8 @@ Search is scoped to what the current user could already reach by navigation, and
 
 | Role | Searches | Never returns |
 |---|---|---|
-| Learner | Published materials and recordings (FR-301), own tasks, own sessions, own exams by title | Notes (searched only inside `/learn/notes`, so private notes never mix into a shared result list; FR-306, FR-307), results, appeal content |
-| Facilitator | Own tasks, materials, quizzes, sessions; learners in assigned cohorts by name or learner number | Outcomes, marks, integrity logs |
+| Learner | Published materials and recordings (FR-301), own assignments, own sessions, own exams by title | Notes (searched only inside `/learn/notes`, so private notes never mix into a shared result list; FR-306, FR-307), results, appeal content |
+| Facilitator | Own assignments, materials, quizzes, sessions; learners in assigned cohorts by name or learner number | Outcomes, marks, integrity logs |
 | Assessor, Moderator | Learners and items inside their allocation only | Anything outside scope; an out-of-scope hit is simply absent (FR-401) |
 | Coordinator | Cohorts, learners, appeals by reference, queries, notices, sessions within scope | Appeal deliberation text |
 | System Administrator | Accounts by name, email, or learner number; configuration keys; import batches | Academic records |
@@ -273,11 +273,11 @@ Every node carries the FR identifiers it serves. "(assumption)" marks a route wi
 ### 4.3 Facilitator (`/teach`)
 
 ```text
-/teach                                     F-01  FR-210 (summary of outstanding work per task)
+/teach                                     F-01  FR-210 (summary of outstanding work per assignment)
 ├── /teach/tasks                           F-02  FR-201, FR-202
 │   ├── /teach/tasks/new                   F-03  FR-201, FR-202
 │   └── /teach/tasks/[taskId]/edit         F-03  FR-201, FR-202, FR-203 (publish step states who is notified and what goes on calendars)
-├── /teach/exams/[examId]/edit             F-11  FR-201 (assumption: an exam is a task whose submission type is "online exam"; see section 12, Q9), FR-312 inputs
+├── /teach/exams/[examId]/edit             F-11  FR-201 (assumption: an exam is a assignment whose submission type is "online exam"; see section 12, Q9), FR-312 inputs
 ├── /teach/materials                       F-04  FR-204, FR-208
 │   ├── /teach/materials/new               F-04  FR-204, FR-208
 │   └── /teach/materials/[materialId]/edit F-04  FR-204
@@ -435,9 +435,9 @@ Priority: **P0** must be prototyped (18 screens, chosen to prove the design acro
 
 | ID | Screen | Route | Roles | Purpose | Primary action | Key data shown | FRs | Pri |
 |---|---|---|---|---|---|---|---|---|
-| L-01 | Learner home | `/learn` | Learner | Answer "what needs me now?" in one screen | Open the most urgent item | New results with appeal closing day; due and overdue tasks; today's sessions with Join; next exam window; credit progress | FR-304, FR-305, FR-316, FR-317, FR-318 | **P0** |
-| L-02 | Tasks | `/learn/tasks` | Learner | All tasks with status | Open task | Title, due date, status tag, late tag | FR-308, FR-309 | P1 |
-| L-03 | Task detail and submission | `/learn/tasks/[taskId]`, `.../submit` | Learner | Read the brief, upload evidence, submit a version, see every version | Submit version N | Brief, criteria, due date, evidence requirements, upload progress, version history with timestamps and late flags, receipt | FR-308, FR-309, FR-310, FR-311, FR-317 | **P0** |
+| L-01 | Learner home | `/learn` | Learner | Answer "what needs me now?" in one screen | Open the most urgent item | New results with appeal closing day; due and overdue assignments; today's sessions with Join; next exam window; credit progress | FR-304, FR-305, FR-316, FR-317, FR-318 | **P0** |
+| L-02 | Assignments | `/learn/tasks` | Learner | All assignments with status | Open assignment | Title, due date, status tag, late tag | FR-308, FR-309 | P1 |
+| L-03 | Assignment detail and submission | `/learn/tasks/[taskId]`, `.../submit` | Learner | Read the brief, upload evidence, submit a version, see every version | Submit version N | Brief, criteria, due date, evidence requirements, upload progress, version history with timestamps and late flags, receipt | FR-308, FR-309, FR-310, FR-311, FR-317 | **P0** |
 | L-04 | Materials | `/learn/materials` | Learner | Browse and search material and recordings by module | Open item | Module, title, type, size for downloads | FR-301, FR-208 | P1 |
 | L-05 | Material viewer | `/learn/materials/[materialId]` | Learner | Read or download; attach a note | Download or open link | Title, description, file or link, related notes | FR-301, FR-306 | P2 |
 | L-06 | Quiz | `/learn/quizzes/[quizId]` | Learner | Practise and get instant feedback | Start attempt; submit | "Practice: does not count towards your result", attempts used of limit, score, per-question feedback | FR-302, FR-303, FR-205 | P1 |
@@ -459,16 +459,16 @@ Priority: **P0** must be prototyped (18 screens, chosen to prove the design acro
 
 | ID | Screen | Route | Roles | Purpose | Primary action | Key data shown | FRs | Pri |
 |---|---|---|---|---|---|---|---|---|
-| F-01 | Teaching overview | `/teach` | Facilitator | Today's sessions and tasks with outstanding work | Open submissions | Per task: submitted, outstanding, late counts | FR-210 | P2 |
-| F-02 | Tasks | `/teach/tasks` | Facilitator | Drafts and published tasks | New task | Title, state (Draft, Published), due date, audience | FR-201, FR-202 | P2 |
-| F-03 | Task editor | `/teach/tasks/new`, `/[taskId]/edit` | Facilitator | Build brief, rubric, due date, submission type, audience; save draft; publish | Publish | Form sections, draft state, publish confirmation naming recipients and calendar effect | FR-201, FR-202, FR-203 | P1 |
+| F-01 | Teaching overview | `/teach` | Facilitator | Today's sessions and assignments with outstanding work | Open submissions | Per assignment: submitted, outstanding, late counts | FR-210 | P2 |
+| F-02 | Assignments | `/teach/tasks` | Facilitator | Drafts and published assignments | New assignment | Title, state (Draft, Published), due date, audience | FR-201, FR-202 | P2 |
+| F-03 | Assignment editor | `/teach/tasks/new`, `/[taskId]/edit` | Facilitator | Build brief, rubric, due date, submission type, audience; save draft; publish | Publish | Form sections, draft state, publish confirmation naming recipients and calendar effect | FR-201, FR-202, FR-203 | P1 |
 | F-04 | Materials manager | `/teach/materials`, `/new`, `/[materialId]/edit` | Facilitator | Upload or link material and recordings, tag to module, set visibility, publish or schedule | Publish or schedule | State (Draft, Scheduled, Published, Archived), module, release time | FR-204, FR-208 | P1 |
 | F-05 | Quiz builder and question bank | `/teach/quizzes/[quizId]/edit`, `/teach/question-bank` | Facilitator | Compose quiz, scoring, feedback, attempt limit | Publish quiz | Questions, keys, feedback, attempt limit | FR-205 | P2 |
-| F-06 | Sessions | `/teach/sessions`, `/new`, `/[sessionId]` | Facilitator | Schedule with Teams link; reschedule or cancel | Save session | Date, time, duration, audience, link validity, who will be notified | FR-206, FR-207 | P1 |
+| F-06 | Sessions | `/teach/sessions`, `/new`, `/[sessionId]` | Facilitator | Schedule with Teams link, once or as a series (every day, week, two weeks or month, 2 to 26 sessions); reschedule or cancel, one session or the rest of its series (the rest keep the rhythm) | Save session | Date, time, duration, repeat and count, audience, link validity, who will be notified (once per series) | FR-206, FR-207 | P1 |
 | F-07 | Register | `/teach/sessions/[sessionId]/register` | Facilitator | Mark present or absent; amend with logged reason | Save register | Roster, present or absent, amendment log | FR-209 | P1 |
-| F-08 | Submission dashboard | `/teach/submissions` | Facilitator | See at a glance who has not submitted | Send reminder to selected | Per task and learner: Submitted, Outstanding, Late; filters; export; selection | FR-210, FR-211, FR-212 | **P0** |
-| F-09 | Learner submission history | `/teach/submissions/learners/[learnerId]` | Facilitator | Drill-down for one learner | Send reminder | All tasks, versions, timestamps, late flags, reminders sent | FR-210 | P1 |
-| F-10 | Send reminder | `/teach/submissions/reminders/new` | Facilitator | Compose reminder to selected learners | Send | Recipients, task, message preview, "logged against each learner" | FR-212 | P1 |
+| F-08 | Submission dashboard | `/teach/submissions` | Facilitator | See at a glance who has not submitted | Send reminder to selected | Per assignment and learner: Submitted, Outstanding, Late; filters; export; selection | FR-210, FR-211, FR-212 | **P0** |
+| F-09 | Learner submission history | `/teach/submissions/learners/[learnerId]` | Facilitator | Drill-down for one learner | Send reminder | All assignments, versions, timestamps, late flags, reminders sent | FR-210 | P1 |
+| F-10 | Send reminder | `/teach/submissions/reminders/new` | Facilitator | Compose reminder to selected learners | Send | Recipients, assignment, message preview, "logged against each learner" | FR-212 | P1 |
 | F-11 | Exam setup | `/teach/exams/[examId]/edit` | Facilitator | Window, duration, attempt limit, questions (assumption) | Publish exam | Window, duration, attempts, question manifest | FR-201, FR-312 | P2 |
 
 #### Assessor
@@ -559,7 +559,7 @@ Each specification lists content blocks in reading order, the states that the pr
 | Client islands | None required. |
 | FRs | FR-304, FR-305, FR-316, FR-317, FR-318 |
 
-#### P0-04 Task detail and submission (`/learn/tasks/[taskId]`, `.../submit`, L-03)
+#### P0-04 Assignment detail and submission (`/learn/tasks/[taskId]`, `.../submit`, L-03)
 
 | Aspect | Specification |
 |---|---|
@@ -628,10 +628,10 @@ Fully specified in section 8. Prototype states: answering; saved on this device 
 
 | Aspect | Specification |
 |---|---|
-| Blocks | Cohort and task filters; status filter chips with counts ("Outstanding 23", "Submitted 71", "Late 6"); search by learner; table; selection bar; Export. |
-| Default view | One task selected (the task with the nearest due date), learners as rows, sorted Outstanding first. This answers "who has not submitted" without interaction (SRS 2.2). |
+| Blocks | Cohort and assignment filters; status filter chips with counts ("Outstanding 23", "Submitted 71", "Late 6"); search by learner; table; selection bar; Export. |
+| Default view | One assignment selected (the assignment with the nearest due date), learners as rows, sorted Outstanding first. This answers "who has not submitted" without interaction (SRS 2.2). |
 | Columns | Learner; status; submitted at; version; late; last reminder sent. Priority on narrow screens: learner, status, late. |
-| Matrix view | Desktop only (at least 1024 px): learners by tasks grid with a status mark per cell and a text alternative per cell. |
+| Matrix view | Desktop only (at least 1024 px): learners by assignments grid with a status mark per cell and a text alternative per cell. |
 | Actions | Select rows (checkboxes; "Select all outstanding"), then "Send reminder" opens F-10 with recipients filled in. Row click opens F-09. Export produces CSV for the current filter (FR-211); large exports are asynchronous and arrive as a notification. |
 | Boundaries | No outcomes, marks, or integrity data appear here: facilitators see operational status only (data model RLS). |
 | States | Before due date; after due date; all submitted; filtered empty; reminder sent confirmation ("Reminder sent to 23 learners and logged on each learner's record"). |
@@ -690,7 +690,7 @@ Fully specified in section 8. Prototype states: answering; saved on this device 
 |---|---|
 | Create flow | One page with sections (not a multi-page wizard, so it can be saved and resumed): Details (programme, cohort name, start and end dates); Moderation policy; People (learners enrolled count with link to import or add; facilitators, assessors, moderators); Review. |
 | Moderation policy (P-01, BR-04) | Required radio group with **no default**. "Moderated: every result in this cohort is held until a moderator signs off a moderation cycle. Learners see nothing until then." "Not moderated: each result is released to the learner as soon as the assessor finalises it." Below: "You can change this later only while no results are waiting or held." |
-| Changing policy later | Shows the policy version history (version, value, actor, date). A refused change names the blocker: "You cannot change to Not moderated: 14 results are waiting for moderation and 96 are held in cycle 'Term 3 tasks'." |
+| Changing policy later | Shows the policy version history (version, value, actor, date). A refused change names the blocker: "You cannot change to Not moderated: 14 results are waiting for moderation and 96 are held in cycle 'Term 3 assignments'." |
 | People section | Adding a moderator who is also an assessor in the cohort is allowed and shows an advisory: "Thandiwe Nkosi also assesses in this cohort. She will never be given items she assessed (BR-01)." Ending a role with open allocations is refused with the conflict panel (FR-105). |
 | Readiness link | Saving creates the readiness item "Moderation policy confirmed" as done (FR-702). |
 | States | New; saved draft (assumption); active; policy change refused; archived read-only. |
@@ -702,7 +702,7 @@ Fully specified in section 8. Prototype states: answering; saved on this device 
 |---|---|
 | Blocks | Pending pool ("Decided and waiting for a cycle"): per assessable item, the count of held results not yet claimed and the age of the oldest, with the P-03 alert when it exceeds the configured threshold. Cycles list by state. Plan a cycle. |
 | Plan form (P-02) | Name; scope: pick assessable items or whole units, optional period; start: "When I choose" or "Automatically on" date and time (FR-501); sampling rule version in force (read-only, from FR-108); moderators available, with a warning if any item in scope has no eligible moderator because every moderator assessed it. |
-| Scope conflict | "Task 3 is already in cycle 'Term 3 tasks', which is not finished. An item can be in one open cycle at a time." |
+| Scope conflict | "Task 3 is already in cycle 'Term 3 assignments', which is not finished. An item can be in one open cycle at a time." |
 | Freeze and sample | Confirmation: "This locks the 96 results that are waiting now and draws the sample. It cannot be undone or redrawn. Decisions finalised after this moment wait for the next cycle." (FR-506). Result panel: population 96; sample 22; percentage rule 15%; mandatory inclusions: 6 NYC, 4 first-time assessor; strata table; seed and rule version with Copy; link to C-07 (FR-502, FR-503, FR-505). |
 | Cancel | Only while Planned: "Cancel this cycle. Results stay waiting." After freeze the action is absent and the page says why. |
 | States | No cycles and empty pool; pool with ageing alert; planned manual; planned scheduled; sampled; in review; waiting for re-marks; signed off; cancelled. |
@@ -727,7 +727,7 @@ Fully specified in section 8. Prototype states: answering; saved on this device 
 |---|---|
 | Blocks | Person header (name, status); Role assignments table (role, scope type and name, effective from and to, assigned by); Add role; Open allocations table (what this person is currently allocated to: marking items, sample items, appeal reviews, with counts and links); Change history (FR-107). |
 | Add role form | Role; scope type (Global, Programme, Cohort, Unit); scope; effective from; optional end. Pre-check advisory when the person already holds the opposite role in the same scope. |
-| Named conflict (FR-104) | Blocking panel, prototype content: H2 "This would break separation of duties". "Thandiwe Nkosi cannot be the moderator for this item because she assessed it." Then a definition list from `details.conflicts[]`: Decision: "Assessment decision on Task 3, Lerato Mokoena, 10 Sep 2026"; Role: "Assessor"; Allocation: "Sample item 7, cycle 'Term 3 tasks', 2026 Intake B". Actions: "Choose another moderator"; "View the decision". No retry button (`retryable: false`). |
+| Named conflict (FR-104) | Blocking panel, prototype content: H2 "This would break separation of duties". "Thandiwe Nkosi cannot be the moderator for this item because she assessed it." Then a definition list from `details.conflicts[]`: Decision: "Assessment decision on Task 3, Lerato Mokoena, 10 Sep 2026"; Role: "Assessor"; Allocation: "Sample item 7, cycle 'Term 3 assignments', 2026 Intake B". Actions: "Choose another moderator"; "View the decision". No retry button (`retryable: false`). |
 | Open allocations (FR-105) | Ending or narrowing a role, or deactivating, is refused with `open_allocations`: "Thandiwe still has work that depends on this role." List from `details.allocations[]`: "12 items to mark in 2026 Intake B", "1 item returned for re-marking, due 25 Sep 2026", each with "Reallocate". When the list is empty the end-role action succeeds. |
 | Where the two errors arise | The architecture enforces separation of duties in the allocation commands and `open_allocations` on role changes (API design). This screen shows both, because an administrator meets both here: the first when reallocating work from this page, the second when ending a role. The same conflict panel component is used on C-04, C-07, and C-12. See section 12, Q4. |
 | States | Single-role user; multi-role user; add role with advisory; named separation-of-duties conflict; open-allocations refusal; role ended; change history. |
@@ -764,7 +764,7 @@ Actor: Lerato, on her phone, prepaid data. Serves FR-308 to FR-311.
 4. The total size is shown before upload starts: "About 18 MB will be uploaded." (relevant on prepaid data).
 5. Upload begins (resumable protocol). Each file row shows percentage and "Keep this page open while your files upload."
    - **E3 Connection lost mid-upload**: the row changes to "Paused, no connection. We will carry on automatically when you are back online." On reconnect: "Resuming" and the percentage continues from where it stopped, not from zero.
-   - **E4 She closes the browser or the phone restarts**: on returning to the task, a notice appears: "You have an unfinished upload: Portfolio.pdf (62%). Resume / Remove." The browser asks her to pick the same file again only if it cannot regain access to it (platform limitation); the uploaded part is kept.
+   - **E4 She closes the browser or the phone restarts**: on returning to the assignment, a notice appears: "You have an unfinished upload: Portfolio.pdf (62%). Resume / Remove." The browser asks her to pick the same file again only if it cannot regain access to it (platform limitation); the uploaded part is kept.
    - **E5 Upload took too long** (intent expired): "This upload took too long and has expired. Please choose the file again." Nothing was submitted.
 6. Each completed file is finalised (`POST /api/files/{intent_id}/finalise`) and shows "Uploaded".
    - **E6 Finalise mismatch** (size or type differs from what was declared): "This file could not be accepted. Choose it again." with the reference.
@@ -775,7 +775,7 @@ Actor: Lerato, on her phone, prepaid data. Serves FR-308 to FR-311.
    - **E8 Version conflict (409)**: "You already submitted version 2 from another device at 16:52. View it, or submit another version."
    - **E9 Due time passed while she was uploading**: the server decides lateness. The receipt says "Late"; the review step had warned her (step 2).
 9. Receipt (same route, final step; also reachable later from the version history): "We have received your work. Version 1. Friday 4 September 2026 at 16:48 (SAST). On time. Receipt SUB-2026-004812." Files and sizes listed. "Your files are being checked" while the scan runs. A notification and an email copy are created (assumption).
-10. Task status becomes "Submitted", then "Being assessed" once the instance is queued. It stays "Being assessed" through marking, hold, moderation, and any re-mark (section 7.1).
+10. Assignment status becomes "Submitted", then "Being assessed" once the instance is queued. It stays "Being assessed" through marking, hold, moderation, and any re-mark (section 7.1).
     - **E10 Scan rejects a file later** (assumption): notification "One of your files for Task 3 could not be opened. Please submit a new version." The version stays on record, labelled "File problem".
 
 ### 6.2 Flow B: sit an exam end to end
@@ -857,7 +857,7 @@ Actor: Thandiwe. Serves FR-401 to FR-408.
 
 Actors: Zanele (coordinator), Anil (moderator), Thandiwe and Bongani (assessors). Serves FR-501 to FR-511, FR-409, FR-410, P-01 to P-06.
 
-1. **Plan.** On `/coordinate/cohorts/[cohortId]/moderation` Zanele sees the pending pool: "Task 3: 96 decided and waiting; oldest 4 days." She selects "Plan a cycle", names it "Term 3 tasks", picks Task 3 as scope, and chooses "Automatically on Monday 14 September 2026 at 09:00" (FR-501).
+1. **Plan.** On `/coordinate/cohorts/[cohortId]/moderation` Zanele sees the pending pool: "Task 3: 96 decided and waiting; oldest 4 days." She selects "Plan a cycle", names it "Term 3 assignments", picks Task 3 as scope, and chooses "Automatically on Monday 14 September 2026 at 09:00" (FR-501).
    - **E1 Scope overlap**: "Task 3 is already in cycle '...', which is not finished." (422, named.)
    - **E2 Wrongly planned**: "Cancel cycle" is available only while Planned. Results stay in the pool.
    - **E3 An item in scope has no eligible moderator** (every moderator in the cohort assessed it): warning at planning time and a blocking notice after sampling, with a link to assign another moderator (C-04).
@@ -889,7 +889,7 @@ Actor: Lerato. Serves FR-316, FR-317, FR-601 to FR-607, FR-610 to FR-613, BR-05,
 1. Tuesday 22 September 2026, 14:05: notification "Your result for Task 3 is ready." The email contains the item name, the appeal closing day, and a link, but not the outcome (assumption: outcome stays behind sign-in for privacy).
 2. She opens `/learn/results/[resultId]`. First screenful: "Not yet competent", "You can appeal this result until the end of Tuesday 29 September 2026", "What to do next" with remediation actions and "Resubmit by the end of Tuesday 6 October 2026" (FR-316, FR-317, SRS 5.3).
 3. **D1 What does she want?**
-   - Resubmit: goes to the task (Flow A). Resubmitting does not remove the right to appeal while the window is open (assumption).
+   - Resubmit: goes to the assignment (Flow A). Resubmitting does not remove the right to appeal while the window is open (assumption).
    - Understand the mark first: "Lodge an appeal", type "See my marked script".
    - Challenge the mark: type "Ask for a remark".
 4. **Script request.** She states her grounds and lodges. Receipt with reference and expected turnaround (FR-604). Tracker state: "Received".
@@ -964,7 +964,7 @@ Rules for every table in this section:
 
 | Data-model state | Learner sees | Tone | Facilitator sees | Assessor sees |
 |---|---|---|---|---|
-| Derived: task published, no version, before due | Not started | neutral | Outstanding | Not shown |
+| Derived: assignment published, no version, before due | Not started | neutral | Outstanding | Not shown |
 | Derived: no version, after due | Overdue. You can still submit | caution | Outstanding (overdue) | Not shown |
 | Version `upload_pending` | Upload in progress / Paused / Expired | info | Outstanding | Not shown |
 | Version `finalised` (files uploaded, not yet submitted) | Ready to submit | info | Outstanding | Not shown |
@@ -1013,9 +1013,9 @@ Staff screens always show both facts when both exist: "Decided 10 Sep 2026. Rele
 | `released`, superseded by a correction | Outcome with "Corrected on [date]" and decision history | Corrected [date] | Read-only | Corrected under dual control |
 | `released` NYC, then resubmission assessed and released | Latest outcome as current; earlier outcome in history | Chain of decisions on one result | Read-only | Chain of decisions |
 
-**What the learner sees while a result is held.** One label, "Being assessed", from the moment the work is accepted until release. The task page and the dashboard's "Being assessed" block carry this explanation:
+**What the learner sees while a result is held.** One label, "Being assessed", from the moment the work is accepted until release. The assignment page and the dashboard's "Being assessed" block carry this explanation:
 
-> "We have your work. In this programme, results are checked by a second person (a moderator) before anyone sees them, and everyone's results for the same task are released together. You will get a message here and by email when your result is ready. Your 7 days to appeal, and any time you are given to resubmit, only start on the day your result is released."
+> "We have your work. In this programme, results are checked by a second person (a moderator) before anyone sees them, and everyone's results for the same assignment are released together. You will get a message here and by email when your result is ready. Your 7 days to appeal, and any time you are given to resubmit, only start on the day your result is released."
 
 Reasons for one label rather than a "Marked, in quality check" sub-state:
 
@@ -1255,7 +1255,7 @@ Mobile first: base styles target 320 px; each breakpoint is a `min-width`.
 
 Supporting rules: no horizontal scrolling at 320 px except inside a data table that has been explicitly allowed to scroll (9.3); layouts respond to the container where a component is reused in panes (container queries), so the rubric panel behaves the same in a 420 px pane and on a 420 px phone; both orientations are supported everywhere except exam mode, which does not restrict orientation either but requires the minimum viewport (WCAG 1.3.4).
 
-Performance budget for learner routes (assumption, to be validated on a mid-range Android device over a throttled 3G profile from South Africa): first load under 170 KB of compressed JavaScript, usable content from server-rendered HTML before hydration, no web-font dependency for first paint, and images never required to complete a task.
+Performance budget for learner routes (assumption, to be validated on a mid-range Android device over a throttled 3G profile from South Africa): first load under 170 KB of compressed JavaScript, usable content from server-rendered HTML before hydration, no web-font dependency for first paint, and images never required to complete a assignment.
 
 ### 9.2 How screens collapse
 
@@ -1265,7 +1265,7 @@ Performance budget for learner routes (assumption, to be validated on a mid-rang
 | Dashboards (L-01, C-01, G-04) | 2 to 3 column card grid | 2 columns | 2 columns | Single column in strict priority order (section 5.2) |
 | Data tables (F-08, A-01, C-12, X-02, X-09) | Full table | Full table, lower-priority columns hidden | Table with priority-1 and priority-2 columns | Card list (9.3) |
 | Forms (F-03, C-03, X-06) | Single column, max 720 px, help text beside fields | Help text below fields | Same | Same; sticky primary action; sections become collapsible with completion state |
-| Matrix (F-08 matrix view) | Available | Available | Hidden; per-task list only | Hidden; per-task list only |
+| Matrix (F-08 matrix view) | Available | Available | Hidden; per-assignment list only | Hidden; per-assignment list only |
 | Calendar (L-07) | Month grid plus agenda | Month grid plus agenda | Agenda default, month optional | Agenda only by default; month as a compact date picker |
 | Result view (L-15) | Main plus Aside (history, how you were told) | Same | Aside below Main | Single column; outcome, appeal line, and next step always above the first scroll on a 360 by 640 viewport |
 | Dialogs | Centred dialog | Centred | Centred | Full-width bottom sheet; consequence dialogs remain true modal dialogs |
@@ -1479,7 +1479,7 @@ Target: **WCAG 2.2 level AA** for every screen, including exam mode. The criteri
 | Q6 | May we provide a practice run of exam mode with sample questions, no attempt record, and no integrity logging? | Learners have varying technical confidence (SRS 2.2); the first experience of fullscreen restrictions should not be a summative exam. It also lets learners test their device days ahead. | Yes, P1, reusing `ExamShell` with fixed sample content. |
 | Q7 | Is the appeal reviewer's name shown to the learner? | Transparency about independence (BR-02) against the risk of direct contact or pressure on the reviewer. | Show the description "a reviewer who did not mark your work" to the learner; names are visible to staff and in the audit trail. |
 | Q8 | Is the interface English only at launch? | Plain-language rules assume second- or third-language English readers; translation affects layout (longer strings) and testing. | English only, plain language, all strings externalised so isiZulu, Sesotho, Afrikaans, or others can be added without redesign. |
-| Q9 | Who sets up an exam, and under which requirement? No FR describes exam authoring, but the data model has exams with a window, duration, and attempt limit. | A screen is needed (F-11) and its owner determines where it sits in navigation. | The facilitator, under FR-201, as a task whose submission type is "online exam", with window, duration, attempt limit, and questions. |
+| Q9 | Who sets up an exam, and under which requirement? No FR describes exam authoring, but the data model has exams with a window, duration, and attempt limit. | A screen is needed (F-11) and its owner determines where it sits in navigation. | The facilitator, under FR-201, as a assignment whose submission type is "online exam", with window, duration, attempt limit, and questions. |
 | Q10 | Does missing mandatory evidence block a coursework submission, and does a resubmission remain possible while an appeal on the same result is open? | Both change Flow A and the result view's actions. The SRS is silent. | Block submission until every mandatory evidence requirement has a file; allow resubmission and appeal in parallel, because the appeal window is short and the resubmission deadline is independent. |
 
 ---

@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { instantFromSast } from "@/lib/dates";
 import type { FormState } from "@/lib/form-state";
 import { createClient } from "@/lib/supabase/server";
+import { parseRepeat, parseSeriesCount, SERIES_REFUSALS } from "./series-rules";
 import { isTeamsLink, SESSION_REFUSALS } from "./sessions-rules";
 
 // Facilitator commands for sessions (S2-15; FR-206, FR-207). The database checks everything again and tells the
@@ -19,6 +20,8 @@ const FIELD_OF: Record<string, string> = {
   invalid_teams_link: "teamsUrl",
   invalid_venue: "venue",
   cohort_not_found: "cohortId",
+  invalid_repeat: "repeat",
+  invalid_count: "count",
 };
 
 function read(form: FormData) {
@@ -30,6 +33,8 @@ function read(form: FormData) {
     mode: text(form, "mode") || "online",
     teamsUrl: text(form, "teamsUrl"),
     venue: text(form, "venue"),
+    repeat: parseRepeat(text(form, "repeat")),
+    count: text(form, "count"),
   };
 }
 
@@ -42,11 +47,12 @@ function check(values: ReturnType<typeof read>, needsCohort: boolean): Record<st
   if (!values.duration) errors.duration = SESSION_REFUSALS.invalid_duration;
   if (values.mode === "online" && !isTeamsLink(values.teamsUrl)) errors.teamsUrl = SESSION_REFUSALS.invalid_teams_link;
   if (values.mode === "in_person" && !values.venue) errors.venue = SESSION_REFUSALS.invalid_venue;
+  if (values.repeat !== "none" && parseSeriesCount(values.count) === null) errors.count = SERIES_REFUSALS.invalid_count;
   return errors;
 }
 
 function refused(status: string, values: Record<string, string>): FormState {
-  const message = SESSION_REFUSALS[status] ?? SESSION_REFUSALS.error;
+  const message = SESSION_REFUSALS[status] ?? SERIES_REFUSALS[status] ?? SESSION_REFUSALS.error;
   const field = FIELD_OF[status];
   return field ? { errors: { [field]: message }, values } : { message, values };
 }
@@ -56,7 +62,7 @@ export async function createSession(_: FormState, form: FormData): Promise<FormS
   const errors = check(values, true);
   if (Object.keys(errors).length > 0) return { errors, values };
   const supabase = await createClient();
-  const { data, error } = await supabase.rpc("create_session", {
+  const facts = {
     p_cohort_id: values.cohortId,
     p_title: values.title,
     p_starts_at: instantFromSast(values.startsAt),
@@ -64,7 +70,20 @@ export async function createSession(_: FormState, form: FormData): Promise<FormS
     p_mode: values.mode,
     p_teams_url: values.mode === "online" ? values.teamsUrl : undefined,
     p_venue: values.mode === "in_person" ? values.venue : undefined,
-  });
+  };
+  if (values.repeat !== "none") {
+    // A series: the same session every week or two, told to the learners once (F-06).
+    const { data, error } = await supabase.rpc("create_session_series", {
+      ...facts,
+      p_repeat: values.repeat,
+      p_count: parseSeriesCount(values.count) ?? 0,
+    });
+    const row = data?.[0];
+    if (error || row?.status !== "ok") return refused(row?.status ?? "error", values);
+    revalidatePath("/teach/sessions");
+    redirect(`/teach/sessions/${row.session_id}?told=${row.notified ?? 0}&series=${row.sessions ?? 0}`);
+  }
+  const { data, error } = await supabase.rpc("create_session", facts);
   const row = data?.[0];
   if (error || row?.status !== "ok") return refused(row?.status ?? "error", values);
   revalidatePath("/teach/sessions");
@@ -90,18 +109,23 @@ export async function updateSession(
     p_mode: values.mode,
     p_teams_url: values.mode === "online" ? values.teamsUrl : undefined,
     p_venue: values.mode === "in_person" ? values.venue : undefined,
+    p_rest_of_series: form.get("restOfSeries") === "on",
   });
   const row = data?.[0];
   if (error || row?.status !== "ok") return refused(row?.status ?? "error", values);
   revalidatePath("/teach/sessions");
-  redirect(`/teach/sessions/${sessionId}?told=${row.notified ?? 0}&changed=1`);
+  redirect(`/teach/sessions/${sessionId}?told=${row.notified ?? 0}&changed=${row.changed ?? 1}`);
 }
 
 export async function cancelSession(sessionId: string, _: FormState, form: FormData): Promise<FormState> {
   const reason = text(form, "reason");
   if (!reason) return { errors: { reason: SESSION_REFUSALS.reason_required } };
   const supabase = await createClient();
-  const { data, error } = await supabase.rpc("cancel_session", { p_session_id: sessionId, p_reason: reason });
+  const { data, error } = await supabase.rpc("cancel_session", {
+    p_session_id: sessionId,
+    p_reason: reason,
+    p_rest_of_series: form.get("restOfSeries") === "on",
+  });
   const row = data?.[0];
   if (error || row?.status !== "ok") {
     const status = row?.status ?? "error";
@@ -110,5 +134,5 @@ export async function cancelSession(sessionId: string, _: FormState, form: FormD
       : { message: SESSION_REFUSALS[status] ?? SESSION_REFUSALS.error };
   }
   revalidatePath("/teach/sessions");
-  redirect(`/teach/sessions/${sessionId}?told=${row.notified ?? 0}&cancelled=1`);
+  redirect(`/teach/sessions/${sessionId}?told=${row.notified ?? 0}&cancelled=${row.cancelled ?? 1}`);
 }

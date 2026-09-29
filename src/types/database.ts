@@ -144,8 +144,13 @@ export type Database = {
         }[]
       }
       cancel_session: {
-        Args: { p_reason: string; p_session_id: string }
+        Args: {
+          p_reason: string
+          p_rest_of_series?: boolean
+          p_session_id: string
+        }
         Returns: {
+          cancelled: number
           notified: number
           status: string
         }[]
@@ -368,6 +373,25 @@ export type Database = {
         Returns: {
           notified: number
           session_id: string
+          status: string
+        }[]
+      }
+      create_session_series: {
+        Args: {
+          p_cohort_id: string
+          p_count: number
+          p_duration_minutes: number
+          p_mode: string
+          p_repeat: string
+          p_starts_at: string
+          p_teams_url?: string
+          p_title: string
+          p_venue?: string
+        }
+        Returns: {
+          notified: number
+          session_id: string
+          sessions: number
           status: string
         }[]
       }
@@ -1508,6 +1532,10 @@ export type Database = {
           duration_minutes: number
           id: string
           mode: string
+          series_count: number
+          series_id: string
+          series_repeat: string
+          series_seq: number
           starts_at: string
           state: string
           teams_url: string
@@ -2101,6 +2129,7 @@ export type Database = {
           p_duration_minutes: number
           p_expected_version: number
           p_mode: string
+          p_rest_of_series?: boolean
           p_session_id: string
           p_starts_at: string
           p_teams_url?: string
@@ -2108,6 +2137,7 @@ export type Database = {
           p_venue?: string
         }
         Returns: {
+          changed: number
           notified: number
           status: string
         }[]
