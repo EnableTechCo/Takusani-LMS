@@ -90,6 +90,8 @@ insert into assessment.results (id, assessable_item_id, learner_id) values
 insert into auth.users (instance_id, id, aud, role, email, created_at, updated_at)
 values ('00000000-0000-0000-0000-000000000000', '90000000-0000-4000-8000-0000000000f1', 'authenticated', 'authenticated', 'second.setup@takusani.test', now(), now());
 insert into identity.profiles (id, full_name) values ('90000000-0000-4000-8000-0000000000f1', 'Second Learner');
+insert into moderation.cycles (id, cohort_id, name, state, frozen_at, planned_by)
+values ('90000000-0000-4000-8000-0000000000c1', :'cohort', 'Setup cycle', 'frozen', now(), :'coordinator');
 insert into assessment.results (id, assessable_item_id, learner_id, hold_cycle_id) values
   ('90000000-0000-4000-8000-000000000004', '90000000-0000-4000-8000-000000000002', '90000000-0000-4000-8000-0000000000f1',
    '90000000-0000-4000-8000-0000000000c1');

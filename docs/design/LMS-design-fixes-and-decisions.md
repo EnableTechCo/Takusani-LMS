@@ -26,11 +26,11 @@ These are the working and open decisions. Each is applied in the documents as sh
 | ID | Question | Working decision applied | Owner | Blocks |
 |---|---|---|---|---|
 | P-01 | Is moderation a property of the cohort, and may it change mid-cohort? | Required `moderated` / `not_moderated` attribute set at creation; change is versioned and refused while results are pending or held **Go-ahead on the working decision, 23 Sep 2026** (S2-08); formal confirmation by the owner still to be recorded. | Quality assurance | Finalise, freeze, sign-off functions |
-| P-02 | What does a moderation cycle cover? | Named assessable items or units, optionally a period; one non-terminal cycle per item | Quality assurance | Freeze and sign-off functions |
+| P-02 | What does a moderation cycle cover? | Named assessable items or units, optionally a period; one non-terminal cycle per item **Confirmed by the owner, 29 Sep 2026** (S4-05). | Quality assurance | Freeze and sign-off functions |
 | P-03 | What is the longest acceptable hold before a learner sees an outcome, especially NYC? | No value assumed; a configurable threshold drives a dashboard and alert | Quality assurance | Go-live, not build |
 | P-04 | Must resubmission decisions (NYC to Competent) be moderated? | Yes, by the next cycle, like any decision in a moderated cohort **Go-ahead on the working decision, 23 Sep 2026** (S2-08); formal confirmation by the owner still to be recorded. | Quality assurance | Finalise function |
-| P-05 | Who may sign off a cycle? | A moderator who took no assessment decision on any sampled result | Quality assurance | Sign-off function |
-| P-06 | Does sign-off release the whole cohort (FR-511 wording) or the sampled population? | The frozen population only; later decisions wait for the next cycle (CR-19) | Quality assurance | Sign-off function |
+| P-05 | Who may sign off a cycle? | A moderator who took no assessment decision on any result in the frozen population (not only the sampled ones: sign-off releases the whole population, so the signer must have assessed none of it) **Confirmed by the owner, 29 Sep 2026, tightened from "any sampled result"** (S4-09). | Quality assurance | Sign-off function |
+| P-06 | Does sign-off release the whole cohort (FR-511 wording) or the sampled population? | The frozen population only; later decisions wait for the next cycle (CR-19) **Confirmed by the owner, 29 Sep 2026** (S4-09). | Quality assurance | Sign-off function |
 | P-07 | How do several assessments roll up to one unit's credit, and may one task serve several units? | Credit when every required item has a released Competent decision; many-to-many allowed; requirement set frozen per cohort | Academic policy, with the AS-03 unit list | Credit functions |
 | P-08 | Is one remark appeal per result the rule? Does a view-script request extend the window? | One remark per result, ever; no extension | Academic policy | Appeal functions |
 | P-09 | After an appeal downgrades a result to NYC, does the learner get remediation and resubmission? | Yes, like any NYC decision **Confirmed by the owner, 28 Sep 2026** (S3-04: the reviewer records what to do and a resubmission period; an upheld NYC keeps the deadline the learner already had). | Academic policy | Appeal conclusion function |
@@ -230,6 +230,6 @@ Each settles an assumption the corrected design depends on. A failed spike reope
 
 **Can start now:** authentication and session handling; the schema-per-module and privilege regime with its CI check (ADR-024); the database test harness; direct resumable uploads; the exam persistence protocol (ADR-023), apart from the grace value; the platform spikes.
 
-**Waits for owner confirmation:** the finalise, freeze, sign-off, appeal, correction, and credit functions, which encode P-01, P-02, P-04 to P-08, and P-11 (P-09 was confirmed on 28 Sep 2026). They are the functions whose mistakes cannot be undone, because a release cannot be recalled.
+**Waits for owner confirmation:** the finalise, freeze, sign-off, appeal, correction, and credit functions, which encode P-01, P-04, P-07, P-08, and P-11 (P-09 was confirmed on 28 Sep 2026; P-02, P-05 and P-06 on 29 Sep 2026). They are the functions whose mistakes cannot be undone, because a release cannot be recalled.
 
 **Before production data:** P-14 to P-16 (plans and region), P-18 (retention), P-19 (Storage recovery), the Department agreement, and the POPIA cross-border assessment.

@@ -170,8 +170,10 @@ reset role;
 select is((select count(*)::int from assessment.decision_releases where result_id = :'held_result'), 0,
   'and nothing is recorded as released');
 
--- A cycle claims it at freeze (S4-06 will do this; the column is enough to read it).
-update assessment.results set hold_cycle_id = gen_random_uuid() where id = :'held_result';
+-- A cycle claims it at freeze (S4-06 will do this; a frozen cycle row is enough to read it).
+insert into moderation.cycles (cohort_id, name, state, frozen_at, planned_by)
+values (:'cohort', 'Read-only cycle', 'frozen', now(), :'assessor') returning id as cycle \gset
+update assessment.results set hold_cycle_id = :'cycle' where id = :'held_result';
 select pg_temp.act_as(:'assessor');
 select results_eq(format($$ select stage from api.list_my_release_status() where decision_id = %L $$, :'held_decision'),
   $$ values ('in_moderation'::text) $$, 'claimed by a cycle, it reads as in moderation');

@@ -184,7 +184,7 @@ Administrative correction of a released outcome. Requires two distinct authorise
 
 ### `POST /api/moderation-cycles/{cycle_id}/sign-off`
 
-- **Authentication:** a moderator with sign-off capability who took no assessment decision on any sampled result.
+- **Authentication:** a moderator with sign-off capability who took no assessment decision on any result in the frozen population (P-05, tightened 29 Sep 2026).
 - **Request:** expected cycle version, sign-off statement.
 - **Response:** signed-off timestamp, released result count, notification count. A signed-off cycle returns the original response.
 - **Validation:** every sample item concluded; no return outstanding (FR-510), with the outstanding items listed in `details`.

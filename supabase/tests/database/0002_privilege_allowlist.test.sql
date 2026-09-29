@@ -221,7 +221,13 @@ insert into expected_grants values
   ('function', 'api', 'list_session_logistics()', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'get_session_logistics(p_session_id uuid)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'save_session_logistics(p_session_id uuid, p_expected_version integer, p_venue_note text, p_venue_arranged boolean, p_catering_needed boolean, p_headcount integer, p_dietary text, p_catering_arranged boolean, p_equipment text, p_equipment_arranged boolean)', 'authenticated', 'EXECUTE'),
-  ('function', 'api', 'reconcile_logistics_variance(p_session_id uuid, p_note text)', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'reconcile_logistics_variance(p_session_id uuid, p_note text)', 'authenticated', 'EXECUTE'),
+  -- Moderation cycles (20261107090000): coordinators in scope, checked inside (test 0047).
+  ('function', 'api', 'plan_moderation_cycle(p_cohort_id uuid, p_name text, p_item_ids uuid[], p_unit_ids uuid[], p_period_from date, p_period_to date, p_scheduled_start_at timestamp with time zone)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'cancel_moderation_cycle(p_cycle_id uuid, p_expected_version integer, p_reason text)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_moderation_cycles(p_cohort_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'get_moderation_pool(p_cohort_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'get_moderation_summary(p_cohort_id uuid)', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (

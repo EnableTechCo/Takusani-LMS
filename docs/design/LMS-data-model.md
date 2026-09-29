@@ -151,7 +151,7 @@ In a `moderated` cohort, finalisation always creates or leaves the result `held`
 
 A scheduled cycle freezes and samples automatically at its start time through Supabase Cron calling the same function as the manual command (FR-501). A first-time assessor (FR-503) is derived at freeze as an assessor with no decision in any previously signed-off cycle; the result of that derivation is stored in the selection-basis snapshot so the mandatory inclusion stays reproducible after the assessor gains history.
 
-Sample uniqueness is enforced by `(cycle_id, result_id)`. The population digest detects later mutation. Sign-off requires every sample item concluded and no return outstanding, and its signer must not have assessed any sampled item. A sample item whose moderator leaves is reallocated, never abandoned. Invariant, monitored and enforced at archival: no result is `held` against a terminal cycle, and no cohort is archived while any result is pending or held.
+Sample uniqueness is enforced by `(cycle_id, result_id)`. The population digest detects later mutation. Sign-off requires every sample item concluded and no return outstanding, and its signer must not have assessed any result in the population (P-05). A sample item whose moderator leaves is reallocated, never abandoned. Invariant, monitored and enforced at archival: no result is `held` against a terminal cycle, and no cohort is archived while any result is pending or held.
 
 ### Appeals and credits
 

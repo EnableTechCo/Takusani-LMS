@@ -137,6 +137,16 @@ export type Database = {
           status: string
         }[]
       }
+      cancel_moderation_cycle: {
+        Args: {
+          p_cycle_id: string
+          p_expected_version: number
+          p_reason: string
+        }
+        Returns: {
+          status: string
+        }[]
+      }
       cancel_notice: {
         Args: { p_notice_id: string }
         Returns: {
@@ -687,6 +697,42 @@ export type Database = {
           title: string
         }[]
       }
+      get_moderation_pool: {
+        Args: { p_cohort_id: string }
+        Returns: {
+          assessors: Json
+          held: number
+          item_id: string
+          kind: string
+          oldest_decided_at: string
+          open_cycle_id: string
+          open_cycle_name: string
+          open_cycle_scheduled_start_at: string
+          open_cycle_state: string
+          released: number
+          title: string
+          unit_code: string
+          unit_id: string
+          unit_title: string
+          waiting: number
+        }[]
+      }
+      get_moderation_summary: {
+        Args: { p_cohort_id: string }
+        Returns: {
+          frozen_cycles: number
+          held: number
+          max_hold_days: number
+          moderation_policy: string
+          oldest_held_at: string
+          oldest_waiting_at: string
+          planned_cycles: number
+          sampling_percentage: number
+          sampling_rule: string
+          sampling_rule_version: number
+          waiting: number
+        }[]
+      }
       get_my_appeal: {
         Args: { p_appeal_id: string }
         Returns: {
@@ -1206,6 +1252,28 @@ export type Database = {
           state: string
           title: string
           updated_at: string
+        }[]
+      }
+      list_moderation_cycles: {
+        Args: { p_cohort_id: string }
+        Returns: {
+          cancel_reason: string
+          cancelled_at: string
+          cancelled_by_name: string
+          frozen_at: string
+          held: number
+          id: string
+          items: Json
+          name: string
+          period_from: string
+          period_to: string
+          planned_at: string
+          planned_by_name: string
+          scheduled_start_at: string
+          state: string
+          unit_ids: string[]
+          version: number
+          waiting: number
         }[]
       }
       list_moderation_policy_history: {
@@ -1760,6 +1828,26 @@ export type Database = {
         Args: { p_notification_id: string }
         Returns: {
           link: string
+          status: string
+        }[]
+      }
+      plan_moderation_cycle: {
+        Args: {
+          p_cohort_id: string
+          p_item_ids?: string[]
+          p_name: string
+          p_period_from?: string
+          p_period_to?: string
+          p_scheduled_start_at?: string
+          p_unit_ids?: string[]
+        }
+        Returns: {
+          conflict_cycle_id: string
+          conflict_cycle_name: string
+          conflict_cycle_state: string
+          conflict_item_id: string
+          conflict_item_title: string
+          cycle_id: string
           status: string
         }[]
       }
