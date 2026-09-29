@@ -17,7 +17,7 @@ This document maps every identified business rule, functional requirement, non-f
 |---|---|---|---|
 | CR-01 | SRS user class says around 100 learners; architecture brief sets 1,000 registered learners | Use 1,000 | Capacity, storage, imports, and release burst use 1,000 |
 | CR-02 | UC-L03, UC-A02, and UC-S02 include plagiarism checking; SRS section 8 defers it | Deferred | No provider or workflow dependency; only a neutral future extension point |
-| CR-03 | UC-F04 says the system records attendance after a Teams lecture; SRS interface says no Teams attendance read | SRS requires manual FR-209 capture | Teams is a validated link only; attendance changes are manually captured and audited |
+| CR-03 | UC-F04 says the system records attendance after a Teams lecture; SRS interface says no Teams attendance read | SRS requires manual FR-209 capture | Teams is a validated link only; learners check themselves in while the session is on, the facilitator confirms the register from those check-ins, and every confirmation and amendment is audited |
 | CR-04 | Catalogue Q6 questions logistics scope; SRS FR-705–FR-707 requires it | Include logistics | Coordinator module stores logistics and headcount reconciliation |
 | CR-05 | SRS traces to UC-SA01–UC-SA06, UC-A06, UC-M05–UC-M06, UC-C07, UC-L10–UC-L13, and UC-F08, which are absent from the supplied catalogue | Requirements remain authoritative; record missing catalogue definitions | Test cases derive from the FR wording and business rules; catalogue should be reconciled before baseline approval |
 | CR-06 | Catalogue calls the external actor Higher Education Body; SRS calls it Department of Education | Use Department-facing terminology | Versioned Department API and data-sharing agreement |

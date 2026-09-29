@@ -16,6 +16,11 @@ export interface OverviewSession {
   venue: string | null;
   state: string;
   audience: number;
+  register_version: number;
+  checkin_state: string;
+  checked_in: number;
+  present: number;
+  absent: number;
 }
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -85,16 +90,18 @@ export function workSummary(tasks: OutstandingTask[]): { tasks: number; outstand
 const count = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
 
 /** The one-line summary under the title, in words. */
-export function teachLead(today: number, tasks: OutstandingTask[]): string {
+export function teachLead(today: number, tasks: OutstandingTask[], registers = 0): string {
   const overdue = tasks.filter((task) => task.overdue).length;
   const parts: string[] = [];
   if (today > 0) parts.push(count(today, "session today", "sessions today"));
+  if (registers > 0) parts.push(count(registers, "register to confirm", "registers to confirm"));
   if (tasks.length > 0) {
     parts.push(
       `${count(tasks.length, "task", "tasks")} with work outstanding${overdue > 0 ? `, ${overdue} past due` : ""}`,
     );
   }
-  if (parts.length === 0) return "No sessions today, and every assignment set has been handed in.";
+  if (parts.length === 0)
+    return "No sessions today, every register is confirmed, and every assignment set has been handed in.";
   const sentence = parts.join(", and ");
   return `${sentence.charAt(0).toUpperCase()}${sentence.slice(1)}.`;
 }

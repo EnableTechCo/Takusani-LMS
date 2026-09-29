@@ -3,11 +3,14 @@ import { TextLink } from "@/components/ui/link";
 import { Tag } from "@/components/ui/status";
 import { formatLongDayOf, formatTime, sastDaysFromToday } from "@/lib/dates";
 import { durationText } from "@/modules/notifications/templates";
+import { CheckInButton } from "./attendance-forms";
+import { learnerAttendanceStatus } from "./attendance-rules";
 import { joinWindow } from "./sessions-rules";
 
 /**
  * The learner's agenda (L-07, FR-305): sessions and due dates by South African day, soonest first. A session gives
- * its Teams link on the calendar itself; a cancelled one stays, marked, with the reason.
+ * its Teams link on the calendar itself, and "I'm here" while check-in is open (FR-209); a cancelled one stays,
+ * marked, with the reason.
  */
 
 export interface AgendaSession {
@@ -22,6 +25,9 @@ export interface AgendaSession {
   state: string;
   cancelReason: string | null;
   facilitator: string;
+  checkinState: string;
+  checkedInAt: string | null;
+  attendance: string | null;
 }
 
 export interface AgendaDue {
@@ -66,7 +72,26 @@ function SessionMeta({ item, now }: { item: AgendaSession; now: Date }) {
           {window.state === "open" ? <Tag tone="positive">On now</Tag> : null}
         </>
       ) : null}
+      <AttendanceMeta item={item} />
     </span>
+  );
+}
+
+/** The learner's attendance at the session: "I'm here" while check-in is open, then the check-in, then the mark. */
+function AttendanceMeta({ item }: { item: AgendaSession }) {
+  if (item.checkinState === "open") {
+    return <CheckInButton checkedInAt={item.checkedInAt} sessionId={item.id} sessionTitle={item.title} />;
+  }
+  if (item.checkinState === "not_open") return null;
+  const status = learnerAttendanceStatus({
+    checkin_state: item.checkinState,
+    checked_in_at: item.checkedInAt,
+    attendance: item.attendance,
+  });
+  return (
+    <Tag shape={status.tone === "positive" ? "check" : undefined} tone={status.tone}>
+      {status.label}
+    </Tag>
   );
 }
 
@@ -129,6 +154,9 @@ export function agendaItems(
     state: string;
     cancel_reason: string | null;
     facilitator_name: string;
+    checkin_state: string;
+    checked_in_at: string | null;
+    attendance: string | null;
   }[],
   tasks: { id: string; title: string; due_at: string | null; latest_version: number | null }[],
   now: Date,
@@ -146,6 +174,9 @@ export function agendaItems(
       state: session.state,
       cancelReason: session.cancel_reason,
       facilitator: session.facilitator_name,
+      checkinState: session.checkin_state,
+      checkedInAt: session.checked_in_at,
+      attendance: session.attendance,
     })),
     ...tasks
       .filter((task) => task.due_at && new Date(task.due_at).getTime() > now.getTime())

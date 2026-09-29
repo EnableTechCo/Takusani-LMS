@@ -167,6 +167,12 @@ insert into expected_grants values
   -- Register and recordings (20261023090000): whoever sets work in the cohort, checked inside each function.
   ('function', 'api', 'save_register(p_session_id uuid, p_marks jsonb, p_expected_version integer, p_reason text)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'get_register(p_session_id uuid)', 'authenticated', 'EXECUTE'),
+  -- Self-marked attendance (20261110090000): the learner's own check-in and record; a cohort's attendance for whoever
+  -- sets work in it or coordinates it, checked inside each function (test 0050).
+  ('function', 'api', 'mark_my_attendance(p_session_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_my_attendance()', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'get_cohort_attendance(p_cohort_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_cohort_registers(p_cohort_id uuid)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'create_recording(p_cohort_id uuid, p_title text, p_description text, p_module_id uuid)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'set_recording_captions(p_material_id uuid, p_has_captions boolean)', 'authenticated', 'EXECUTE'),
   -- Calendar feed (20261024090000): the learner manages their own token; the feed itself is authenticated by its token,

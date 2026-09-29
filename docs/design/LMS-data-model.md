@@ -68,7 +68,7 @@ Lockout blocks new password sign-ins only. It never affects an existing session 
 
 ### Programme and learning delivery
 
-`programmes`, `qualifications`, `units`, `modules`, `cohorts`, `enrolments`, `tasks`, `task_targets`, `rubrics`, `rubric_criteria`, `materials`, `material_access_events`, `quizzes`, `questions`, `question_keys`, `quiz_attempts`, `quiz_responses`, `sessions`, `attendance_records`, `logistics_items`, `readiness_items`, `notices`, and `stakeholder_queries` implement FR-201–FR-318 and FR-701–FR-708.
+`programmes`, `qualifications`, `units`, `modules`, `cohorts`, `enrolments`, `tasks`, `task_targets`, `rubrics`, `rubric_criteria`, `materials`, `material_access_events`, `quizzes`, `questions`, `question_keys`, `quiz_attempts`, `quiz_responses`, `sessions`, `attendance_checkins` (the learner's own "I'm here"), `attendance_records` (the confirmed register and its amendment log), `logistics_items`, `readiness_items`, `notices`, and `stakeholder_queries` implement FR-201–FR-318 and FR-701–FR-708.
 
 `units` carry the configured credit value used by FR-801; the value is a versioned configuration item, and the value in force at award is snapshotted onto the ledger entry. `modules` are programme-defined groupings, optionally linked to a unit, to which material is tagged (FR-204). `readiness_items` hold the checklist category, state, assignee, and due date for FR-702, including "moderation policy confirmed".
 

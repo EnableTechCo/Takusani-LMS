@@ -577,6 +577,19 @@ export type Database = {
           type: string
         }[]
       }
+      get_cohort_attendance: {
+        Args: { p_cohort_id: string }
+        Returns: {
+          absent: number
+          enrolled: boolean
+          full_name: string
+          last_absent_at: string
+          learner_id: string
+          learner_number: string
+          present: number
+          sessions: number
+        }[]
+      }
       get_cohort_readiness: {
         Args: { p_cohort_id: string }
         Returns: {
@@ -1169,6 +1182,26 @@ export type Database = {
           title: string
         }[]
       }
+      list_cohort_registers: {
+        Args: { p_cohort_id: string }
+        Returns: {
+          absent: number
+          audience: number
+          checked_in: number
+          checkin_state: string
+          confirmed_at: string
+          confirmed_by_name: string
+          duration_minutes: number
+          mode: string
+          present: number
+          register_version: number
+          session_id: string
+          starts_at: string
+          state: string
+          title: string
+          venue: string
+        }[]
+      }
       list_cohort_staff: {
         Args: { p_cohort_id: string }
         Returns: {
@@ -1368,6 +1401,22 @@ export type Database = {
           type: string
         }[]
       }
+      list_my_attendance: {
+        Args: never
+        Returns: {
+          attendance: string
+          checked_in_at: string
+          checkin_state: string
+          cohort_name: string
+          confirmed_at: string
+          duration_minutes: number
+          mode: string
+          session_id: string
+          starts_at: string
+          title: string
+          venue: string
+        }[]
+      }
       list_my_enrolments: {
         Args: never
         Returns: {
@@ -1536,7 +1585,10 @@ export type Database = {
       list_my_sessions: {
         Args: { p_from?: string }
         Returns: {
+          attendance: string
           cancel_reason: string
+          checked_in_at: string
+          checkin_state: string
           cohort_name: string
           duration_minutes: number
           facilitator_name: string
@@ -1701,13 +1753,18 @@ export type Database = {
       list_sessions: {
         Args: never
         Returns: {
+          absent: number
           audience: number
           cancel_reason: string
+          checked_in: number
+          checkin_state: string
           cohort_id: string
           cohort_name: string
           duration_minutes: number
           id: string
           mode: string
+          present: number
+          register_version: number
           series_count: number
           series_id: string
           series_repeat: string
@@ -1849,6 +1906,13 @@ export type Database = {
         Returns: {
           query_id: string
           reference: string
+          status: string
+        }[]
+      }
+      mark_my_attendance: {
+        Args: { p_session_id: string }
+        Returns: {
+          checked_in_at: string
           status: string
         }[]
       }

@@ -95,7 +95,8 @@ export const GLOSSARY: readonly GlossaryTerm[] = [
   {
     term: "register",
     pattern: "registers?",
-    meaning: "The attendance list for a session: who was present.",
+    meaning:
+      "The attendance list for a session: who was present, confirmed by the facilitator from the learners' own check-ins.",
   },
   {
     term: "readiness",

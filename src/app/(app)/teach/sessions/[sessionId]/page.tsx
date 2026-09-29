@@ -5,7 +5,7 @@ import { Banner, Tag } from "@/components/ui/status";
 import { formatDateTime, formatLongDayOf, formatTime, sastInputValue } from "@/lib/dates";
 import { CancelSessionForm, SessionForm } from "@/modules/learning/sessions-forms";
 import { getRegister } from "@/modules/learning/register-queries";
-import { registerSummary } from "@/modules/learning/register-rules";
+import { checkinSummary, registerSummary } from "@/modules/learning/register-rules";
 import { isSeriesRepeat, seriesLabel, seriesSentence } from "@/modules/learning/series-rules";
 import { listSessions } from "@/modules/learning/sessions-queries";
 import { durationText } from "@/modules/notifications/templates";
@@ -13,7 +13,7 @@ import { durationText } from "@/modules/notifications/templates";
 export const metadata = { title: "Session · Teaching" };
 
 // F-06 (FR-206, FR-207): one session. Change its time or place, or cancel it; either tells the learners. Once it has
-// started, its register (F-07, FR-209).
+// started, its register (F-07, FR-209): the check-ins so far, then the confirmed counts.
 export default async function SessionPage({
   params,
   searchParams,
@@ -126,10 +126,10 @@ export default async function SessionPage({
               </h2>
               {register.register_version > 0 ? (
                 <Tag shape="dot" tone="positive">
-                  Taken
+                  Confirmed
                 </Tag>
               ) : (
-                <Tag>Not taken yet</Tag>
+                <Tag>Not confirmed yet</Tag>
               )}
             </div>
             <div className="card__body stack">
@@ -137,17 +137,17 @@ export default async function SessionPage({
                 {register.register_version > 0
                   ? `${registerSummary(register.roster)}.${
                       register.amendments.length > 0
-                        ? ` Changed ${register.amendments.length === 1 ? "once" : `${register.amendments.length} times`} since it was taken.`
+                        ? ` Changed ${register.amendments.length === 1 ? "once" : `${register.amendments.length} times`} since it was confirmed.`
                         : ""
                     }`
-                  : "Mark each learner present or absent. Teams attendance is not read: this register is the record."}
+                  : `${checkinSummary(register.roster)} so far. Confirm the register from the check-ins, changing any mark that is wrong. Teams attendance is not read: the register you confirm is the record.`}
               </p>
               <p>
                 <ButtonLink
                   href={`/teach/sessions/${session.id}/register`}
                   variant={register.register_version > 0 ? "secondary" : "primary"}
                 >
-                  {register.register_version > 0 ? "Open the register" : "Take the register"}
+                  {register.register_version > 0 ? "Open the register" : "Confirm the register"}
                 </ButtonLink>
               </p>
             </div>

@@ -257,8 +257,9 @@ Every node carries the FR identifiers it serves. "(assumption)" marks a route wi
 │   └── /learn/materials/[materialId]      L-05  FR-301 (access logged), FR-306 (attach a note)
 ├── /learn/quizzes/[quizId]                L-06  FR-302, FR-303 (labelled as practice; does not count), FR-205 (attempt limit shown)
 │   └── /learn/quizzes/[quizId]/attempts/[attemptId]   L-06  FR-302
-├── /learn/calendar                        L-07  FR-304, FR-305, FR-203, FR-207
+├── /learn/calendar                        L-07  FR-304, FR-305, FR-203, FR-207, FR-209 ("I'm here" while a session is on)
 │   └── /learn/calendar/subscribe          L-08  FR-304 (external subscription; issue, rotate, revoke feed token)
+├── /learn/attendance                      L-20  FR-209 (own check-ins and confirmed marks; rate across confirmed registers)
 ├── /learn/results                         L-14  FR-316
 │   └── /learn/results/[resultId]          L-15  FR-316, FR-317, FR-603, NFR-11; decision history per BR-03, FR-803 effect explained
 │       └── /learn/results/[resultId]/appeal/new   L-16  FR-601, FR-602, FR-603, FR-604, AS-04
@@ -287,7 +288,8 @@ Every node carries the FR identifiers it serves. "(assumption)" marks a route wi
 ├── /teach/sessions                        F-06  FR-206, FR-207
 │   ├── /teach/sessions/new                F-06  FR-206 (Teams link format validated on entry)
 │   ├── /teach/sessions/[sessionId]        F-06  FR-206, FR-207 (reschedule, cancel, who is notified)
-│   └── /teach/sessions/[sessionId]/register   F-07  FR-209
+│   └── /teach/sessions/[sessionId]/register   F-07  FR-209 (confirm from the learners' check-ins; amend with a reason)
+├── /teach/attendance                      F-12  FR-209 (a cohort's attendance by learner; registers to confirm)
 └── /teach/submissions                     F-08  FR-210, FR-211
     ├── /teach/submissions/learners/[learnerId]   F-09  FR-210 (drill-down to history)
     └── /teach/submissions/reminders/new   F-10  FR-212
@@ -324,6 +326,7 @@ Every node carries the FR identifiers it serves. "(assumption)" marks a route wi
 │       ├── /setup                         C-03  FR-701; moderation policy change (P-01)
 │       ├── /people                        C-04  FR-701, FR-104, FR-105
 │       ├── /readiness                     C-05  FR-702
+│       ├── /attendance                    C-15  FR-209, FR-701 (the cohort's attendance by learner and by register; read-only)
 │       ├── /moderation                    C-06  FR-501, FR-506; plan, cancel, freeze and sample; pending pool
 │       │   ├── /cycles/new                C-06  FR-501 (manual or scheduled start)
 │       │   └── /cycles/[cycleId]          C-07  FR-502, FR-503, FR-504, FR-505 (seed, rule version, strata, inclusion reasons, allocations, reallocation)
@@ -385,7 +388,7 @@ Every FR with a human-facing surface appears below with the screen that is its p
 | FR-206 | F-06 | FR-318 | L-19 | FR-613 | L-17 (absence of control plus statement) |
 | FR-207 | F-06, G-05 | FR-401 | A-01, G-08 | FR-701 | C-03, C-04 |
 | FR-208 | F-04, L-04 | FR-402 | A-02 | FR-702 | C-05 |
-| FR-209 | F-07 | FR-403 | A-02 | FR-703 | C-09 |
+| FR-209 | F-07, L-07, L-20, F-12, C-15 | FR-403 | A-02 | FR-703 | C-09 |
 | FR-210 | F-08, F-09 | FR-404 | A-02 | FR-704 | C-10 |
 | FR-211 | F-08 | FR-405 | A-02 | FR-705 | C-11 |
 | FR-212 | F-10, F-08 | FR-406 | A-02 | FR-706 | C-11 |
@@ -441,7 +444,7 @@ Priority: **P0** must be prototyped (18 screens, chosen to prove the design acro
 | L-04 | Materials | `/learn/materials` | Learner | Browse and search material and recordings by module | Open item | Module, title, type, size for downloads | FR-301, FR-208 | P1 |
 | L-05 | Material viewer | `/learn/materials/[materialId]` | Learner | Read or download; attach a note | Download or open link | Title, description, file or link, related notes | FR-301, FR-306 | P2 |
 | L-06 | Quiz | `/learn/quizzes/[quizId]` | Learner | Practise and get instant feedback | Start attempt; submit | "Practice: does not count towards your result", attempts used of limit, score, per-question feedback | FR-302, FR-303, FR-205 | P1 |
-| L-07 | Calendar | `/learn/calendar` | Learner | Sessions, exam windows, due dates in list and month views | Join session | Agenda list (default on phone), month grid (desktop), Teams join link at session time | FR-304, FR-305, FR-203, FR-207 | P1 |
+| L-07 | Calendar | `/learn/calendar` | Learner | Sessions, exam windows, due dates in list and month views; mark yourself present while a session is on | Join session; I'm here | Agenda list (default on phone), month grid (desktop), Teams join link at session time, "I'm here" from ten minutes before the start until thirty minutes after the end or until the register is confirmed, then the check-in time, then the confirmed mark | FR-304, FR-305, FR-203, FR-207, FR-209 | P1 |
 | L-08 | Calendar subscription | `/learn/calendar/subscribe` | Learner | Subscribe from a phone calendar | Create link; copy; rotate; revoke | Feed URL shown once, what the feed contains and omits | FR-304 | P2 |
 | L-09 | Notes | `/learn/notes`, `/[noteId]` | Learner | Private notes, searchable, optionally linked to material or session | New note | Note list, search, link target, "Only you can see your notes" | FR-306, FR-307 | P2 |
 | L-10 | Exams | `/learn/exams` | Learner | Upcoming and past exams | Open pre-flight | Window, duration, attempts, status | FR-312, FR-304 | P2 |
@@ -454,22 +457,24 @@ Priority: **P0** must be prototyped (18 screens, chosen to prove the design acro
 | L-17 | Appeals tracker | `/learn/appeals`, `/[appealId]` | Learner | Track status, read outcome and reasons | View outcome | Timeline of states, inadmissible reason, outcome, reasons, "This decision is final" | FR-612, FR-613, FR-605 | P1 |
 | L-18 | Marked script | `/learn/appeals/[appealId]/script` | Learner | See own submission beside marks per criterion and feedback | Request a remark (if still open) | Submission, criterion marks, feedback, remaining appeal window | FR-606, FR-607 | P1 |
 | L-19 | Credits record | `/learn/credits` | Learner | See credits earned and outstanding | Open unit | Total earned of required, per-unit status, outstanding units, ledger history including adjustments | FR-318, FR-801 to FR-804 | **P0** |
+| L-20 | Attendance | `/learn/attendance` | Learner | See every session with the own check-in and the confirmed mark, and the rate | I'm here (when a session is on) | "Present at 8 of 10 sessions (80%)" over confirmed registers only; per session: check-in time, Present, Absent, "Checked in, awaiting confirmation", confirmed time | FR-209 | P1 |
 
 #### Facilitator
 
 | ID | Screen | Route | Roles | Purpose | Primary action | Key data shown | FRs | Pri |
 |---|---|---|---|---|---|---|---|---|
-| F-01 | Teaching overview | `/teach` | Facilitator | Today's sessions and assignments with outstanding work | Open submissions | Per assignment: submitted, outstanding, late counts | FR-210 | P2 |
+| F-01 | Teaching overview | `/teach` | Facilitator | Today's sessions, registers to confirm, and assignments with outstanding work | Open submissions; Confirm register | Today's sessions with check-ins so far; registers still to confirm, latest first; per assignment: submitted, outstanding, late counts | FR-210, FR-209 | P2 |
 | F-02 | Assignments | `/teach/tasks` | Facilitator | Drafts and published assignments | New assignment | Title, state (Draft, Published), due date, audience | FR-201, FR-202 | P2 |
 | F-03 | Assignment editor | `/teach/tasks/new`, `/[taskId]/edit` | Facilitator | Build brief, rubric, due date, submission type, audience; save draft; publish | Publish | Form sections, draft state, publish confirmation naming recipients and calendar effect | FR-201, FR-202, FR-203 | P1 |
 | F-04 | Materials manager | `/teach/materials`, `/new`, `/[materialId]/edit` | Facilitator | Upload or link material and recordings, tag to module, set visibility, publish or schedule | Publish or schedule | State (Draft, Scheduled, Published, Archived), module, release time | FR-204, FR-208 | P1 |
 | F-05 | Quiz builder and question bank | `/teach/quizzes/[quizId]/edit`, `/teach/question-bank` | Facilitator | Compose quiz, scoring, feedback, attempt limit | Publish quiz | Questions, keys, feedback, attempt limit | FR-205 | P2 |
 | F-06 | Sessions | `/teach/sessions`, `/new`, `/[sessionId]` | Facilitator | Schedule with Teams link, once or as a series (every day, week, two weeks or month, 2 to 26 sessions); reschedule or cancel, one session or the rest of its series (the rest keep the rhythm) | Save session | Date, time, duration, repeat and count, audience, link validity, who will be notified (once per series) | FR-206, FR-207 | P1 |
-| F-07 | Register | `/teach/sessions/[sessionId]/register` | Facilitator | Mark present or absent; amend with logged reason | Save register | Roster, present or absent, amendment log | FR-209 | P1 |
+| F-07 | Register | `/teach/sessions/[sessionId]/register` | Facilitator | Confirm the register from the learners' check-ins (checked in: present; not: absent), changing any mark that is wrong; amend with logged reason | Confirm register | Roster with each learner's check-in time, present or absent, "9 of 12 checked in", amendment log naming which confirmed marks were self-marked | FR-209 | P1 |
 | F-08 | Submission dashboard | `/teach/submissions` | Facilitator | See at a glance who has not submitted | Send reminder to selected | Per assignment and learner: Submitted, Outstanding, Late; filters; export; selection | FR-210, FR-211, FR-212 | **P0** |
 | F-09 | Learner submission history | `/teach/submissions/learners/[learnerId]` | Facilitator | Drill-down for one learner | Send reminder | All assignments, versions, timestamps, late flags, reminders sent | FR-210 | P1 |
 | F-10 | Send reminder | `/teach/submissions/reminders/new` | Facilitator | Compose reminder to selected learners | Send | Recipients, assignment, message preview, "logged against each learner" | FR-212 | P1 |
 | F-11 | Exam setup | `/teach/exams/[examId]/edit` | Facilitator | Window, duration, attempt limit, questions (assumption) | Publish exam | Window, duration, attempts, question manifest | FR-201, FR-312 | P2 |
+| F-12 | Attendance | `/teach/attendance` | Facilitator | A cohort's attendance at a glance; which registers still need confirming | Confirm register | Registers confirmed, registers to confirm, average attendance; per learner: rate meter, present, absent, last absent; per session: check-ins so far or confirmed counts, confirmed by whom | FR-209 | P1 |
 
 #### Assessor
 
@@ -496,7 +501,7 @@ Priority: **P0** must be prototyped (18 screens, chosen to prove the design acro
 | ID | Screen | Route | Roles | Purpose | Primary action | Key data shown | FRs | Pri |
 |---|---|---|---|---|---|---|---|---|
 | C-01 | Coordinator overview | `/coordinate` | Coordinator | What needs attention across cohorts | Open item | Appeals awaiting action, held results by age (P-03), open readiness items, headcount variances, undelivered notices | FR-604, FR-702, FR-707 | P1 |
-| C-02 | Cohorts and cohort overview | `/coordinate/cohorts`, `/[cohortId]` | Coordinator | List and summary | New cohort | Dates, policy, enrolment count, readiness, moderation state | FR-701 | P2 |
+| C-02 | Cohorts and cohort overview | `/coordinate/cohorts`, `/[cohortId]` | Coordinator | List and summary | New cohort | Dates, policy, enrolment count, attendance average, readiness, moderation state | FR-701 | P2 |
 | C-03 | Cohort setup | `/coordinate/cohorts/new`, `/[cohortId]/setup` | Coordinator | Create cohort: dates, moderation policy, people | Create cohort; save | Programme, dates, required moderation policy with consequences, policy version history, enrolment and role summary | FR-701, FR-104, BR-04 | **P0** |
 | C-04 | People | `/coordinate/cohorts/[cohortId]/people` | Coordinator | Enrol learners; assign and end facilitator, assessor, moderator roles | Add person | Roster by role, open allocations per person, conflict panel | FR-701, FR-104, FR-105 | P1 |
 | C-05 | Readiness checklist | `/coordinate/cohorts/[cohortId]/readiness` | Coordinator | Track and assign open items | Assign item | Category, state, assignee, due date; includes "moderation policy confirmed" | FR-702 | P1 |
@@ -509,6 +514,7 @@ Priority: **P0** must be prototyped (18 screens, chosen to prove the design acro
 | C-12 | Appeals administration | `/coordinate/appeals`, `/[appealId]` | Coordinator | Decide admissibility; grant script view; allocate reviewer | Admit; Allocate reviewer | Queue by state and age; grounds; release and notification evidence; candidate reviewers by AS-02 tier; excluded users with reasons | FR-604, FR-605, FR-606, FR-608 | **P0** |
 | C-13 | Reports | `/coordinate/reports`, `/[reportType]` | Coordinator | Run and export scoped reports | Export | Report types in FR-708, scope (programme, cohort, date range), asynchronous export status | FR-708 | P1 |
 | C-14 | Result corrections | `/coordinate/corrections` | Coordinator plus a second authorised user | Propose and approve a correction under dual control | Propose; Approve | Current decision, proposed decision, proposer, approver, reason | BR-03, P-12 | P2 |
+| C-15 | Cohort attendance | `/coordinate/cohorts/[cohortId]/attendance` | Coordinator | Read the cohort's attendance by learner and by register | Open register (none: read-only) | Same figures and tables as F-12; the cohort overview (C-02) carries the average | FR-209, FR-701 | P2 |
 
 #### System Administrator
 
@@ -553,7 +559,7 @@ Each specification lists content blocks in reading order, the states that the pr
 
 | Aspect | Specification |
 |---|---|
-| Block order | 1. "New results" cards, only when a released result has an open appeal window or an open resubmission: item, outcome, "You can appeal until the end of Tuesday 29 September 2026". 2. "Do next": overdue, then due within 7 days, each with due date and status. 3. "Today": sessions with Join button active from 10 minutes before start (assumption) and exam windows. 4. "Being assessed": submitted items awaiting a result, with the moderation explainer link. 5. Credit progress: "32 of 140 credits earned". |
+| Block order | 1. "New results" cards, only when a released result has an open appeal window or an open resubmission: item, outcome, "You can appeal until the end of Tuesday 29 September 2026". 2. "Do next": overdue, then due within 7 days, each with due date and status. 3. "Today": sessions with Join button active from 10 minutes before start (assumption) and "I'm here" over the same window (FR-209; until thirty minutes after the end or until the facilitator confirms the register), then the check-in time, then the confirmed mark; exam windows. An "Your attendance" card gives the rate over confirmed registers once any session has started. 4. "Being assessed": submitted items awaiting a result, with the moderation explainer link. 5. Credit progress: "32 of 140 credits earned". |
 | Rules | Nothing on this screen changes when a held decision is made (principle 1). Block 1 disappears when the appeal window and resubmission deadline have both passed; the result remains under Results. |
 | States | New learner with nothing due; busy week; NYC with resubmission open; exam open now ("Open now, closes 12:00", with "Use a laptop or desktop computer" on phones); archived cohort (read-only banner). |
 | Client islands | None required. |
@@ -1094,7 +1100,19 @@ The in-app record is the notification of record for NFR-11; email states are sup
 
 If archival preconditions fail, X-10 lists each unmet condition with counts: "3 results are still held", "Appeal windows still open until the end of 29 Sep 2026", "1 appeal is not concluded".
 
-### 7.9 Feedback patterns
+### 7.9 Session register
+
+| State | Label | What changes in the UI |
+|---|---|---|
+| Check-in not open | (none) | Nothing on the learner's agenda; the facilitator's lists say "Opens with the session" |
+| Check-in open | Check-in open | "I'm here" on the learner's home, calendar and attendance page from ten minutes before the start; after pressing it, "Checked in 09:03" and "Your facilitator confirms the register"; the facilitator's lists count check-ins as they happen |
+| Check-in closed, register not confirmed | To confirm | Thirty minutes after the end: the learner sees "Not checked in" or "Checked in, awaiting confirmation"; the session appears under "Registers to confirm" on the teaching overview and attendance page |
+| Register confirmed | Confirmed | The learner sees Present or Absent with the confirmed time; check-in is closed whatever the time; the facilitator amends with a reason (F-07); the coordinator's cohort overview and attendance page count it |
+| Cancelled | Cancelled, no register | No check-in, no register, no row on the attendance pages |
+
+The confirmed register is the record. A check-in on its own never counts as attendance, and no rate is shown before a register is confirmed.
+
+### 7.10 Feedback patterns
 
 | Pattern | Use for | Behaviour |
 |---|---|---|

@@ -26,7 +26,7 @@ The governing invariants are:
 
 The deployment serves one institution. Role assignments are scoped globally or by programme, cohort, or unit; allocation to a specific assessment, sample item, or appeal is held on that work item. There is no institutional routing, cross-institution identity, tenant provisioning, white labelling, tenant billing, or per-institution database strategy.
 
-Deferred or excluded capabilities are plagiarism checking, native video conferencing, automatic Microsoft Teams attendance, certification, webcam or biometric proctoring, external or second-level appeals, and recognition of prior learning unless separately approved. Microsoft Teams is represented only by validated meeting and recording links. Attendance is recorded manually.
+Deferred or excluded capabilities are plagiarism checking, native video conferencing, automatic Microsoft Teams attendance, certification, webcam or biometric proctoring, external or second-level appeals, and recognition of prior learning unless separately approved. Microsoft Teams is represented only by validated meeting and recording links. Attendance is recorded in the LMS: a learner marks themselves present while a session is on, and the facilitator confirms the register; nothing is read from Teams.
 
 ## Assumptions and open decisions
 

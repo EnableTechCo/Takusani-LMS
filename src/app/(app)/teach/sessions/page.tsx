@@ -3,6 +3,7 @@ import { ButtonLink, TextLink } from "@/components/ui/link";
 import { EmptyState, Tag } from "@/components/ui/status";
 import { DataTable } from "@/components/ui/table";
 import { formatDateTime } from "@/lib/dates";
+import { sessionAttendanceText, sessionRegisterTag } from "@/modules/learning/attendance-rules";
 import { listSessions } from "@/modules/learning/sessions-queries";
 import { seriesLabel } from "@/modules/learning/series-rules";
 import { durationText } from "@/modules/notifications/templates";
@@ -45,6 +46,28 @@ function SessionTable({ caption, sessions }: { caption: string; sessions: Sessio
           cell: (session) =>
             session.state === "cancelled" ? <Tag tone="caution">Cancelled</Tag> : <Tag tone="info">Scheduled</Tag>,
         },
+        {
+          key: "attendance",
+          header: "Attendance",
+          cell: (session) => {
+            if (session.state === "cancelled") return <span className="text-muted">No register</span>;
+            const tag = sessionRegisterTag(session);
+            return (
+              <>
+                {session.checkin_state === "not_open" ? (
+                  <span className="text-muted">Opens with the session</span>
+                ) : (
+                  <TextLink href={`/teach/sessions/${session.id}/register`}>{sessionAttendanceText(session)}</TextLink>
+                )}
+                {tag ? (
+                  <span className="table__secondary">
+                    <Tag tone={tag.tone}>{tag.label}</Tag>
+                  </span>
+                ) : null}
+              </>
+            );
+          },
+        },
       ]}
       rowKey={(session) => session.id}
       rows={sessions}
@@ -52,7 +75,8 @@ function SessionTable({ caption, sessions }: { caption: string; sessions: Sessio
   );
 }
 
-// F-06 (FR-206, FR-207): the sessions of this person's cohorts. Upcoming first, soonest first; then those held.
+// F-06 (FR-206, FR-207, FR-209): the sessions of this person's cohorts, each with its register. Upcoming first,
+// soonest first; then those held.
 export default async function TeachSessionsPage() {
   const sessions = await listSessions();
   const now = new Date();
@@ -69,7 +93,7 @@ export default async function TeachSessionsPage() {
             Schedule a session
           </ButtonLink>
         }
-        lead="Live sessions for your cohorts, online in Teams or in person. Times are SAST."
+        lead="Live sessions for your cohorts, online in Teams or in person, each with its register. Times are SAST."
         title="Sessions"
         workspace="Teaching"
       />

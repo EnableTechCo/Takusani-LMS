@@ -3,6 +3,8 @@ import { CohortNav } from "@/components/shell/cohort-nav";
 import { PageHeader } from "@/components/shell/page-header";
 import { Block, Blocks } from "@/components/skeleton/skeleton";
 import { formatDay } from "@/lib/dates";
+import { getCohortAttendance } from "@/modules/learning/attendance-queries";
+import { cohortAttendanceLine } from "@/modules/learning/attendance-tables";
 import { getCohort } from "@/modules/programmes/queries";
 import { MODERATION_POLICY_LABELS } from "@/modules/programmes/rules";
 import { COHORT_STATUS_LABELS } from "@/modules/programmes/setup-rules";
@@ -17,6 +19,7 @@ export async function generateMetadata({ params }: { params: Promise<{ cohortId:
 export default async function CohortOverviewPage({ params }: { params: Promise<{ cohortId: string }> }) {
   const cohort = await getCohort((await params).cohortId);
   if (!cohort) notFound();
+  const attendance = await getCohortAttendance(cohort.id);
 
   return (
     <div className="page">
@@ -36,6 +39,15 @@ export default async function CohortOverviewPage({ params }: { params: Promise<{
             <div className="card__body">
               <dt className="text-small text-muted">Learners enrolled</dt>
               <dd>{cohort.enrolment_count}</dd>
+            </div>
+          </div>
+          <div className="card">
+            <div className="card__body">
+              <dt className="text-small text-muted">Attendance</dt>
+              <dd>
+                {cohortAttendanceLine(attendance)}{" "}
+                <TextLink href={`/coordinate/cohorts/${cohort.id}/attendance`}>By learner</TextLink>
+              </dd>
             </div>
           </div>
           <div className="card">

@@ -1,8 +1,10 @@
 // @vitest-environment jsdom
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import "@/components/ui/test-dom";
 import { Agenda, agendaItems } from "./agenda";
+
+vi.mock("./attendance-actions", () => ({ markMyAttendance: vi.fn() }));
 
 const now = new Date("2026-09-28T10:00:00+02:00");
 const teams = "https://teams.microsoft.com/l/meetup-join/19%3ameeting_abc%40thread.v2/0";
@@ -19,6 +21,9 @@ const sessions = [
     state: "scheduled",
     cancel_reason: null,
     facilitator_name: "Pieter van Wyk",
+    checkin_state: "not_open",
+    checked_in_at: null,
+    attendance: null,
   },
   {
     id: "s2",
@@ -31,6 +36,9 @@ const sessions = [
     state: "cancelled",
     cancel_reason: "The venue is closed for repairs.",
     facilitator_name: "Pieter van Wyk",
+    checkin_state: "cancelled",
+    checked_in_at: null,
+    attendance: null,
   },
 ];
 
@@ -59,5 +67,39 @@ describe("Agenda (L-07, FR-305)", () => {
     expect(screen.getByText("Cancelled")).toBeInTheDocument();
     expect(container).toHaveTextContent("The venue is closed for repairs.");
     expect(screen.queryByRole("link", { name: /Join in Teams/ })).toBeNull();
+  });
+});
+
+describe("attendance on the agenda (FR-209)", () => {
+  const onNow = {
+    ...sessions[0],
+    id: "s3",
+    starts_at: "2026-09-28T09:30:00+02:00",
+    checkin_state: "open",
+  };
+
+  it("offers I'm here while check-in is open", () => {
+    render(<Agenda items={agendaItems([onNow], [], now)} label="Coming up" now={now} />);
+    expect(screen.getByRole("button", { name: /^I'm here/ })).toBeInTheDocument();
+  });
+
+  it("shows the check-in time once marked, and the confirmed mark after that", () => {
+    const { container } = render(
+      <Agenda
+        items={agendaItems(
+          [
+            { ...onNow, checked_in_at: "2026-09-28T09:32:00+02:00" },
+            { ...onNow, id: "s4", checkin_state: "confirmed", checked_in_at: null, attendance: "absent" },
+          ],
+          [],
+          now,
+        )}
+        label="Coming up"
+        now={now}
+      />,
+    );
+    expect(container).toHaveTextContent("Checked in 09:32");
+    expect(screen.queryByRole("button", { name: /I'm here/ })).toBeNull();
+    expect(screen.getByText("Absent")).toBeInTheDocument();
   });
 });
