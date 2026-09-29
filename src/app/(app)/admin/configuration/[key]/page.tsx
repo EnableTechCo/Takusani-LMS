@@ -52,7 +52,8 @@ export default async function ConfigurationKeyPage({
 }) {
   const [{ key }, flash] = await Promise.all([params, searchParams]);
   const setting = await getConfigurationKey(decodeURIComponent(key));
-  if (!setting) notFound();
+  // Exam settings stay recorded but are not served: exams are deprecated and in the backlog (29 Sep 2026).
+  if (!setting || setting.key.startsWith("exam.")) notFound();
 
   const shape = { ...setting, choices: setting.choices as unknown as Choice[] | null };
   const versions = (setting.versions ?? []) as unknown as Version[];
@@ -104,9 +105,8 @@ export default async function ConfigurationKeyPage({
           {!setting.in_use ? (
             <Banner role="note" title="Recorded now, read later" tone="info">
               <p>
-                The LMS does not read this setting yet: it is used when{" "}
-                {setting.key.startsWith("exam.") ? "exams are" : "moderation is"} built. The value you record here is
-                the one it will use then.
+                The LMS does not read this setting yet: it is used when moderation is built. The value you record here
+                is the one it will use then.
               </p>
             </Banner>
           ) : null}

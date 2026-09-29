@@ -9,12 +9,12 @@ export default function SearchPage() {
       id="G-07"
       frs="FR-301"
       title="Search"
-      lead="Find materials, assignments, sessions and exams within your own scope."
+      lead="Find materials, assignments and sessions within your own scope."
     >
       <Form fields={[{ label: "Search", type: "search" }]} />
       <Block
         label="Grouped results"
-        detail="Learners: materials, recordings, assignments, sessions and exams. Staff: records within their scope. Private notes are searched only inside Notes."
+        detail="Learners: materials, recordings, assignments and sessions. Staff: records within their scope. Private notes are searched only inside Notes."
         size="lg"
       />
     </Screen>
