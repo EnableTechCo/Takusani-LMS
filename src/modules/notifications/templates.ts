@@ -498,6 +498,7 @@ const READINESS_ITEM_NAMES_V2: Record<string, string> = {
   ...READINESS_ITEM_NAMES,
   published_tasks: "publish an assignment",
   logistics: "arrange the logistics",
+  unit_requirements: "freeze the unit credit requirements",
 };
 
 /** FR-702: a coordinator assigned an open readiness item to the person (S4-03). */
@@ -663,6 +664,20 @@ function correctionConcluded(payload: Payload): Rendered {
   };
 }
 
+/** Administrators: the daily credit reconciliation found the ledger and the rule out of step (S6-01, ADR-022). */
+function creditReconciliationDifferences(payload: Payload): Rendered {
+  const count = typeof payload.differences === "number" ? payload.differences : Number(text(payload, "differences"));
+  const noun = count === 1 ? "difference" : "differences";
+  return {
+    title: `Credit reconciliation found ${count} ${noun}`,
+    summary: "The credit ledger and the award rule disagree. Nothing was changed.",
+    paragraphs: [
+      `The daily reconciliation compared every learner's credit ledger with the award in force and with the unit requirements, and found ${count} ${noun}. It changes no credit: each one points to a fault to investigate before a learner's record is relied on.`,
+    ],
+    action: "Open the reconciliation",
+  };
+}
+
 /** A coordinator's alert that a stakeholder query was routed to them (S6-03, FR-704). */
 function queryAssigned(payload: Payload): Rendered {
   const reference = text(payload, "reference");
@@ -708,6 +723,7 @@ const TEMPLATES: Record<string, Record<number, (payload: Payload) => Rendered>> 
   result_corrected: { 1: resultCorrected },
   correction_proposed: { 1: correctionProposed },
   correction_concluded: { 1: correctionConcluded },
+  credit_reconciliation_differences: { 1: creditReconciliationDifferences },
   account_deactivated: { 1: accountDeactivated },
   account_reactivated: { 1: accountReactivated },
   sign_in_locked: { 1: signInLocked },

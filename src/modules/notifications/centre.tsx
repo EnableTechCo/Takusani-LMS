@@ -55,6 +55,7 @@ const ICONS: Record<string, IconName> = {
   result_corrected: "check-circle",
   correction_proposed: "pencil",
   correction_concluded: "pencil",
+  credit_reconciliation_differences: "chart",
 };
 
 function Evidence({ row, title }: { row: NotificationRow; title: string }) {

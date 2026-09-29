@@ -107,6 +107,7 @@ export const WORKSPACES: readonly Workspace[] = [
       { label: "Audit log", href: "/admin/audit" },
       { label: "Cohort archive", href: "/admin/cohorts" },
       { label: "Corrections", href: "/admin/corrections" },
+      { label: "Credit reconciliation", href: "/admin/credits" },
     ],
   },
 ];

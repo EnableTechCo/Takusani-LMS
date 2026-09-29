@@ -2,7 +2,7 @@
 
 ## Status
 
-Proposed. Refines the award keying in ADR-016; the immutable decisions and append-only ledger of ADR-016 stand.
+Accepted (S6-01, 29 Sep 2026, with P-07 confirmed). Refines the award keying in ADR-016; the immutable decisions and append-only ledger of ADR-016 stand.
 
 ## Context
 
@@ -10,7 +10,7 @@ FR-801 awards credit per unit, while decisions are recorded per assessable item 
 
 ## Decision
 
-`unit_assessment_requirements` lists the assessable items required per unit as a versioned set, frozen per cohort at activation. `learner_unit_outcomes` holds one mutable row per learner and unit with the derived unit outcome, award state, and a monotonic `award_seq`. Every release or supersession that touches a required item upserts and locks that row `FOR UPDATE`, re-evaluates the unit, and appends an `award` or `reversal` ledger entry when the award state changes. Ledger uniqueness is `(learner_id, unit_id, award_seq, entry_type)`. Each entry stores the contributing decision identifiers, the requirement-set version, and the credit value in force. A scheduled reconciliation compares ledger and rule and alerts on any difference. The derived unit outcome also serves "competency outcomes by unit" in the Department API.
+`unit_assessment_requirements` lists the assessable items required per unit as a versioned set, frozen per cohort by its coordinator (a readiness item, not an activation gate, because assessments are published after activation too). `learner_unit_outcomes` holds one mutable row per learner and unit with the derived unit outcome, award state, and a monotonic `award_seq`. Every release or supersession that touches a required item upserts and locks that row `FOR UPDATE`, re-evaluates the unit, and appends an `award` or `reversal` ledger entry when the award state changes. Ledger uniqueness is `(learner_id, unit_id, award_seq, entry_type)`. Each entry stores the contributing decision identifiers, the requirement-set version, and the credit value in force. A scheduled reconciliation compares ledger and rule and alerts on any difference. The derived unit outcome also serves "competency outcomes by unit" in the Department API.
 
 ## Alternatives considered
 

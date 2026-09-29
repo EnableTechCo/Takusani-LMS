@@ -265,7 +265,14 @@ insert into expected_grants values
   ('function', 'api', 'get_my_result_correction(p_result_id uuid)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'propose_correction(p_result_id uuid, p_outcome text, p_justification text, p_reason text, p_remediation text, p_resubmission_days integer)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'conclude_correction(p_correction_id uuid, p_approve boolean, p_reason text)', 'authenticated', 'EXECUTE'),
-  ('function', 'api', 'withdraw_correction(p_correction_id uuid)', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'withdraw_correction(p_correction_id uuid)', 'authenticated', 'EXECUTE'),
+  -- Unit credit requirements (20261115090000): coordinators of the cohort, checked inside each function; the
+  -- reconciliation read is administrators only.
+  ('function', 'api', 'save_requirement_draft(p_cohort_id uuid, p_requirements jsonb)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'discard_requirement_draft(p_cohort_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'freeze_requirement_set(p_cohort_id uuid, p_requirement_set_id uuid, p_reason text)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'get_cohort_credit_requirements(p_cohort_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'get_credit_reconciliation()', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (

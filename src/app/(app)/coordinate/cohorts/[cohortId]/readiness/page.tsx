@@ -80,6 +80,11 @@ export default async function ReadinessPage({ params }: { params: Promise<{ coho
                       {" "}
                       <TextLink href="/coordinate/logistics">Open logistics</TextLink>
                     </>
+                  ) : item.item_key === "unit_requirements" ? (
+                    <>
+                      {" "}
+                      <TextLink href={`/coordinate/cohorts/${cohort.cohort_id}/credits`}>Open credits</TextLink>
+                    </>
                   ) : null}
                 </p>
                 {item.assignee_name ? (

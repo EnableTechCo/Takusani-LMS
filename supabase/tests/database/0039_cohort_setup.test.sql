@@ -135,7 +135,8 @@ select results_eq(format($$ select item_key, done from api.get_cohort_readiness(
             ('assessor', false), ('moderator', false) $$,
   'the checklist shows what activation still needs');
 select results_eq(format($$ select item_key, done, detail from api.get_cohort_readiness(%L) where not gate $$, :'cohort'),
-  $$ values ('materials'::text, false, '0'::text), ('published_tasks', true, '1'), ('sessions', true, '1'), ('logistics', false, '0/1') $$,
+  $$ values ('materials'::text, false, '0'::text), ('published_tasks', true, '1'), ('sessions', true, '1'), ('logistics', false, '0/1'),
+            ('unit_requirements', false, null) $$,
   'and what else is ready, counted from the cohort');
 select results_eq(format($$ select status, missing from api.activate_cohort(%L) $$, :'cohort'),
   $$ values ('not_ready'::text, array['facilitator', 'assessor', 'moderator']) $$,

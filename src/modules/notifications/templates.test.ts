@@ -195,6 +195,18 @@ describe("renderNotification", () => {
     expect(declined.paragraphs[0]).toMatch(/Their reason: "The appendix does not cover AC 3.1."$/);
   });
 
+  it("tells administrators the credit reconciliation found differences, and that nothing changed", () => {
+    const one = renderNotification("credit_reconciliation_differences", 1, {
+      differences: 1,
+      found_at: "2026-09-29T22:40:00Z",
+    });
+    expect(one.title).toBe("Credit reconciliation found 1 difference");
+    expect(one.summary).toBe("The credit ledger and the award rule disagree. Nothing was changed.");
+    expect(renderNotification("credit_reconciliation_differences", 1, { differences: 3 }).title).toBe(
+      "Credit reconciliation found 3 differences",
+    );
+  });
+
   it("refuses an unknown template or a payload missing a fact, rather than sending a broken email", () => {
     expect(() => renderNotification("result_released", 2, released)).toThrow("no template");
     expect(() => renderNotification("result_released", 1, { ...released, item_title: "" })).toThrow("item_title");
