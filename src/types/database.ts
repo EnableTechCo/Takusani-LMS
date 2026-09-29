@@ -492,6 +492,18 @@ export type Database = {
           status: string
         }[]
       }
+      freeze_moderation_cycle: {
+        Args: {
+          p_cycle_id: string
+          p_expected_version: number
+          p_seed?: string
+        }
+        Returns: {
+          population: number
+          sample: number
+          status: string
+        }[]
+      }
       get_account: {
         Args: { p_profile_id: string }
         Returns: {
@@ -715,6 +727,27 @@ export type Database = {
           unit_id: string
           unit_title: string
           waiting: number
+        }[]
+      }
+      get_moderation_sample: {
+        Args: { p_cycle_id: string }
+        Returns: {
+          algorithm_version: string
+          allocations: Json
+          cycle_id: string
+          digest: string
+          frozen_at: string
+          frozen_by_name: string
+          mandatory_first_time: number
+          mandatory_nyc: number
+          percentage: number
+          population: number
+          random_draw: number
+          rule_version: number
+          sample_size: number
+          seed: string
+          strata: Json
+          unallocated: number
         }[]
       }
       get_moderation_summary: {
@@ -1269,6 +1302,7 @@ export type Database = {
           period_to: string
           planned_at: string
           planned_by_name: string
+          sampled: number
           scheduled_start_at: string
           state: string
           unit_ids: string[]

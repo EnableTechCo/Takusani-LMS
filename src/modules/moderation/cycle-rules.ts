@@ -32,6 +32,51 @@ export interface CycleRow {
   items: { id: string; title: string; via_unit_id: string | null }[];
   waiting: number;
   held: number;
+  sampled: number;
+}
+
+export interface SampleRecord {
+  cycle_id: string;
+  frozen_at: string;
+  frozen_by_name: string | null;
+  population: number;
+  digest: string;
+  sample_size: number;
+  mandatory_nyc: number;
+  mandatory_first_time: number;
+  random_draw: number;
+  percentage: number;
+  rule_version: number;
+  algorithm_version: string;
+  seed: string;
+  strata: { stratum: string; population: number; sampled: number; why: string }[];
+  allocations: { moderator_name: string; count: number }[];
+  unallocated: number;
+}
+
+/** "23% of the population". */
+export function sampleShareText(sampleSize: number, population: number): string {
+  return population > 0 ? `${Math.round((sampleSize / population) * 100)}% of the population` : "No population";
+}
+
+/** "6 Not yet competent · 4 by a first-time assessor". */
+export function mandatoryText(nyc: number, firstTime: number): string {
+  const parts: string[] = [];
+  if (nyc > 0) parts.push(`${nyc} Not yet competent`);
+  if (firstTime > 0) parts.push(`${firstTime} by a first-time assessor`);
+  return parts.length ? parts.join(" · ") : "None";
+}
+
+/** "All 22 allocated to Anil Naidoo" or "12 to Anil Naidoo, 10 to Thabo Nkosi; 1 waits for a moderator". */
+export function allocationsText(record: Pick<SampleRecord, "allocations" | "unallocated" | "sample_size">): string {
+  const parts = record.allocations.map((a) => `${a.count} to ${a.moderator_name}`);
+  const shared =
+    record.allocations.length === 1 && record.unallocated === 0
+      ? `All ${record.sample_size} allocated to ${record.allocations[0].moderator_name}`
+      : parts.join(", ");
+  if (record.unallocated === 0) return shared || "Nothing to allocate";
+  const waiting = `${record.unallocated} ${record.unallocated === 1 ? "waits" : "wait"} for a moderator: everyone eligible assessed ${record.unallocated === 1 ? "it" : "them"}`;
+  return shared ? `${shared}; ${waiting}` : waiting;
 }
 
 export interface PoolRow {
@@ -202,5 +247,7 @@ export const MODERATION_REFUSALS: Record<string, string> = {
   not_planned: "This cycle is no longer planned: it has been frozen or cancelled, so it cannot be cancelled.",
   stale_version: "This cycle changed while you had the page open. Reload it; nothing was changed.",
   reason_required: "Say why the cycle is cancelled, in up to 500 characters. It is kept with the cycle.",
+  nothing_to_freeze:
+    "Nothing is waiting in this cycle's scope, so there is nothing to freeze. It can freeze once a result is decided.",
   error: "It could not be saved. Try again.",
 };

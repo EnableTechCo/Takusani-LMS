@@ -1,13 +1,16 @@
 import { describe, expect, it } from "vitest";
 import {
+  allocationsText,
   assessorsText,
   cycleStateText,
   holdCaution,
   holdDays,
   holdText,
   itemFateText,
+  mandatoryText,
   periodText,
   poolLead,
+  sampleShareText,
   samplingRuleText,
   scopeText,
   startText,
@@ -134,5 +137,27 @@ describe("pool wording", () => {
     expect(samplingRuleText(summary())).toBe(
       "Version 1: 10% of Competent results at random, stratified by assessor, outcome and unit; every Not yet competent decision and every first-time assessor's decisions.",
     );
+  });
+});
+
+describe("sample record wording", () => {
+  it("says the sample's share, the mandatory inclusions and who holds the items", () => {
+    expect(sampleShareText(22, 96)).toBe("23% of the population");
+    expect(sampleShareText(0, 0)).toBe("No population");
+    expect(mandatoryText(6, 4)).toBe("6 Not yet competent · 4 by a first-time assessor");
+    expect(mandatoryText(0, 0)).toBe("None");
+    expect(
+      allocationsText({ allocations: [{ moderator_name: "Anil Naidoo", count: 22 }], unallocated: 0, sample_size: 22 }),
+    ).toBe("All 22 allocated to Anil Naidoo");
+    expect(
+      allocationsText({
+        allocations: [
+          { moderator_name: "Anil Naidoo", count: 2 },
+          { moderator_name: "Thabo Nkosi", count: 1 },
+        ],
+        unallocated: 1,
+        sample_size: 4,
+      }),
+    ).toBe("2 to Anil Naidoo, 1 to Thabo Nkosi; 1 waits for a moderator: everyone eligible assessed it");
   });
 });
