@@ -89,7 +89,8 @@ describe("homePathFor", () => {
   it("follows the landing rules", () => {
     expect(homePathFor(null)).toBe("/sign-in");
     expect(homePathFor(access())).toBe("/learn");
-    expect(homePathFor(access({ roles: ["learner", "assessor"] }))).toBe("/home");
+    expect(homePathFor(access({ roles: ["learner", "assessor"] }))).toBe("/learn");
+    expect(homePathFor(access({ roles: ["coordinator"] }))).toBe("/coordinate");
     expect(homePathFor(access({ status: "deactivated" }))).toBe("/sign-in");
   });
 

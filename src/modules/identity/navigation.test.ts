@@ -26,10 +26,12 @@ describe("workspacesFor", () => {
 });
 
 describe("landingPathFor", () => {
-  it("sends a learner to /learn and any staff role to /home", () => {
+  it("lands everyone on the overview of the first workspace they hold, Learning first", () => {
     expect(landingPathFor({ roles: ["learner"], hasReviewAllocation: false })).toBe("/learn");
-    expect(landingPathFor({ roles: ["learner", "assessor"], hasReviewAllocation: false })).toBe("/home");
-    expect(landingPathFor({ roles: ["facilitator"], hasReviewAllocation: false })).toBe("/home");
+    expect(landingPathFor({ roles: ["learner", "assessor"], hasReviewAllocation: false })).toBe("/learn");
+    expect(landingPathFor({ roles: ["facilitator"], hasReviewAllocation: false })).toBe("/teach");
+    expect(landingPathFor({ roles: ["administrator", "coordinator"], hasReviewAllocation: false })).toBe("/coordinate");
+    expect(landingPathFor({ roles: [], hasReviewAllocation: true })).toBe("/review");
   });
 
   it("sends someone with no roles to sign in", () => {

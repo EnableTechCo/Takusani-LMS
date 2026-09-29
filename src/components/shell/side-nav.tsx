@@ -15,8 +15,8 @@ function Items({ workspace }: { workspace: Workspace }) {
 }
 
 /**
- * Side navigation (UX section 3.3). One role: a flat list labelled by its workspace. Several: "My work" first,
- * then a heading per workspace. There is no role switcher.
+ * Side navigation (UX section 3.3). One role: a flat list labelled by its workspace. Several: a heading per
+ * workspace, each starting with its overview. There is no role switcher.
  */
 export function SideNav({ workspaces }: { workspaces: Workspace[] }) {
   if (workspaces.length === 0) {
@@ -39,13 +39,6 @@ export function SideNav({ workspaces }: { workspaces: Workspace[] }) {
 
   return (
     <nav aria-label="Main navigation" className="sidenav">
-      <div className="sidenav__group">
-        <ul className="sidenav__list">
-          <li>
-            <NavLink exact href="/home" icon="house" label="My work" />
-          </li>
-        </ul>
-      </div>
       {workspaces.map((workspace) => (
         <div className="sidenav__group" key={workspace.id}>
           <h2 className="sidenav__heading">{workspace.label}</h2>

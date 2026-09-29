@@ -154,11 +154,11 @@ Phone (< 768 px)
 
 | Cost | Mitigation |
 |---|---|
-| Six workspaces do not fit a phone tab bar | On phones the `TopBar` shows a workspace picker (a sheet listing the held workspaces with their counts). `BottomTabs` shows the current workspace's destinations. This is navigation, not a mode: nothing is stored server-side, deep links ignore it, and the staff home (`/home`) shows work from all workspaces. The picker is not rendered for single-role users. |
+| Six workspaces do not fit a phone tab bar | On phones the `TopBar` shows a workspace picker (a sheet listing the held workspaces with their counts). `BottomTabs` shows the current workspace's destinations. This is navigation, not a mode: nothing is stored server-side, deep links ignore it, and each workspace overview shows what needs that person in that workspace. The picker is not rendered for single-role users. |
 | A multi-role user may forget which hat a page belongs to | Every staff `PageHeader` carries a persistent workspace label ("Assessing", "Moderating") above the H1, and the confirmation dialog for any decision names the capacity: "You are finalising this decision as the assessor." |
 | Learner who is also staff (rare) | The Learning group is listed first and behaves exactly as it does for any learner. Staff counts never include learner data. |
 
-**Landing rules after sign-in.** Learner only: `/learn`. Any staff role: `/home`, a cross-workspace work list ("My work") with rows tagged by workspace and cohort: items to mark, items returned to me, sample items to review, cycles I can sign off, appeals to review, appeals to administer, open checklist items. A deep link that triggered sign-in wins over both.
+**Landing rules after sign-in.** Everyone lands on the overview of the first workspace they hold, in desktop order: `/learn` for a learner, `/teach` for a facilitator, `/assess` for an assessor, `/moderate` for a moderator, `/review` for an appeal reviewer, `/coordinate` for a coordinator, `/admin` for an administrator. Each overview is that workspace's work list (items to mark, appeals to review, appeals to administer, open checklist items, and so on); there is no separate cross-workspace home. A deep link that triggered sign-in wins.
 
 **Navigation items per workspace (desktop order).**
 
@@ -236,7 +236,6 @@ Every node carries the FR identifiers it serves. "(assumption)" marks a route wi
 /forgot-password                           G-02  FR-101, FR-106
 /reset-password                            G-02  FR-101, FR-106
 /accept-invite                             G-03  FR-103 (assumption: invitation sets the first password)
-/home                                      G-04  FR-102 (staff cross-workspace work list); links into FR-401, FR-409, FR-504, FR-608, FR-609
 /notifications                             G-05  NFR-11; surfaces FR-203, FR-207, FR-212, FR-509, FR-511, FR-604, FR-605, FR-611, FR-106
 /account                                   G-06  FR-102 (roles held, read-only)
 /search                                    G-07  FR-301 (learner material search) and scoped staff search
@@ -427,7 +426,6 @@ Priority: **P0** must be prototyped (18 screens, chosen to prove the design acro
 | G-01 | Sign in | `/sign-in` | All | Authenticate before anything else | Sign in | Email, password, reset link, paused-sign-in message, help contact | FR-101, FR-106 | **P0** |
 | G-02 | Forgot and reset password | `/forgot-password`, `/reset-password` | All | Self-service recovery | Send reset link; set new password | Neutral confirmation that does not reveal whether the account exists | FR-101, FR-106 | P1 |
 | G-03 | Accept invitation | `/accept-invite` | All | First sign-in after account creation or import (assumption) | Set password | Name, roles granted, programme | FR-103 | P2 |
-| G-04 | My work (staff home) | `/home` | All staff | One list of work across every workspace the user holds | Open item | Row per work item: type, learner or cohort, due date, workspace tag | FR-102, FR-401, FR-409, FR-504, FR-609 | P1 |
 | G-05 | Notification centre | `/notifications` | All | Show what the user was told and when | Open linked object | Title, time, delivery evidence per channel, read state | NFR-11, FR-203, FR-207, FR-511, FR-604, FR-611 | **P0** |
 | G-06 | Account | `/account` | All | Own details, roles held, preferences, appearance | Save | Roles with scopes (read-only), password, preferences | FR-102 | P2 |
 | G-07 | Search results | `/search` | All | Find within own scope | Open result | Grouped results | FR-301 | P2 |
@@ -536,7 +534,7 @@ Each specification lists content blocks in reading order, the states that the pr
 | Aspect | Specification |
 |---|---|
 | Blocks | Institution name; H1 "Sign in"; email; password with show/hide; "Sign in"; "Forgot your password?"; help contact; appearance control in footer. |
-| Behaviour | Works as a plain form post. Password managers and paste are allowed (WCAG 3.3.8). After sign-in: deep link, else `/learn` for learner-only users, else `/home`. |
+| Behaviour | Works as a plain form post. Password managers and paste are allowed (WCAG 3.3.8). After sign-in: deep link, else the overview of the first workspace held (`/learn`, `/teach`, `/assess`, `/moderate`, `/review`, `/coordinate` or `/admin`). |
 | States | Default. Wrong details: one neutral message, "The email or password is not correct", never which one. Sign-in paused (ADR-026): "Too many attempts. Sign-in with a password is paused for a short time. You can reset your password now, or ask your administrator to unlock your account." (shown generically so it does not confirm that an account exists). Challenge shown after repeated failures, with a non-visual alternative. Deactivated account: same neutral message plus help contact. Session expired return: banner "You were signed out for security. Sign in to carry on where you left off." |
 | Client islands | Show/hide password only. |
 | FRs | FR-101, FR-106 |

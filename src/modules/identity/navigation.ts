@@ -133,10 +133,13 @@ export function findWorkspace(segment: string): Workspace | undefined {
   return WORKSPACES.find((workspace) => workspace.segment === segment);
 }
 
-/** Section 3.3 landing rules: learner only goes to /learn; any staff role goes to /home; nobody signed in goes to /sign-in. */
+/**
+ * Section 3.3 landing rules: everyone lands on the overview of the first workspace they hold, in desktop order
+ * (Learning first, then Teaching, Assessing, Moderating, Appeal reviews, Coordinating, Administration); nobody signed
+ * in goes to /sign-in. Each overview says what needs that person now, so there is no separate cross-workspace home.
+ */
 export function landingPathFor(subject: NavigationSubject): string {
   const workspaces = workspacesFor(subject);
   if (workspaces.length === 0) return "/sign-in";
-  if (workspaces.length === 1 && workspaces[0].id === "learn") return "/learn";
-  return "/home";
+  return `/${workspaces[0].segment}`;
 }
