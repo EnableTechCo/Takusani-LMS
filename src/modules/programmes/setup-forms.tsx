@@ -15,7 +15,6 @@ import {
   activateCohort,
   assignCohortRole,
   assignReadinessItem,
-  confirmLogistics,
   setModerationPolicy,
   type CohortRoleState,
   type PolicyState,
@@ -199,15 +198,6 @@ export function AssignItemForm({
       <div className="cluster">
         <SubmitButton pendingLabel="Assigning">{assigneeId ? "Reassign" : "Assign"}</SubmitButton>
       </div>
-    </form>
-  );
-}
-
-/** Logistics, confirmed by hand until session logistics (C-11) is in the LMS. */
-export function LogisticsToggle({ cohortId, confirmed }: { cohortId: string; confirmed: boolean }) {
-  return (
-    <form action={confirmLogistics.bind(null, cohortId, !confirmed)}>
-      <SubmitButton pendingLabel="Saving">{confirmed ? "Mark as not confirmed" : "Confirm logistics"}</SubmitButton>
     </form>
   );
 }

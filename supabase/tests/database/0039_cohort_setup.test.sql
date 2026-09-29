@@ -133,7 +133,7 @@ select results_eq(format($$ select item_key, done from api.get_cohort_readiness(
             ('assessor', false), ('moderator', false) $$,
   'the checklist shows what activation still needs');
 select results_eq(format($$ select item_key, done, detail from api.get_cohort_readiness(%L) where not gate $$, :'cohort'),
-  $$ values ('materials'::text, false, '0'::text), ('published_tasks', true, '1'), ('sessions', true, '1'), ('logistics', false, null) $$,
+  $$ values ('materials'::text, false, '0'::text), ('published_tasks', true, '1'), ('sessions', true, '1'), ('logistics', false, '0/1') $$,
   'and what else is ready, counted from the cohort');
 select results_eq(format($$ select status, missing from api.activate_cohort(%L) $$, :'cohort'),
   $$ values ('not_ready'::text, array['facilitator', 'assessor', 'moderator']) $$,
@@ -170,10 +170,10 @@ select results_eq($$ select event_type, link, payload ->> 'item_key' from notifi
   'and the assignee is told, with a link to where the work is done');
 
 select pg_temp.act_as(:'coordinator');
-select results_eq(format($$ select status from api.confirm_cohort_logistics(%L, true) $$, :'cohort'), $$ values ('ok'::text) $$,
-  'logistics is confirmed by hand for now');
-select results_eq(format($$ select done, confirmed_by_name from api.get_cohort_readiness(%L) where item_key = 'logistics' $$, :'cohort'),
-  $$ values (true, 'Ayesha Patel'::text) $$, 'and says who confirmed it');
+select results_eq(format($$ select done, detail from api.get_cohort_readiness(%L) where item_key = 'logistics' $$, :'cohort'),
+  $$ values (false, '0/1'::text) $$, 'logistics follows from session logistics now: its in-person session is not arranged (S6-03)');
+select hasnt_function('api', 'confirm_cohort_logistics', array['uuid', 'boolean'],
+  'and the hand confirmation it replaced is gone');
 
 -- A moderated cohort needs a moderator.
 select results_eq(format($$ select status, missing from api.activate_cohort(%L) $$, :'cohort'),

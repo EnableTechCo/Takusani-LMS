@@ -39,6 +39,7 @@ const ICONS: Record<string, IconName> = {
   role_assigned: "user",
   role_ended: "user",
   readiness_item_assigned: "clipboard",
+  query_assigned: "inbox",
   session_scheduled: "video",
   session_changed: "video",
   session_cancelled: "video",

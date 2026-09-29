@@ -88,12 +88,6 @@ export async function assignReadinessItem(
   return { done: true, values };
 }
 
-export async function confirmLogistics(cohortId: string, confirmed: boolean): Promise<void> {
-  const supabase = await createClient();
-  await supabase.rpc("confirm_cohort_logistics", { p_cohort_id: cohortId, p_confirmed: confirmed });
-  refreshCohort(cohortId);
-}
-
 export interface CohortRoleState extends FormState {
   assigned?: string;
   personName?: string;
