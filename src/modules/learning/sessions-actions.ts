@@ -109,11 +109,12 @@ export async function updateSession(
     p_mode: values.mode,
     p_teams_url: values.mode === "online" ? values.teamsUrl : undefined,
     p_venue: values.mode === "in_person" ? values.venue : undefined,
+    p_rest_of_series: form.get("restOfSeries") === "on",
   });
   const row = data?.[0];
   if (error || row?.status !== "ok") return refused(row?.status ?? "error", values);
   revalidatePath("/teach/sessions");
-  redirect(`/teach/sessions/${sessionId}?told=${row.notified ?? 0}&changed=1`);
+  redirect(`/teach/sessions/${sessionId}?told=${row.notified ?? 0}&changed=${row.changed ?? 1}`);
 }
 
 export async function cancelSession(sessionId: string, _: FormState, form: FormData): Promise<FormState> {

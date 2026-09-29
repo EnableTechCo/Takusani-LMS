@@ -42,6 +42,7 @@ export function SessionForm({
   cohorts,
   session,
   audience,
+  laterInSeries = 0,
 }: {
   /** For a new session: the cohorts to choose from, each with how many learners it reaches. */
   cohorts?: { id: string; label: string; audience: number }[];
@@ -49,6 +50,8 @@ export function SessionForm({
   session?: { id: string; version: number; values: SessionValues };
   /** For a change: how many learners a change of time or place tells. */
   audience?: number;
+  /** For a change: how many later sessions of the same series are still scheduled; they can change with this one. */
+  laterInSeries?: number;
 }) {
   const action = session ? updateSession.bind(null, session.id, session.version) : createSession;
   const [state, formAction] = useActionState(action, initial);
@@ -165,10 +168,21 @@ export function SessionForm({
           ) : null}
         </Fieldset>
       )}
+      {session && laterInSeries > 0 ? (
+        <Checkbox
+          help="The same title, length and place; their times move by the same amount as this one, so the series keeps its rhythm."
+          label={
+            laterInSeries === 1
+              ? "Also change the later session in this series"
+              : `Also change the ${laterInSeries} later sessions in this series`
+          }
+          name="restOfSeries"
+        />
+      ) : null}
       {told !== undefined ? (
         <p className="text-small text-muted">
           {session
-            ? `A change of time, length or place tells the ${told === 1 ? "1 learner" : `${told} learners`} in the cohort. A new title alone does not.`
+            ? `A change of time, length or place tells the ${told === 1 ? "1 learner" : `${told} learners`} in the cohort, once when it applies to the rest of the series. A new title alone does not.`
             : repeat !== "none"
               ? `${told === 1 ? "1 learner" : `${told} learners`} in this cohort will be told once, about the whole series.`
               : `${told === 1 ? "1 learner" : `${told} learners`} in this cohort will be told in the LMS.`}

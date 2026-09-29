@@ -1534,6 +1534,7 @@ export type Database = {
           mode: string
           series_count: number
           series_id: string
+          series_repeat: string
           series_seq: number
           starts_at: string
           state: string
@@ -2128,6 +2129,7 @@ export type Database = {
           p_duration_minutes: number
           p_expected_version: number
           p_mode: string
+          p_rest_of_series?: boolean
           p_session_id: string
           p_starts_at: string
           p_teams_url?: string
@@ -2135,6 +2137,7 @@ export type Database = {
           p_venue?: string
         }
         Returns: {
+          changed: number
           notified: number
           status: string
         }[]

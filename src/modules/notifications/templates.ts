@@ -422,10 +422,17 @@ function roleEnded(payload: Payload): Rendered {
 }
 
 /** F-06: a series of sessions, told once: how many, how often, from when to when (S6-series). */
+const RHYTHMS: Record<string, string> = {
+  daily: "every day",
+  weekly: "every week",
+  fortnightly: "every two weeks",
+  monthly: "every month",
+};
+
 function sessionSeriesScheduled(payload: Payload): Rendered {
   const title = text(payload, "title");
   const count = typeof payload.count === "number" ? String(payload.count) : text(payload, "count");
-  const rhythm = text(payload, "repeat") === "fortnightly" ? "every two weeks" : "every week";
+  const rhythm = RHYTHMS[text(payload, "repeat")] ?? "every week";
   const first = text(payload, "starts_at");
   const last = text(payload, "last_starts_at");
   const span = `from ${formatLongDayOf(first)} to ${formatLongDayOf(last)}, each at ${formatTime(first)} (SAST)`;
@@ -435,6 +442,23 @@ function sessionSeriesScheduled(payload: Payload): Rendered {
     paragraphs: [
       `${count} sessions have been scheduled for ${text(payload, "cohort_name")}: ${title}.`,
       `One ${rhythm}, ${span}${text(payload, "mode") === "online" ? ", online in Teams" : ""}.`,
+    ],
+    action: "Open your calendar",
+  };
+}
+
+/** The rest of a series changed together: the new time or place of the first, and how many follow it. */
+function sessionSeriesChanged(payload: Payload): Rendered {
+  const title = text(payload, "title");
+  const count = typeof payload.count === "number" ? String(payload.count) : text(payload, "count");
+  const rhythm = RHYTHMS[text(payload, "repeat")] ?? "every week";
+  const when = sessionWhen(payload);
+  return {
+    title: `Sessions changed: ${title}`,
+    summary: `${count} sessions, now from ${when}.`,
+    paragraphs: [
+      `The time or place of ${count} sessions of ${title} (${text(payload, "cohort_name")}) has changed.`,
+      `The first is now on ${when}; the others follow ${rhythm} at the same time.`,
     ],
     action: "Open your calendar",
   };
@@ -553,6 +577,7 @@ const TEMPLATES: Record<string, Record<number, (payload: Payload) => Rendered>> 
   session_changed: { 1: sessionChanged },
   session_cancelled: { 1: sessionCancelled },
   session_series_scheduled: { 1: sessionSeriesScheduled },
+  session_series_changed: { 1: sessionSeriesChanged },
   session_series_cancelled: { 1: sessionSeriesCancelled },
 };
 

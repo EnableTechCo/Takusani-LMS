@@ -73,6 +73,37 @@ describe("renderNotification", () => {
       cancel_reason: "The venue closed",
     });
     expect(cancelled.summary).toBe("3 sessions from Tuesday 27 October 2026 are cancelled.");
+    const monthly = renderNotification("session_series_scheduled", 1, {
+      session_id: "s1",
+      series_id: "y",
+      title: "Monthly review",
+      cohort_name: "2026 Intake B",
+      starts_at: "2027-01-31T07:00:00Z",
+      last_starts_at: "2027-03-31T07:00:00Z",
+      duration_minutes: 60,
+      mode: "in_person",
+      venue: "Room 4",
+      repeat: "monthly",
+      count: 3,
+    });
+    expect(monthly.summary).toBe(
+      "3 sessions, every month from Sunday 31 January 2027 to Wednesday 31 March 2027, each at 09:00 (SAST).",
+    );
+    const changed = renderNotification("session_series_changed", 1, {
+      session_id: "s1",
+      series_id: "x",
+      title: "Weekly class",
+      cohort_name: "2026 Intake B",
+      starts_at: "2027-02-03T08:00:00Z",
+      duration_minutes: 90,
+      mode: "online",
+      repeat: "weekly",
+      count: 6,
+    });
+    expect(changed.title).toBe("Sessions changed: Weekly class");
+    expect(changed.paragraphs[1]).toBe(
+      "The first is now on Wednesday 3 February 2027 at 10:00 (SAST), 1 hour 30 minutes, online in Teams; the others follow every week at the same time.",
+    );
     expect(cancelled.paragraphs[1]).toBe('The reason given: "The venue closed"');
   });
 
