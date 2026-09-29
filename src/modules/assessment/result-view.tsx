@@ -139,7 +139,7 @@ function MyAppeals({ appeals }: { appeals: MyAppeal[] }) {
  * The appeal clock, on the page and never behind a click (SRS 5.3). Written as the last full day, never a midnight
  * time (P-11). The learner lodges the appeal online (S3-01) and sees the appeals already lodged.
  */
-export function AppealLine({
+function AppealLine({
   resultId,
   releasedAt,
   appealDeadlineAt,

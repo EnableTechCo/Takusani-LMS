@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
 import { isUuid } from "./rules";
 
@@ -13,13 +14,13 @@ export async function listTasks(cohortId?: string) {
 }
 
 /** One task with its rubric and named learners, or null when it does not exist or is outside the person's scope. */
-export async function getTask(taskId: string) {
+export const getTask = cache(async (taskId: string) => {
   if (!isUuid(taskId)) return null;
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("get_task", { p_task_id: taskId });
   if (error) throw new Error(`api.get_task failed: ${error.message}`);
   return data?.[0] ?? null;
-}
+});
 
 /** The cohorts this person may set work in. */
 export async function listWorkCohorts() {
@@ -30,13 +31,13 @@ export async function listWorkCohorts() {
 }
 
 /** One task as its learner sees it: the brief, what to hand in, and every version they have submitted. */
-export async function getMyTask(taskId: string) {
+export const getMyTask = cache(async (taskId: string) => {
   if (!isUuid(taskId)) return null;
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("get_my_task", { p_task_id: taskId });
   if (error) throw new Error(`api.get_my_task failed: ${error.message}`);
   return data?.[0] ?? null;
-}
+});
 
 /** Files this learner has uploaded for a task and not yet handed in; they survive a reload. */
 export async function listMyUploads(taskId: string) {

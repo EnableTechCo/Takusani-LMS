@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: { params: Promise<{ taskId: s
 // L-03 submit (FR-308 to FR-311): add files, check, hand in. The upload is the only part that needs the browser.
 export default async function SubmitTaskPage({ params }: { params: Promise<{ taskId: string }> }) {
   const { taskId } = await params;
-  const task = await getMyTask(taskId);
+  const [task, uploads, settings] = await Promise.all([getMyTask(taskId), listMyUploads(taskId), getPublicSettings()]);
   if (!task) notFound();
 
   const closed = task.late_policy === "closed_at_due" && task.due_at !== null && new Date(task.due_at) < new Date();
@@ -24,8 +24,6 @@ export default async function SubmitTaskPage({ params }: { params: Promise<{ tas
 
   const requirements = (task.requirements ?? []) as unknown as Requirement[];
   const versions = (task.versions ?? []) as unknown as Version[];
-  const uploads = await listMyUploads(taskId);
-
   return (
     <div className="page page--form">
       <PageHeader
@@ -42,7 +40,7 @@ export default async function SubmitTaskPage({ params }: { params: Promise<{ tas
           rejected: upload.scan_state === "rejected",
         }))}
         latePolicySentence={LATE_POLICY_LABELS[task.late_policy] ?? task.late_policy}
-        maxMb={(await getPublicSettings()).uploadMaxMb}
+        maxMb={settings.uploadMaxMb}
         nextVersion={(versions[0]?.version_number ?? 0) + 1}
         requirements={requirements}
         taskId={task.id}

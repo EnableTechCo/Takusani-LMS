@@ -8,7 +8,6 @@ import type { IconName } from "@/components/ui/icons";
 export const NAV_ICONS: Record<string, IconName> = {
   "/learn": "house",
   "/learn/tasks": "clipboard",
-  "/learn/exams": "laptop",
   "/learn/materials": "book",
   "/learn/calendar": "calendar",
   "/learn/results": "check-circle",

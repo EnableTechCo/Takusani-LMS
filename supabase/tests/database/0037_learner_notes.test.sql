@@ -47,7 +47,7 @@ select is_empty($$
 $$, 'and each of them is scoped to the caller');
 select ok((select relrowsecurity from pg_class where oid = 'learning.learner_notes'::regclass),
   'row security is on as well');
-select ok((select count(*) = 1 and bool_and(policyname = 'only the owner' and qual = '(owner_id = auth.uid())')
+select ok((select count(*) = 1 and bool_and(policyname = 'only the owner' and qual = '(owner_id = ( SELECT auth.uid() AS uid))')
            from pg_policies where schemaname = 'learning' and tablename = 'learner_notes'),
   'with one policy: only the owner');
 select ok(not has_function_privilege('service_role', 'api.list_my_notes(text, text)', 'execute')
