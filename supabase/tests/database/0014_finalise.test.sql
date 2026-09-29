@@ -110,13 +110,13 @@ select results_eq(format($$ select status, result_state from api.finalise_decisi
 reset role;
 select results_eq(format($$ select count(*)::int from assessment.decisions where instance_id = %L $$, :'nyc'),
   $$ values (1) $$, 'there is still exactly one decision for the item');
+-- A second decision on the instance may only supersede the first (a re-mark, S4-08): outside the chain it is refused.
 select throws_ok(
-  format($$ insert into assessment.decisions (result_id, instance_id, type, outcome, actor_id, acting_role,
-            justification, supersedes_decision_id)
-            select r.id, i.id, 'assessment', 'competent', %L, 'assessor', 'A second go.', r.current_decision_id
+  format($$ insert into assessment.decisions (result_id, instance_id, type, outcome, actor_id, acting_role, justification)
+            select r.id, i.id, 'assessment', 'competent', %L, 'assessor', 'A second go.'
             from assessment.assessment_instances i join assessment.results r on r.id = i.result_id
             where i.id = %L $$, :'assessor', :'nyc'),
-  '23505', null, 'and even a direct insert cannot add a second assessment decision to the same item');
+  '23505', null, 'and even a direct insert cannot add a second assessment decision outside the chain');
 select throws_ok(
   format($$ insert into assessment.decisions (result_id, type, outcome, actor_id, acting_role, justification)
             select i.result_id, 'appeal', 'not_yet_competent', %L, 'assessor', 'x'

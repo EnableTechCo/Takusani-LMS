@@ -22,7 +22,7 @@ import {
   listModerationObservations,
   listSampleModeratorCandidates,
 } from "@/modules/moderation/review-queries";
-import { INCLUSION_LABELS, ITEM_STATE_LABELS, itemStateTone } from "@/modules/moderation/review-rules";
+import { dueText, INCLUSION_LABELS, ITEM_STATE_LABELS, itemStateTone } from "@/modules/moderation/review-rules";
 import { getCohort } from "@/modules/programmes/queries";
 
 export const metadata = { title: "Cycle and sample record · Coordinating" };
@@ -214,7 +214,9 @@ export default async function CycleDetailPage({
                     cell: (item) => (
                       <>
                         <Tag tone={itemStateTone(item.state)}>{ITEM_STATE_LABELS[item.state] ?? item.state}</Tag>
-                        {item.last_finding_at ? (
+                        {item.state === "returned" && item.due_on ? (
+                          <span className="table__secondary">{dueText(item.due_on, new Date())}</span>
+                        ) : item.last_finding_at ? (
                           <span className="table__secondary">{formatDateTime(item.last_finding_at)}</span>
                         ) : null}
                       </>

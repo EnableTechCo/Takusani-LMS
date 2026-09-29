@@ -12,7 +12,14 @@ import {
   listMyModerationCycles,
   listMySampleItems,
 } from "@/modules/moderation/review-queries";
-import { INCLUSION_LABELS, ITEM_STATE_LABELS, itemStateTone, progressText } from "@/modules/moderation/review-rules";
+import {
+  dueText,
+  INCLUSION_LABELS,
+  ITEM_STATE_LABELS,
+  itemStateTone,
+  needsReview,
+  progressText,
+} from "@/modules/moderation/review-rules";
 
 export const metadata = { title: "Cycle · Moderating" };
 
@@ -26,8 +33,9 @@ export default async function ModerateCyclePage({ params }: { params: Promise<{ 
   ]);
   const cycle = cycles.find((row) => row.cycle_id === cycleId);
   if (!cycle) notFound();
-  const next = items.find((item) => item.state === "allocated") ?? items.find((item) => item.state === "disagreed");
+  const next = items.find((item) => needsReview(item.state));
   const signedOff = cycle.state === "signed_off";
+  const now = new Date();
 
   return (
     <div className="page">
@@ -39,7 +47,7 @@ export default async function ModerateCyclePage({ params }: { params: Promise<{ 
             </ButtonLink>
           ) : undefined
         }
-        lead={`${cycle.cohort_name}. ${progressText(cycle.my_concluded, cycle.my_items)}${cycle.frozen_at ? ` Frozen ${formatDateTime(cycle.frozen_at)} (SAST); ${cycle.total_items} items in all.` : ""}`}
+        lead={`${cycle.cohort_name}. ${progressText(cycle.my_concluded, cycle.my_items)}${cycle.my_returned > 0 ? ` ${cycle.my_returned} ${cycle.my_returned === 1 ? "is" : "are"} with the assessor for re-marking.` : ""}${cycle.frozen_at ? ` Frozen ${formatDateTime(cycle.frozen_at)} (SAST); ${cycle.total_items} items in all.` : ""}`}
         meta={
           signedOff ? (
             <Tag tone="positive">Signed off</Tag>
@@ -98,7 +106,12 @@ export default async function ModerateCyclePage({ params }: { params: Promise<{ 
                   key: "state",
                   header: "State",
                   cell: (item) => (
-                    <Tag tone={itemStateTone(item.state)}>{ITEM_STATE_LABELS[item.state] ?? item.state}</Tag>
+                    <>
+                      <Tag tone={itemStateTone(item.state)}>{ITEM_STATE_LABELS[item.state] ?? item.state}</Tag>
+                      {item.state === "returned" && item.due_on ? (
+                        <span className="table__secondary">{dueText(item.due_on, now)}</span>
+                      ) : null}
+                    </>
                   ),
                 },
               ]}

@@ -11,29 +11,45 @@ import { REVIEW_REFUSALS } from "./review-rules";
 
 const text = (form: FormData, name: string) => String(form.get(name) ?? "").trim();
 
-/** M-03: records a finding on an item the moderator holds; the page reloads on the item with it in the history. */
+/**
+ * M-03: records a finding on an item the moderator holds. Agreeing concludes it; disagreeing returns it to the
+ * assessor with the required corrections and a deadline (FR-509). The page reloads on the item with the outcome.
+ */
 export async function recordFinding(cycleId: string, itemId: string, _: FormState, form: FormData): Promise<FormState> {
-  const values = { finding: text(form, "finding"), reasons: text(form, "reasons") };
+  const values = {
+    finding: text(form, "finding"),
+    reasons: text(form, "reasons"),
+    corrections: text(form, "corrections"),
+    dueOn: text(form, "dueOn"),
+  };
   const errors: Record<string, string> = {};
   if (!values.finding) errors.finding = REVIEW_REFUSALS.invalid_finding;
   if (!values.reasons) errors.reasons = REVIEW_REFUSALS.reasons_required;
+  if (values.finding === "disagree") {
+    if (!values.corrections) errors.corrections = REVIEW_REFUSALS.corrections_required;
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(values.dueOn)) errors.dueOn = REVIEW_REFUSALS.invalid_due_on;
+  }
   if (Object.keys(errors).length > 0) return { errors, values };
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("record_moderation_finding", {
     p_item_id: itemId,
     p_finding: values.finding,
     p_reasons: values.reasons,
+    p_corrections: values.finding === "disagree" ? values.corrections : undefined,
+    p_due_on: values.finding === "disagree" ? values.dueOn : undefined,
   });
   const status = error ? "error" : (data?.[0]?.status ?? "error");
   if (status !== "ok") {
     const message = REVIEW_REFUSALS[status] ?? REVIEW_REFUSALS.error;
     if (status === "invalid_finding") return { errors: { finding: message }, values };
     if (status === "reasons_required") return { errors: { reasons: message }, values };
+    if (status === "corrections_required") return { errors: { corrections: message }, values };
+    if (status === "invalid_due_on") return { errors: { dueOn: message }, values };
     return { message, values };
   }
   revalidatePath(`/moderate/cycles/${cycleId}`);
   revalidatePath(`/moderate/cycles/${cycleId}/items/${itemId}`);
-  redirect(`/moderate/cycles/${cycleId}/items/${itemId}?recorded=${values.finding}`);
+  redirect(`/moderate/cycles/${cycleId}/items/${itemId}?recorded=${values.finding === "agree" ? "agree" : "returned"}`);
 }
 
 /** M-02: adds a cohort-level observation to the cycle. */

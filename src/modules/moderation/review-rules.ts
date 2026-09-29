@@ -1,22 +1,50 @@
+import { formatDay } from "@/lib/dates";
+
 /**
- * Moderator review (M-01 to M-03; FR-504, FR-507, FR-508; BR-01): the words for a sampled item's state, why it is
- * in the sample, and what a refusal means. Pure rules over the rows the pages read.
+ * Moderator review (M-01 to M-03; FR-504, FR-507, FR-508, FR-509; BR-01): the words for a sampled item's state,
+ * why it is in the sample, a return's deadline, and what a refusal means. Pure rules over the rows the pages read.
  */
 
-export type ItemState = "unallocated" | "allocated" | "agreed" | "disagreed";
+export type ItemState = "unallocated" | "allocated" | "agreed" | "returned" | "remarked";
 
 export const ITEM_STATE_LABELS: Record<string, string> = {
   unallocated: "Waiting for a moderator",
   allocated: "To review",
   agreed: "Agreed",
-  disagreed: "Disagreed",
+  returned: "Returned to the assessor",
+  remarked: "Re-marked, review again",
 };
 
 export function itemStateTone(state: string): "info" | "positive" | "caution" | "neutral" {
   if (state === "agreed") return "positive";
-  if (state === "disagreed") return "caution";
-  if (state === "allocated") return "info";
+  if (state === "returned") return "caution";
+  if (state === "allocated" || state === "remarked") return "info";
   return "neutral";
+}
+
+/** An item still to review by this moderator: not yet concluded and not waiting for the assessor. */
+export function needsReview(state: string): boolean {
+  return state === "allocated" || state === "remarked";
+}
+
+/** "Due 17 Sep 2026", "Due today" or "3 days overdue", from a return's deadline (a South African date). */
+export function dueText(dueOn: string, now: Date): string {
+  const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Africa/Johannesburg" }).format(now);
+  if (dueOn === today) return "Due today";
+  if (dueOn > today) return `Due ${formatDay(dueOn)}`;
+  const days = Math.round((Date.parse(today) - Date.parse(dueOn)) / 86_400_000);
+  return `${days} ${days === 1 ? "day" : "days"} overdue`;
+}
+
+export function isOverdue(dueOn: string, now: Date): boolean {
+  return dueOn < new Intl.DateTimeFormat("en-CA", { timeZone: "Africa/Johannesburg" }).format(now);
+}
+
+/** The earliest deadline a moderator may set: tomorrow, as a South African date for a date input. */
+export function earliestDueOn(now: Date): string {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "Africa/Johannesburg" }).format(
+    new Date(now.getTime() + 86_400_000),
+  );
 }
 
 export const INCLUSION_LABELS: Record<string, string> = {
@@ -59,6 +87,12 @@ export const REVIEW_REFUSALS: Record<string, string> = {
   not_open: "This cycle is signed off, so nothing more can be recorded on it.",
   invalid_finding: "Choose Agree or Disagree.",
   reasons_required: "Give your reasons, in up to 4,000 characters. The assessor and the coordinator can read them.",
+  corrections_required: "Say what the assessor must correct, in up to 4,000 characters. They read this.",
+  invalid_due_on: "Choose a deadline after today and within ninety days.",
+  item_returned: "This item is with the assessor for re-marking. You can review it again once they finalise.",
+  cannot_return: "This decision was not made in the marking workspace, so it cannot be returned for re-marking.",
+  superseded:
+    "The learner handed in a later version, which is being marked afresh. That decision will come to you; nothing was recorded.",
   body_required: "Write the observation, in up to 4,000 characters.",
   concluded: "This item is concluded, so it stays with the moderator who reviewed it.",
   not_a_moderator: "Choose one of the cohort's moderators.",

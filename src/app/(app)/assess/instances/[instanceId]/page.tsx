@@ -10,6 +10,7 @@ import {
   MarkingWorkspace,
   type Criterion,
   type HistoryDecision,
+  type ReturnRecord,
   type StoredDraft,
   type Version,
 } from "@/modules/assessment/workspace";
@@ -19,8 +20,8 @@ export async function generateMetadata({ params }: { params: Promise<{ instanceI
   return { title: item ? `${item.learner_name}, ${item.task_title} · Assessing` : "Not found" };
 }
 
-// A-02, P0-11 (FR-401 to FR-405): the marking workspace. Outside the assessor's scope this is a 404, and the attempt
-// is audited by the database (FR-401).
+// A-02, P0-11 (FR-401 to FR-405, FR-410): the marking workspace, and its re-mark mode after a moderator's return.
+// Outside the assessor's scope this is a 404, and the attempt is audited by the database (FR-401).
 export default async function MarkingPage({ params }: { params: Promise<{ instanceId: string }> }) {
   const { instanceId } = await params;
   const [item, access] = await Promise.all([getMarkingItem(instanceId), getMyAccess()]);
@@ -30,9 +31,13 @@ export default async function MarkingPage({ params }: { params: Promise<{ instan
   const links = await signEvidence(versions.flatMap((version) => version.files));
   const mine = item.assessor_id === access?.profile_id;
   const decisions = (item.decisions ?? []) as unknown as HistoryDecision[];
-  // This item's own decision: its date, and when it reached the learner. Once a later decision replaces it, the
-  // result's release facts are the later decision's, so the earlier release comes from the decision's own record.
-  const own = decisions.find((decision) => decision.type === "assessment" && decision.instance_id === item.instance_id);
+  const returns = (item.returns ?? []) as unknown as ReturnRecord[];
+  // This item's latest own decision (a re-mark adds a second): its date, and when it reached the learner. Once a
+  // later decision replaces it, the result's release facts are the later decision's, so the earlier release comes
+  // from the decision's own record.
+  const own = decisions.findLast(
+    (decision) => decision.type === "assessment" && decision.instance_id === item.instance_id,
+  );
 
   return (
     <div className="page page--full">
@@ -44,7 +49,10 @@ export default async function MarkingPage({ params }: { params: Promise<{ instan
         } of ${versions.length}, submitted ${formatDateTime(item.submitted_at)} (SAST)${item.is_late ? ", late" : ""}.`}
         meta={
           <>
-            <Tag shape={item.instance_state === "marking" ? "half" : undefined} tone="info">
+            <Tag
+              shape={item.instance_state === "marking" ? "half" : undefined}
+              tone={item.instance_state === "returned" ? "caution" : "info"}
+            >
               {INSTANCE_STATE_LABELS[item.instance_state] ?? item.instance_state}
             </Tag>
             <span className="text-meta">
@@ -62,8 +70,13 @@ export default async function MarkingPage({ params }: { params: Promise<{ instan
         </Banner>
       ) : null}
       <MarkingWorkspace
+        // Remounted when the instance moves on (taken, returned, re-mark started), so the draft shown is the one
+        // the database now holds rather than the state this page first mounted with.
+        key={`${item.instance_state}-${item.instance_version}`}
         canMark={mine && item.instance_state === "marking"}
+        canStartRemark={mine && item.instance_state === "returned"}
         canTake={item.instance_state === "to_mark"}
+        returns={returns}
         criteria={(item.criteria ?? []) as unknown as Criterion[]}
         decisions={decisions}
         instanceId={item.instance_id}

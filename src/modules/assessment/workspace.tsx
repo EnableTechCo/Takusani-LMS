@@ -10,7 +10,8 @@ import { ConsequenceDialog } from "@/components/ui/dialog";
 import { BlockedReason } from "@/components/ui/link";
 import { ScrollRegion } from "@/components/ui/scroll-region";
 import { formatDateTime, formatDay, formatTime, lastFullDayBefore, sastDatePlusDays } from "@/lib/dates";
-import { finaliseDecision, saveMarkingDraft, takeMarking } from "./actions";
+import { dueText } from "@/modules/moderation/review-rules";
+import { finaliseDecision, saveMarkingDraft, startRemark, takeMarking } from "./actions";
 import { missingForFinalise, OUTCOME_LABELS, runningTotal, type Draft, type Score } from "./rules";
 
 /**
@@ -52,6 +53,20 @@ export interface HistoryDecision {
   released_at: string | null;
 }
 
+/** A moderator's return of a decision on this result, open until a re-mark answers it. */
+export interface ReturnRecord {
+  return_id: string;
+  instance_id: string;
+  corrections: string;
+  due_on: string;
+  returned_at: string;
+  remarked_at: string | null;
+  moderator_name: string;
+  cycle_name: string;
+  outcome: string;
+  decided_at: string;
+}
+
 export interface StoredDraft {
   scores: Score[];
   feedback: string | null;
@@ -83,6 +98,8 @@ export function MarkingWorkspace({
   instanceId,
   canMark,
   canTake,
+  canStartRemark,
+  returns,
   takenBySomeoneElse,
   criteria,
   versions,
@@ -99,6 +116,10 @@ export function MarkingWorkspace({
   canMark: boolean;
   /** Nobody has taken the item yet, so it can be taken. */
   canTake: boolean;
+  /** A moderator returned this item to this assessor, and the re-mark has not been started. */
+  canStartRemark: boolean;
+  /** Every return on this result, newest first; the first with no re-mark is the open one (FR-509). */
+  returns: ReturnRecord[];
   /** The name of whoever else is marking it, when it is not this assessor. */
   takenBySomeoneElse: string | null;
   criteria: Criterion[];
@@ -127,6 +148,9 @@ export function MarkingWorkspace({
   const [problem, setProblem] = useState<string | null>(null);
   const [saving, startSaving] = useTransition();
   const [taking, startTaking] = useTransition();
+  const openReturn = returns.find((record) => record.remarked_at === null && record.instance_id === instanceId) ?? null;
+  const remarking = canMark && openReturn !== null;
+  const now = new Date();
   const [finalising, startFinalising] = useTransition();
   const [viewing, setViewing] = useState(versions.find((item) => item.assessed)?.version_number ?? 0);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -316,6 +340,18 @@ export function MarkingWorkspace({
           </li>
         ))}
       </ol>
+      {returns.length ? (
+        <ol aria-label="Returns for re-marking, newest first" className="stack stack--sm">
+          {returns.map((record) => (
+            <li key={record.return_id}>
+              Returned {formatDateTime(record.returned_at)} by {record.moderator_name} ({record.cycle_name}), due{" "}
+              {formatDay(record.due_on)}.{" "}
+              {record.remarked_at ? `Re-marked ${formatDateTime(record.remarked_at)}.` : "Not yet re-marked."}{" "}
+              <span className="whitespace-pre-line">&ldquo;{record.corrections}&rdquo;</span>
+            </li>
+          ))}
+        </ol>
+      ) : null}
       {decisions.length ? (
         <ol aria-label="Earlier decisions on this result" className="stack stack--sm">
           {decisions.map((decision, index) => (
@@ -349,17 +385,19 @@ export function MarkingWorkspace({
       if (!result.ok) setProblem(result.message);
     });
 
-  const consequence = moderated
-    ? resultReleased
-      ? `This decision will be held for moderation. ${learnerName} keeps the result already released to them, and sees this one only when moderation of this cohort is signed off.`
-      : `This decision will be held. ${learnerName} will not see it until moderation of this cohort is signed off.`
-    : `This releases the result to ${learnerName} now and starts the seven-day appeal window, which closes at the end of ${formatDay(
-        sastDatePlusDays(7),
-      )}.${
-        draft.outcome === "not_yet_competent" && draft.resubmissionDays
-          ? ` ${learnerName} must resubmit within ${draft.resubmissionDays} days.`
-          : ""
-      }`;
+  const consequence = remarking
+    ? `This records a new decision that replaces the one ${openReturn!.moderator_name} returned. The original stays on record beside it. ${learnerName} will not see either until moderation of this cohort is signed off; ${openReturn!.moderator_name} reviews the new decision first.`
+    : moderated
+      ? resultReleased
+        ? `This decision will be held for moderation. ${learnerName} keeps the result already released to them, and sees this one only when moderation of this cohort is signed off.`
+        : `This decision will be held. ${learnerName} will not see it until moderation of this cohort is signed off.`
+      : `This releases the result to ${learnerName} now and starts the seven-day appeal window, which closes at the end of ${formatDay(
+          sastDatePlusDays(7),
+        )}.${
+          draft.outcome === "not_yet_competent" && draft.resubmissionDays
+            ? ` ${learnerName} must resubmit within ${draft.resubmissionDays} days.`
+            : ""
+        }`;
 
   return (
     <>
@@ -392,6 +430,25 @@ export function MarkingWorkspace({
             </p>
           </Banner>
         )
+      ) : null}
+      {openReturn ? (
+        <Banner
+          title={`Returned for re-marking by ${openReturn.moderator_name}: ${dueText(openReturn.due_on, now)}`}
+          tone={
+            openReturn.due_on < new Intl.DateTimeFormat("en-CA", { timeZone: "Africa/Johannesburg" }).format(now)
+              ? "caution"
+              : "info"
+          }
+        >
+          <p>
+            Returned {formatDateTime(openReturn.returned_at)} (SAST) in {openReturn.cycle_name}. Your decision of{" "}
+            {formatDateTime(openReturn.decided_at)} ({OUTCOME_LABELS[openReturn.outcome] ?? openReturn.outcome}) is
+            shown read-only under History and stays on record; the re-mark is a new decision. The result stays held.
+          </p>
+          <p className="whitespace-pre-line">
+            <strong>Required corrections:</strong> {openReturn.corrections}
+          </p>
+        </Banner>
       ) : null}
       {takenBySomeoneElse ? (
         <Banner title={`${takenBySomeoneElse} is marking this item`} tone="info">
@@ -585,6 +642,20 @@ export function MarkingWorkspace({
               <Button disabled={!dirty} loading={saving} loadingLabel="Saving the draft" onClick={save}>
                 Save draft
               </Button>
+            ) : canStartRemark ? (
+              <Button
+                loading={taking}
+                loadingLabel="Opening the re-mark"
+                onClick={() =>
+                  startTaking(async () => {
+                    const result = await startRemark(instanceId);
+                    if (!result.ok) setProblem(result.message);
+                  })
+                }
+                variant="primary"
+              >
+                Start re-mark
+              </Button>
             ) : !canTake ? null : (
               <Button
                 loading={taking}
@@ -611,25 +682,29 @@ export function MarkingWorkspace({
               {missing.length > 0 ? (
                 <div>
                   <Button aria-describedby="finalise-blocked" disabled variant="primary">
-                    Finalise decision
+                    {remarking ? "Finalise re-mark" : "Finalise decision"}
                   </Button>
                 </div>
               ) : (
                 <div>
                   <ConsequenceDialog
                     cancelLabel="Keep editing"
-                    confirmLabel="Finalise decision"
+                    confirmLabel={remarking ? "Finalise re-mark" : "Finalise decision"}
                     consequence={consequence}
                     onConfirm={finalise}
-                    title="Finalise this decision?"
-                    trigger={{ label: finalising ? "Finalising" : "Finalise decision", variant: "primary" }}
+                    title={remarking ? "Finalise this re-mark?" : "Finalise this decision?"}
+                    trigger={{
+                      label: finalising ? "Finalising" : remarking ? "Finalise re-mark" : "Finalise decision",
+                      variant: "primary",
+                    }}
                   >
                     <p>
                       {learnerName} · {draft.outcome === "competent" ? "Competent" : "Not yet competent"}
                     </p>
                     <p className="text-small text-muted">
-                      You are finalising this decision as the assessor. It is kept permanently and cannot be edited; any
-                      later decision is recorded beside it.
+                      {remarking
+                        ? "You are finalising this re-mark as the assessor. This records a new decision. The original stays on record."
+                        : "You are finalising this decision as the assessor. It is kept permanently and cannot be edited; any later decision is recorded beside it."}
                     </p>
                   </ConsequenceDialog>
                 </div>

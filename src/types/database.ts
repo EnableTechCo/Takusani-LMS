@@ -691,6 +691,7 @@ export type Database = {
           result_released_at: string
           result_remediation_deadline_at: string
           result_state: string
+          returns: Json
           submitted_at: string
           task_brief: string
           task_id: string
@@ -1253,6 +1254,7 @@ export type Database = {
         Returns: {
           allocated_at: string
           assessor_name: string
+          due_on: string
           inclusion_reason: string
           item_id: string
           item_title: string
@@ -1263,6 +1265,7 @@ export type Database = {
           moderator_id: string
           moderator_name: string
           outcome: string
+          returned_at: string
           seq: number
           state: string
           stratum: string
@@ -1355,6 +1358,7 @@ export type Database = {
           period_to: string
           planned_at: string
           planned_by_name: string
+          returned: number
           sampled: number
           scheduled_start_at: string
           state: string
@@ -1454,8 +1458,9 @@ export type Database = {
           cycle_id: string
           frozen_at: string
           my_concluded: number
-          my_disagreed: number
           my_items: number
+          my_remarked: number
+          my_returned: number
           name: string
           state: string
           total_items: number
@@ -1530,6 +1535,7 @@ export type Database = {
           replaced_at: string
           replaced_by: string
           result_id: string
+          return_due_on: string
           stage: string
         }[]
       }
@@ -1546,6 +1552,27 @@ export type Database = {
           result_id: string
           state: string
           task_id: string
+        }[]
+      }
+      list_my_returned_items: {
+        Args: never
+        Returns: {
+          cohort_name: string
+          corrections: string
+          cycle_name: string
+          decided_at: string
+          due_on: string
+          instance_id: string
+          instance_state: string
+          item_title: string
+          learner_name: string
+          learner_number: string
+          moderator_name: string
+          outcome: string
+          overdue: boolean
+          result_id: string
+          return_id: string
+          returned_at: string
         }[]
       }
       list_my_reviews: {
@@ -1569,6 +1596,7 @@ export type Database = {
           cohort_name: string
           cycle_id: string
           cycle_name: string
+          due_on: string
           inclusion_reason: string
           item_id: string
           item_title: string
@@ -1576,6 +1604,7 @@ export type Database = {
           learner_name: string
           learner_number: string
           outcome: string
+          remarked_at: string
           seq: number
           state: string
           stratum: string
@@ -2032,6 +2061,7 @@ export type Database = {
           previous_item_id: string
           remediation: string
           resubmission_days: number
+          returns: Json
           seq: number
           state: string
           status: string
@@ -2153,9 +2183,16 @@ export type Database = {
         }[]
       }
       record_moderation_finding: {
-        Args: { p_finding: string; p_item_id: string; p_reasons: string }
+        Args: {
+          p_corrections?: string
+          p_due_on?: string
+          p_finding: string
+          p_item_id: string
+          p_reasons: string
+        }
         Returns: {
           finding_id: string
+          return_id: string
           status: string
         }[]
       }
@@ -2352,6 +2389,14 @@ export type Database = {
         Returns: {
           attempt_id: string
           attempt_number: number
+          status: string
+        }[]
+      }
+      start_remark: {
+        Args: { p_instance_id: string }
+        Returns: {
+          draft_version: number
+          instance_version: number
           status: string
         }[]
       }

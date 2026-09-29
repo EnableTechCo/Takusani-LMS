@@ -242,12 +242,15 @@ insert into expected_grants values
   ('function', 'api', 'list_my_sample_items(p_cycle_id uuid)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'open_sample_item(p_item_id uuid)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'list_moderation_observations(p_cycle_id uuid)', 'authenticated', 'EXECUTE'),
-  ('function', 'api', 'record_moderation_finding(p_item_id uuid, p_finding text, p_reasons text)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'record_moderation_finding(p_item_id uuid, p_finding text, p_reasons text, p_corrections text, p_due_on date)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'record_moderation_observation(p_cycle_id uuid, p_body text)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'list_cycle_sample_items(p_cycle_id uuid)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'list_sample_moderator_candidates(p_item_id uuid)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'reallocate_sample_item(p_item_id uuid, p_moderator_id uuid)', 'authenticated', 'EXECUTE'),
-  ('function', 'moderation', 'may_read_sample_evidence(p_profile_id uuid, p_bucket text, p_object_key text)', 'authenticated', 'EXECUTE');
+  ('function', 'moderation', 'may_read_sample_evidence(p_profile_id uuid, p_bucket text, p_object_key text)', 'authenticated', 'EXECUTE'),
+  -- Return for re-marking (20261111090000): the assessor's own returned items and re-mark, checked inside (test 0051).
+  ('function', 'api', 'start_remark(p_instance_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_my_returned_items()', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (

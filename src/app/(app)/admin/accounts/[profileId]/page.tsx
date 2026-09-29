@@ -117,7 +117,12 @@ export default async function AccountPage({
             }
             evidence={[
               ...allocations.map((allocation) => ({
-                term: allocation.kind === "marking" ? `Marking, ${allocation.cohort_name}` : "Appeal reviews",
+                term:
+                  allocation.kind === "marking"
+                    ? `Marking, ${allocation.cohort_name}`
+                    : allocation.kind === "remark"
+                      ? `Returned for re-marking, ${allocation.cohort_name}`
+                      : "Appeal reviews",
                 detail: itemsText(allocation.items),
               })),
               {
