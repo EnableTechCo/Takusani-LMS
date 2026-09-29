@@ -8,6 +8,7 @@ import { Banner, StatusLine, Tag } from "@/components/ui/status";
 import { Tabs } from "@/components/ui/tabs";
 import { ConsequenceDialog } from "@/components/ui/dialog";
 import { BlockedReason } from "@/components/ui/link";
+import { ScrollRegion } from "@/components/ui/scroll-region";
 import { formatDateTime, formatDay, formatTime, lastFullDayBefore, sastDatePlusDays } from "@/lib/dates";
 import { finaliseDecision, saveMarkingDraft, takeMarking } from "./actions";
 import { missingForFinalise, OUTCOME_LABELS, runningTotal, type Draft, type Score } from "./rules";
@@ -167,11 +168,34 @@ export function MarkingWorkspace({
   const shown = versions.find((item) => item.version_number === viewing) ?? versions[0];
   const assessed = versions.find((item) => item.assessed);
 
+  // Read-only (decided, not yet taken, or someone else's): a text record, not a disabled form, so the marks keep full
+  // contrast and are read in order (A11Y-12).
   const rubric = (
-    <div className="rubric">
+    <div className={canMark ? "rubric" : "rubric rubric--readonly"}>
       {criteria.length === 0 ? <p className="text-muted">This task has no rubric rows.</p> : null}
       {criteria.map((criterion) => {
         const score = draft.scores.find((item) => item.ordinal === criterion.ordinal)!;
+        if (!canMark) {
+          return (
+            <section aria-labelledby={`criterion-${criterion.ordinal}`} className="rubric__row" key={criterion.ordinal}>
+              <h3 className="rubric__head" id={`criterion-${criterion.ordinal}`}>
+                <span>
+                  <span className="rubric__id">{criterion.ordinal}</span>{" "}
+                  <span className="rubric__title">{criterion.title}</span>
+                </span>
+                {criterion.points !== null ? (
+                  <span className="rubric__score">
+                    {score.points === null ? "Not marked" : `${score.points} of ${criterion.points}`}
+                  </span>
+                ) : null}
+              </h3>
+              {criterion.descriptor ? <p className="rubric__desc">{criterion.descriptor}</p> : null}
+              <p className="whitespace-pre-line">
+                {score.comment.trim() ? score.comment : <span className="text-muted">No comment.</span>}
+              </p>
+            </section>
+          );
+        }
         return (
           <fieldset
             className={score.points === null && criterion.points !== null ? "rubric__row is-unscored" : "rubric__row"}
@@ -242,7 +266,18 @@ export function MarkingWorkspace({
     </div>
   );
 
-  const feedback = (
+  const feedback = !canMark ? (
+    <section aria-labelledby="feedback-record-h" className="stack stack--sm">
+      <h3 className="text-subheading" id="feedback-record-h">
+        Overall feedback
+      </h3>
+      {draft.feedback.trim() ? (
+        <p className="whitespace-pre-line">{draft.feedback}</p>
+      ) : (
+        <p className="text-muted">No overall feedback.</p>
+      )}
+    </section>
+  ) : (
     <Field
       help="Written for the learner. They read it with the outcome when the result is released."
       label="Overall feedback"
@@ -428,7 +463,8 @@ export function MarkingWorkspace({
           </div>
         </section>
 
-        <section aria-label="Marking" className="workspace__panel">
+        {/* A11Y-12: the panel scrolls on its own, so it takes focus whenever it overflows. */}
+        <ScrollRegion as="section" className="workspace__panel" label="Rubric, feedback and history" landmark>
           <Tabs
             label="Marking panel"
             tabs={[
@@ -437,7 +473,7 @@ export function MarkingWorkspace({
               { id: "history", label: "History", count: versions.length, content: history },
             ]}
           />
-        </section>
+        </ScrollRegion>
       </div>
 
       <section aria-labelledby="decision-h" className="card u-mt-4">

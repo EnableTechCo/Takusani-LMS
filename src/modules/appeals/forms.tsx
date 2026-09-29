@@ -54,7 +54,7 @@ export function LodgeAppealForm({ facts }: { facts: LodgeFacts }) {
       : "Why do you think the mark does not match the work you submitted?";
 
   return (
-    <form action={action} aria-label="Lodge an appeal" className="form" id="appeal-form" noValidate>
+    <form action={action} aria-label="Send an appeal" className="form" id="appeal-form" noValidate>
       <input name="clientAppealId" type="hidden" value={attempt} />
       <ErrorSummary errors={state.errors} labels={LABELS} />
       {state.message ? (
@@ -178,11 +178,11 @@ export function LodgeAppealForm({ facts }: { facts: LodgeFacts }) {
           <ConsequenceDialog
             acknowledgement="I understand my mark can go down as well as up."
             cancelLabel="Go back"
-            confirmLabel="Lodge appeal"
+            confirmLabel="Send appeal"
             consequence="Your mark can go down as well as up. You can ask for a re-mark only once for this result, and the reviewer's decision is final."
             form="appeal-form"
             title={`Ask for a re-mark of ${facts.itemTitle}?`}
-            trigger={{ label: "Lodge appeal" }}
+            trigger={{ label: "Send appeal" }}
           >
             <ul className="modal__list">
               <li>Your result now: {facts.resultText}.</li>
@@ -191,11 +191,11 @@ export function LodgeAppealForm({ facts }: { facts: LodgeFacts }) {
                 {facts.versionNumber ? ` version ${facts.versionNumber}` : " it"} again.
               </li>
               {facts.resubmitUntil ? <li>Your resubmission date, {facts.resubmitUntil}, stays the same.</li> : null}
-              <li>You are lodging this appeal as the learner: {facts.learnerName}.</li>
+              <li>You are sending this appeal as the learner: {facts.learnerName}.</li>
             </ul>
           </ConsequenceDialog>
         ) : (
-          <SubmitButton pendingLabel="Lodging your appeal">Lodge appeal</SubmitButton>
+          <SubmitButton pendingLabel="Sending your appeal">Send appeal</SubmitButton>
         )}
         <ButtonLink href={`/learn/results/${facts.resultId}`} variant="ghost">
           Cancel

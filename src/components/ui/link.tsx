@@ -65,8 +65,8 @@ export function TextLink({
 }
 
 /**
- * Why an action cannot be taken yet, as visible text beside the disabled control, never a tooltip. Give the control
- * `aria-describedby` with this id.
+ * Why an action cannot be taken yet, as visible text beside the disabled control, never a tooltip. Place it before the
+ * control, so it is read first (A11Y-21), and give the control `aria-describedby` with this id.
  */
 export function BlockedReason({ id, children }: { id: string; children: ReactNode }) {
   return (

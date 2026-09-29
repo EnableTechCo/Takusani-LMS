@@ -844,6 +844,12 @@ export type Database = {
           title: string
         }[]
       }
+      get_session_policy: {
+        Args: never
+        Returns: {
+          idle_minutes: number
+        }[]
+      }
       get_task: {
         Args: { p_task_id: string }
         Returns: {

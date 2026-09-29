@@ -9,6 +9,7 @@ export const metadata = { title: "Sign in" };
 const NOTICES: Record<string, string> = {
   link_expired: "That link has expired or has already been used. Ask for a new one.",
   no_access: "This account cannot sign in. If you think it should, ask your administrator.",
+  idle: "You were signed out because you had not done anything for a while. Your saved work is kept. Sign in to carry on.",
 };
 
 // G-01 (FR-101). Accounts come from an administrator's invitation; there is no public sign-up.

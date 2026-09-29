@@ -2,12 +2,14 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { cx } from "./cx";
 import { Icon } from "./icons";
+import { ScrollRegion } from "./scroll-region";
 
 /**
  * Data tables (design system 4.5). From 768px a real table; below it a real list of cards, one per row, with each
  * cell as a label and value (the design system's production note: restyling a table as blocks drops its semantics
- * in some browsers). Two-dimensional tables such as the audit log set `cards={false}` and scroll sideways inside a
- * focusable, labelled region instead. Sorting and paging are links, so they work on the server and can be shared.
+ * in some browsers). Two-dimensional tables such as the audit log set `cards={false}` and scroll sideways instead.
+ * A table that is wider than its box becomes a focusable, labelled region, so the keyboard can scroll it (A11Y-12).
+ * Sorting and paging are links, so they work on the server and can be shared.
  */
 
 export type SortDirection = "ascending" | "descending" | "none";
@@ -94,10 +96,9 @@ export function DataTable<Row>({
 
   if (!cards) {
     return (
-      // A focusable region, so a keyboard user can scroll a wide table sideways.
-      <div aria-label={caption} className="table-wrap" role="region" tabIndex={0}>
+      <ScrollRegion className="table-wrap" label={caption}>
         {table}
-      </div>
+      </ScrollRegion>
     );
   }
 
@@ -106,7 +107,9 @@ export function DataTable<Row>({
   const actions = columns.filter((column) => column.actions);
   return (
     <>
-      <div className={cx("table-wrap", stickyHeader && "table-wrap--sticky", "u-hide-phone")}>{table}</div>
+      <ScrollRegion className={cx("table-wrap", stickyHeader && "table-wrap--sticky", "u-hide-phone")} label={caption}>
+        {table}
+      </ScrollRegion>
       <ul aria-label={caption} className="stack u-phone-only">
         {rows.map((row) => (
           <li className="card" key={rowKey(row)}>

@@ -64,13 +64,13 @@ The prototypes were audited against WCAG 2.2 AA on 21 September 2026: [LMS-ui-ac
 | A11Y-09 "Mark" meant three things; "remark" read as "comment" | Fixed in the exam and on the learner appeal page |
 | A11Y-13 Forced colours | Rules added from CSS inspection; not yet rendered in a contrast theme |
 | A11Y-14, 15, 16, 17 (part), 19, 20, 22, 23 (part) | Fixed |
-| A11Y-07 No session-expiry warning pattern | **Open.** Needs a dialog component and a specimen |
-| A11Y-10 Tables have no row headers; card mode may lose table semantics | **Open.** Row-header styling is ready; pages not converted; card-mode semantics need a screen reader to settle |
-| A11Y-11 Upload rows: state changes not announced | **Open** |
-| A11Y-12 Scrollable regions a keyboard cannot scroll | **Open** |
-| A11Y-18 Repeated identical disclosure labels | **Open** |
-| A11Y-21 Disabled controls: reason placed after the control; excluded reviewers as disabled radios | **Open** |
-| A11Y-24 Jargon and long sentences on learner screens | **Open**, apart from the items under A11Y-09 |
+| A11Y-07 No session-expiry warning pattern | Fixed in the app (S4-14): after 30 minutes without activity (a versioned setting) the app signs out, and two minutes before it an alert dialog asks "Do you want to stay signed in?" with that choice focused. Activity in any tab counts; an exam page keeps every tab active. The session itself is not limited on the server until go-live (P-14). No gallery specimen, since a live one would sign the viewer out |
+| A11Y-10 Tables have no row headers; card mode may lose table semantics | Fixed in the app: `DataTable` makes the row's name a `th scope="row"`, and below 768px renders a real list of cards with a `dl` per row instead of restyling the table. Still to confirm with VoiceOver and TalkBack |
+| A11Y-11 Upload rows: state changes not announced | Fixed in the app: one alert region per upload widget, always on the page, announces a file that was not accepted or expired; the status line reports pauses and resumption; a paused file says until when it can carry on; each file input is named by its requirement |
+| A11Y-12 Scrollable regions a keyboard cannot scroll | Fixed in the app: a table wider than its box, and the marking panel, become focusable labelled regions when they overflow. A decided or read-only rubric is a text record, not a disabled form |
+| A11Y-18 Repeated identical disclosure labels | Fixed in the app: notification and cohort-readiness disclosures name what they are about |
+| A11Y-21 Disabled controls: reason placed after the control; excluded reviewers as disabled radios | Fixed in the app: every blocked reason comes before its control; people who cannot be the appeal reviewer are a plain list after the choices, and the legend says how many |
+| A11Y-24 Jargon and long sentences on learner screens | Fixed on learner screens: "ready" rather than "released" for results, "send an appeal" with "lodge" glossed once, "You can resubmit", the moderation explanation in short sentences. Notification wording is unchanged: rewording it needs a new template version so earlier messages keep what they said |
 
 The audit's position on the exam timer and WCAG 2.2.1 is that the "essential" exception is defensible only if per-learner accommodations are built (decided, U-02), the session-expiry warning exists (open, A11Y-07), a paused upload states how long it waits, and the integrity overlay does not fire repeatedly for learners whose assistive software takes focus. Treat accommodations as a release blocker for exams.
 

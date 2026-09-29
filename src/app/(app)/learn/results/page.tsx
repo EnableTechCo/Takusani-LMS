@@ -52,7 +52,7 @@ export default async function LearnResultsPage() {
           </div>
         ) : (
           <DataTable
-            caption="Your results: released results first, newest first, then work still being assessed."
+            caption="Your results: the ones that are ready first, newest first, then work still being assessed."
             columns={[
               {
                 key: "item",
@@ -68,7 +68,7 @@ export default async function LearnResultsPage() {
               { key: "outcome", header: "Outcome", cell: (result) => <Outcome result={result} /> },
               {
                 key: "released",
-                header: "Released",
+                header: "Ready on",
                 cell: (result) => (result.released_at ? formatDayOf(result.released_at) : "Not yet"),
               },
               { key: "appeal", header: "Appeal", cell: (result) => <Appeal now={now} result={result} /> },

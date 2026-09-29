@@ -49,3 +49,14 @@ export async function requireWorkspace(id: WorkspaceId): Promise<void> {
   const held = workspacesFor(toNavigationSubject(await getMyAccess()));
   if (!held.some((workspace) => workspace.id === id)) notFound();
 }
+
+/**
+ * How long the signed-in person may do nothing before the app shell signs them out (A11Y-07), from the versioned
+ * setting in force. 0 means no limit.
+ */
+export async function getSessionPolicy(): Promise<{ idleMinutes: number }> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("get_session_policy");
+  if (error) throw new Error(`api.get_session_policy failed: ${error.message}`);
+  return { idleMinutes: data?.[0]?.idle_minutes ?? 0 };
+}

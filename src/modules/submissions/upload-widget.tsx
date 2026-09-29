@@ -6,6 +6,7 @@ import { Button, IconButton } from "@/components/ui/button";
 import { useOffline } from "@/components/ui/connection";
 import { Banner } from "@/components/ui/status";
 import { UploadDrop, UploadRow, type UploadState } from "@/components/ui/upload";
+import { formatTime } from "@/lib/dates";
 import { createBrowserSupabase } from "@/lib/supabase/browser";
 import { authoriseUpload, discardUpload, finaliseUpload } from "./actions";
 import { formatBytes, UPLOAD_REFUSALS } from "./rules";
@@ -16,7 +17,8 @@ import type { Requirement } from "./types";
  * resumable protocol (ADR-007), so a dropped connection carries on where it stopped instead of starting again.
  *
  * Every state is said in words. A pause is never called a failure, and a rejection says what to do instead. One
- * polite status line reports progress for the whole set; a row that needs the learner to act announces itself.
+ * polite status line reports progress, pauses and resumption for the whole set; one alert region, always on the
+ * page, announces a file that was not accepted or has expired, because the learner must act on it (A11Y-11).
  */
 
 const MEGABYTE = 1024 * 1024;
@@ -44,7 +46,11 @@ interface Row {
   fileId?: string;
   /** When paused, the moment the next attempt is due, so the row can say how long it will wait. */
   retryAt?: number;
+  /** When the upload's authorisation runs out; a paused upload can carry on until then (A11Y-11). */
+  expiresAt?: number;
 }
+
+const URGENT: UploadState[] = ["rejected", "expired"];
 
 const ACCEPTED = [
   "application/pdf",
@@ -114,6 +120,9 @@ export function UploadWidget({
   );
   const offline = useOffline();
   const [now, setNow] = useState(() => Date.now());
+  // The last thing the learner must act on, and a counter so the same words said twice are announced twice.
+  const [alert, setAlert] = useState<{ text: string; n: number }>({ text: "", n: 0 });
+  const announced = useRef(new Map(rows.map((row) => [row.key, row.state] as const)));
   const uploads = useRef(new Map<string, tus.Upload>());
 
   const patch = useCallback(
@@ -135,6 +144,18 @@ export function UploadWidget({
         })),
     );
   }, [rows, onChange]);
+
+  // A row that has just become "Not accepted" or "Expired" is announced once, from the alert region. Rows that were
+  // already refused when the page loaded are shown, not announced.
+  useEffect(() => {
+    const fresh = rows.filter((row) => URGENT.includes(row.state) && announced.current.get(row.key) !== row.state);
+    announced.current = new Map(rows.map((row) => [row.key, row.state] as const));
+    if (fresh.length === 0) return;
+    setAlert((current) => ({
+      text: fresh.map((row) => `${row.filename}: ${statusText(row, Date.now())}`).join(" "),
+      n: current.n + 1,
+    }));
+  }, [rows]);
 
   // A paused row says how long it will wait, so the count has to tick.
   useEffect(() => {
@@ -161,6 +182,7 @@ export function UploadWidget({
         patch(row.key, { state: "rejected", message: authorised.message });
         return;
       }
+      patch(row.key, { expiresAt: new Date(authorised.expiresAt).getTime() });
 
       const supabase = createBrowserSupabase();
       const { data } = await supabase.auth.getSession();
@@ -303,6 +325,7 @@ export function UploadWidget({
     : [{ id: null, title: copy.slotTitle, help: copy.help, mandatory: true }];
 
   const working = rows.filter((row) => ["waiting", "uploading", "resuming", "checking"].includes(row.state)).length;
+  const paused = rows.filter((row) => row.state === "paused").length;
   const done = rows.filter((row) => row.state === "uploaded").length;
 
   return (
@@ -314,10 +337,14 @@ export function UploadWidget({
       ) : null}
 
       <p className="status-line" role="status">
-        {working > 0 ? (
+        {working > 0 || paused > 0 ? (
           <>
-            <span aria-hidden="true" className="spinner" />
-            {done} of {done + working} files uploaded. Keep this page open.
+            {working > 0 ? <span aria-hidden="true" className="spinner" /> : null}
+            {done} of {done + working + paused} files uploaded.
+            {paused > 0
+              ? ` ${paused === 1 ? "1 file is" : `${paused} files are`} paused: no connection. They carry on by themselves.`
+              : ""}{" "}
+            Keep this page open.
           </>
         ) : done === 0 ? (
           "No files chosen yet."
@@ -325,6 +352,9 @@ export function UploadWidget({
           copy.ready(done)
         )}
       </p>
+      <div aria-atomic="true" className="u-visually-hidden" role="alert">
+        {alert.text ? <p key={alert.n}>{alert.text}</p> : null}
+      </div>
 
       {slots.map((slot, index) => (
         <UploadDrop
@@ -378,7 +408,8 @@ function statusText(row: Row, now: number): string {
           : row.retryAt
             ? " Trying again now."
             : "";
-      return `Paused at ${Math.round((row.sent / Math.max(row.bytes, 1)) * 100)}%, no connection. It will carry on by itself when you are back online.${when}`;
+      const until = row.expiresAt ? `, until ${formatTime(new Date(row.expiresAt).toISOString())}` : "";
+      return `Paused at ${Math.round((row.sent / Math.max(row.bytes, 1)) * 100)}%, no connection. It will carry on by itself when you are back online${until}.${until ? " After that, choose the file again." : ""}${when}`;
     }
     case "resuming":
       return `Resuming from ${Math.round((row.sent / Math.max(row.bytes, 1)) * 100)}%`;

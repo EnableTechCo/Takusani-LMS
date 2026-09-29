@@ -179,7 +179,7 @@ export function AppealLine({
           <Icon name="lock" />
           <span>
             The time to appeal closed at the end of {window.lastDay}. You had{" "}
-            {appealWindowDaysOf(releasedAt, appealDeadlineAt)} days from the day your result was released,{" "}
+            {appealWindowDaysOf(releasedAt, appealDeadlineAt)} days from the day your result was ready,{" "}
             {formatLongDayOf(releasedAt)}.
           </span>
         </p>
@@ -344,7 +344,7 @@ function HowYouWereTold({ result }: { result: ReleasedResult }) {
         <summary>How you were told</summary>
         <ul className="delivery-evidence__list">
           <li className="delivery-evidence__row">
-            <span className="delivery-evidence__channel">Released in the LMS</span>
+            <span className="delivery-evidence__channel">Ready in the LMS</span>
             <time className="delivery-evidence__time" dateTime={result.releasedAt}>
               {formatDateTime(result.releasedAt)}
             </time>
@@ -361,8 +361,8 @@ function HowYouWereTold({ result }: { result: ReleasedResult }) {
       </details>
       <p className="text-small text-muted">
         {result.decidedOnAppeal
-          ? `The appeal decision was released on ${formatLongDayOf(result.releasedAt)}.`
-          : `Your ${appealWindowDaysOf(result.releasedAt, result.appealDeadlineAt)} days to appeal are counted from the day your result was released: ${formatLongDayOf(result.releasedAt)}.`}{" "}
+          ? `The appeal decision was ready on ${formatLongDayOf(result.releasedAt)}.`
+          : `Your ${appealWindowDaysOf(result.releasedAt, result.appealDeadlineAt)} days to appeal count from the day your result was ready: ${formatLongDayOf(result.releasedAt)}.`}{" "}
         Times are South African time.
       </p>
     </>
@@ -462,7 +462,7 @@ export function ReleasedResultView({ result, now }: { result: ReleasedResult; no
           </div>
 
           <div className="result__footer">
-            Released on {formatLongDayOf(result.releasedAt)} at {formatTime(result.releasedAt)} (SAST).
+            Ready on {formatLongDayOf(result.releasedAt)} at {formatTime(result.releasedAt)} (SAST).
           </div>
         </article>
       </div>
@@ -508,10 +508,10 @@ export function HeldResultView({
             <Banner title="We have your work" tone="info">
               <p>
                 {moderated
-                  ? "In this programme, results are checked by a second person (a moderator) before anyone sees them, and everyone's results for the same task are released together."
+                  ? "A second person, called a moderator, checks results before anyone sees them. Everyone's results for the same task come out together."
                   : "Your assessor is marking your work."}{" "}
-                You will be told here when your result is ready. Your {appealWindowDays} days to appeal, and any time
-                you are given to resubmit, only start on the day your result is released.
+                We will tell you here when your result is ready. Your {appealWindowDays} days to appeal, and any time to
+                resubmit, start on the day your result is ready.
               </p>
             </Banner>
             <div>
