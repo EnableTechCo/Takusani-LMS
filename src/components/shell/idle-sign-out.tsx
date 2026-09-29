@@ -18,7 +18,7 @@ import {
  * server, so nothing is lost.
  *
  * Activity in any tab counts: tabs share the last activity through storage, and a tab that signs out tells the others.
- * A playing video counts as activity, and an exam page keeps every tab active (ActivityBeacon).
+ * A playing video counts as activity.
  */
 
 const ACTIVITY_EVENTS = ["pointerdown", "keydown", "wheel", "touchstart", "scroll"] as const;
@@ -166,18 +166,4 @@ export function IdleSignOut({ idleMinutes }: { idleMinutes: number }) {
       </div>
     </dialog>
   );
-}
-
-/**
- * On exam pages: keeps the shared last activity fresh while the page is open, so a quiet tab elsewhere never signs
- * the learner out in the middle of an exam (the exam shell has no inactivity limit of its own).
- */
-export function ActivityBeacon() {
-  useEffect(() => {
-    const beat = () => writeShared(ACTIVITY_KEY, String(Date.now()));
-    beat();
-    const timer = window.setInterval(beat, 30_000);
-    return () => window.clearInterval(timer);
-  }, []);
-  return null;
 }

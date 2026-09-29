@@ -4,14 +4,14 @@
  * The links Teams gives out for a meeting, as the database checks them (learning.is_teams_link): work and school
  * accounts (teams.microsoft.com, a meetup-join or meet link) and personal accounts (teams.live.com/meet).
  */
-export const TEAMS_LINK = /^https:\/\/teams\.(microsoft\.com\/(l\/meetup-join|meet)\/|live\.com\/meet\/)[^\s<>"]+$/;
+const TEAMS_LINK = /^https:\/\/teams\.(microsoft\.com\/(l\/meetup-join|meet)\/|live\.com\/meet\/)[^\s<>"]+$/;
 
 export function isTeamsLink(url: string): boolean {
   return url.length <= 2000 && TEAMS_LINK.test(url.trim());
 }
 
 /** People can join from this many minutes before the start (UX architecture P0-03, assumption). */
-export const JOIN_EARLY_MINUTES = 10;
+const JOIN_EARLY_MINUTES = 10;
 
 export type JoinWindow = { state: "early"; opensAt: Date } | { state: "open" } | { state: "ended" };
 

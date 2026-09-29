@@ -16,13 +16,12 @@ export const metadata = { title: "Edit material · Teaching" };
 // learners see it. A recording is best added as a link; an upload goes to the recordings bucket, within its own limit.
 export default async function EditMaterialPage({ params }: { params: Promise<{ materialId: string }> }) {
   const { materialId } = await params;
-  const material = await getMaterial(materialId);
+  const [material, settings] = await Promise.all([getMaterial(materialId), getPublicSettings()]);
   if (!material) notFound();
   const modules = await listCohortModules(material.cohort_id);
   const label = materialState(material.state, material.release_at, new Date());
   const archived = label === "Archived";
   const recording = material.category === "recording";
-  const settings = await getPublicSettings();
   const content = describeContent({
     kind: material.kind,
     link_host: material.link_url ? new URL(material.link_url).host : null,

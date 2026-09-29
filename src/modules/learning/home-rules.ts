@@ -30,7 +30,7 @@ export interface HomeResult {
 const before = (a: string | null, b: Date) => a !== null && new Date(a).getTime() <= b.getTime();
 
 /** A task past its due time that takes no late work cannot be handed in online. */
-export function isClosed(task: HomeTask, now: Date): boolean {
+function isClosed(task: HomeTask, now: Date): boolean {
   return task.late_policy === "closed_at_due" && before(task.due_at, now);
 }
 

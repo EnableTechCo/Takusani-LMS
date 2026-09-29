@@ -1,22 +1,23 @@
 import "server-only";
+import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
 import { isUuid } from "./rules";
 
 // Each query returns only what the signed-in coordinator's role covers; the database applies the scope.
 
-export async function listProgrammes() {
+export const listProgrammes = cache(async () => {
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("list_programmes");
   if (error) throw new Error(`api.list_programmes failed: ${error.message}`);
   return data;
-}
+});
 
-export async function listCohorts() {
+export const listCohorts = cache(async () => {
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("list_cohorts");
   if (error) throw new Error(`api.list_cohorts failed: ${error.message}`);
   return data;
-}
+});
 
 /** One cohort, or null when it does not exist or the coordinator's scope does not cover it. */
 export async function getCohort(cohortId: string) {

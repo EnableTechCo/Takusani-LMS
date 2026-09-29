@@ -32,7 +32,6 @@ export const WORKSPACES: readonly Workspace[] = [
     items: [
       { label: "Home", href: "/learn" },
       { label: "Tasks", href: "/learn/tasks" },
-      { label: "Exams", href: "/learn/exams" },
       { label: "Materials", href: "/learn/materials" },
       { label: "Calendar", href: "/learn/calendar" },
       { label: "Results", href: "/learn/results" },

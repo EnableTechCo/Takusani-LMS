@@ -25,7 +25,11 @@ export async function generateMetadata({ params }: { params: Promise<{ resultId:
 
 // L-15 (P0-07; FR-316, FR-317, NFR-11, SRS 5.3): the learner's result. Held, it says only "Being assessed".
 export default async function LearnResultPage({ params }: { params: Promise<{ resultId: string }> }) {
-  const result = await getMyResult((await params).resultId);
+  const [result, settings, myAppeals] = await Promise.all([
+    getMyResult((await params).resultId),
+    getPublicSettings(),
+    listMyAppeals(),
+  ]);
   if (!result) notFound();
 
   const latestVersion = (result.latest_version ?? null) as unknown as VersionFacts | null;
@@ -50,7 +54,7 @@ export default async function LearnResultPage({ params }: { params: Promise<{ re
         />
         <div className="stack stack--lg">
           <HeldResultView
-            appealWindowDays={(await getPublicSettings()).appealWindowDays}
+            appealWindowDays={settings.appealWindowDays}
             itemTitle={result.item_title}
             latestVersion={latestVersion}
             moderated={result.moderated}
@@ -63,7 +67,7 @@ export default async function LearnResultPage({ params }: { params: Promise<{ re
   }
 
   const assessedVersion = result.assessed_version as unknown as VersionFacts;
-  const appeals = (await listMyAppeals()).filter((appeal) => appeal.result_id === result.result_id);
+  const appeals = myAppeals.filter((appeal) => appeal.result_id === result.result_id);
   const released: ReleasedResult = {
     resultId: result.result_id,
     taskId: result.task_id,

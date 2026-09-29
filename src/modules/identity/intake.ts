@@ -6,7 +6,7 @@
 
 /** Under Next.js's 1 MB limit on a server action's body, with room for the form. 5,000 learners is about 400 KB. */
 export const MAX_INTAKE_BYTES = 900 * 1024;
-export const MAX_INTAKE_ROWS = 5000;
+const MAX_INTAKE_ROWS = 5000;
 
 /** The template's header, in the order the template gives it. */
 export const INTAKE_COLUMNS = ["full_name", "email", "learner_number"] as const;
