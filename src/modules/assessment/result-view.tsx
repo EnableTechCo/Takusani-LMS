@@ -59,6 +59,8 @@ export interface ReleasedResult {
   appeals?: MyAppeal[];
   /** The current decision came from an appeal: final (FR-613), and the reviewer is not named (UX Q7). */
   decidedOnAppeal?: boolean;
+  /** The current decision is an administrative correction (P-12): when it was made. */
+  correctedAt?: string | null;
 }
 
 export interface MyAppeal {
@@ -434,6 +436,15 @@ export function ReleasedResultView({ result, now }: { result: ReleasedResult; no
           </div>
 
           <div className="result__body">
+            {result.correctedAt ? (
+              <p className="deadline-line">
+                <Icon name="info" />
+                <span>
+                  Corrected on {formatLongDayOf(result.correctedAt)}. The outcome released earlier was wrong; it stays
+                  on your record, marked as replaced. Your time to appeal counts from the correction.
+                </span>
+              </p>
+            ) : null}
             {/* First screenful, in order (P0-07): outcome, the appeal clock (SRS 5.3), then the next step (FR-317). */}
             <AppealLine
               appealDeadlineAt={result.appealDeadlineAt}

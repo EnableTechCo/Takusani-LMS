@@ -256,7 +256,16 @@ insert into expected_grants values
   ('function', 'api', 'get_sign_off(p_cycle_id uuid)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'sign_off_moderation_cycle(p_cycle_id uuid, p_expected_version integer, p_statement text)', 'authenticated', 'EXECUTE'),
   -- Moderation planning (20261113090000): coordinators of the cohort, checked inside (test 0054).
-  ('function', 'api', 'list_moderation_moderators(p_cohort_id uuid)', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'list_moderation_moderators(p_cohort_id uuid)', 'authenticated', 'EXECUTE'),
+  -- Result corrections (20261114090000): coordinators of the cohort or administrators, under dual control, checked
+  -- inside; the learner reads only whether their own result was corrected (test 0055).
+  ('function', 'api', 'list_correctable_results(p_cohort_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_corrections()', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'get_correction(p_correction_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'get_my_result_correction(p_result_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'propose_correction(p_result_id uuid, p_outcome text, p_justification text, p_reason text, p_remediation text, p_resubmission_days integer)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'conclude_correction(p_correction_id uuid, p_approve boolean, p_reason text)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'withdraw_correction(p_correction_id uuid)', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (

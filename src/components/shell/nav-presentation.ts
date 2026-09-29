@@ -34,6 +34,7 @@ export const NAV_ICONS: Record<string, IconName> = {
   "/coordinate/queries": "help",
   "/coordinate/logistics": "calendar",
   "/coordinate/reports": "chart",
+  "/coordinate/corrections": "pencil",
   "/admin": "grid",
   "/admin/accounts": "users",
   "/admin/imports": "upload",
@@ -41,6 +42,7 @@ export const NAV_ICONS: Record<string, IconName> = {
   "/admin/integration": "external",
   "/admin/audit": "clipboard",
   "/admin/cohorts": "archive",
+  "/admin/corrections": "pencil",
 };
 
 const BOTTOM_TABS = new Set<string>([

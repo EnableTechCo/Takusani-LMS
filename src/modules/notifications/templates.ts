@@ -614,6 +614,55 @@ function moderationCycleSignedOff(payload: Payload): Rendered {
   };
 }
 
+/** The learner: their released result was corrected under dual control, with a new appeal window (S4-12, P-12). */
+function resultCorrected(payload: Payload): Rendered {
+  const item = text(payload, "item_title");
+  const releasedAt = text(payload, "released_at");
+  const lastDay = lastFullDayBefore(text(payload, "appeal_deadline_at"), "long");
+  return {
+    title: `Your result for ${item} was corrected`,
+    summary: `You can appeal the corrected result until the end of ${lastDay}.`,
+    paragraphs: [
+      `Your result for ${item} (${text(payload, "cohort_name")}) was corrected on ${formatLongDayOf(releasedAt)} at ${formatTime(releasedAt)} (SAST). The earlier outcome was released in error; it stays on your record, marked as replaced.`,
+      "Sign in to see the corrected outcome and why it was corrected.",
+      `You can appeal the corrected result until the end of ${lastDay}. The ${appealWindowDaysOf(releasedAt, text(payload, "appeal_deadline_at"))} days count from the day it was corrected, including weekends and public holidays.`,
+    ],
+    action: "See your result",
+  };
+}
+
+/** A coordinator: a correction in their cohort needs a second person to approve it (S4-12, P-12). */
+function correctionProposed(payload: Payload): Rendered {
+  const outcome = (key: string) => (text(payload, key) === "competent" ? "Competent" : "Not yet competent");
+  return {
+    title: `A correction needs approval: ${text(payload, "learner_name")}, ${text(payload, "item_title")}`,
+    summary: `${outcome("current_outcome")} to ${outcome("proposed_outcome")}. Proposed by ${text(payload, "proposed_by")}.`,
+    paragraphs: [
+      `${text(payload, "proposed_by")} proposed correcting the released result of ${text(payload, "learner_name")} for ${text(payload, "item_title")} (${text(payload, "cohort_name")}) from ${outcome("current_outcome")} to ${outcome("proposed_outcome")}.`,
+      "A second person must approve or decline it: another coordinator of the cohort, or an administrator, who took no decision on the result.",
+    ],
+    action: "Review the correction",
+  };
+}
+
+/** The proposer: their correction was approved or declined (S4-12, P-12). */
+function correctionConcluded(payload: Payload): Rendered {
+  const approved = payload.approved === true;
+  const reason = typeof payload.reason === "string" && payload.reason ? payload.reason : null;
+  return {
+    title: `Correction ${approved ? "approved" : "declined"}: ${text(payload, "learner_name")}, ${text(payload, "item_title")}`,
+    summary: approved
+      ? `Approved by ${text(payload, "concluded_by")}. The corrected outcome is released.`
+      : `Declined by ${text(payload, "concluded_by")}. The released outcome stands.`,
+    paragraphs: [
+      approved
+        ? `${text(payload, "concluded_by")} approved your correction for ${text(payload, "learner_name")}, ${text(payload, "item_title")} (${text(payload, "cohort_name")}). The learner has been told and has a new appeal window.`
+        : `${text(payload, "concluded_by")} declined your correction for ${text(payload, "learner_name")}, ${text(payload, "item_title")} (${text(payload, "cohort_name")}).${reason ? ` Their reason: "${reason}"` : ""}`,
+    ],
+    action: "Open the correction",
+  };
+}
+
 /** A coordinator's alert that a stakeholder query was routed to them (S6-03, FR-704). */
 function queryAssigned(payload: Payload): Rendered {
   const reference = text(payload, "reference");
@@ -656,6 +705,9 @@ const TEMPLATES: Record<string, Record<number, (payload: Payload) => Rendered>> 
   moderation_return_logged: { 1: moderationReturnLogged },
   moderation_item_remarked: { 1: moderationItemRemarked },
   moderation_cycle_signed_off: { 1: moderationCycleSignedOff },
+  result_corrected: { 1: resultCorrected },
+  correction_proposed: { 1: correctionProposed },
+  correction_concluded: { 1: correctionConcluded },
   account_deactivated: { 1: accountDeactivated },
   account_reactivated: { 1: accountReactivated },
   sign_in_locked: { 1: signInLocked },

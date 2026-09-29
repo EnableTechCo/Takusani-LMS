@@ -241,6 +241,15 @@ export type Database = {
           status: string
         }[]
       }
+      conclude_correction: {
+        Args: { p_approve: boolean; p_correction_id: string; p_reason?: string }
+        Returns: {
+          appeal_deadline_at: string
+          decision_id: string
+          released_at: string
+          status: string
+        }[]
+      }
       create_account: {
         Args: {
           p_full_name: string
@@ -642,6 +651,38 @@ export type Database = {
           versions: Json
         }[]
       }
+      get_correction: {
+        Args: { p_correction_id: string }
+        Returns: {
+          cannot_conclude_because: string
+          cohort_id: string
+          cohort_name: string
+          concluded_at: string
+          concluded_by_name: string
+          conclusion_reason: string
+          corrected_decided_at: string
+          corrected_decided_by_name: string
+          corrected_decision_type: string
+          corrected_outcome: string
+          corrected_released_at: string
+          correction_id: string
+          item_title: string
+          justification: string
+          learner_name: string
+          learner_number: string
+          may_conclude: boolean
+          mine: boolean
+          proposed_at: string
+          proposed_by_name: string
+          proposed_outcome: string
+          reason: string
+          remediation: string
+          resubmission_days: number
+          result_changed: boolean
+          result_id: string
+          state: string
+        }[]
+      }
       get_import_rows: {
         Args: { p_batch_id: string; p_outcome?: string }
         Returns: {
@@ -897,6 +938,13 @@ export type Database = {
           state: string
           task_closed: boolean
           task_id: string
+        }[]
+      }
+      get_my_result_correction: {
+        Args: { p_result_id: string }
+        Returns: {
+          assessor_name: string
+          corrected_at: string
         }[]
       }
       get_my_task: {
@@ -1281,6 +1329,42 @@ export type Database = {
           value: Json
           value_type: string
           version: number
+        }[]
+      }
+      list_correctable_results: {
+        Args: { p_cohort_id: string }
+        Returns: {
+          blocker: string
+          decided_by_name: string
+          decision_type: string
+          item_title: string
+          learner_name: string
+          learner_number: string
+          open_correction_id: string
+          outcome: string
+          released_at: string
+          result_id: string
+        }[]
+      }
+      list_corrections: {
+        Args: never
+        Returns: {
+          cohort_id: string
+          cohort_name: string
+          concluded_at: string
+          concluded_by_name: string
+          correction_id: string
+          current_outcome: string
+          item_title: string
+          learner_name: string
+          learner_number: string
+          may_conclude: boolean
+          mine: boolean
+          proposed_at: string
+          proposed_by_name: string
+          proposed_outcome: string
+          result_id: string
+          state: string
         }[]
       }
       list_cycle_sample_items: {
@@ -2141,6 +2225,20 @@ export type Database = {
           status: string
         }[]
       }
+      propose_correction: {
+        Args: {
+          p_justification: string
+          p_outcome: string
+          p_reason: string
+          p_remediation?: string
+          p_resubmission_days?: number
+          p_result_id: string
+        }
+        Returns: {
+          correction_id: string
+          status: string
+        }[]
+      }
       provision_account: {
         Args: {
           p_full_name: string
@@ -2606,6 +2704,12 @@ export type Database = {
           result_id: string
           status: string
           views: number
+        }[]
+      }
+      withdraw_correction: {
+        Args: { p_correction_id: string }
+        Returns: {
+          status: string
         }[]
       }
     }
