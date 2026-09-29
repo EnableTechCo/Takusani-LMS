@@ -282,7 +282,10 @@ insert into expected_grants values
   ('function', 'api', 'run_report(p_type text, p_programme_id uuid, p_cohort_id uuid, p_from date, p_to date)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'request_report_export(p_type text, p_programme_id uuid, p_cohort_id uuid, p_from date, p_to date)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'list_my_report_exports()', 'authenticated', 'EXECUTE'),
-  ('function', 'api', 'download_report_export(p_export_id uuid)', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'download_report_export(p_export_id uuid)', 'authenticated', 'EXECUTE'),
+  -- Cohort archival (20261118090000): administrators only, checked inside each function.
+  ('function', 'api', 'archive_cohort(p_cohort_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_cohort_archival()', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (
