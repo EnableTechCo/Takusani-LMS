@@ -39,7 +39,7 @@ Working decisions are the basis for design and are applied throughout this packa
 | Moderation cycle scope | A cycle covers named assessable items or units, optionally a period; one non-terminal cycle per item | Quality assurance policy |
 | Maximum hold | Configurable threshold that drives an alert; no value assumed | Quality assurance policy |
 | Resubmissions | Moderated like any other decision, by the next cycle | Quality assurance policy |
-| Sign-off authority | A moderator who took no assessment decision on any sampled result | Quality assurance policy |
+| Sign-off authority | A moderator who took no assessment decision on any result in the frozen population | Quality assurance policy |
 | Unit competency roll-up | Credit when every required item for the unit has a released Competent decision; an item may serve several units (ADR-022) | Academic policy, with the AS-03 unit list |
 | Appeals | One remark per result, ever; a view-script request does not extend the window; a downgrade to NYC carries remediation | Academic policy |
 | Appeal reviewer fallback | SRS AS-02 ordering | Academic policy |

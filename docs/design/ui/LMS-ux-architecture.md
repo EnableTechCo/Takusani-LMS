@@ -24,7 +24,7 @@
 | Institution | Khanya Skills Institute (fictional) |
 | Programme | Certificate in Business Administration, NQF Level 4, 140 credits (fictional unit list) |
 | Cohorts | "2026 Intake B" (`moderated`), "2026 Intake C" (`moderated`), "2026 Short Course 2" (`not_moderated`, used only to show immediate release). Corrected 21 September 2026: Intake C was first listed as `not_moderated`, which contradicted Thandiwe moderating it, because a cohort that is not moderated has no held results, cycles, or sign-off (ADR-019). |
-| Intake C moderation cycle | "Unit 3 portfolios", assessor Nomvula Mahlangu, frozen Friday 18 September 2026, population 64, sample 18, signed off Monday 28 September 2026 at 10:40. Thandiwe cannot sign off Intake B's "Term 3 assignments" because she assessed sampled results there (P-05). |
+| Intake C moderation cycle | "Unit 3 portfolios", assessor Nomvula Mahlangu, frozen Friday 18 September 2026, population 64, sample 18, signed off Monday 28 September 2026 at 10:40. Thandiwe cannot sign off Intake B's "Term 3 assignments" because she assessed results in its population (P-05). |
 | Learners | Lerato Mokoena, Sipho Zulu, Ayesha Patel, Johan Botha, Naledi Khoza |
 | Facilitator | Pieter van Wyk |
 | Assessors | Thandiwe Nkosi (assesses Intake B, moderates Intake C); Bongani Sithole (Intake B); Nomvula Mahlangu (Intake C only) |
@@ -678,7 +678,7 @@ Fully specified in section 8. Prototype states: answering; saved on this device 
 | Blocks | Cycle summary (scope, population 96 results, sample 22 items, frozen on date); checklist; outstanding list; eligibility line; statement; Sign off and release. |
 | Checklist | "All sample items concluded: 19 of 22". "No returned items outstanding: 3 outstanding". "Cohort observations recorded: yes" (optional, FR-508). |
 | Outstanding list (FR-510) | One row per blocking item: learner, item, assessor, returned on, due date, overdue tag, state ("Waiting for assessor" / "Re-marked, waiting for your review"), link. The button is disabled and the reason is stated in text next to it, not only through the disabled state. The server's `details` list is rendered the same way if sign-off is refused after a race. |
-| Eligibility (P-05) | "You can sign off this cycle: you took no assessment decision on any sampled result." Otherwise: "You cannot sign off this cycle because you assessed 2 of the sampled results. Anil Naidoo can sign off." |
+| Eligibility (P-05) | "You can sign off this cycle: you took no assessment decision on any of its 96 results." Otherwise: "You cannot sign off this cycle because you assessed 2 of its 96 results. Anil Naidoo can sign off." |
 | Confirmation | "Signing off releases **96 results** to learners in 2026 Intake B now. Each learner is notified. Each learner's 7 days to appeal start now and end at the end of Tuesday 29 September 2026. This cannot be undone." Required sign-off statement text box. (FR-511, BR-04, BR-05) |
 | After | "Signed off on 22 Sep 2026 at 14:05. 96 results released. 96 notifications created." Results finalised after the freeze are called out: "11 newer decisions are waiting for the next cycle." (P-06) |
 | States | Blocked with outstanding returns; ready; not eligible; signed off; stale (409: another moderator acted; reload). |

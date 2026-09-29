@@ -1,0 +1,206 @@
+import { formatDateTime, formatDay, formatLongDayOf, sastDaysBetween } from "@/lib/dates";
+
+/**
+ * Moderation planning (C-06; FR-501, FR-506; ADR-019; P-02): what a cycle is, how far the pending pool has aged,
+ * and what a refusal means, in words. Pure rules over the rows the page reads, so the page is only layout.
+ */
+
+export type CycleState = "planned" | "frozen" | "signed_off" | "cancelled";
+
+export const CYCLE_STATE_LABELS: Record<CycleState, string> = {
+  planned: "Planned",
+  frozen: "Frozen and sampled",
+  signed_off: "Signed off",
+  cancelled: "Cancelled before freeze",
+};
+
+export interface CycleRow {
+  id: string;
+  name: string;
+  state: string;
+  unit_ids: string[];
+  period_from: string | null;
+  period_to: string | null;
+  scheduled_start_at: string | null;
+  planned_by_name: string;
+  planned_at: string;
+  frozen_at: string | null;
+  cancelled_by_name: string | null;
+  cancelled_at: string | null;
+  cancel_reason: string | null;
+  version: number;
+  items: { id: string; title: string; via_unit_id: string | null }[];
+  waiting: number;
+  held: number;
+}
+
+export interface PoolRow {
+  item_id: string;
+  title: string;
+  kind: string;
+  unit_id: string | null;
+  unit_code: string | null;
+  unit_title: string | null;
+  waiting: number;
+  oldest_decided_at: string | null;
+  assessors: { name: string; count: number }[];
+  held: number;
+  released: number;
+  open_cycle_id: string | null;
+  open_cycle_name: string | null;
+  open_cycle_state: string | null;
+  open_cycle_scheduled_start_at: string | null;
+}
+
+export interface PoolSummary {
+  moderation_policy: string | null;
+  max_hold_days: number | null;
+  sampling_percentage: number | null;
+  sampling_rule: string | null;
+  sampling_rule_version: number | null;
+  waiting: number;
+  oldest_waiting_at: string | null;
+  held: number;
+  oldest_held_at: string | null;
+  planned_cycles: number;
+  frozen_cycles: number;
+}
+
+const count = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
+
+/** "Planned. Starts by itself on 14 Sep 2026, 09:00" or "Planned. Freezes when you choose". */
+export function cycleStateText(cycle: Pick<CycleRow, "state" | "scheduled_start_at" | "held">): string {
+  switch (cycle.state) {
+    case "planned":
+      return cycle.scheduled_start_at
+        ? `Planned. Starts by itself on ${formatDateTime(cycle.scheduled_start_at)}`
+        : "Planned. Freezes when you choose";
+    case "frozen":
+      return `Frozen and sampled. ${count(cycle.held, "result held", "results held")}`;
+    case "signed_off":
+      return "Signed off";
+    default:
+      return CYCLE_STATE_LABELS.cancelled;
+  }
+}
+
+/** "Automatically, 14 Sep 2026, 09:00" or "When chosen". */
+export function startText(scheduledStartAt: string | null): string {
+  return scheduledStartAt ? `Automatically, ${formatDateTime(scheduledStartAt)}` : "When chosen";
+}
+
+/** The scope in words: whole units first, then items named on their own. */
+export function scopeText(
+  cycle: Pick<CycleRow, "unit_ids" | "items">,
+  units: { id: string; code: string | null; title: string | null }[],
+): string {
+  const unitNames = cycle.unit_ids.map((id) => {
+    const unit = units.find((row) => row.id === id);
+    return unit ? `Unit ${unit.code ?? ""}${unit.title ? `: ${unit.title}` : ""} (every assignment)` : "A whole unit";
+  });
+  const named = cycle.items.filter((item) => item.via_unit_id === null).map((item) => item.title);
+  const parts = [...unitNames, ...named];
+  return parts.length ? parts.join("; ") : "Nothing yet";
+}
+
+/** "Only results decided from 1 Sep 2026 to 30 Sep 2026", or null when the whole pool. */
+export function periodText(from: string | null, to: string | null): string | null {
+  if (!from && !to) return null;
+  if (from && to) return `Only results decided from ${formatDay(from)} to ${formatDay(to)}`;
+  if (from) return `Only results decided from ${formatDay(from)}`;
+  return `Only results decided up to ${formatDay(to!)}`;
+}
+
+/** Whole South African days since the oldest waiting decision. */
+export function holdDays(oldestIso: string | null, now: Date): number {
+  return oldestIso ? Math.max(0, sastDaysBetween(oldestIso, now.toISOString())) : 0;
+}
+
+/** "4 of 21 days", or "4 days" when no maximum is set. */
+export function holdText(days: number, maxDays: number | null): string {
+  return maxDays ? `${days} of ${maxDays} days` : count(days, "day", "days");
+}
+
+/** Past the maximum hold, or within three days of it (P-03). */
+export function holdCaution(days: number, maxDays: number | null): boolean {
+  return maxDays !== null && days >= Math.max(0, maxDays - 3);
+}
+
+/** "Nomsa Dlamini 2 · Zanele Khumalo 1". */
+export function assessorsText(assessors: { name: string; count: number }[]): string {
+  return assessors.map((assessor) => `${assessor.name} ${assessor.count}`).join(" · ");
+}
+
+/** What will happen to an item's waiting results, for the pool table. */
+export function itemFateText(
+  row: Pick<PoolRow, "waiting" | "open_cycle_name" | "open_cycle_state" | "open_cycle_scheduled_start_at">,
+): {
+  text: string;
+  tone: "caution" | "info" | "neutral";
+} {
+  if (row.waiting === 0) return { text: "Nothing waiting", tone: "neutral" };
+  if (!row.open_cycle_name) return { text: "Not in any cycle", tone: "caution" };
+  if (row.open_cycle_state === "frozen") {
+    return { text: `Waiting for the next cycle: "${row.open_cycle_name}" is already frozen`, tone: "caution" };
+  }
+  return {
+    text: row.open_cycle_scheduled_start_at
+      ? `"${row.open_cycle_name}" claims them on ${formatDateTime(row.open_cycle_scheduled_start_at)}`
+      : `"${row.open_cycle_name}" claims them when it is frozen`,
+    tone: "info",
+  };
+}
+
+/** The sentence at the top of the page: the pool, its age, and whether a cycle will release it. */
+export function poolLead(summary: PoolSummary, now: Date): string {
+  if (summary.moderation_policy !== "moderated") {
+    return "This cohort is not moderated: results are released as soon as the assessor decides.";
+  }
+  if (summary.waiting === 0 && summary.held === 0) {
+    return "Every result in this cohort is held from the moment the assessor decides, until a cycle that covers it is signed off. Nothing is waiting right now.";
+  }
+  const parts: string[] = [];
+  if (summary.waiting > 0) {
+    const age = holdDays(summary.oldest_waiting_at, now);
+    parts.push(
+      `${count(summary.waiting, "result is", "results are")} waiting for a cycle` +
+        (summary.oldest_waiting_at
+          ? `; the oldest was decided ${age === 0 ? "today" : count(age, "day ago", "days ago")}, on ${formatLongDayOf(summary.oldest_waiting_at)}`
+          : ""),
+    );
+  }
+  if (summary.held > 0) parts.push(`${count(summary.held, "result is", "results are")} held in a frozen cycle`);
+  const sentence = parts.join(", and ");
+  const cycles =
+    summary.waiting > 0 && summary.planned_cycles === 0 ? " No cycle is planned to release the waiting results." : "";
+  return `${sentence.charAt(0).toUpperCase()}${sentence.slice(1)}.${cycles}`;
+}
+
+/** The sampling rule in force, read-only on the plan form. */
+export function samplingRuleText(
+  summary: Pick<PoolSummary, "sampling_rule" | "sampling_rule_version" | "sampling_percentage">,
+): string {
+  const rule =
+    summary.sampling_rule === "stratified"
+      ? "stratified by assessor, outcome and unit"
+      : (summary.sampling_rule ?? "not set");
+  return `Version ${summary.sampling_rule_version ?? "?"}: ${summary.sampling_percentage ?? "?"}% of Competent results at random, ${rule}; every Not yet competent decision and every first-time assessor's decisions.`;
+}
+
+export const MODERATION_REFUSALS: Record<string, string> = {
+  unauthenticated: "Your session has ended. Sign in again; nothing was saved.",
+  forbidden: "You do not coordinate this cohort.",
+  cohort_not_found: "This cohort no longer exists, or is archived.",
+  not_moderated: "This cohort is not moderated, so it has no cycles. Change the policy on the setup page first.",
+  invalid_name: "Give the cycle a name of up to 120 characters. Moderators and assessors see it.",
+  unknown_item: "One of the chosen assignments is not in this cohort.",
+  unknown_unit: "One of the chosen units is not in this programme.",
+  empty_scope: "Choose at least one assignment or unit.",
+  invalid_period: "The period runs backwards: the end is before the start.",
+  start_in_past: "Choose a start in the future, or freeze the cycle when you choose.",
+  not_found: "This cycle no longer exists, or is not in a cohort you coordinate.",
+  not_planned: "This cycle is no longer planned: it has been frozen or cancelled, so it cannot be cancelled.",
+  stale_version: "This cycle changed while you had the page open. Reload it; nothing was changed.",
+  reason_required: "Say why the cycle is cancelled, in up to 500 characters. It is kept with the cycle.",
+  error: "It could not be saved. Try again.",
+};
