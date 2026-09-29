@@ -91,6 +91,7 @@ export const WORKSPACES: readonly Workspace[] = [
       { label: "Queries", href: "/coordinate/queries" },
       { label: "Logistics", href: "/coordinate/logistics" },
       { label: "Reports", href: "/coordinate/reports" },
+      { label: "Corrections", href: "/coordinate/corrections" },
     ],
   },
   {
@@ -105,6 +106,7 @@ export const WORKSPACES: readonly Workspace[] = [
       { label: "Department integration", href: "/admin/integration" },
       { label: "Audit log", href: "/admin/audit" },
       { label: "Cohort archive", href: "/admin/cohorts" },
+      { label: "Corrections", href: "/admin/corrections" },
     ],
   },
 ];

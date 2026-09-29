@@ -4,6 +4,7 @@ import { TextLink } from "@/components/ui/link";
 import { Tag } from "@/components/ui/status";
 import { listMyAppeals } from "@/modules/appeals/queries";
 import { getPublicSettings } from "@/modules/audit/settings";
+import { getMyResultCorrection } from "@/modules/assessment/correction-queries";
 import { getMyResult } from "@/modules/assessment/queries";
 import {
   HeldResultView,
@@ -67,6 +68,7 @@ export default async function LearnResultPage({ params }: { params: Promise<{ re
   }
 
   const assessedVersion = result.assessed_version as unknown as VersionFacts;
+  const correction = await getMyResultCorrection(result.result_id);
   const appeals = myAppeals.filter((appeal) => appeal.result_id === result.result_id);
   const released: ReleasedResult = {
     resultId: result.result_id,
@@ -79,13 +81,15 @@ export default async function LearnResultPage({ params }: { params: Promise<{ re
     remediation: result.remediation ?? null,
     remediationDeadlineAt: result.remediation_deadline_at ?? null,
     feedback: result.feedback ?? null,
-    assessorName: result.assessor_name ?? null,
+    // A correction's actor is the approver; the learner's assessor is the one who assessed the work.
+    assessorName: correction ? correction.assessorName : (result.assessor_name ?? null),
     marks: (result.marks ?? []) as unknown as Mark[],
     assessedVersion,
     latestVersion: latestVersion ?? assessedVersion,
     firstViewedAt: result.first_viewed_at ?? null,
     appeals,
     decidedOnAppeal: result.decided_on_appeal,
+    correctedAt: correction?.correctedAt ?? null,
   };
 
   return (

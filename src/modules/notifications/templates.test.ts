@@ -162,6 +162,39 @@ describe("renderNotification", () => {
     );
   });
 
+  it("tells the learner a result was corrected, and the coordinators about the correction", () => {
+    const corrected = renderNotification("result_corrected", 1, {
+      result_id: "r1",
+      item_title: "Task 3",
+      cohort_name: "2026 Intake B",
+      released_at: "2026-09-29T12:05:00Z",
+      appeal_deadline_at: "2026-10-06T22:00:00Z",
+    });
+    expect(corrected.title).toBe("Your result for Task 3 was corrected");
+    expect(corrected.summary).toBe("You can appeal the corrected result until the end of Tuesday 6 October 2026.");
+    const proposed = renderNotification("correction_proposed", 1, {
+      correction_id: "c1",
+      learner_name: "Lerato Mokoena",
+      item_title: "Task 3",
+      cohort_name: "2026 Intake B",
+      proposed_by: "Ayesha Patel",
+      current_outcome: "not_yet_competent",
+      proposed_outcome: "competent",
+    });
+    expect(proposed.summary).toBe("Not yet competent to Competent. Proposed by Ayesha Patel.");
+    const declined = renderNotification("correction_concluded", 1, {
+      correction_id: "c1",
+      learner_name: "Lerato Mokoena",
+      item_title: "Task 3",
+      cohort_name: "2026 Intake B",
+      concluded_by: "Sipho Mahlangu",
+      approved: false,
+      reason: "The appendix does not cover AC 3.1.",
+    });
+    expect(declined.title).toBe("Correction declined: Lerato Mokoena, Task 3");
+    expect(declined.paragraphs[0]).toMatch(/Their reason: "The appendix does not cover AC 3.1."$/);
+  });
+
   it("refuses an unknown template or a payload missing a fact, rather than sending a broken email", () => {
     expect(() => renderNotification("result_released", 2, released)).toThrow("no template");
     expect(() => renderNotification("result_released", 1, { ...released, item_title: "" })).toThrow("item_title");
