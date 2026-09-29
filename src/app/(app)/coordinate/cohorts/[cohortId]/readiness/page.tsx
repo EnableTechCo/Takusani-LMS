@@ -3,9 +3,9 @@ import { CohortNav } from "@/components/shell/cohort-nav";
 import { PageHeader } from "@/components/shell/page-header";
 import { TextLink } from "@/components/ui/link";
 import { Tag } from "@/components/ui/status";
-import { formatDateTime, formatDay } from "@/lib/dates";
+import { formatDay } from "@/lib/dates";
 import { roleLabel } from "@/modules/identity/roles-rules";
-import { AssignItemForm, LogisticsToggle } from "@/modules/programmes/setup-forms";
+import { AssignItemForm } from "@/modules/programmes/setup-forms";
 import { getCohortReadiness, getCohortSetup, listCohortStaff } from "@/modules/programmes/setup-queries";
 import { READINESS_ITEMS, readinessDetail } from "@/modules/programmes/setup-rules";
 
@@ -75,6 +75,11 @@ export default async function ReadinessPage({ params }: { params: Promise<{ coho
                       {" "}
                       <TextLink href={`/coordinate/cohorts/${cohort.cohort_id}/people`}>Open people</TextLink>
                     </>
+                  ) : item.item_key === "logistics" ? (
+                    <>
+                      {" "}
+                      <TextLink href="/coordinate/logistics">Open logistics</TextLink>
+                    </>
                   ) : null}
                 </p>
                 {item.assignee_name ? (
@@ -84,18 +89,8 @@ export default async function ReadinessPage({ params }: { params: Promise<{ coho
                     {item.note ? `: "${item.note}"` : "."}
                   </p>
                 ) : null}
-                {item.item_key === "logistics" && item.confirmed_at ? (
-                  <p className="text-small text-muted">
-                    Confirmed by {item.confirmed_by_name}, {formatDateTime(item.confirmed_at)} (SAST).
-                  </p>
-                ) : null}
                 {archived ? null : (
                   <>
-                    {item.item_key === "logistics" ? (
-                      <div>
-                        <LogisticsToggle cohortId={cohort.cohort_id} confirmed={item.done} />
-                      </div>
-                    ) : null}
                     {!item.done && people.length > 0 ? (
                       <details className="disclosure">
                         {/* A11Y-18: one of these per item, so each says which item it is. */}

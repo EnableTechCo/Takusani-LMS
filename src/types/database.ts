@@ -15,6 +15,12 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      act_on_stakeholder_query: {
+        Args: { p_action: string; p_note?: string; p_query_id: string }
+        Returns: {
+          status: string
+        }[]
+      }
       activate_cohort: {
         Args: { p_cohort_id: string }
         Returns: {
@@ -217,12 +223,6 @@ export type Database = {
         Returns: {
           decision_id: string
           outcome_category: string
-          status: string
-        }[]
-      }
-      confirm_cohort_logistics: {
-        Args: { p_cohort_id: string; p_confirmed: boolean }
-        Returns: {
           status: string
         }[]
       }
@@ -844,10 +844,76 @@ export type Database = {
           title: string
         }[]
       }
+      get_session_logistics: {
+        Args: { p_session_id: string }
+        Returns: {
+          catering_arranged_at: string
+          catering_arranged_by_name: string
+          catering_needed: boolean
+          cohort_id: string
+          cohort_name: string
+          default_basis: number
+          default_headcount: number
+          default_source: string
+          dietary: string
+          difference: number
+          duration_minutes: number
+          enrolled: number
+          equipment: string
+          equipment_arranged_at: string
+          equipment_arranged_by_name: string
+          headcount: number
+          headcount_source: string
+          mode: string
+          present: number
+          reconciled_at: string
+          reconciled_by_name: string
+          reconciliation_note: string
+          register_captured: boolean
+          session_id: string
+          session_state: string
+          starts_at: string
+          title: string
+          variance_flagged: boolean
+          variance_percent: number
+          venue: string
+          venue_arranged_at: string
+          venue_arranged_by_name: string
+          venue_note: string
+          version: number
+        }[]
+      }
       get_session_policy: {
         Args: never
         Returns: {
           idle_minutes: number
+        }[]
+      }
+      get_stakeholder_query: {
+        Args: { p_query_id: string }
+        Returns: {
+          closed_at: string
+          closed_by_name: string
+          cohort_id: string
+          cohort_name: string
+          contact: string
+          details: string
+          due_on: string
+          events: Json
+          id: string
+          logged_at: string
+          logged_by_name: string
+          owner_id: string
+          owner_name: string
+          owners: Json
+          programme_id: string
+          programme_title: string
+          reference: string
+          resolution: string
+          source_name: string
+          source_type: string
+          state: string
+          subject: string
         }[]
       }
       get_task: {
@@ -1413,6 +1479,25 @@ export type Database = {
           scope_type: string
         }[]
       }
+      list_session_logistics: {
+        Args: never
+        Returns: {
+          arranged: number
+          catering_needed: boolean
+          cohort_id: string
+          cohort_name: string
+          headcount: number
+          needed: number
+          present: number
+          register_captured: boolean
+          session_id: string
+          session_state: string
+          starts_at: string
+          title: string
+          variance_flagged: boolean
+          venue: string
+        }[]
+      }
       list_sessions: {
         Args: never
         Returns: {
@@ -1438,6 +1523,24 @@ export type Database = {
           locked_at: string
           locked_until: string
           profile_id: string
+        }[]
+      }
+      list_stakeholder_queries: {
+        Args: { p_show?: string }
+        Returns: {
+          cohort_name: string
+          due_on: string
+          id: string
+          last_activity_at: string
+          logged_at: string
+          owner_id: string
+          owner_name: string
+          programme_title: string
+          reference: string
+          source_name: string
+          source_type: string
+          state: string
+          subject: string
         }[]
       }
       list_task_submission_counts: {
@@ -1525,6 +1628,23 @@ export type Database = {
       log_material_access: {
         Args: { p_material_id: string }
         Returns: {
+          status: string
+        }[]
+      }
+      log_stakeholder_query: {
+        Args: {
+          p_cohort_id: string
+          p_contact: string
+          p_details: string
+          p_due_on?: string
+          p_programme_id: string
+          p_source_name: string
+          p_source_type: string
+          p_subject: string
+        }
+        Returns: {
+          query_id: string
+          reference: string
           status: string
         }[]
       }
@@ -1667,6 +1787,12 @@ export type Database = {
           status: string
         }[]
       }
+      reconcile_logistics_variance: {
+        Args: { p_note: string; p_session_id: string }
+        Returns: {
+          status: string
+        }[]
+      }
       record_configuration_version: {
         Args: {
           p_effective_on: string
@@ -1710,6 +1836,12 @@ export type Database = {
       record_sign_in_success: { Args: { p_email: string }; Returns: undefined }
       revoke_calendar_feed_token: {
         Args: never
+        Returns: {
+          status: string
+        }[]
+      }
+      route_stakeholder_query: {
+        Args: { p_note?: string; p_owner_id: string; p_query_id: string }
         Returns: {
           status: string
         }[]
@@ -1758,6 +1890,24 @@ export type Database = {
           changed: number
           register_version: number
           status: string
+        }[]
+      }
+      save_session_logistics: {
+        Args: {
+          p_catering_arranged: boolean
+          p_catering_needed: boolean
+          p_dietary: string
+          p_equipment: string
+          p_equipment_arranged: boolean
+          p_expected_version: number
+          p_headcount: number
+          p_session_id: string
+          p_venue_arranged: boolean
+          p_venue_note: string
+        }
+        Returns: {
+          status: string
+          version: number
         }[]
       }
       scheduled_job_health: {

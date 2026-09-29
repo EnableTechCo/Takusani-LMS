@@ -107,4 +107,23 @@ describe("account notices (S3-08)", () => {
     expect(item.summary).toBe("Due by Friday 9 October 2026.");
     expect(item.paragraphs.join(" ")).toContain('Their note: "The unit 1 pack."');
   });
+
+  it("tells a coordinator a stakeholder query is theirs (FR-704)", () => {
+    const query = renderNotification("query_assigned", 1, {
+      reference: "QRY-2026-0007",
+      subject: "Placement dates",
+      programme_title: "Certificate in Business Administration",
+      cohort_name: "2026 Intake B",
+      source_name: "Acme Logistics",
+      due_on: "2026-10-30",
+      note: "You know the employer.",
+      assigned_by_name: "Ayesha Patel",
+    });
+    expect(query.title).toBe("Query QRY-2026-0007 is yours: Placement dates");
+    expect(query.summary).toBe("Reply due by Friday 30 October 2026.");
+    expect(query.paragraphs).toEqual([
+      "Ayesha Patel routed query QRY-2026-0007 to you. It is from Acme Logistics, about Certificate in Business Administration, 2026 Intake B, and a reply is due by Friday 30 October 2026.",
+      'Their note: "You know the employer."',
+    ]);
+  });
 });

@@ -436,11 +436,39 @@ function readinessItemAssigned(payload: Payload): Rendered {
   };
 }
 
+/** A coordinator's alert that a stakeholder query was routed to them (S6-03, FR-704). */
+function queryAssigned(payload: Payload): Rendered {
+  const reference = text(payload, "reference");
+  const subject = text(payload, "subject");
+  const about = [payload.programme_title, payload.cohort_name]
+    .filter((part) => typeof part === "string" && part)
+    .join(", ");
+  const due = typeof payload.due_on === "string" && payload.due_on ? payload.due_on : null;
+  const note = typeof payload.note === "string" && payload.note ? payload.note : null;
+  const by =
+    typeof payload.assigned_by_name === "string" && payload.assigned_by_name
+      ? payload.assigned_by_name
+      : "A coordinator";
+  const dueText = due ? `by ${formatLongDayOf(`${due}T12:00:00+02:00`)}` : null;
+  return {
+    title: `Query ${reference} is yours: ${subject}`,
+    summary: dueText ? `Reply due ${dueText}.` : `${by} routed it to you.`,
+    paragraphs: [
+      `${by} routed query ${reference} to you. It is from ${text(payload, "source_name")}${about ? `, about ${about}` : ""}${
+        dueText ? `, and a reply is due ${dueText}` : ""
+      }.`,
+      ...(note ? [`Their note: "${note}"`] : []),
+    ],
+    action: "Open the query",
+  };
+}
+
 const TEMPLATES: Record<string, Record<number, (payload: Payload) => Rendered>> = {
   password_reset_sent: { 1: passwordResetSent },
   role_assigned: { 1: roleAssigned },
   role_ended: { 1: roleEnded },
   readiness_item_assigned: { 1: readinessItemAssigned },
+  query_assigned: { 1: queryAssigned },
   account_deactivated: { 1: accountDeactivated },
   account_reactivated: { 1: accountReactivated },
   sign_in_locked: { 1: signInLocked },

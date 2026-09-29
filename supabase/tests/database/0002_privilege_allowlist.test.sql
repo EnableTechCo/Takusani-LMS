@@ -190,7 +190,6 @@ insert into expected_grants values
   ('function', 'api', 'activate_cohort(p_cohort_id uuid)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'get_cohort_readiness(p_cohort_id uuid)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'assign_readiness_item(p_cohort_id uuid, p_item_key text, p_assignee_id uuid, p_due_on date, p_note text)', 'authenticated', 'EXECUTE'),
-  ('function', 'api', 'confirm_cohort_logistics(p_cohort_id uuid, p_confirmed boolean)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'list_cohort_staff(p_cohort_id uuid)', 'authenticated', 'EXECUTE'),
   ('function', 'api', 'assign_cohort_role(p_cohort_id uuid, p_email text, p_role text, p_until timestamp with time zone)', 'authenticated', 'EXECUTE'),
   -- Formative quizzes (20261028090000): facilitators for the bank and quizzes, learners for their own attempts;
@@ -211,7 +210,17 @@ insert into expected_grants values
   -- Assessor release status (20261029090000): the caller's own decisions in cohorts they assess (test 0041).
   ('function', 'api', 'list_my_release_status()', 'authenticated', 'EXECUTE'),
   -- Inactivity sign-out (20261031090000): the limit that applies to the caller; nothing without a user (test 0042).
-  ('function', 'api', 'get_session_policy()', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'get_session_policy()', 'authenticated', 'EXECUTE'),
+  -- Stakeholder queries and session logistics (20261103090000): coordinators in scope, checked inside (test 0043).
+  ('function', 'api', 'log_stakeholder_query(p_programme_id uuid, p_cohort_id uuid, p_source_type text, p_source_name text, p_contact text, p_subject text, p_details text, p_due_on date)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'route_stakeholder_query(p_query_id uuid, p_owner_id uuid, p_note text)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'act_on_stakeholder_query(p_query_id uuid, p_action text, p_note text)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_stakeholder_queries(p_show text)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'get_stakeholder_query(p_query_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_session_logistics()', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'get_session_logistics(p_session_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'save_session_logistics(p_session_id uuid, p_expected_version integer, p_venue_note text, p_venue_arranged boolean, p_catering_needed boolean, p_headcount integer, p_dietary text, p_catering_arranged boolean, p_equipment text, p_equipment_arranged boolean)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'reconcile_logistics_variance(p_session_id uuid, p_note text)', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (

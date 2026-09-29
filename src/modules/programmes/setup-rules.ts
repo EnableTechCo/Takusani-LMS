@@ -29,8 +29,8 @@ export const READINESS_ITEMS: Record<string, ReadinessItem> = {
   published_tasks: { label: "A task published", help: "A facilitator publishes it under Tasks." },
   sessions: { label: "A session scheduled", help: "A facilitator schedules it under Sessions." },
   logistics: {
-    label: "Logistics confirmed",
-    help: "Venues, catering and equipment. Confirm it here by hand until session logistics is in the LMS.",
+    label: "Logistics arranged",
+    help: "The venue, catering and equipment for every upcoming in-person session, arranged under Logistics.",
   },
 };
 
@@ -38,6 +38,11 @@ export const READINESS_ITEMS: Record<string, ReadinessItem> = {
 export function readinessDetail(key: string, detail: string | null, policy: string | null): string | null {
   if (detail === null) return null;
   if (key === "moderation_policy") return detail === "moderated" ? "Moderated" : "Not moderated";
+  if (key === "logistics") {
+    if (detail === "none_in_person") return "No in-person sessions, so nothing to arrange";
+    const [arranged, total] = detail.split("/").map(Number);
+    return `${arranged} of ${total} in-person ${total === 1 ? "session" : "sessions"} arranged`;
+  }
   const count = Number(detail);
   if (key === "moderator" && policy === "not_moderated" && count === 0) return "Not needed: not moderated";
   const nouns: Record<string, [string, string]> = {

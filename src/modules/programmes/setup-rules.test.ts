@@ -8,6 +8,9 @@ describe("cohort setup wording", () => {
     expect(readinessDetail("published_tasks", "0", null)).toBe("0 tasks");
     expect(readinessDetail("moderation_policy", "not_moderated", "not_moderated")).toBe("Not moderated");
     expect(readinessDetail("logistics", null, null)).toBeNull();
+    expect(readinessDetail("logistics", "1/3", null)).toBe("1 of 3 in-person sessions arranged");
+    expect(readinessDetail("logistics", "0/1", null)).toBe("0 of 1 in-person session arranged");
+    expect(readinessDetail("logistics", "none_in_person", null)).toBe("No in-person sessions, so nothing to arrange");
   });
 
   it("says a moderator is not needed for a cohort that is not moderated", () => {
