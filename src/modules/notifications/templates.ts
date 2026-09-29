@@ -522,6 +522,37 @@ function readinessItemAssigned(payload: Payload, names = READINESS_ITEM_NAMES): 
   };
 }
 
+/** A moderator's allocations in a frozen cycle, told once (S4-07, FR-504). */
+function moderationItemsAllocated(payload: Payload): Rendered {
+  const cycle = text(payload, "cycle_name");
+  const count = typeof payload.count === "number" ? payload.count : Number(text(payload, "count"));
+  const items = `${count} ${count === 1 ? "item" : "items"}`;
+  return {
+    title: `${items} to moderate: ${cycle}`,
+    summary: `${text(payload, "cohort_name")}. The cycle is signed off once every item is concluded.`,
+    paragraphs: [
+      `The cycle "${cycle}" (${text(payload, "cohort_name")}) is frozen and sampled, and ${items} ${count === 1 ? "is" : "are"} yours to review.`,
+      "You were given no item you assessed. Record a finding on each: agree, or disagree with reasons.",
+    ],
+    action: "Open the cycle",
+  };
+}
+
+/** One item moved to a moderator by the coordinator (S4-07, FR-504). */
+function moderationItemReallocated(payload: Payload): Rendered {
+  const cycle = text(payload, "cycle_name");
+  const item = text(payload, "item_title");
+  return {
+    title: `An item to moderate: ${item}`,
+    summary: `Reallocated to you in "${cycle}" (${text(payload, "cohort_name")}).`,
+    paragraphs: [
+      `The coordinator reallocated a sampled ${item} in "${cycle}" (${text(payload, "cohort_name")}) to you.`,
+      "You took no assessment decision on it, which is why it could come to you.",
+    ],
+    action: "Open the item",
+  };
+}
+
 /** A coordinator's alert that a stakeholder query was routed to them (S6-03, FR-704). */
 function queryAssigned(payload: Payload): Rendered {
   const reference = text(payload, "reference");
@@ -558,6 +589,8 @@ const TEMPLATES: Record<string, Record<number, (payload: Payload) => Rendered>> 
     2: (payload) => readinessItemAssigned(payload, READINESS_ITEM_NAMES_V2),
   },
   query_assigned: { 1: queryAssigned },
+  moderation_items_allocated: { 1: moderationItemsAllocated },
+  moderation_item_reallocated: { 1: moderationItemReallocated },
   account_deactivated: { 1: accountDeactivated },
   account_reactivated: { 1: accountReactivated },
   sign_in_locked: { 1: signInLocked },

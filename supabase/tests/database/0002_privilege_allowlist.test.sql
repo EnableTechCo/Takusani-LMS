@@ -230,7 +230,18 @@ insert into expected_grants values
   ('function', 'api', 'get_moderation_summary(p_cohort_id uuid)', 'authenticated', 'EXECUTE'),
   -- Freeze and sample (20261108090000): coordinators in scope, checked inside (test 0048).
   ('function', 'api', 'freeze_moderation_cycle(p_cycle_id uuid, p_expected_version integer, p_seed text)', 'authenticated', 'EXECUTE'),
-  ('function', 'api', 'get_moderation_sample(p_cycle_id uuid)', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'get_moderation_sample(p_cycle_id uuid)', 'authenticated', 'EXECUTE'),
+  -- Sample item review and allocation (20261109090000): moderators on their items, coordinators in scope (test 0049).
+  ('function', 'api', 'list_my_moderation_cycles()', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_my_sample_items(p_cycle_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'open_sample_item(p_item_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_moderation_observations(p_cycle_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'record_moderation_finding(p_item_id uuid, p_finding text, p_reasons text)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'record_moderation_observation(p_cycle_id uuid, p_body text)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_cycle_sample_items(p_cycle_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_sample_moderator_candidates(p_item_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'reallocate_sample_item(p_item_id uuid, p_moderator_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'moderation', 'may_read_sample_evidence(p_profile_id uuid, p_bucket text, p_object_key text)', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (

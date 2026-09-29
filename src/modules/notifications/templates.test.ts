@@ -107,6 +107,24 @@ describe("renderNotification", () => {
     expect(cancelled.paragraphs[1]).toBe('The reason given: "The venue closed"');
   });
 
+  it("tells a moderator about their items, once per cycle, and about one reallocated to them", () => {
+    const allocated = renderNotification("moderation_items_allocated", 1, {
+      cycle_id: "c1",
+      cycle_name: "Term 3 assignments",
+      cohort_name: "2026 Intake B",
+      count: 4,
+    });
+    expect(allocated.title).toBe("4 items to moderate: Term 3 assignments");
+    expect(allocated.action).toBe("Open the cycle");
+    const one = renderNotification("moderation_item_reallocated", 1, {
+      cycle_id: "c1",
+      cycle_name: "Term 3 assignments",
+      cohort_name: "2026 Intake B",
+      item_title: "Task 3: Workplace records portfolio",
+    });
+    expect(one.summary).toBe('Reallocated to you in "Term 3 assignments" (2026 Intake B).');
+  });
+
   it("refuses an unknown template or a payload missing a fact, rather than sending a broken email", () => {
     expect(() => renderNotification("result_released", 2, released)).toThrow("no template");
     expect(() => renderNotification("result_released", 1, { ...released, item_title: "" })).toThrow("item_title");

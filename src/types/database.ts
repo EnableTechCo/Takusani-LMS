@@ -1215,6 +1215,26 @@ export type Database = {
           version: number
         }[]
       }
+      list_cycle_sample_items: {
+        Args: { p_cycle_id: string }
+        Returns: {
+          allocated_at: string
+          assessor_name: string
+          inclusion_reason: string
+          item_id: string
+          item_title: string
+          last_finding: string
+          last_finding_at: string
+          learner_name: string
+          learner_number: string
+          moderator_id: string
+          moderator_name: string
+          outcome: string
+          seq: number
+          state: string
+          stratum: string
+        }[]
+      }
       list_enrolments: {
         Args: { p_cohort_id: string }
         Returns: {
@@ -1310,6 +1330,16 @@ export type Database = {
           waiting: number
         }[]
       }
+      list_moderation_observations: {
+        Args: { p_cycle_id: string }
+        Returns: {
+          body: string
+          created_at: string
+          id: string
+          mine: boolean
+          moderator_name: string
+        }[]
+      }
       list_moderation_policy_history: {
         Args: { p_cohort_id: string }
         Returns: {
@@ -1365,6 +1395,21 @@ export type Database = {
           module_title: string
           release_at: string
           title: string
+        }[]
+      }
+      list_my_moderation_cycles: {
+        Args: never
+        Returns: {
+          cohort_id: string
+          cohort_name: string
+          cycle_id: string
+          frozen_at: string
+          my_concluded: number
+          my_disagreed: number
+          my_items: number
+          name: string
+          state: string
+          total_items: number
         }[]
       }
       list_my_note_folders: {
@@ -1467,6 +1512,25 @@ export type Database = {
           outcome_category: string
           reference: string
           state: string
+        }[]
+      }
+      list_my_sample_items: {
+        Args: { p_cycle_id?: string }
+        Returns: {
+          cohort_name: string
+          cycle_id: string
+          cycle_name: string
+          inclusion_reason: string
+          item_id: string
+          item_title: string
+          last_finding_at: string
+          learner_name: string
+          learner_number: string
+          outcome: string
+          seq: number
+          state: string
+          stratum: string
+          total: number
         }[]
       }
       list_my_sessions: {
@@ -1603,6 +1667,16 @@ export type Database = {
           label: string
           scope_key: string
           scope_type: string
+        }[]
+      }
+      list_sample_moderator_candidates: {
+        Args: { p_item_id: string }
+        Returns: {
+          conflict: boolean
+          full_name: string
+          holds_now: boolean
+          items_in_cycle: number
+          profile_id: string
         }[]
       }
       list_session_logistics: {
@@ -1865,6 +1939,42 @@ export type Database = {
           status: string
         }[]
       }
+      open_sample_item: {
+        Args: { p_item_id: string }
+        Returns: {
+          assessed_version: Json
+          assessor_name: string
+          cohort_name: string
+          conflict: Json
+          cycle_id: string
+          cycle_name: string
+          cycle_state: string
+          decided_at: string
+          decisions: Json
+          feedback: string
+          files: Json
+          findings: Json
+          inclusion_reason: string
+          item_id: string
+          item_title: string
+          justification: string
+          learner_name: string
+          learner_number: string
+          marks: Json
+          my_concluded: number
+          my_items: number
+          next_item_id: string
+          outcome: string
+          previous_item_id: string
+          remediation: string
+          resubmission_days: number
+          seq: number
+          state: string
+          status: string
+          stratum: string
+          total: number
+        }[]
+      }
       plan_moderation_cycle: {
         Args: {
           p_cohort_id: string
@@ -1937,6 +2047,13 @@ export type Database = {
           status: string
         }[]
       }
+      reallocate_sample_item: {
+        Args: { p_item_id: string; p_moderator_id: string }
+        Returns: {
+          conflict: Json
+          status: string
+        }[]
+      }
       reconcile_logistics_variance: {
         Args: { p_note: string; p_session_id: string }
         Returns: {
@@ -1968,6 +2085,20 @@ export type Database = {
         }
         Returns: {
           scan_state: string
+          status: string
+        }[]
+      }
+      record_moderation_finding: {
+        Args: { p_finding: string; p_item_id: string; p_reasons: string }
+        Returns: {
+          finding_id: string
+          status: string
+        }[]
+      }
+      record_moderation_observation: {
+        Args: { p_body: string; p_cycle_id: string }
+        Returns: {
+          observation_id: string
           status: string
         }[]
       }
