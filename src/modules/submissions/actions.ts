@@ -138,7 +138,7 @@ export async function setTaskRequirements(taskId: string, _: FormState, form: Fo
     done: true,
     message:
       count === 0
-        ? "This task asks for no files."
+        ? "This assignment asks for no files."
         : count === 1
           ? "The learner hands in 1 piece of evidence."
           : `The learner hands in ${count} pieces of evidence.`,
@@ -161,7 +161,10 @@ export async function setTaskAudience(taskId: string, _: FormState, form: FormDa
 
   revalidatePath(`/teach/tasks/${taskId}/edit`);
   const size = data![0].audience_size ?? 0;
-  return { done: true, message: size === 1 ? "The task is for 1 learner." : `The task is for ${size} learners.` };
+  return {
+    done: true,
+    message: size === 1 ? "The assignment is for 1 learner." : `The assignment is for ${size} learners.`,
+  };
 }
 
 /**

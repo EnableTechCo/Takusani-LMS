@@ -136,7 +136,7 @@ export function ActivateForm({
       <ConsequenceDialog
         cancelLabel="Not yet"
         confirmLabel="Activate cohort"
-        consequence={`${cohortName} becomes visible to its ${learners === 1 ? "learner" : `${learners} learners`} at once: their tasks, material and sessions appear.`}
+        consequence={`${cohortName} becomes visible to its ${learners === 1 ? "learner" : `${learners} learners`} at once: their assignments, material and sessions appear.`}
         form="activate-form"
         title={`Activate ${cohortName}?`}
         trigger={{ label: "Activate cohort" }}

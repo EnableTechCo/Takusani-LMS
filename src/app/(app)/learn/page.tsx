@@ -138,7 +138,7 @@ export default async function LearnHomePage() {
               <h2 className="text-heading" id="do-next-h">
                 Do next
               </h2>
-              <TextLink href="/learn/tasks">All tasks</TextLink>
+              <TextLink href="/learn/tasks">All assignments</TextLink>
             </div>
             {todo.length > 0 ? (
               <DoNextTable items={todo} now={now} />

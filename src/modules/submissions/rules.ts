@@ -23,7 +23,7 @@ export const AUDIENCE_LABELS: Record<string, string> = {
   named: "Named learners",
 };
 
-const title = z.string().trim().min(1, "Enter the task title.").max(200, "Use 200 characters or fewer.");
+const title = z.string().trim().min(1, "Enter the assignment title.").max(200, "Use 200 characters or fewer.");
 const brief = z
   .string()
   .trim()
@@ -72,12 +72,12 @@ const requirementSchema = z.object({
 
 export const requirementsSchema = z
   .array(requirementSchema)
-  .max(20, "A task asks for at most 20 pieces of evidence.")
+  .max(20, "An assignment asks for at most 20 pieces of evidence.")
   .describe("What the learner must hand in, in the order the submit screen shows them.");
 
 export const audienceSchema = z
   .object({
-    audience: z.enum(["cohort", "named"], { message: "Choose who the task is for." }),
+    audience: z.enum(["cohort", "named"], { message: "Choose who the assignment is for." }),
     emails: z.string().trim().optional(),
   })
   .transform((value) => ({ audience: value.audience, emails: splitEmails(value.emails ?? "") }))
@@ -108,13 +108,13 @@ export const TASK_REFUSALS: Record<string, { field?: string; message: string }> 
   unauthenticated: { message: "Your session has ended. Sign in again." },
   cohort_not_found: { field: "cohortId", message: "That cohort no longer exists. Choose another." },
   cohort_archived: { field: "cohortId", message: "That cohort is archived, so no new work can be set in it." },
-  task_not_found: { message: "That task no longer exists." },
+  task_not_found: { message: "That assignment no longer exists." },
   not_a_draft: {
     message:
-      "This task is published, so it cannot be changed. Learners have planned around it. Set a new task instead.",
+      "This assignment is published, so it cannot be changed. Learners have planned around it. Set a new assignment instead.",
   },
-  invalid_title: { field: "title", message: "Enter the task title." },
-  title_taken: { field: "title", message: "This cohort already has a task with that title." },
+  invalid_title: { field: "title", message: "Enter the assignment title." },
+  title_taken: { field: "title", message: "This cohort already has an assignment with that title." },
   invalid_brief: { field: "brief", message: "Write the brief: what the learner must do." },
   invalid_submission_type: { field: "submissionType", message: "Choose how learners hand the work in." },
   invalid_late_policy: { field: "latePolicy", message: "Choose what happens to late work." },
@@ -123,7 +123,7 @@ export const TASK_REFUSALS: Record<string, { field?: string; message: string }> 
   invalid_criterion_title: { field: "criteria", message: "Every criterion needs a title." },
   invalid_points: { field: "criteria", message: "Points are a whole number from 0 to 1000." },
   too_many_criteria: { field: "criteria", message: "A rubric has at most 50 criteria." },
-  invalid_audience: { field: "audience", message: "Choose who the task is for." },
+  invalid_audience: { field: "audience", message: "Choose who the assignment is for." },
   no_learners_named: { field: "emails", message: "List at least one learner's email address, one per line." },
   learner_not_enrolled: {
     field: "emails",
@@ -132,10 +132,10 @@ export const TASK_REFUSALS: Record<string, { field?: string; message: string }> 
   due_date_required: { field: "dueAt", message: "Set the due date before publishing." },
   due_date_passed: { field: "dueAt", message: "That due date has passed. Choose a later one before publishing." },
   no_learners: { message: "Nobody is enrolled in this cohort yet, so there is no one to publish to." },
-  already_published: { message: "This task is already published." },
+  already_published: { message: "This assignment is already published." },
   invalid_requirements: { field: "requirements", message: "The evidence list could not be read. Try again." },
   invalid_requirement_title: { field: "requirements", message: "Every piece of evidence needs a title." },
-  too_many_requirements: { field: "requirements", message: "A task asks for at most 20 pieces of evidence." },
+  too_many_requirements: { field: "requirements", message: "An assignment asks for at most 20 pieces of evidence." },
   file_rejected: {
     message:
       "One of your files did not pass the file check, so nothing was handed in. Remove it and upload the file again.",
@@ -145,7 +145,7 @@ export const TASK_REFUSALS: Record<string, { field?: string; message: string }> 
 
 /** Plain-language messages for the upload refusals, in the design system's tone: say what to do instead. */
 export const UPLOAD_REFUSALS: Record<string, string> = {
-  forbidden: "This task is not yours to submit.",
+  forbidden: "This assignment is not yours to submit.",
   unauthenticated: "Your session has ended. Sign in again, then choose the file once more.",
   invalid_filename: "That file name is too long. Rename the file and choose it again.",
   invalid_checksum: "That file could not be prepared. Choose it again.",

@@ -94,7 +94,7 @@ export function teachLead(today: number, tasks: OutstandingTask[]): string {
       `${count(tasks.length, "task", "tasks")} with work outstanding${overdue > 0 ? `, ${overdue} past due` : ""}`,
     );
   }
-  if (parts.length === 0) return "No sessions today, and every task set has been handed in.";
+  if (parts.length === 0) return "No sessions today, and every assignment set has been handed in.";
   const sentence = parts.join(", and ");
   return `${sentence.charAt(0).toUpperCase()}${sentence.slice(1)}.`;
 }

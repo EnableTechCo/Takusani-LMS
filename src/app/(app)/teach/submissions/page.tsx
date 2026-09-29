@@ -106,22 +106,22 @@ export default async function SubmissionsDashboardPage({
 
         <section aria-labelledby="by-task-h" className="stack">
           <h2 className="text-heading" id="by-task-h">
-            By task
+            By assignment
           </h2>
           <p className="text-small text-muted">Submitted means on time. Late work is counted separately.</p>
           {tasks.length === 0 ? (
             <div className="card">
-              <EmptyState icon="clipboard" title="No published tasks">
+              <EmptyState icon="clipboard" title="No published assignments">
                 <p>When you publish a task for {cohort.name}, who has handed it in shows here.</p>
               </EmptyState>
             </div>
           ) : (
             <DataTable
-              caption={`Submission counts for each task in ${cohort.name}`}
+              caption={`Submission counts for each assignment in ${cohort.name}`}
               columns={[
                 {
                   key: "task",
-                  header: "Task",
+                  header: "Assignment",
                   primary: true,
                   cell: (row) =>
                     row.task_id === taskId ? (

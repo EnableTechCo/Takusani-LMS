@@ -26,7 +26,7 @@ export const READINESS_ITEMS: Record<string, ReadinessItem> = {
     help: "Needed for a moderated cohort, to review samples and sign off cycles.",
   },
   materials: { label: "Learning material published", help: "A facilitator publishes it under Materials." },
-  published_tasks: { label: "A task published", help: "A facilitator publishes it under Tasks." },
+  published_tasks: { label: "An assignment published", help: "A facilitator publishes it under Assignments." },
   sessions: { label: "A session scheduled", help: "A facilitator schedules it under Sessions." },
   logistics: {
     label: "Logistics arranged",
@@ -51,7 +51,7 @@ export function readinessDetail(key: string, detail: string | null, policy: stri
     assessor: ["assessor", "assessors"],
     moderator: ["moderator", "moderators"],
     materials: ["material", "materials"],
-    published_tasks: ["task", "tasks"],
+    published_tasks: ["assignment", "assignments"],
     sessions: ["session", "sessions"],
   };
   const noun = nouns[key];

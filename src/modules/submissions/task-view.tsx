@@ -30,7 +30,7 @@ export function DueLine({ dueAt, latePolicy, now }: { dueAt: string | null; late
     <p className={passed ? "deadline-line deadline-line--closed" : "deadline-line"}>
       <Icon name={passed && closes ? "lock" : "clock"} />
       <span>
-        {passed ? "This task was due " : "Due "}
+        {passed ? "This assignment was due " : "Due "}
         <span className="deadline-line__date">{formatDateTime(dueAt)}</span> (SAST)
         {passed ? ". " : ", "}
         {!passed ? <span className="deadline-line__left">{left}</span> : null}
@@ -48,7 +48,7 @@ export function DueLine({ dueAt, latePolicy, now }: { dueAt: string | null; late
 }
 
 export function CriteriaList({ criteria }: { criteria: Criterion[] }) {
-  if (criteria.length === 0) return <p className="text-muted">No marking criteria were set for this task.</p>;
+  if (criteria.length === 0) return <p className="text-muted">No marking criteria were set for this assignment.</p>;
   return (
     <ol className="stack stack--sm">
       {criteria.map((criterion, index) => (
@@ -75,7 +75,7 @@ export function RequirementChecklist({
   latest?: Version | null;
 }) {
   if (requirements.length === 0) {
-    return <p className="text-muted">This task asks for no particular files.</p>;
+    return <p className="text-muted">This assignment asks for no particular files.</p>;
   }
   return (
     <ul className="checklist" aria-label="What to hand in">
@@ -103,7 +103,7 @@ export function RequirementChecklist({
 /** Every version, newest first. A superseded version is never removed (FR-310). */
 export function VersionHistory({ versions }: { versions: Version[] }) {
   if (versions.length === 0) {
-    return <p className="text-muted">You have not handed anything in for this task yet.</p>;
+    return <p className="text-muted">You have not handed anything in for this assignment yet.</p>;
   }
   return (
     <ol className="history-list" aria-label="Your versions, newest first">

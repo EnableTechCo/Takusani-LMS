@@ -4,7 +4,7 @@ import { getPublicSettings } from "@/modules/audit/settings";
 import { NewTaskForm } from "@/modules/submissions/forms";
 import { listWorkCohorts } from "@/modules/submissions/queries";
 
-export const metadata = { title: "New task · Teaching" };
+export const metadata = { title: "New assignment · Teaching" };
 
 // F-03 create (FR-201, FR-202): the brief and the dates. The rubric and the audience are set on the draft.
 export default async function NewTaskPage({ searchParams }: { searchParams: Promise<{ cohort?: string }> }) {
@@ -12,7 +12,11 @@ export default async function NewTaskPage({ searchParams }: { searchParams: Prom
 
   return (
     <div className="page page--form">
-      <PageHeader workspace="Teaching" title="New task" lead="Set work for a cohort, or for named learners in it." />
+      <PageHeader
+        workspace="Teaching"
+        title="New assignment"
+        lead="Set work for a cohort, or for named learners in it."
+      />
       <div className="card">
         <div className="card__body">
           {cohorts.length === 0 ? (

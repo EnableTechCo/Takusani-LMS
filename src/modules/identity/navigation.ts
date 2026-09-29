@@ -31,7 +31,7 @@ export const WORKSPACES: readonly Workspace[] = [
     label: "Learning",
     items: [
       { label: "Home", href: "/learn" },
-      { label: "Tasks", href: "/learn/tasks" },
+      { label: "Assignments", href: "/learn/tasks" },
       { label: "Materials", href: "/learn/materials" },
       { label: "Calendar", href: "/learn/calendar" },
       { label: "Results", href: "/learn/results" },
@@ -45,7 +45,7 @@ export const WORKSPACES: readonly Workspace[] = [
     label: "Teaching",
     items: [
       { label: "Overview", href: "/teach" },
-      { label: "Tasks", href: "/teach/tasks" },
+      { label: "Assignments", href: "/teach/tasks" },
       { label: "Materials", href: "/teach/materials" },
       { label: "Quizzes", href: "/teach/quizzes" },
       { label: "Sessions", href: "/teach/sessions" },

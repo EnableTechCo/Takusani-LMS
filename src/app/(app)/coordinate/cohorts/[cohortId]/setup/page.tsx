@@ -60,8 +60,8 @@ export default async function CohortSetupPage({
           {inSetup ? (
             <Banner role="note" title="This cohort is being set up" tone="info">
               <p>
-                Learners do not see it yet. Staff can prepare it: enrol learners, publish tasks and material, schedule
-                sessions. Activate it when everything needed is in place.
+                Learners do not see it yet. Staff can prepare it: enrol learners, publish assignments and material,
+                schedule sessions. Activate it when everything needed is in place.
               </p>
             </Banner>
           ) : null}

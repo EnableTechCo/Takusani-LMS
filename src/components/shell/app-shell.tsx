@@ -46,7 +46,7 @@ export function AppShell({
           <span className="topbar__spacer" />
           <form action="/search" className="topbar__search" role="search">
             <label className="input-icon">
-              <span className="u-visually-hidden">Search materials, tasks, sessions and exams</span>
+              <span className="u-visually-hidden">Search materials, assignments, sessions and exams</span>
               <Icon name="search" />
               <input className="input" name="q" placeholder="Search" type="search" />
             </label>

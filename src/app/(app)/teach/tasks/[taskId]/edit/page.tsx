@@ -73,7 +73,7 @@ export default async function EditTaskPage({
       />
       <div className="stack stack--lg">
         {published ? (
-          <Banner title="The task is published" tone="positive">
+          <Banner title="The assignment is published" tone="positive">
             <p>
               {published === "1" ? "1 learner" : `${published} learners`} can see it now, and each one is told in the
               LMS.
@@ -126,10 +126,10 @@ export default async function EditTaskPage({
           </>
         ) : (
           <>
-            <Banner title="This task is published" tone="readonly">
+            <Banner title="This assignment is published" tone="readonly">
               <p>
-                Learners have planned around it, so it cannot be edited. To change the work, set a new task and tell
-                them why.
+                Learners have planned around it, so it cannot be edited. To change the work, set a new assignment and
+                tell them why.
               </p>
             </Banner>
             <section aria-labelledby="brief-h" className="stack">
@@ -160,7 +160,7 @@ export default async function EditTaskPage({
                 What the learner hands in
               </h2>
               {requirements.length === 0 ? (
-                <p className="text-muted">This task asks for no files.</p>
+                <p className="text-muted">This assignment asks for no files.</p>
               ) : (
                 <ol className="stack stack--sm">
                   {requirements.map((requirement, index) => (
@@ -182,7 +182,7 @@ export default async function EditTaskPage({
                 Rubric
               </h2>
               {criteria.length === 0 ? (
-                <p className="text-muted">No rubric was set for this task.</p>
+                <p className="text-muted">No rubric was set for this assignment.</p>
               ) : (
                 <ol className="stack stack--sm">
                   {criteria.map((criterion, index) => (
@@ -204,7 +204,7 @@ export default async function EditTaskPage({
           </>
         )}
         <p>
-          <TextLink href="/teach/tasks">Back to tasks</TextLink>
+          <TextLink href="/teach/tasks">Back to assignments</TextLink>
         </p>
       </div>
     </div>
