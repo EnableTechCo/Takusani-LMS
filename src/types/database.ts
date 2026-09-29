@@ -1852,21 +1852,6 @@ export type Database = {
         }[]
       }
       sign_in_gate: { Args: { p_email: string }; Returns: boolean }
-      spike_autosave: {
-        Args: { p_answers: Json; p_attempt_id: string; p_lease_id: string }
-        Returns: {
-          saved: number
-          status: string
-        }[]
-      }
-      spike_cleanup: { Args: never; Returns: number }
-      spike_prepare: {
-        Args: { p_count: number; p_minutes?: number }
-        Returns: {
-          attempt_id: string
-          lease_id: string
-        }[]
-      }
       start_quiz_attempt: {
         Args: { p_quiz_id: string }
         Returns: {
