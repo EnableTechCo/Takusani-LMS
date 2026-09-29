@@ -47,7 +47,9 @@ export default async function LearnQuizPage({
       />
       <div className="stack stack--lg">
         <Banner role="note" title={PRACTICE_NOTICE} tone="info">
-          <p>You see your score and feedback as soon as you submit. Your result for the task is decided separately.</p>
+          <p>
+            You see your score and feedback as soon as you submit. Your result for the assignment is decided separately.
+          </p>
         </Banner>
         {flash.refused ? (
           <Banner compact title={QUIZ_REFUSALS[flash.refused] ?? QUIZ_REFUSALS.error} tone="critical" />

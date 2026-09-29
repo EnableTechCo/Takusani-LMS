@@ -12,8 +12,8 @@ export const MODULES = [
   },
   {
     id: "submissions",
-    label: "Tasks & submissions",
-    summary: "Tasks, upload intents, immutable versions, and receipts.",
+    label: "Assignments & submissions",
+    summary: "Assignments, upload intents, immutable versions, and receipts.",
   },
   { id: "exams", label: "Exams", summary: "Attempts, leases, batched autosave, expiry, submission, and recovery." },
   { id: "assessment", label: "Assessment", summary: "Allocations, evidence, immutable decisions, and results." },

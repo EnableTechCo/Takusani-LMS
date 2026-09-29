@@ -172,7 +172,7 @@ export function MarkingWorkspace({
   // contrast and are read in order (A11Y-12).
   const rubric = (
     <div className={canMark ? "rubric" : "rubric rubric--readonly"}>
-      {criteria.length === 0 ? <p className="text-muted">This task has no rubric rows.</p> : null}
+      {criteria.length === 0 ? <p className="text-muted">This assignment has no rubric rows.</p> : null}
       {criteria.map((criterion) => {
         const score = draft.scores.find((item) => item.ordinal === criterion.ordinal)!;
         if (!canMark) {

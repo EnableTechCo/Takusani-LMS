@@ -64,7 +64,7 @@ function TaskFields({
       <TextField
         defaultValue={state.values?.dueAt ?? task?.dueAt ?? ""}
         error={state.errors?.dueAt}
-        help="South African time. A draft can wait, but a task cannot be published without a due date."
+        help="South African time. A draft can wait, but an assignment cannot be published without a due date."
         label={TASK_LABELS.dueAt}
         name="dueAt"
         optional
@@ -115,8 +115,8 @@ export function NewTaskForm({
       />
       <TaskFields defaultLatePolicy={defaultLatePolicy} state={state} />
       <p className="text-small text-muted">
-        The task is created as a draft. Learners see nothing until you publish it, so you can set the rubric and the
-        audience first.
+        The assignment is created as a draft. Learners see nothing until you publish it, so you can set the rubric and
+        the audience first.
       </p>
       <div className="cluster">
         <SubmitButton pendingLabel="Creating the draft">Create draft</SubmitButton>
@@ -246,7 +246,7 @@ export function RequirementsForm({ taskId, requirements }: { taskId: string; req
       />
       {rows.length === 0 ? (
         <p className="text-muted">
-          This task asks for no files. Add a requirement for each thing the learner must hand in.
+          This assignment asks for no files. Add a requirement for each thing the learner must hand in.
         </p>
       ) : (
         <ol className="stack">
@@ -326,11 +326,11 @@ export function AudienceForm({ taskId, audience, emails }: { taskId: string; aud
         className="fieldset"
         onChange={(event) => setChoice((event.target as unknown as HTMLInputElement).value)}
       >
-        <legend className="fieldset__legend">Who is this task for?</legend>
+        <legend className="fieldset__legend">Who is this assignment for?</legend>
         <Radio defaultChecked={choice === "cohort"} label="Everyone in the cohort" name="audience" value="cohort" />
         <Radio
           defaultChecked={choice === "named"}
-          help="For example, learners resitting a task."
+          help="For example, learners resitting an assignment."
           label="Named learners"
           name="audience"
           value="named"
@@ -375,16 +375,16 @@ export function PublishTask({
       {state.message ? <Banner title={state.message} tone="critical" /> : null}
       <ConsequenceDialog
         cancelLabel="Not yet"
-        confirmLabel="Publish this task"
-        consequence={`${learners} in ${cohortName} will see this task straight away${
+        confirmLabel="Publish this assignment"
+        consequence={`${learners} in ${cohortName} will see this assignment straight away${
           dueAt ? `, due ${formatDateTime(dueAt)}` : ""
         }.`}
         form="publish-task"
-        title="Publish this task?"
+        title="Publish this assignment?"
         trigger={{ label: "Publish" }}
       >
         <ul className="modal__list">
-          <li>A published task cannot be edited. To change the work, set a new task.</li>
+          <li>A published assignment cannot be edited. To change the work, set a new assignment.</li>
           <li>Each learner it is for is told in the LMS.</li>
         </ul>
       </ConsequenceDialog>

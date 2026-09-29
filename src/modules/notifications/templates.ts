@@ -79,6 +79,25 @@ function taskReminder(payload: Payload): Rendered {
   };
 }
 
+/** Version 2 of taskPublished: an assignment, in the words people read (never edit version 1: messages were queued with it). */
+function assignmentPublished(payload: Payload): Rendered {
+  const title = text(payload, "title");
+  const dueAt = text(payload, "due_at");
+  const due = `${formatLongDayOf(dueAt)} at ${formatTime(dueAt)} (SAST)`;
+  return {
+    title: `New assignment: ${title}`,
+    summary: `Due ${due}.`,
+    paragraphs: [`A new assignment has been set for ${text(payload, "cohort_name")}: ${title}.`, `It is due ${due}.`],
+    action: "Open the assignment",
+  };
+}
+
+/** Version 2 of taskReminder: the same reminder, with the assignment named as one. */
+function assignmentReminder(payload: Payload): Rendered {
+  const rendered = taskReminder(payload);
+  return { ...rendered, action: "Open the assignment" };
+}
+
 /** A coordinator's notice (FR-703): who sent it, its title, and the message itself. */
 function notice(payload: Payload): Rendered {
   const body = text(payload, "body");
@@ -414,10 +433,17 @@ const READINESS_ITEM_NAMES: Record<string, string> = {
   logistics: "confirm the logistics",
 };
 
+/** Version 2 names the assignment as one; version 1 keeps its words for messages already queued. */
+const READINESS_ITEM_NAMES_V2: Record<string, string> = {
+  ...READINESS_ITEM_NAMES,
+  published_tasks: "publish an assignment",
+  logistics: "arrange the logistics",
+};
+
 /** FR-702: a coordinator assigned an open readiness item to the person (S4-03). */
-function readinessItemAssigned(payload: Payload): Rendered {
+function readinessItemAssigned(payload: Payload, names = READINESS_ITEM_NAMES): Rendered {
   const cohort = text(payload, "cohort_name");
-  const item = READINESS_ITEM_NAMES[text(payload, "item_key")] ?? "a readiness item";
+  const item = names[text(payload, "item_key")] ?? "a readiness item";
   const due = typeof payload.due_on === "string" && payload.due_on ? payload.due_on : null;
   const note = typeof payload.note === "string" && payload.note ? payload.note : null;
   const by =
@@ -467,7 +493,10 @@ const TEMPLATES: Record<string, Record<number, (payload: Payload) => Rendered>> 
   password_reset_sent: { 1: passwordResetSent },
   role_assigned: { 1: roleAssigned },
   role_ended: { 1: roleEnded },
-  readiness_item_assigned: { 1: readinessItemAssigned },
+  readiness_item_assigned: {
+    1: (payload) => readinessItemAssigned(payload),
+    2: (payload) => readinessItemAssigned(payload, READINESS_ITEM_NAMES_V2),
+  },
   query_assigned: { 1: queryAssigned },
   account_deactivated: { 1: accountDeactivated },
   account_reactivated: { 1: accountReactivated },
@@ -481,8 +510,8 @@ const TEMPLATES: Record<string, Record<number, (payload: Payload) => Rendered>> 
   appeal_received: { 1: appealReceived },
   appeal_lodged: { 1: appealLodged },
   result_released: { 1: resultReleased },
-  task_published: { 1: taskPublished },
-  task_reminder: { 1: taskReminder },
+  task_published: { 1: taskPublished, 2: assignmentPublished },
+  task_reminder: { 1: taskReminder, 2: assignmentReminder },
   notice: { 1: notice },
   session_scheduled: { 1: sessionScheduled },
   session_changed: { 1: sessionChanged },

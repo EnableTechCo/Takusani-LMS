@@ -7,7 +7,7 @@ import { listMyResults } from "@/modules/assessment/queries";
 import { OUTCOME_LABELS } from "@/modules/assessment/rules";
 import { listMyTasks } from "@/modules/submissions/queries";
 
-export const metadata = { title: "Tasks" };
+export const metadata = { title: "Assignments" };
 
 type Task = Awaited<ReturnType<typeof listMyTasks>>[number];
 type Result = Awaited<ReturnType<typeof listMyResults>>[number];
@@ -37,21 +37,25 @@ export default async function LearnTasksPage() {
 
   return (
     <div className="page">
-      <PageHeader workspace="Learning" title="Tasks" lead="Your tasks and where each one stands. Times are SAST." />
+      <PageHeader
+        workspace="Learning"
+        title="Assignments"
+        lead="Your assignments and where each one stands. Times are SAST."
+      />
       <div className="stack stack--lg">
         {tasks.length === 0 ? (
           <div className="card">
-            <EmptyState icon="clipboard" title="No tasks yet">
+            <EmptyState icon="clipboard" title="No assignments yet">
               <p>Work set for your cohort appears here. You will be told when there is something to do.</p>
             </EmptyState>
           </div>
         ) : (
           <DataTable
-            caption="Your tasks, by due date. Times in SAST."
+            caption="Your assignments, by due date. Times in SAST."
             columns={[
               {
                 key: "task",
-                header: "Task",
+                header: "Assignment",
                 primary: true,
                 cell: (task) => (
                   <>

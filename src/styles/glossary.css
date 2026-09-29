@@ -1,0 +1,51 @@
+/* A glossary term (src/components/ui/term.tsx): the word with a dotted underline, and its meaning shown on hover,
+   on focus and on tap (a button, so it works from the keyboard and on phones). Application layer: not part of the
+   prototype's component layer. Meets WCAG 1.4.13: the meaning can be hovered, stays until the pointer or focus
+   leaves, and moving on dismisses it.
+
+   The meaning sits below the paragraph that holds the term (the nearest positioned ancestor), spanning its width,
+   so it never runs off a phone screen however far right the word is; a hidden meaning takes no space at all. */
+.page-header__lead,
+.empty__body,
+.term-context {
+  position: relative;
+}
+.term {
+  display: inline;
+}
+.term__word {
+  all: unset;
+  cursor: help;
+  text-decoration: underline dotted currentColor;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+.term__word:focus-visible {
+  outline: var(--focus-width) solid var(--color-focus);
+  outline-offset: var(--focus-offset);
+  border-radius: var(--radius-xs);
+}
+.term__meaning {
+  display: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + var(--space-2));
+  z-index: var(--z-menu);
+  max-width: 24rem;
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-normal);
+  color: var(--color-text);
+  text-align: left;
+  background: var(--color-surface);
+  border: var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-overlay);
+}
+.term:hover .term__meaning,
+.term:focus-within .term__meaning {
+  display: block;
+}

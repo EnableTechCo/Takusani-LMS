@@ -6,7 +6,7 @@ import { formatDateTime } from "@/lib/dates";
 import { listTasks } from "@/modules/submissions/queries";
 import { AUDIENCE_LABELS, TASK_STATE_LABELS } from "@/modules/submissions/rules";
 
-export const metadata = { title: "Tasks · Teaching" };
+export const metadata = { title: "Assignments · Teaching" };
 
 // F-02 (FR-201, FR-202): the drafts and published tasks of the cohorts this person sets work in.
 export default async function TeachTasksPage() {
@@ -14,26 +14,28 @@ export default async function TeachTasksPage() {
 
   return (
     <div className="page">
-      <PageHeader workspace="Teaching" title="Tasks" lead="Drafts and published tasks. Times are SAST." />
+      <PageHeader workspace="Teaching" title="Assignments" lead="Drafts and published assignments. Times are SAST." />
       <div className="stack stack--lg">
         <div className="cluster">
           <ButtonLink href="/teach/tasks/new" variant="primary">
-            New task
+            New assignment
           </ButtonLink>
         </div>
         {tasks.length === 0 ? (
           <div className="card">
-            <EmptyState icon="clipboard" title="No tasks yet">
-              <p>A task starts as a draft that only you can see. Publish it when the brief and the date are right.</p>
+            <EmptyState icon="clipboard" title="No assignments yet">
+              <p>
+                An assignment starts as a draft that only you can see. Publish it when the brief and the date are right.
+              </p>
             </EmptyState>
           </div>
         ) : (
           <DataTable
-            caption="Tasks, drafts first, then by due date. Times in SAST."
+            caption="Assignments, drafts first, then by due date. Times in SAST."
             columns={[
               {
                 key: "title",
-                header: "Task",
+                header: "Assignment",
                 primary: true,
                 cell: (task) => (
                   <>

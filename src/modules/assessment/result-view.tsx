@@ -266,7 +266,7 @@ function NextSteps({ result, now }: { result: ReleasedResult; now: Date }) {
           Some criteria still need evidence. You can resubmit {until}.{" "}
           <span className="mono">{daysLeft <= 0 ? "Ends today" : daysLeftText(daysLeft)}</span>
           {state === "task_closed" ? (
-            <> This task no longer takes new versions online, so ask your coordinator how to hand in your work.</>
+            <> This assignment no longer takes new versions online, so ask your coordinator how to hand in your work.</>
           ) : null}
         </p>
       )}
@@ -403,7 +403,7 @@ function AssessedWork({ result }: { result: ReleasedResult }) {
         </dl>
       </div>
       <div className="card__footer">
-        <TextLink href={`/learn/tasks/${result.taskId}`}>Open the task and your versions</TextLink>
+        <TextLink href={`/learn/tasks/${result.taskId}`}>Open the assignment and your versions</TextLink>
       </div>
     </div>
   );
@@ -508,7 +508,7 @@ export function HeldResultView({
             <Banner title="We have your work" tone="info">
               <p>
                 {moderated
-                  ? "A second person, called a moderator, checks results before anyone sees them. Everyone's results for the same task come out together."
+                  ? "A second person, called a moderator, checks results before anyone sees them. Everyone's results for the same assignment come out together."
                   : "Your assessor is marking your work."}{" "}
                 We will tell you here when your result is ready. Your {appealWindowDays} days to appeal, and any time to
                 resubmit, start on the day your result is ready.
@@ -559,7 +559,7 @@ export function HeldResultView({
               </dl>
             </div>
             <div className="card__footer">
-              <TextLink href={`/learn/tasks/${taskId}`}>Open the task and your receipt</TextLink>
+              <TextLink href={`/learn/tasks/${taskId}`}>Open the assignment and your receipt</TextLink>
             </div>
           </div>
         </aside>

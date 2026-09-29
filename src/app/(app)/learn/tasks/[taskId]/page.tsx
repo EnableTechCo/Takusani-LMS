@@ -123,7 +123,7 @@ export default async function LearnTaskPage({
         </section>
 
         <p>
-          <TextLink href="/learn/tasks">Back to your tasks</TextLink>
+          <TextLink href="/learn/tasks">Back to your assignments</TextLink>
         </p>
       </div>
     </div>

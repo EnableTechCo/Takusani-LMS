@@ -104,7 +104,7 @@ export function exportRows(rows: TaskRow[], dueAt: string | null, now: Date): { 
 export const REMINDER_REFUSALS: Record<string, string> = {
   unauthenticated: "Your session has ended. Sign in again.",
   forbidden: "You do not set work in this cohort.",
-  task_not_found: "This task is not published.",
+  task_not_found: "This assignment is not published.",
   invalid_message: "Write the reminder, up to 1,000 characters.",
   no_learners: "Choose at least one learner who has not handed in.",
   too_many: "Send to at most 2,000 learners at a time.",

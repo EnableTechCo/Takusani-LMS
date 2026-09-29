@@ -47,7 +47,7 @@ export default async function SubmitTaskPage({ params }: { params: Promise<{ tas
         willBeLate={task.due_at !== null && new Date(task.due_at) < new Date()}
       />
       <p className="u-mt-6">
-        <TextLink href={`/learn/tasks/${taskId}`}>Back to the task</TextLink>
+        <TextLink href={`/learn/tasks/${taskId}`}>Back to the assignment</TextLink>
       </p>
     </div>
   );

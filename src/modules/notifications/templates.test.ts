@@ -31,6 +31,21 @@ describe("renderNotification", () => {
     expect(rendered.summary).toBe("Due Friday 2 October 2026 at 17:00 (SAST).");
   });
 
+  it("says assignment, not task, from version 2, while version 1 keeps its words", () => {
+    const payload = { task_id: "t1", title: "Task 4", cohort_name: "2026 Intake B", due_at: "2026-10-02T15:00:00Z" };
+    expect(renderNotification("task_published", 2, payload).title).toBe("New assignment: Task 4");
+    expect(renderNotification("task_published", 2, payload).action).toBe("Open the assignment");
+    expect(renderNotification("task_published", 1, payload).title).toBe("New task: Task 4");
+    const reminder = { ...payload, message: "Please hand it in." };
+    expect(renderNotification("task_reminder", 2, reminder).action).toBe("Open the assignment");
+    expect(renderNotification("task_reminder", 1, reminder).action).toBe("Open the task");
+    const item = { cohort_name: "2026 Intake B", item_key: "published_tasks", assigned_by_name: "Ayesha Patel" };
+    expect(renderNotification("readiness_item_assigned", 2, item).title).toBe(
+      "2026 Intake B: please publish an assignment",
+    );
+    expect(renderNotification("readiness_item_assigned", 1, item).title).toBe("2026 Intake B: please publish a task");
+  });
+
   it("refuses an unknown template or a payload missing a fact, rather than sending a broken email", () => {
     expect(() => renderNotification("result_released", 2, released)).toThrow("no template");
     expect(() => renderNotification("result_released", 1, { ...released, item_title: "" })).toThrow("item_title");

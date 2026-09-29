@@ -89,11 +89,11 @@ function SessionRows({ caption, sessions, now }: { caption: string; sessions: Ov
 function OutstandingRows({ tasks }: { tasks: OutstandingTask[] }) {
   return (
     <DataTable
-      caption="Tasks with work outstanding: past due first, then the soonest due. Times in SAST."
+      caption="Assignments with work outstanding: past due first, then the soonest due. Times in SAST."
       columns={[
         {
           key: "task",
-          header: "Task",
+          header: "Assignment",
           primary: true,
           cell: (task) => (
             <>
@@ -163,14 +163,14 @@ export default async function TeachOverviewPage() {
             </span>
           </div>
           <div className="stat" role="listitem">
-            <span className="stat__label">Tasks with work outstanding</span>
+            <span className="stat__label">Assignments with work outstanding</span>
             <span className="stat__value">{summary.tasks}</span>
             <span className="stat__meta">{tasks.filter((task) => task.overdue).length} past due</span>
           </div>
           <div className="stat" role="listitem">
             <span className="stat__label">Learners still to hand in</span>
             <span className="stat__value">{summary.outstanding}</span>
-            <span className="stat__meta">Across those tasks</span>
+            <span className="stat__meta">Across those assignments</span>
           </div>
           <div className="stat" role="listitem">
             <span className="stat__label">Late submissions</span>
@@ -224,7 +224,7 @@ export default async function TeachOverviewPage() {
           {tasks.length === 0 ? (
             <div className="card">
               <EmptyState icon="check-circle" title="Everything set has been handed in">
-                <p>When a published task still has learners to hand in, it appears here with the counts.</p>
+                <p>When a published assignment still has learners to hand in, it appears here with the counts.</p>
               </EmptyState>
             </div>
           ) : (

@@ -96,7 +96,7 @@ export default async function NotificationsPage({
             >
               <p>
                 {category === "all"
-                  ? "Messages about your results and new tasks will appear here."
+                  ? "Messages about your results and new assignments will appear here."
                   : `You have no ${CATEGORY_LABELS[category].toLowerCase()} notifications.`}
               </p>
             </EmptyState>
