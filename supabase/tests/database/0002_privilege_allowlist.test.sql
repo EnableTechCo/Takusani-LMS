@@ -211,13 +211,17 @@ insert into expected_grants values
   -- Assessor release status (20261029090000): the caller's own decisions in cohorts they assess (test 0041).
   ('function', 'api', 'list_my_release_status()', 'authenticated', 'EXECUTE'),
   -- Inactivity sign-out (20261031090000): the limit that applies to the caller; nothing without a user (test 0042).
-  ('function', 'api', 'get_session_policy()', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'get_session_policy()', 'authenticated', 'EXECUTE'),
+  -- Spike X-3 (20261101090000, throwaway): test accounts only, checked inside (test 0043). Dropped after the write-up.
+  ('function', 'api', 'spike_prepare(p_count integer, p_minutes integer)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'spike_autosave(p_attempt_id uuid, p_lease_id uuid, p_answers jsonb)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'spike_cleanup()', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (
   values ('public'), ('api'), ('identity'), ('programmes'), ('learning'), ('submissions'), ('exams'),
          ('assessment'), ('moderation'), ('appeals'), ('credits'), ('notifications'), ('reporting'),
-         ('department'), ('audit')
+         ('department'), ('audit'), ('spike')
 ),
 roles(grantee) as (values ('anon'), ('authenticated')),
 extension_owned as (
