@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Takusani LMS — ui.css  (framework-free component layer; requires tokens.css)
+   iNurture LMS — ui.css  (framework-free component layer; requires tokens.css)
    Naming:  .block  .block__element  .block--modifier   state: .is-*  or ARIA/native attributes
             ([aria-current], [aria-selected], [aria-invalid], [aria-sort], [aria-pressed], :disabled, [open])
             utilities: .u-*      JS hooks: data-* attributes only (never classes)
@@ -70,8 +70,8 @@ i[class^="ph"] { font-size: 1.25em; line-height: 1; flex: none; } /* optional Ph
 
 /* ---- 2. TYPE ------------------------------------------------------------- */
 /* Serif = page titles and key figures only. Sans = everything interactive. Mono = IDs, timestamps, receipts. */
-.text-display { font-family: var(--font-serif); font-size: var(--text-2xl); font-weight: var(--weight-medium); line-height: var(--leading-tight); letter-spacing: var(--tracking-tight); color: var(--color-text-strong); }
-.text-title { font-family: var(--font-serif); font-size: var(--text-xl); font-weight: var(--weight-medium); line-height: var(--leading-tight); letter-spacing: var(--tracking-tight); color: var(--color-text-strong); }
+.text-display { font-family: var(--font-display); font-size: var(--text-2xl); font-weight: var(--weight-medium); line-height: var(--leading-tight); letter-spacing: var(--tracking-tight); color: var(--color-text-strong); }
+.text-title { font-family: var(--font-display); font-size: var(--text-xl); font-weight: var(--weight-medium); line-height: var(--leading-tight); letter-spacing: var(--tracking-tight); color: var(--color-text-strong); }
 .text-heading { font-size: var(--text-lg); font-weight: var(--weight-semibold); line-height: var(--leading-snug); color: var(--color-text-strong); }
 .text-subheading { font-size: var(--text-base); font-weight: var(--weight-semibold); line-height: var(--leading-snug); color: var(--color-text-strong); }
 .text-lead { font-size: var(--text-md); color: var(--color-text-secondary); }
@@ -80,7 +80,7 @@ i[class^="ph"] { font-size: 1.25em; line-height: 1; flex: none; } /* optional Ph
 .text-muted { color: var(--color-text-secondary); }
 .text-overline { font-size: var(--text-xs); font-weight: var(--weight-semibold); letter-spacing: var(--tracking-wide); text-transform: uppercase; color: var(--color-text-secondary); }
 .text-meta, .mono { font-family: var(--font-mono); font-size: 0.8125rem; font-variant-numeric: tabular-nums; color: var(--color-text-secondary); letter-spacing: 0; }
-.text-figure { font-family: var(--font-serif); font-size: var(--text-3xl); font-weight: var(--weight-medium); line-height: 1; letter-spacing: var(--tracking-tight); color: var(--color-text-strong); font-variant-numeric: lining-nums tabular-nums; }
+.text-figure { font-family: var(--font-display); font-size: var(--text-3xl); font-weight: var(--weight-medium); line-height: 1; letter-spacing: var(--tracking-tight); color: var(--color-text-strong); font-variant-numeric: lining-nums tabular-nums; }
 @media (min-width: 48rem) { .text-display { font-size: var(--text-3xl); } .text-title { font-size: var(--text-2xl); } }
 
 /* Long-form reading: assessor feedback, learning material, appeal grounds. About 70 characters per line (--measure), never wider than 720px. */
@@ -101,10 +101,12 @@ a:hover, .link:hover { color: var(--color-accent-hover); text-decoration-thickne
 .link--standalone { display: inline-flex; align-items: center; gap: var(--space-2); min-height: 1.5rem; font-weight: var(--weight-medium); }
 
 /* ---- 3. SHELLS & LAYOUT ---------------------------------------------------- */
-/* AuthShell: institution name, one centred form column, help link and theme control in the footer. No navigation. */
+/* AuthShell: the institution's brand, one centred form column, help link and theme control in the footer. No navigation. */
 .auth-shell { min-height: 100vh; min-height: 100dvh; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; background: var(--color-canvas); }
 .auth-shell__header { display: flex; flex-direction: column; align-items: center; gap: var(--space-2); padding: var(--space-8) var(--space-4) var(--space-5); text-align: center; }
-.auth-shell__institution { font-family: var(--font-serif); font-size: var(--text-xl); font-weight: var(--weight-medium); letter-spacing: var(--tracking-tight); color: var(--color-text-strong); }
+/* The sign-in page leads with the institution, so its brand is larger than the top bar's. */
+.auth-shell__header .brand__mark { width: 2.5rem; height: 2.5rem; }
+.auth-shell__header .brand__name { font-size: var(--text-2xl); }
 .auth-shell__main { display: grid; justify-items: center; align-content: start; padding: var(--space-4); }
 .auth-shell__card { width: 100%; max-width: var(--width-auth); padding: var(--space-6); background: var(--color-surface); border: var(--border); border-radius: var(--radius-lg); }
 .auth-shell__footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--space-3) var(--space-6); padding: var(--space-6) var(--space-4); font-size: var(--text-sm); color: var(--color-text-secondary); }
@@ -128,13 +130,13 @@ a:hover, .link:hover { color: var(--color-accent-hover); text-decoration-thickne
 }
 @media (min-width: 64rem) { .app-shell { grid-template-columns: var(--sidenav-width) minmax(0, 1fr); } .app-shell__sidenav { padding: var(--space-4) var(--space-3); } }
 
-/* TopBar parts: brand + institution, context selector, search, bell, account. Never holds page actions. */
+/* TopBar parts: the institution's brand, context selector, search, bell, account. Never holds page actions. */
 .brand { display: inline-flex; align-items: center; gap: var(--space-2); color: var(--color-text-strong); text-decoration: none; min-height: 2.75rem; }
 .brand:hover { color: var(--color-text-strong); }
-.brand__mark { width: 1.75rem; height: 1.75rem; flex: none; }
-.brand__name { font-family: var(--font-serif); font-size: 1.375rem; font-weight: var(--weight-medium); letter-spacing: var(--tracking-tight); line-height: 1; }
+/* The iNurture leaf: brand green in both themes; the cut-out "i" shows the bar behind it. */
+.brand__mark { width: 1.75rem; height: 1.75rem; flex: none; color: var(--color-brand-leaf); }
+.brand__name { font-family: var(--font-display); font-size: 1.375rem; font-weight: 700; letter-spacing: -0.01em; line-height: 1; }
 .brand__suffix { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-text-secondary); align-self: flex-end; padding-bottom: 0.2em; }
-.topbar__institution { display: none; padding-left: var(--space-3); margin-left: var(--space-1); border-left: var(--border); font-size: var(--text-sm); color: var(--color-text-secondary); white-space: nowrap; }
 .topbar__spacer { flex: 1; }
 .topbar__context, .topbar__search { display: none; }
 .topbar__search { flex: 0 1 18rem; }
@@ -145,7 +147,6 @@ a:hover, .link:hover { color: var(--color-accent-hover); text-decoration-thickne
   .app-shell__topbar:has(.topbar__workspace) .brand__name { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 }
 @media (min-width: 48rem) { .topbar__context, .topbar__search { display: block; } .topbar__workspace, .btn.topbar__workspace { display: none; } }
-@media (min-width: 64rem) { .topbar__institution { display: block; } }
 
 /* Page containers: content caps at 1200px, prose and forms at 720px. Workspaces may use the full width. */
 .page { width: 100%; max-width: var(--width-content); margin-inline: auto; padding: var(--space-5) var(--space-4) var(--space-12); }
@@ -161,7 +162,7 @@ a:hover, .link:hover { color: var(--color-accent-hover); text-decoration-thickne
 /* PageHeader: breadcrumb (from lg), workspace label above the H1, ONE status tag, at most ONE primary action + overflow. */
 .page-header { display: grid; gap: var(--space-2); margin-bottom: var(--space-6); padding-bottom: var(--space-5); border-bottom: var(--border); }
 .page-header__workspace { font-size: var(--text-xs); font-weight: var(--weight-semibold); letter-spacing: var(--tracking-wide); text-transform: uppercase; color: var(--color-accent); }
-.page-header__title { font-family: var(--font-serif); font-size: var(--text-xl); font-weight: var(--weight-medium); line-height: var(--leading-tight); letter-spacing: var(--tracking-tight); color: var(--color-text-strong); }
+.page-header__title { font-family: var(--font-display); font-size: var(--text-xl); font-weight: var(--weight-medium); line-height: var(--leading-tight); letter-spacing: var(--tracking-tight); color: var(--color-text-strong); }
 .page-header__lead { color: var(--color-text-secondary); max-width: var(--measure); }
 .page-header__meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-4); margin-top: var(--space-1); font-size: var(--text-sm); color: var(--color-text-secondary); }
 .page-header__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); margin-top: var(--space-2); }
@@ -581,7 +582,7 @@ th[aria-sort="descending"] .table__sort::after { content: "\2193"; color: var(--
 /* Empty state: says what will appear here and the next step. */
 .empty { display: flex; flex-direction: column; align-items: center; gap: var(--space-2); padding: var(--space-10) var(--space-5); text-align: center; color: var(--color-text-secondary); }
 .empty__icon { display: grid; place-items: center; width: 3rem; height: 3rem; margin-bottom: var(--space-2); border: var(--border); border-radius: var(--radius-md); background: var(--color-surface-subtle); color: var(--color-text-secondary); }
-.empty__title { font-family: var(--font-serif); font-size: var(--text-lg); font-weight: var(--weight-medium); color: var(--color-text-strong); }
+.empty__title { font-family: var(--font-display); font-size: var(--text-lg); font-weight: var(--weight-medium); color: var(--color-text-strong); }
 .empty__body { max-width: 28rem; font-size: 0.9375rem; }
 .empty__actions { margin-top: var(--space-3); display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-2); }
 
@@ -618,7 +619,7 @@ th[aria-sort="descending"] .table__sort::after { content: "\2193"; color: var(--
 .modal::backdrop { background: var(--color-scrim); }
 .modal--wide { width: min(48rem, calc(100vw - 2rem)); }
 .modal__header { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-4); padding: var(--space-5) var(--space-6) var(--space-3); }
-.modal__title { font-family: var(--font-serif); font-size: var(--text-xl); font-weight: var(--weight-medium); line-height: var(--leading-tight); letter-spacing: var(--tracking-tight); color: var(--color-text-strong); }
+.modal__title { font-family: var(--font-display); font-size: var(--text-xl); font-weight: var(--weight-medium); line-height: var(--leading-tight); letter-spacing: var(--tracking-tight); color: var(--color-text-strong); }
 .modal__body { padding: var(--space-2) var(--space-6) var(--space-5); overflow-y: auto; }
 .modal__body > * + * { margin-top: var(--space-4); }
 .modal__consequence { padding: var(--space-3) var(--space-4); border-left: 4px solid var(--color-text-strong); background: var(--color-surface-sunken); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; font-weight: var(--weight-medium); color: var(--color-text-strong); }
@@ -727,7 +728,7 @@ th[aria-sort="descending"] .table__sort::after { content: "\2193"; color: var(--
 .rubric__levels .choice { padding: var(--space-3); }
 .rubric__score { font-family: var(--font-mono); font-size: var(--text-sm); font-weight: var(--weight-semibold); color: var(--color-text-strong); white-space: nowrap; }
 .rubric__total { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-3); padding: var(--space-4) var(--card-pad); background: var(--color-surface); border: var(--border); border-radius: var(--radius-md); }
-.rubric__total-value { font-family: var(--font-serif); font-size: var(--text-xl); font-weight: var(--weight-medium); color: var(--color-text-strong); font-variant-numeric: lining-nums tabular-nums; }
+.rubric__total-value { font-family: var(--font-display); font-size: var(--text-xl); font-weight: var(--weight-medium); color: var(--color-text-strong); font-variant-numeric: lining-nums tabular-nums; }
 .rubric--readonly .choice { cursor: default; }
 .rubric--readonly .choice:not(:has(.choice__input:checked)) { background: var(--color-surface-subtle); border-color: var(--color-border); }
 
@@ -735,7 +736,7 @@ th[aria-sort="descending"] .table__sort::after { content: "\2193"; color: var(--
    critical, no cross icons, no alarm styling. Competent is positive and calm. */
 .decision { background: var(--color-surface); border: 1px solid var(--color-text-strong); border-radius: var(--radius-md); }
 .decision__header { padding: var(--space-4) var(--card-pad); border-bottom: var(--border); }
-.decision__title { font-family: var(--font-serif); font-size: var(--text-lg); font-weight: var(--weight-medium); color: var(--color-text-strong); letter-spacing: var(--tracking-tight); }
+.decision__title { font-family: var(--font-display); font-size: var(--text-lg); font-weight: var(--weight-medium); color: var(--color-text-strong); letter-spacing: var(--tracking-tight); }
 .decision__body { display: flex; flex-direction: column; gap: var(--space-5); padding: var(--card-pad); }
 .decision__remediation { display: flex; flex-direction: column; gap: var(--space-4); padding: var(--space-4); background: var(--color-caution-bg); border: 1px solid var(--color-caution-solid); border-radius: var(--radius-md); }
 .decision__footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-3); padding: var(--space-4) var(--card-pad); border-top: var(--border); background: var(--color-surface-subtle); border-radius: 0 0 var(--radius-md) var(--radius-md); }
@@ -808,7 +809,7 @@ th[aria-sort="descending"] .table__sort::after { content: "\2193"; color: var(--
 .exam-notice { min-height: 100vh; min-height: 100dvh; display: grid; place-items: center; padding: var(--space-4); background: var(--color-canvas); }
 .exam-notice__panel { width: min(36rem, 100%); padding: var(--space-6); background: var(--color-surface); border: 1px solid var(--color-text-strong); border-radius: var(--radius-lg); }
 .exam-notice__panel--caution { background: var(--color-caution-bg); border: 2px solid var(--color-caution-solid); }
-.exam-notice__title { display: flex; align-items: flex-start; gap: var(--space-3); font-family: var(--font-serif); font-size: var(--text-xl); font-weight: var(--weight-medium); line-height: var(--leading-tight); letter-spacing: var(--tracking-tight); color: var(--color-text-strong); }
+.exam-notice__title { display: flex; align-items: flex-start; gap: var(--space-3); font-family: var(--font-display); font-size: var(--text-xl); font-weight: var(--weight-medium); line-height: var(--leading-tight); letter-spacing: var(--tracking-tight); color: var(--color-text-strong); }
 .exam-notice__body { margin-top: var(--space-3); max-width: var(--measure); }
 .exam-notice__body > * + * { margin-top: var(--space-3); }
 .exam-notice__fact { margin-top: var(--space-4); padding: var(--space-3) var(--space-4); background: var(--color-surface); border: var(--border-control); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: var(--text-sm); color: var(--color-text-strong); }
@@ -881,7 +882,7 @@ th[aria-sort="descending"] .table__sort::after { content: "\2193"; color: var(--
 /* Agenda (list) is the default below lg; the month grid is optional there and shows markers only below md. */
 .calendar { background: var(--color-surface); border: var(--border); border-radius: var(--radius-md); overflow: hidden; }
 .calendar__toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-3); padding: var(--space-3) var(--space-4); border-bottom: var(--border); }
-.calendar__month { font-family: var(--font-serif); font-size: var(--text-lg); font-weight: var(--weight-medium); color: var(--color-text-strong); }
+.calendar__month { font-family: var(--font-display); font-size: var(--text-lg); font-weight: var(--weight-medium); color: var(--color-text-strong); }
 .calendar__grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); }
 .calendar__weekday { padding: var(--space-2); background: var(--color-surface-subtle); border-bottom: var(--border); font-size: var(--text-xs); font-weight: var(--weight-semibold); letter-spacing: 0.04em; text-transform: uppercase; text-align: center; color: var(--color-text-secondary); }
 .calendar__day { min-height: 3.5rem; padding: var(--space-1); border-right: var(--border); border-bottom: var(--border); display: flex; flex-direction: column; gap: 2px; min-width: 0; }
@@ -931,7 +932,7 @@ th[aria-sort="descending"] .table__sort::after { content: "\2193"; color: var(--
 /* Stat tile: label, serif figure, one line of context. */
 .stat { display: flex; flex-direction: column; gap: var(--space-2); padding: var(--card-pad); background: var(--color-surface); border: var(--border); border-radius: var(--radius-md); min-width: 0; }
 .stat__label { font-size: var(--text-sm); font-weight: var(--weight-medium); color: var(--color-text-secondary); }
-.stat__value { font-family: var(--font-serif); font-size: var(--text-3xl); font-weight: var(--weight-medium); line-height: 1; letter-spacing: var(--tracking-tight); color: var(--color-text-strong); font-variant-numeric: lining-nums tabular-nums; }
+.stat__value { font-family: var(--font-display); font-size: var(--text-3xl); font-weight: var(--weight-medium); line-height: 1; letter-spacing: var(--tracking-tight); color: var(--color-text-strong); font-variant-numeric: lining-nums tabular-nums; }
 .stat__unit { font-family: var(--font-sans); font-size: var(--text-base); font-weight: var(--weight-regular); letter-spacing: 0; color: var(--color-text-secondary); }
 .stat__meta { font-size: var(--text-sm); color: var(--color-text-secondary); }
 .stat__delta { font-family: var(--font-mono); font-size: var(--text-xs); font-weight: var(--weight-semibold); color: var(--color-text-strong); }
@@ -939,7 +940,7 @@ th[aria-sort="descending"] .table__sort::after { content: "\2193"; color: var(--
 /* Progress toward qualification: credits earned vs outstanding. Only released Competent results count; held results
    are invisible to the learner, so there is no "pending" segment. The legend carries the numbers. */
 .credits { display: flex; flex-direction: column; gap: var(--space-3); }
-.credits__figure { font-family: var(--font-serif); font-size: var(--text-3xl); font-weight: var(--weight-medium); line-height: 1; letter-spacing: var(--tracking-tight); color: var(--color-text-strong); font-variant-numeric: lining-nums; }
+.credits__figure { font-family: var(--font-display); font-size: var(--text-3xl); font-weight: var(--weight-medium); line-height: 1; letter-spacing: var(--tracking-tight); color: var(--color-text-strong); font-variant-numeric: lining-nums; }
 .credits__of { font-family: var(--font-sans); font-size: var(--text-base); font-weight: var(--weight-regular); letter-spacing: 0; color: var(--color-text-secondary); }
 .credits__bar { display: flex; gap: 2px; height: 0.75rem; border-radius: var(--radius-xs); overflow: hidden; }
 .credits__segment { display: block; flex: 0 0 var(--value, 0%); min-width: 2px; }

@@ -1,19 +1,21 @@
 import type { Metadata } from "next";
-import { Geist_Mono, Instrument_Sans, Newsreader } from "next/font/google";
+import { Geist_Mono, Open_Sans, Outfit } from "next/font/google";
 import { cookies } from "next/headers";
 import type { ReactNode } from "react";
 import { StickyInsets } from "@/components/shell/sticky-insets";
 import { IconSprite } from "@/components/ui/icons";
+import { INSTITUTION } from "@/config/institution";
 import { ToastProvider } from "@/components/ui/toast";
 import { parseTheme, THEME_COOKIE } from "@/lib/theme";
 import "./globals.css";
 
-const serif = Newsreader({ subsets: ["latin"], variable: "--font-newsreader", display: "swap" });
-const sans = Instrument_Sans({ subsets: ["latin"], variable: "--font-instrument-sans", display: "swap" });
+// iNurture's typefaces: Outfit for titles and the wordmark, Open Sans for everything else.
+const display = Outfit({ subsets: ["latin"], variable: "--font-outfit", display: "swap" });
+const sans = Open_Sans({ subsets: ["latin"], variable: "--font-open-sans", display: "swap" });
 const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono", display: "swap" });
 
 export const metadata: Metadata = {
-  title: { default: "Takusani LMS", template: "%s · Takusani LMS" },
+  title: { default: INSTITUTION.product, template: `%s · ${INSTITUTION.product}` },
   description:
     "Learning delivery, assessment, moderation, appeals and statutory records for an accredited training programme.",
 };
@@ -22,7 +24,7 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   const theme = parseTheme((await cookies()).get(THEME_COOKIE)?.value);
   return (
-    <html lang="en-ZA" data-theme={theme} className={`${serif.variable} ${sans.variable} ${mono.variable}`}>
+    <html lang="en-ZA" data-theme={theme} className={`${display.variable} ${sans.variable} ${mono.variable}`}>
       <body>
         <IconSprite />
         <StickyInsets />

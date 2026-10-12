@@ -5,7 +5,7 @@ import { ThemeControl } from "@/components/shell/theme-control";
 import { INSTITUTION } from "@/config/institution";
 import { parseTheme, THEME_COOKIE } from "@/lib/theme";
 
-/** AuthShell (UX architecture 3.1): institution, brand, one card, help and time-zone note in the footer. */
+/** AuthShell (UX architecture 3.1): the institution's brand, one card, help and time-zone note in the footer. */
 export default async function AuthLayout({ children }: Readonly<{ children: ReactNode }>) {
   const theme = parseTheme((await cookies()).get(THEME_COOKIE)?.value);
   return (
@@ -15,7 +15,6 @@ export default async function AuthLayout({ children }: Readonly<{ children: Reac
       </a>
       <div className="auth-shell">
         <header className="auth-shell__header">
-          <p className="auth-shell__institution">{INSTITUTION.name}</p>
           <span className="brand">
             <Brand />
           </span>

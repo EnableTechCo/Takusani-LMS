@@ -52,7 +52,7 @@
   --color-critical-text: var(--tk-critical-text);
   --color-critical-solid: var(--tk-critical-solid);
 
-  --font-serif: var(--tk-font-serif);
+  --font-display: var(--tk-font-display);
   --font-sans: var(--tk-font-sans);
   --font-mono: var(--tk-font-mono);
 
@@ -120,7 +120,7 @@
   --tk-critical-text: var(--color-critical-text);
   --tk-critical-solid: var(--color-critical-solid);
   --tk-shadow-overlay: var(--shadow-overlay);
-  --tk-font-serif: var(--font-serif);
+  --tk-font-display: var(--font-display);
   --tk-font-sans: var(--font-sans);
   --tk-font-mono: var(--font-mono);
 }
@@ -128,10 +128,11 @@
 /* next/font self-hosts the families under generated names; put them first in the token stacks, which ui.css reads.
    :root:root outranks the :root declarations in tokens.css. */
 :root:root {
-  --font-serif:
-    var(--font-newsreader), "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --font-display:
+    var(--font-outfit), "Segoe UI Variable Display", "Segoe UI", "Helvetica Neue", Helvetica, Arial, system-ui,
+    sans-serif;
   --font-sans:
-    var(--font-instrument-sans), "Segoe UI Variable Text", "Segoe UI", "Helvetica Neue", Helvetica, Arial, system-ui,
+    var(--font-open-sans), "Segoe UI Variable Text", "Segoe UI", "Helvetica Neue", Helvetica, Arial, system-ui,
     sans-serif;
   --font-mono: var(--font-geist-mono), "Cascadia Mono", "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
 }

@@ -39,10 +39,9 @@ export function AppShell({
       </a>
       <div className="app-shell">
         <header className="app-shell__topbar">
-          <Link aria-label="Takusani LMS, go to your home page" className="brand" href="/">
+          <Link aria-label={`${INSTITUTION.product}, go to your home page`} className="brand" href="/">
             <Brand />
           </Link>
-          <span className="topbar__institution">{INSTITUTION.name}</span>
           <span className="topbar__spacer" />
           <form action="/search" className="topbar__search" role="search">
             <label className="input-icon">

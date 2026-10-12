@@ -1,4 +1,4 @@
-# Takusani LMS Design System
+# iNurture LMS Design System
 
 | Document | UI-LMS-001 |
 |---|---|
@@ -16,7 +16,7 @@
 
 ## 1. Brand proposal
 
-### 1.1 What Takusani should feel like
+### 1.1 What the LMS should feel like
 
 This system decides whether people gain a qualification. It holds results back while a second person checks them, it starts short legal clocks the moment a result is released, and it records who decided what. The brand therefore has one job: to make a high-stakes process feel **trustworthy, calm and fair**.
 
@@ -26,51 +26,46 @@ This system decides whether people gain a qualification. It holds results back w
 | Calm | A warm paper-coloured canvas, off-black text, flat surfaces with a 1px hairline, no gradients, no shadows, no celebration effects, motion only on state changes. Density is comfortable, not sparse: this is a working tool. |
 | Fair | Both outcomes are professional judgements. "Competent" is positive and quiet. "Not yet competent" is amber "action needed" and is always followed by the next step and its date. It is never red, never a cross, never "failed". |
 
-The institution is the authority the learner deals with, so the institution's name (in the examples, Khanya Skills Institute) always sits beside the product name, and leads on the sign-in page. Takusani is the instrument, not the institution.
-
-Open point for the product owner: if "Takusani" carries a meaning in a South African language that the client intends, confirm it before the brand is finalised. Nothing in this proposal depends on a meaning.
+**Rebranded for iNurture, 12 Oct 2026.** The LMS was first proposed under its own product name, Takusani, beside the institution's. Each institution now gets its own copy of the LMS (see the multi-institution decision), so the product carries the institution's brand: this copy is **iNurture LMS**, after iNurture (iNurture Employer Solutions, inurture.co.za). The name, product label and links come from `src/config/institution.ts`, so another institution's copy changes that file, the mark and the accent. The calm, fair qualities above do not change with the brand.
 
 ### 1.2 Mark
 
-A rounded tile carrying a knocked-out capital **T** whose crossbar has two equal weights hanging beneath it: a level balance. It says "T", and it says "equal treatment", without drawing scales of justice.
-
-Construction on a 32 × 32 grid, one even-odd path, `currentColor` only (it inherits the text colour and works on any surface and in both themes):
+The iNurture leaf, drawn after the institution's logo: a leaf pointing up whose vein is a knocked-out **i**, with the dot near the tip. One even-odd path on a 32 × 32 grid, filled with the brand leaf green `#97C05D`; the knock-outs show the surface behind it, so it works on both themes.
 
 | Part | Geometry |
 |---|---|
-| Tile | 32 × 32, corner radius 7 |
-| Crossbar (knocked out) | x 7 to 25, y 8.5 to 12 (18 × 3.5) |
-| Stem (knocked out) | x 14.25 to 17.75, y 12 to 24 (3.5 × 12), centred |
-| Two weights (knocked out) | circles r 1.75 at (10, 17.5) and (22, 17.5): equal size, equal height, symmetrical about the stem |
-| Clear space | 25% of the tile width on every side |
-| Minimum size | 16px (favicon). Below 20px the weights still read as two dots; do not simplify further. |
+| Leaf | tip at (16, 2), widest near y 18, rounded base at y 29 |
+| Stem of the i (knocked out) | x 14.5 to 17.5, y 12.75 to 25.75, rounded ends |
+| Dot of the i (knocked out) | circle r 1.9 at (16, 9.6) |
+| Minimum size | 16px (favicon, `src/app/icon.svg`) |
 
-File: `prototype/assets/mark.svg`. Never recolour parts of it, never place it on a photograph, never add a shadow or outline.
+Files: `prototype/assets/mark.svg` and `src/components/shell/brand.tsx`. **This is a drawing after the logo, not the logo itself:** the only artwork on inurture.co.za is a low-resolution raster. Replace both with iNurture's official vector logo when they supply it, and keep the leaf green for the mark only.
 
 ### 1.3 Wordmark
 
-"Takusani" in **Newsreader Medium (500)**, sentence case, tracking −0.02em, optically aligned to the tile's vertical centre, followed by "LMS" in **Geist Mono Medium**, 0.6875rem, uppercase, tracking 0.08em, at 72% opacity, baseline-aligned. The serif gives the name an editorial, institutional voice; the mono suffix says "system of record".
+"iNurture" in **Outfit Bold (700)**, tracking −0.01em, followed by "LMS" in **Geist Mono Medium**, 0.6875rem, uppercase, tracking 0.08em, at 72% opacity, baseline-aligned. Outfit is iNurture's headline typeface on its website.
 
 - In the application, build the lockup in HTML with `.brand` (inline mark + `.brand__name` + `.brand__suffix`) so that it uses the loaded font and scales with text.
-- `prototype/assets/logo.svg` uses live `<text>` so it stays editable. When it is loaded as an `<img>` it cannot see the page's web fonts and falls back to the serif stack. **Before any external use (letterheads, certificates, app icons) convert the text to outlines.** That was not done here because no font tooling or font download was part of this task.
+- `prototype/assets/logo.svg` uses live `<text>` so it stays editable. When it is loaded as an `<img>` it falls back to the sans stack. **Before any external use (letterheads, certificates, app icons) use iNurture's own artwork.**
 - On phones the wordmark yields to the workspace picker; the mark alone remains, with a visually hidden name.
+- The brand names the institution, so the top bar no longer repeats the institution's name beside it, and the sign-in page leads with the brand.
 
 ### 1.4 Brand accent
 
-One accent: **Takusani indigo `#2B3A8C`** (dark theme `#A9B7FF`).
+One accent: **iNurture green `#3E6B1D`** (dark theme `#A9D07A`). The brand's own leaf green `#97C05D` is 2.10:1 on white, too light for text or controls, so the accent is the leaf darkened until it carries text, and the leaf green itself is kept for the mark (`--color-brand-leaf`).
 
 | Pair | Ratio |
 |---|---|
-| Indigo on canvas `#F7F6F3` | 9.31:1 |
-| Indigo on surface `#FFFFFF` | 10.06:1 |
-| Indigo on its own tint `#ECEEF8` (selected navigation) | 8.70:1 |
-| Indigo on caution tint `#FBF3DB` / info tint `#E1F3FE` (links inside banners) | 9.08:1 / 8.84:1 |
-| White on indigo (count badge) | 10.06:1 |
-| Dark theme: `#A9B7FF` on canvas / surface / its tint `#23284A` | 9.57 / 8.86 / 7.40:1 |
+| Green on canvas `#F7F6F3` | 5.84:1 |
+| Green on surface `#FFFFFF` | 6.31:1 |
+| Green on its own tint `#EEF5E3` (selected navigation) | 5.65:1 |
+| Green on caution tint `#FBF3DB` / info tint `#E1F3FE` (links inside banners) | 5.70:1 / 5.55:1 |
+| White on green (count badge) | 6.31:1 |
+| Dark theme: `#A9D07A` on canvas / surface / its tint `#22301A` | 10.53 / 9.75 / 7.96:1 |
 
-Why indigo. (1) Blue is the colour people with low technical confidence already read as "link". (2) It is far from every status hue (green, amber, red), so the accent can never be mistaken for a verdict. (3) It is dark enough to pass AAA on every surface, so links, focus rings and the current navigation item share one colour without a contrast exception. (4) It is cooler than the warm canvas, which gives the only chromatic contrast the interface needs.
+The trade-off. Indigo was chosen first partly because it is far from every status hue, so the accent could never be read as a verdict. Green sits near the positive tone. Three things keep them apart: the accent is used only for the four purposes below, never for a status; every status tag also carries a shape (a check for positive), so colour is never the only signal; and the positive tone is a quieter, bluer green (`#3F7D46`) in a tinted pill.
 
-Use it for exactly four things: links, the focus ring, the current navigation item, and the workspace label above the page title. Primary buttons are ink (off-black), not indigo: the accent marks *where you are and where you can go*, ink marks *what you are about to do*.
+Use it for exactly four things: links, the focus ring, the current navigation item, and the workspace label above the page title. Primary buttons are ink (off-black), not green: the accent marks *where you are and where you can go*, ink marks *what you are about to do*.
 
 ### 1.5 Tone of voice
 
@@ -100,7 +95,8 @@ All tokens are CSS custom properties on `:root` in `tokens.css`. Dark values liv
 | `--color-text-tertiary` | `#696863` | `#97958E` | Placeholders, overlines |
 | `--color-text-disabled` | `#9A9893` | `#6B6A65` | Disabled controls only (exempt from 1.4.3). Never for live content; excluded list rows use secondary text instead |
 | `--color-ink` / `-hover` | `#111110` / `#33332F` | `#ECEBE7` / `#D2D0C9` | Primary button, bulk bar, toast, offline banner |
-| `--color-accent` / `-hover` / `-subtle` / `-border` | `#2B3A8C` / `#1E2A6B` / `#ECEEF8` / `#C5CBE8` | `#A9B7FF` / `#C4CEFF` / `#23284A` / `#3A4377` | Links, focus, current navigation |
+| `--color-accent` / `-hover` / `-subtle` / `-border` | `#3E6B1D` / `#2E5214` / `#EEF5E3` / `#C3DCA0` | `#A9D07A` / `#C3E0A0` / `#22301A` / `#3B5229` | Links, focus, current navigation |
+| `--color-brand-leaf` | `#97C05D` | `#97C05D` | The mark only; never text or a control |
 
 Text contrast (light theme; dark in brackets):
 
@@ -149,8 +145,8 @@ Loaded from Google Fonts, all optional: the page is complete on the fallback sta
 
 | Role | Family and stack | Why |
 |---|---|---|
-| Editorial serif: page titles, dialog titles, key figures, empty-state titles | `"Newsreader", "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif` | A text serif with optical sizes and lining tabular figures; it carries authority without being ornamental. Weights 400 to 600 loaded; 500 used. |
-| UI sans: everything interactive and all body text | `"Instrument Sans", "Segoe UI Variable Text", "Segoe UI", "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif` | Characterful but quiet, open apertures, clear at 14px, variable 400 to 700. Not Inter, Roboto or Open Sans. |
+| Display (`--font-display`): page titles, dialog titles, key figures, empty-state titles, the wordmark | `"Outfit", "Segoe UI Variable Display", "Segoe UI", "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif` | iNurture's headline typeface: a geometric sans with clear lining figures. Weights 400 to 700 loaded; 500 for titles, 700 for the wordmark. |
+| UI sans: everything interactive and all body text | `"Open Sans", "Segoe UI Variable Text", "Segoe UI", "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif` | iNurture's body typeface: open apertures and clear at 14px, variable 400 to 700. |
 | Mono: references, timestamps, receipts, counts, the exam timer | `"Geist Mono", "Cascadia Mono", "SF Mono", Consolas, "Liberation Mono", Menlo, monospace` | Unambiguous 0/O and 1/l/I, tabular by nature, lighter on the page than most coding fonts. |
 
 | Token | Size | Use | Line height | Weight | Tracking |
@@ -159,10 +155,10 @@ Loaded from Google Fonts, all optional: the page is complete on the fallback sta
 | `--text-sm` | 14px | Labels, table cells, help, status lines | 1.45 to 1.5 | 400 to 600 | 0 |
 | `--text-base` | 16px | Body, inputs, feedback text | **1.6** | 400 | 0 |
 | `--text-md` | 18px | Lead, question stem | 1.6 | 400 | 0 |
-| `--text-lg` | 20px | Section headings (sans 600); serif panel titles | 1.35 | 600 / 500 | 0 / −0.02em |
-| `--text-xl` | 24px | Page title on phones, dialog title (serif) | 1.15 | 500 | −0.02em |
-| `--text-2xl` | 30px | Page title from md (serif) | 1.15 | 500 | −0.02em |
-| `--text-3xl` | 36px | Key figures (serif, lining tabular) | 1 | 500 | −0.02em |
+| `--text-lg` | 20px | Section headings (sans 600); display panel titles | 1.35 | 600 / 500 | 0 / −0.02em |
+| `--text-xl` | 24px | Page title on phones, dialog title (display) | 1.15 | 500 | −0.02em |
+| `--text-2xl` | 30px | Page title from md (display) | 1.15 | 500 | −0.02em |
+| `--text-3xl` | 36px | Key figures (display, lining tabular) | 1 | 500 | −0.02em |
 | `--text-4xl` | 48px | Large exam timer (mono) | 1 | 600 | 0.02em |
 
 Reading comfort for long marking sessions: 16px base, 1.6 line height, `--measure: 38rem` (about 70 to 75 characters; the `ch` unit was rejected because it measures the digit 0 and overshoots to about 95 characters), hard cap 720px (`--width-prose`). Text resizes to 200% without loss because all sizes are in rem.
@@ -285,7 +281,7 @@ Class names follow `.block`, `.block__element`, `.block--modifier`; state is `.i
 
 | Shell | Anatomy | Rules |
 |---|---|---|
-| **AuthShell** `.auth-shell` | `__header` (institution name in serif, then `.brand`), `__main` > `__card` (one form column, 416px), `__footer` (help link, Appearance `.segmented`) | No navigation. Do: lead with the institution. Don't: add marketing content or illustration. |
+| **AuthShell** `.auth-shell` | `__header` (the institution's `.brand`), `__main` > `__card` (one form column, 416px), `__footer` (help link, Appearance `.segmented`) | No navigation. Do: lead with the institution's brand. Don't: add marketing content or illustration. |
 | **AppShell** `.app-shell` | `__topbar` (fixed 56px: `.brand`, `.topbar__institution`, `.topbar__context`, `.topbar__spacer`, `.topbar__search`, `.topbar__actions` with bell and account menu; phones add `.topbar__workspace`), `__sidenav`, `__main` (first focusable region after the skip link), optional `.bottom-tabs`, `.action-bar` | Phones: top bar + bottom tabs; the side navigation is not rendered visually. md: 72px icon rail (icon + short label, count as a corner badge). lg: 256px SideNav. The top bar never holds page actions. |
 | **ExamShell** `.exam-shell` | `__bar` (`.exam-bar`), `__banner` (offline), `__navigator` (`<details>`, 240px from lg, collapsible), `__main` (one question), `__actions` | **No navigation components at all**: no `.sidenav`, `.bottom-tabs`, bell, search, account menu or brand link. Skip links first. Reflows to 320px for 400% zoom. Follows the same theme setting. Print hides the question. |
 
@@ -299,7 +295,7 @@ Class names follow `.block`, `.block__element`, `.block--modifier`; state is `.i
 
 **Bottom tabs** `.bottom-tabs` / `__item`: phones only, at most five (four destinations + More), icon above an always-visible label, 44px+ targets, current tab has a top bar and semibold accent text. Hidden automatically while an `.action-bar` or `.decision-bar` is present.
 
-**PageHeader** `.page-header`: `.breadcrumb` (from lg), `__workspace` (accent overline: "Assessing"), `__title` (serif H1, one per page), `__lead`, `__meta` (**one** status tag, cohort name + policy tag, reference), `__actions` (**at most one** primary button and an overflow `menu-wrap`). Don't: put two primaries, or a status tag per fact.
+**PageHeader** `.page-header`: `.breadcrumb` (from lg), `__workspace` (accent overline: "Assessing"), `__title` (display H1, one per page), `__lead`, `__meta` (**one** status tag, cohort name + policy tag, reference), `__actions` (**at most one** primary button and an overflow `menu-wrap`). Don't: put two primaries, or a status tag per fact.
 
 **Sticky regions and WCAG 2.4.11.** Every sticky region feeds `--sticky-top` or `--sticky-bottom` on `html` through `:has()`, and `scroll-padding-top/bottom` is derived from them, so a control scrolled into view by focus or by an anchor is never hidden behind the top bar, section switcher, bottom tabs, action bar, decision bar, exam bar or exam action bar. The marking panel, being its own scroller from xl, has its own `scroll-padding-block`.
 
@@ -356,10 +352,10 @@ Below 768px a `.table--cards` table becomes a card list: header visually hidden,
 | Banner `.banner` | `__icon`, `__title`, `__body`, `__actions`; tones `--info`, `--positive`, `--caution`, `--critical`; `--readonly` (archived cohort: dashed, ink bar, archive icon); `--offline` (ink, full bleed, not dismissible while offline, does not cover content or block input); `--sticky`, `--compact`. In the page flow under the header. `role="status"` or `role="alert"` by severity. |
 | Conflict panel `.conflict` | `__title` (names the rule: "This would break separation of duties"), `__body` (one sentence naming the person and the reason, and that nothing was changed), `__evidence` (definition list of each conflicting decision, role and allocation, linked), `__rule` (mono: rule id, error code, reference, time), `__actions` (alternatives; **no retry**). `role="alert"`, focus moves to the heading. Caution bar with an ink border: a refusal is serious, but it is not a system fault. |
 | Toast `.toast-region` > `.toast` | polite live region present from load; ink surface; title, body, mono meta, close. 6 seconds, pauses on hover and focus. Low-stakes confirmations only ("Reminder sent"). Never for errors, saving, or anything that needs action. |
-| Dialog `dialog.modal` | `__header` > `__title` (serif), `__body`, `__footer` (buttons stack on phones with the safe action nearest the thumb). Native `showModal()`: focus trapped, Escape closes, focus returns to the trigger. |
+| Dialog `dialog.modal` | `__header` > `__title` (display), `__body`, `__footer` (buttons stack on phones with the safe action nearest the thumb). Native `showModal()`: focus trapped, Escape closes, focus returns to the trigger. |
 | Consequence dialog | a `.modal` with `data-modal-static` (no backdrop dismissal), a `.modal__consequence` sentence that states the effect in plain words **with the number of people affected**, the capacity ("You are signing off as the moderator"), an acknowledgement checkbox gating the confirm button (`data-requires`), and **default focus on the cancel action**. Used for finalise, freeze and sample, sign-off and release, lodge remark, submit exam. The confirm button is ink, not red: these are irreversible, not destructive. |
 | Sheet `.modal--sheet` (`--full`) | ordinary dialogs on phones: full-width bottom sheet below md, centred from md. Workspace picker, sort and filter, decision sheet. Consequence dialogs remain centred true modals at every size. |
-| Empty state `.empty` | `__icon` tile, serif `__title`, `__body` (what will appear here and when), `__actions`. No illustration needed. |
+| Empty state `.empty` | `__icon` tile, display `__title`, `__body` (what will appear here and when), `__actions`. No illustration needed. |
 | Skeleton `.skeleton` | `--text`, `--title`, `--block`, `--tag`; region has `aria-busy="true"` and hidden "Loading ..." text; opacity pulse, off under reduced motion. |
 | Checklist `.checklist` | rows with icon, title, a word tag (Pass, Problem, Checking) and `__detail` with the one-line fix. Device check, readiness, archive preconditions. |
 
@@ -380,9 +376,9 @@ Below 768px a `.table--cards` table becomes a card list: header visually hidden,
 | Workspace `.workspace` | `__evidence` + `__panel`. **Two panes only from xl (1280)**: flexible evidence, 420 to 480px sticky panel. Below xl the sections stack under a sticky `.section-switcher` (anchor links, `aria-current="true"`), with a sticky `.decision-bar`. |
 | Decision bar and sheet `.decision-bar` | `__summary` (outcome so far, what is missing), `__actions` (Save draft, Finalise), `__open` (phones: one button that opens the decision sheet, a `.modal--sheet.modal--full`). |
 | Evidence viewer `.viewer` | `__toolbar` (file name, page, version switcher), `__body` (sunken well), `__page`. |
-| Rubric `.rubric` | one `fieldset.rubric__row` per criterion: `__head` (`__id` mono, `__title`, `__score`), `__desc`, `__levels` (choice cards with points), comment field; `.is-unscored` adds a caution bar and "Not scored"; `__total` with serif `__total-value`; `--readonly` for moderators and marked scripts. Keyboard: Tab between criteria, arrows within levels. |
+| Rubric `.rubric` | one `fieldset.rubric__row` per criterion: `__head` (`__id` mono, `__title`, `__score`), `__desc`, `__levels` (choice cards with points), comment field; `.is-unscored` adds a caution bar and "Not scored"; `__total` with display `__total-value`; `--readonly` for moderators and marked scripts. Keyboard: Tab between criteria, arrows within levels. |
 | Decision panel `.decision` | ink-bordered card: `__header`, `__body` (outcome as two choice cards `--positive` / `--caution`, **required** justification, `__remediation` block required for Not yet competent: actions + "Resubmit by the end of" date), held/released notice, `__footer` with `__attribution` ("You are deciding as the assessor") and the draft status line. A decision is never edited; a new one is recorded. |
-| Learner result `.result` | `__head` (`__outcome`: unit overline + `tag--lg`; `__marks`: serif figure with the outcome in words beneath it), `__body` (next-step banner for NYC, `.deadline-line`, feedback introduced as the assessor's view), `__footer` ("Released on ... You were notified ..."). Outcome, next step and both clocks are above the first scroll on 360 × 640. |
+| Learner result `.result` | `__head` (`__outcome`: unit overline + `tag--lg`; `__marks`: display figure with the outcome in words beneath it), `__body` (next-step banner for NYC, `.deadline-line`, feedback introduced as the assessor's view), `__footer` ("Released on ... You were notified ..."). Outcome, next step and both clocks are above the first scroll on 360 × 640. |
 
 ### 4.9 Exam
 
@@ -392,7 +388,7 @@ Below 768px a `.table--cards` table becomes a card list: header visually hidden,
 | Question `.question__number`, `__stem` (receives focus on question change), choice cards or textarea, `__notice` (status line for "Pasting is switched off during this exam."). |
 | Question navigator `.qnav` > `__item` | four states, each with a non-colour cue and its name in the accessible label: **unanswered** (outline), **answered** `.is-answered` (filled + check), **come back to** `.is-marked` (corner bookmark; the learner's own marker, never called a flag), **current** `[aria-current="true"]` (3px ring + underline + semibold). `.is-local` adds a dotted underline: the latest edit is on this device only. `__key` prints the legend in words. 44px targets. |
 | Integrity overlay `.exam-overlay` + `.exam-notice__panel--caution` | `role="alertdialog"`, covers the question, traps focus, one button ("Return to the exam"). Says what happened, that it was recorded, who will look, and that the timer is still running. Caution tone. Never threatens an outcome, never shows the threshold. |
-| Takeover screen and mobile gate `.exam-notice` | full-page `__panel` with serif `__title`, `__body`, mono `__fact` (true time left, or the exam window), `__actions`. Takeover (`lease_lost`): "Continue here instead" and "Close this tab", no "Try again", no answers shown. Mobile gate: runs before an attempt exists, names the window, points to the coordinator. |
+| Takeover screen and mobile gate `.exam-notice` | full-page `__panel` with display `__title`, `__body`, mono `__fact` (true time left, or the exam window), `__actions`. Takeover (`lease_lost`): "Continue here instead" and "Close this tab", no "Try again", no answers shown. Mobile gate: runs before an attempt exists, names the window, points to the coordinator. |
 
 ### 4.10 Records
 
@@ -410,8 +406,8 @@ Below 768px a `.table--cards` table becomes a card list: header visually hidden,
 | Calendar `.calendar` | `__toolbar`, `__grid` of `__weekday` and `__day` (`--outside`, `--today` with hidden "Today"), `__event` (`--session` dot, `--exam` square, `--due` diamond; each has a hidden type word). Below md the grid shows markers only. |
 | Agenda `.agenda` | the default below lg: `__day-title`, `__item` (`__time` mono, `__title`, `__meta` with join link or deadline chip). End-of-day deadlines appear as "All day: Last day to ...". |
 | Notification `.notification-list` > `.notification` | `__icon`, `__title` (link), `__time`, `__body`, `__unread` dot, `__extra` (delivery evidence). Unread = semibold + accent bar + dot + hidden "Unread:". `.badge-count` on the bell. |
-| Stat tile `.stat` | `__label`, serif `__value` (+ `__unit`), `__meta`, `__delta` in words ("1.5 days faster"), never a bare arrow or colour. |
-| Credits `.credits` | serif `__figure` ("52 of 140 credits earned"), `__bar` with `--earned` and `--outstanding` segments, `__legend` with the numbers. **No "pending" segment**: a held result is invisible to its learner, so only released Competent results count. |
+| Stat tile `.stat` | `__label`, display `__value` (+ `__unit`), `__meta`, `__delta` in words ("1.5 days faster"), never a bare arrow or colour. |
+| Credits `.credits` | display `__figure` ("52 of 140 credits earned"), `__bar` with `--earned` and `--outstanding` segments, `__legend` with the numbers. **No "pending" segment**: a held result is invisible to its learner, so only released Competent results count. |
 
 ---
 
@@ -482,7 +478,7 @@ Keep `tokens.css` as the source of truth and expose it to Tailwind with `@theme 
   --color-caution-text: var(--color-caution-text);
   --color-caution-solid: var(--color-caution-solid);
 
-  --font-serif: var(--font-serif);
+  --font-display: var(--font-display);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
 
@@ -499,7 +495,7 @@ Keep `tokens.css` as the source of truth and expose it to Tailwind with `@theme 
 }
 ```
 
-Notes: the 4px spacing scale is Tailwind's default (`p-4` = 16px), so no spacing override is needed. Because token names are already in Tailwind's namespaces (`--color-*`, `--font-*`, `--radius-*`), `@theme inline` can alias them one to one. Load fonts with `next/font/google` (Newsreader, Instrument Sans, Geist Mono) with `display: "swap"` and assign their CSS variables to `--font-serif`, `--font-sans`, `--font-mono`; this removes the Google Fonts request and the layout shift. Set `data-theme` on `<html>` from a cookie in the root layout so Server Components render the right theme without a flash.
+Notes: the 4px spacing scale is Tailwind's default (`p-4` = 16px), so no spacing override is needed. Because token names are already in Tailwind's namespaces (`--color-*`, `--font-*`, `--radius-*`), `@theme inline` can alias them one to one. Load fonts with `next/font/google` (Outfit, Open Sans, Geist Mono) with `display: "swap"` and assign their CSS variables to `--font-display`, `--font-sans`, `--font-mono`; this removes the Google Fonts request and the layout shift. Set `data-theme` on `<html>` from a cookie in the root layout so Server Components render the right theme without a flash.
 
 **Porting `ui.css`.** Move each block into `@layer components` unchanged (it uses only tokens), then migrate block by block to React components that apply the same class names or the equivalent utilities. Because state is already expressed through ARIA and native attributes, the selectors survive the move.
 

@@ -73,6 +73,6 @@ describe("buildCalendar", () => {
 
   it("names nobody and links to nothing outside the LMS", () => {
     expect(document).not.toMatch(/teams\.microsoft\.com|teams\.live\.com/);
-    expect(document).toContain("X-WR-CALNAME:Takusani LMS\r\n");
+    expect(document).toContain("X-WR-CALNAME:iNurture LMS\r\n");
   });
 });

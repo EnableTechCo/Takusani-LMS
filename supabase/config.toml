@@ -248,11 +248,11 @@ otp_expiry = 3600
 # Invitation and password reset links go to /auth/confirm, which verifies the token on the server and sets the
 # session cookie, then sends the person to set a password (invite) or choose a new one (recovery).
 [auth.email.template.invite]
-subject = "Your Takusani LMS account"
+subject = "Your iNurture LMS account"
 content_path = "./supabase/email/invite.html"
 
 [auth.email.template.recovery]
-subject = "Reset your Takusani LMS password"
+subject = "Reset your iNurture LMS password"
 content_path = "./supabase/email/recovery.html"
 
 # Uncomment to customize notification email template
