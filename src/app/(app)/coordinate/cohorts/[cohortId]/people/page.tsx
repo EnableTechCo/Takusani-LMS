@@ -37,7 +37,12 @@ export default async function CohortPeoplePage({
 
   return (
     <div className="page">
-      <PageHeader workspace="Coordinating" title="People" lead={`${cohort.name}, ${cohort.programme_title}`} />
+      <PageHeader
+        back={{ href: "/coordinate/cohorts", label: "Cohorts" }}
+        workspace="Coordinating"
+        title="People"
+        lead={`${cohort.name}, ${cohort.programme_title}`}
+      />
       <CohortNav cohortId={cohort.id} current="People" />
       <div className="page-layout">
         <div className="page-layout__main stack stack--lg">

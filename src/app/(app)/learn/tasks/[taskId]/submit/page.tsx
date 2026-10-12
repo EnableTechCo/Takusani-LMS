@@ -1,7 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 import { getPublicSettings } from "@/modules/audit/settings";
 import { PageHeader } from "@/components/shell/page-header";
-import { TextLink } from "@/components/ui/link";
 import { getMyTask, listMyUploads } from "@/modules/submissions/queries";
 import { LATE_POLICY_LABELS } from "@/modules/submissions/rules";
 import { SubmitForm } from "@/modules/submissions/submit-form";
@@ -27,6 +26,7 @@ export default async function SubmitTaskPage({ params }: { params: Promise<{ tas
   return (
     <div className="page page--form">
       <PageHeader
+        back={{ href: `/learn/tasks/${taskId}`, label: "Assignment" }}
         workspace="Learning"
         title={`Submit: ${task.title}`}
         lead={`${task.cohort_name}. Your files go straight to the institution; nothing is sent until you submit.`}
@@ -46,9 +46,6 @@ export default async function SubmitTaskPage({ params }: { params: Promise<{ tas
         taskId={task.id}
         willBeLate={task.due_at !== null && new Date(task.due_at) < new Date()}
       />
-      <p className="u-mt-6">
-        <TextLink href={`/learn/tasks/${taskId}`}>Back to the assignment</TextLink>
-      </p>
     </div>
   );
 }

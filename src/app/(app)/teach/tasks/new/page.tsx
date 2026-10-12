@@ -13,6 +13,7 @@ export default async function NewTaskPage({ searchParams }: { searchParams: Prom
   return (
     <div className="page page--form">
       <PageHeader
+        back={{ href: "/teach/tasks", label: "Assignments" }}
         workspace="Teaching"
         title="New assignment"
         lead="Set work for a cohort, or for named learners in it."

@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/shell/page-header";
-import { ButtonLink, TextLink } from "@/components/ui/link";
+import { ButtonLink } from "@/components/ui/link";
 import { Banner, Tag } from "@/components/ui/status";
 import { listMyResults } from "@/modules/assessment/queries";
 import { OUTCOME_LABELS } from "@/modules/assessment/rules";
@@ -42,6 +42,7 @@ export default async function LearnTaskPage({
   return (
     <div className="page">
       <PageHeader
+        back={{ href: "/learn/tasks", label: "Assignments" }}
         workspace="Learning"
         title={task.title}
         lead={task.cohort_name}
@@ -121,10 +122,6 @@ export default async function LearnTaskPage({
           </h2>
           <VersionHistory versions={versions} />
         </section>
-
-        <p>
-          <TextLink href="/learn/tasks">Back to your assignments</TextLink>
-        </p>
       </div>
     </div>
   );

@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/shell/page-header";
-import { TextLink } from "@/components/ui/link";
 import { Banner, Tag } from "@/components/ui/status";
 import { formatDateTime } from "@/lib/dates";
 import { LogisticsForm, ReconcileForm } from "@/modules/learning/logistics-forms";
@@ -35,6 +34,7 @@ export default async function SessionLogisticsPage({ params }: { params: Promise
   return (
     <div className="page">
       <PageHeader
+        back={{ href: "/coordinate/logistics", label: "Logistics" }}
         lead={`${session.cohort_name}. ${formatDateTime(session.starts_at)} (SAST), ${session.duration_minutes} minutes${
           session.venue ? `, ${session.venue}` : ", online"
         }.`}
@@ -95,9 +95,6 @@ export default async function SessionLogisticsPage({ params }: { params: Promise
                 </div>
               </section>
             )}
-            <p>
-              <TextLink href="/coordinate/logistics">All session logistics</TextLink>
-            </p>
           </div>
 
           <aside aria-labelledby="headcount-h" className="page-layout__aside stack">

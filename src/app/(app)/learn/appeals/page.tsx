@@ -22,7 +22,12 @@ export default async function LearnAppealsPage() {
   const [appeals, settings] = await Promise.all([listMyAppeals(), getPublicSettings()]);
   return (
     <div className="page">
-      <PageHeader lead="Every appeal you have sent, and where it stands." title="Your appeals" workspace="Learning" />
+      <PageHeader
+        back={{ href: "/learn/results", label: "Results" }}
+        lead="Every appeal you have sent, and where it stands."
+        title="Your appeals"
+        workspace="Learning"
+      />
       {appeals.length === 0 ? (
         <div className="card">
           <EmptyState

@@ -40,6 +40,7 @@ export default async function ModerateCyclePage({ params }: { params: Promise<{ 
   return (
     <div className="page">
       <PageHeader
+        back={{ href: "/moderate", label: "Cycles" }}
         actions={
           <>
             {next ? (
@@ -164,10 +165,6 @@ export default async function ModerateCyclePage({ params }: { params: Promise<{ 
             {!signedOff ? <ObservationForm cycleId={cycleId} /> : null}
           </div>
         </section>
-
-        <p>
-          <TextLink href="/moderate">All cycles</TextLink>
-        </p>
       </div>
     </div>
   );

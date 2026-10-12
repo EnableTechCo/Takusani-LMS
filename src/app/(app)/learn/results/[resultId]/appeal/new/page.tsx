@@ -52,6 +52,7 @@ export default async function LearnAppealNewPage({ params }: { params: Promise<{
   return (
     <div className="page page--form">
       <PageHeader
+        back={{ href: back, label: "Your result" }}
         lead={
           window.state === "closed" || options.decision_final
             ? undefined

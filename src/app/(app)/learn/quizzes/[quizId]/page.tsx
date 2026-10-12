@@ -33,6 +33,7 @@ export default async function LearnQuizPage({
   return (
     <div className="page page--prose">
       <PageHeader
+        back={{ href: "/learn/materials", label: "Materials" }}
         meta={
           <>
             <Tag>Practice</Tag>
@@ -105,9 +106,6 @@ export default async function LearnQuizPage({
             rows={quiz.attempts}
           />
         ) : null}
-        <p>
-          <TextLink href="/learn/materials">Back to materials</TextLink>
-        </p>
       </div>
     </div>
   );

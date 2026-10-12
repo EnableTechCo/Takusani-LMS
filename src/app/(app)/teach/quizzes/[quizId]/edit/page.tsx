@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/shell/page-header";
 import { Button } from "@/components/ui/button";
 import { ConsequenceDialog } from "@/components/ui/dialog";
-import { TextLink } from "@/components/ui/link";
 import { Banner, Tag } from "@/components/ui/status";
 import { formatDateTime } from "@/lib/dates";
 import { archiveQuiz, publishQuiz } from "@/modules/learning/quiz-actions";
@@ -33,6 +32,7 @@ export default async function EditQuizPage({
   return (
     <div className="page">
       <PageHeader
+        back={{ href: "/teach/quizzes", label: "Quizzes" }}
         lead={quiz.cohort_name}
         meta={
           <>
@@ -158,7 +158,6 @@ export default async function EditQuizPage({
         )}
 
         <div className="cluster cluster--between">
-          <TextLink href="/teach/quizzes">All quizzes</TextLink>
           {quiz.state !== "archived" ? (
             <form action={archiveQuiz.bind(null, quiz.id)}>
               <Button type="submit" variant="ghost">

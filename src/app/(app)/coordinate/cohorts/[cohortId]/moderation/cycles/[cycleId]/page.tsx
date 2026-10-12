@@ -60,6 +60,7 @@ export default async function CycleDetailPage({
   return (
     <div className="page">
       <PageHeader
+        back={{ href: `/coordinate/cohorts/${cohortId}/moderation`, label: "Moderation planning" }}
         lead={`${cohort.name}. ${scopeText(cycle, [])}${periodText(cycle.period_from, cycle.period_to) ? `. ${periodText(cycle.period_from, cycle.period_to)}` : ""}. Planned by ${cycle.planned_by_name}, ${formatDateTime(cycle.planned_at)} (SAST).`}
         meta={
           <>
@@ -289,9 +290,6 @@ export default async function CycleDetailPage({
             </section>
           </>
         )}
-        <p>
-          <TextLink href={`/coordinate/cohorts/${cohortId}/moderation`}>Back to moderation planning</TextLink>
-        </p>
       </div>
     </div>
   );

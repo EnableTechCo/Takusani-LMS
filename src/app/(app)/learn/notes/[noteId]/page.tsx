@@ -38,6 +38,7 @@ export default async function NotePage({
   return (
     <div className="page page--form">
       <PageHeader
+        back={{ href: "/learn/notes", label: "Notes" }}
         lead="Only you can see this note."
         meta={
           <>
@@ -81,7 +82,6 @@ export default async function NotePage({
           targets={options}
         />
         <div className="cluster cluster--between">
-          <TextLink href="/learn/notes">All notes</TextLink>
           <DeleteNote noteId={note.id} title={note.title} />
         </div>
       </div>

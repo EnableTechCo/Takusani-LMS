@@ -20,6 +20,7 @@ export default async function CohortAttendancePage({ params }: { params: Promise
   return (
     <div className="page">
       <PageHeader
+        back={{ href: "/coordinate/cohorts", label: "Cohorts" }}
         lead={`${cohort.name}, ${cohort.programme_title}. Learners check themselves in; the facilitator confirms each register. Only confirmed registers count. Times are SAST.`}
         title="Attendance"
         workspace="Coordinating"

@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/shell/page-header";
 import { ConsequenceDialog } from "@/components/ui/dialog";
 import { TextareaField } from "@/components/ui/field";
-import { TextLink } from "@/components/ui/link";
 import { Banner, Tag } from "@/components/ui/status";
 import { DataTable } from "@/components/ui/table";
 import { formatDateTime } from "@/lib/dates";
@@ -64,6 +63,7 @@ export default async function ConfigurationKeyPage({
   return (
     <div className="page">
       <PageHeader
+        back={{ href: "/admin/configuration", label: "Configuration" }}
         lead={setting.description}
         meta={
           <>
@@ -252,9 +252,6 @@ export default async function ConfigurationKeyPage({
               </dl>
             </div>
           </div>
-          <p>
-            <TextLink href="/admin/configuration">All configuration</TextLink>
-          </p>
         </aside>
       </div>
     </div>

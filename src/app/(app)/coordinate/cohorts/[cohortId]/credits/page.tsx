@@ -47,6 +47,7 @@ export default async function CohortCreditsPage({
   return (
     <div className="page">
       <PageHeader
+        back={{ href: "/coordinate/cohorts", label: "Cohorts" }}
         lead={
           inForce
             ? `Version ${inForce.version} is in force. A unit's credits are awarded when every assessment it needs is released Competent, and reversed if one later becomes Not yet competent.`

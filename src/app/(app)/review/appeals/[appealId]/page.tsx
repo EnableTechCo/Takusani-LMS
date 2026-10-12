@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/shell/page-header";
 import { Icon } from "@/components/ui/icons";
-import { TextLink } from "@/components/ui/link";
 import { DateTime, HistoryList } from "@/components/ui/records";
 import { Banner, Tag } from "@/components/ui/status";
 import { formatDateTime, formatLongDayOf, formatTime } from "@/lib/dates";
@@ -71,6 +70,7 @@ export default async function ReviewAppealPage({
   return (
     <div className="page">
       <PageHeader
+        back={{ href: "/review/appeals", label: "Reviews" }}
         lead={`${review.learner_name}${review.learner_number ? ` · ${review.learner_number}` : ""} · ${review.item_title}, ${review.cohort_name}`}
         meta={
           concluded && review.outcome_category ? (
@@ -272,9 +272,6 @@ export default async function ReviewAppealPage({
               </ul>
             )}
           </section>
-          <p>
-            <TextLink href="/review/appeals">All your reviews</TextLink>
-          </p>
         </aside>
       </div>
     </div>

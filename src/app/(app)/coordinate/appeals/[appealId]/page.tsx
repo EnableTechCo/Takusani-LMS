@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/shell/page-header";
 import { Icon } from "@/components/ui/icons";
-import { TextLink } from "@/components/ui/link";
 import { DateTime, HistoryList, Log } from "@/components/ui/records";
 import { Banner, Tag } from "@/components/ui/status";
 import { formatDateTime, formatLongDayOf, lastFullDayBefore } from "@/lib/dates";
@@ -109,6 +108,7 @@ export default async function CoordinateAppealPage({
   return (
     <div className="page">
       <PageHeader
+        back={{ href: "/coordinate/appeals", label: "Appeals" }}
         lead={`${appeal.learner_name}${appeal.learner_number ? ` · ${appeal.learner_number}` : ""} · ${appeal.item_title}, ${appeal.cohort_name}`}
         meta={
           <>
@@ -404,9 +404,6 @@ export default async function CoordinateAppealPage({
             }))}
             label={`Record of appeal ${appeal.reference}, oldest first. Times in SAST.`}
           />
-          <p>
-            <TextLink href="/coordinate/appeals">All appeals</TextLink>
-          </p>
         </aside>
       </div>
     </div>

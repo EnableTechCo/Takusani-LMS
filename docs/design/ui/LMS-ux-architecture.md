@@ -94,7 +94,7 @@ Desktop (>= 1024 px)
 +----------------------------------------------------------------------------+
 | TopBar:  [Institution] [<-][->]  [Context selector]  [Search] [Bell] [Account] |
 +-------------+--------------------------------------------------------------+
-| SideNav     | PageHeader: breadcrumb, title, status tag, primary action     |
+| SideNav     | PageHeader: back link, title, status tag, primary action      |
 | (256 px)    +-----------------------------------------------+--------------+
 | workspace   | Main (reading measure max 720 px for prose;   | Aside        |
 | groups      | data views may use full width up to 1200 px)  | (optional,   |

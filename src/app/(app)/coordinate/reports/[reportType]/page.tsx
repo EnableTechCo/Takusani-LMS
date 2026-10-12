@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/shell/page-header";
 import { Button } from "@/components/ui/button";
 import { SelectField, TextField } from "@/components/ui/field";
-import { TextLink } from "@/components/ui/link";
 import { Banner, EmptyState } from "@/components/ui/status";
 import { DataTable } from "@/components/ui/table";
 import { listCohorts } from "@/modules/programmes/queries";
@@ -40,11 +39,13 @@ export default async function CoordinateReportPage({
 
   return (
     <div className="page">
-      <PageHeader lead={type.description} title={type.title} workspace="Coordinating" />
+      <PageHeader
+        back={{ href: "/coordinate/reports", label: "Reports" }}
+        lead={type.description}
+        title={type.title}
+        workspace="Coordinating"
+      />
       <div className="stack stack--lg">
-        <p>
-          <TextLink href="/coordinate/reports">All reports and your exports</TextLink>
-        </p>
         <section aria-labelledby="scope-h" className="card">
           <div className="card__header">
             <h2 className="card__title" id="scope-h">

@@ -12,6 +12,7 @@ export default async function NewImportPage() {
   return (
     <div className="page page--form">
       <PageHeader
+        back={{ href: "/admin/imports", label: "Imports" }}
         lead="Every row is checked first. Nothing is created until you choose to import the ready rows."
         title="New import"
         workspace="Administration"

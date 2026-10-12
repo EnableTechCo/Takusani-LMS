@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/shell/page-header";
-import { TextLink } from "@/components/ui/link";
 import { Banner, EmptyState, Tag } from "@/components/ui/status";
 import { formatDateTime, formatLongDayOf, formatTime } from "@/lib/dates";
 import { RegisterForm } from "@/modules/learning/register-forms";
@@ -31,6 +30,7 @@ export default async function RegisterPage({
   return (
     <div className="page">
       <PageHeader
+        back={{ href: `/teach/sessions/${sessionId}`, label: "Session" }}
         lead={register.cohort_name}
         meta={
           <>
@@ -103,9 +103,6 @@ export default async function RegisterPage({
               />
             </>
           )}
-          <p>
-            <TextLink href={`/teach/sessions/${register.session_id}`}>Back to the session</TextLink>
-          </p>
         </div>
 
         <aside aria-labelledby="changes-h" className="page-layout__aside stack">

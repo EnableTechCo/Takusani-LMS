@@ -10,7 +10,12 @@ export default async function NewNoticePage() {
   const { cohorts, canSendWide } = await myNoticeAudiences();
   return (
     <div className="page page--form">
-      <PageHeader lead="Everyone it is for is told in the LMS." title="New notice" workspace="Coordinating" />
+      <PageHeader
+        back={{ href: "/coordinate/notices", label: "Notices" }}
+        lead="Everyone it is for is told in the LMS."
+        title="New notice"
+        workspace="Coordinating"
+      />
       <div className="card">
         <div className="card__body">
           {cohorts.length === 0 && !canSendWide ? (

@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/shell/page-header";
-import { TextLink } from "@/components/ui/link";
 import { Banner, Tag } from "@/components/ui/status";
 import { formatDateTime, sastInputValue } from "@/lib/dates";
 import { AudienceForm, CriteriaForm, EditTaskForm, PublishTask, RequirementsForm } from "@/modules/submissions/forms";
@@ -44,6 +43,7 @@ export default async function EditTaskPage({
   return (
     <div className="page page--form">
       <PageHeader
+        back={{ href: "/teach/tasks", label: "Assignments" }}
         workspace="Teaching"
         title={task.title}
         lead={`${task.cohort_name}. Times are SAST.`}
@@ -203,9 +203,6 @@ export default async function EditTaskPage({
             </section>
           </>
         )}
-        <p>
-          <TextLink href="/teach/tasks">Back to assignments</TextLink>
-        </p>
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ConflictPanel } from "@/components/ui/conflict";
 import { ConsequenceDialog } from "@/components/ui/dialog";
 import { TextareaField } from "@/components/ui/field";
-import { ButtonLink, TextLink } from "@/components/ui/link";
+import { ButtonLink } from "@/components/ui/link";
 import { Log } from "@/components/ui/records";
 import { Banner, Tag } from "@/components/ui/status";
 import { formatDateTime } from "@/lib/dates";
@@ -77,6 +77,7 @@ export default async function AccountPage({
   return (
     <div className="page">
       <PageHeader
+        back={{ href: "/admin/accounts", label: "Accounts" }}
         actions={
           <ButtonLink href={`/admin/accounts/${profileId}/roles`} variant="secondary">
             Roles and allocations
@@ -280,9 +281,6 @@ export default async function AccountPage({
                 label={`Changes to ${account.full_name}'s account and roles, newest first. Times in SAST.`}
               />
             )}
-            <p>
-              <TextLink href="/admin/accounts">All accounts</TextLink>
-            </p>
           </aside>
         </div>
       </div>

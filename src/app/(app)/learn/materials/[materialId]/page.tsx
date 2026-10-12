@@ -21,6 +21,7 @@ export default async function LearnMaterialPage({ params }: { params: Promise<{ 
     <div className="page page--prose">
       <AccessLogger materialId={material.id} />
       <PageHeader
+        back={{ href: "/learn/materials", label: "Materials" }}
         lead={material.module_title ?? undefined}
         meta={
           <>
@@ -82,7 +83,6 @@ export default async function LearnMaterialPage({ params }: { params: Promise<{ 
         ) : null}
 
         <div className="cluster cluster--between">
-          <TextLink href="/learn/materials">All materials</TextLink>
           <TextLink href={`/learn/notes/new?about=material:${material.id}`}>Write a note about this</TextLink>
         </div>
       </div>

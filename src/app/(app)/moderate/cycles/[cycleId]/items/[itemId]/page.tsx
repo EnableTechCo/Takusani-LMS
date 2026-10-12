@@ -96,6 +96,7 @@ export default async function SampleItemPage({
     return (
       <div className="page">
         <PageHeader
+          back={{ href: `/moderate/cycles/${cycleId}`, label: "Cycle" }}
           actions={nav}
           lead={`${item.cycle_name}, ${item.cohort_name}`}
           title={`${position}: you cannot moderate this item`}
@@ -138,6 +139,7 @@ export default async function SampleItemPage({
   return (
     <div className="page">
       <PageHeader
+        back={{ href: `/moderate/cycles/${cycleId}`, label: "Cycle" }}
         actions={nav}
         lead={`${item.learner_name}${item.learner_number ? ` · ${item.learner_number}` : ""} · ${item.item_title} · ${item.cycle_name}, ${item.cohort_name}`}
         meta={<Tag tone={itemStateTone(item.state)}>{ITEM_STATE_LABELS[item.state] ?? item.state}</Tag>}
