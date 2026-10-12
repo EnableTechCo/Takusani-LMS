@@ -60,6 +60,7 @@ export default async function LearnAppealPage({
   return (
     <div className="page page--form">
       <PageHeader
+        back={{ href: "/learn/appeals", label: "Your appeals" }}
         lead={`${appeal.item_title} · ${appeal.cohort_name}`}
         meta={
           concluded ? (

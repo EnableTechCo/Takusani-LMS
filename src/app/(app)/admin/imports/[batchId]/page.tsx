@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/shell/page-header";
 import { buttonClass, iconClass } from "@/components/ui/button-class";
 import { Icon } from "@/components/ui/icons";
-import { TextLink } from "@/components/ui/link";
 import { Subnav } from "@/components/ui/process";
 import { Banner, EmptyState, Tag } from "@/components/ui/status";
 import { DataTable } from "@/components/ui/table";
@@ -61,6 +60,7 @@ export default async function ImportBatchPage({
   return (
     <div className="page">
       <PageHeader
+        back={{ href: "/admin/imports", label: "Imports" }}
         lead={`${batch.file_name} for ${batch.cohort_name}. Checked on ${formatDateTime(batch.created_at)} by ${batch.uploaded_by_name}.`}
         meta={
           <>
@@ -165,7 +165,6 @@ export default async function ImportBatchPage({
               Download problem rows (CSV)
             </a>
           ) : null}
-          <TextLink href="/admin/imports">All imports</TextLink>
         </div>
       </div>
     </div>

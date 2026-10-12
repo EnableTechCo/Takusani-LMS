@@ -1,5 +1,5 @@
 import { PageHeader } from "@/components/shell/page-header";
-import { ButtonLink, TextLink } from "@/components/ui/link";
+import { ButtonLink } from "@/components/ui/link";
 import { Banner, EmptyState, Tag } from "@/components/ui/status";
 import { DataTable } from "@/components/ui/table";
 import { formatDateTime } from "@/lib/dates";
@@ -157,6 +157,7 @@ export function CorrectionDetail({
   return (
     <div className="page">
       <PageHeader
+        back={{ href: base, label: "Corrections" }}
         lead={`${correction.learner_name}${correction.learner_number ? ` · ${correction.learner_number}` : ""} · ${correction.item_title} · ${correction.cohort_name}`}
         meta={
           <Tag tone={correctionTone(correction.state)}>
@@ -319,10 +320,6 @@ export function CorrectionDetail({
             </div>
           </section>
         )}
-
-        <p>
-          <TextLink href={base}>All corrections</TextLink>
-        </p>
       </div>
     </div>
   );

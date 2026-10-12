@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/shell/page-header";
-import { TextLink } from "@/components/ui/link";
 import { Tag } from "@/components/ui/status";
 import { listMyAppeals } from "@/modules/appeals/queries";
 import { getPublicSettings } from "@/modules/audit/settings";
@@ -34,16 +33,12 @@ export default async function LearnResultPage({ params }: { params: Promise<{ re
   if (!result) notFound();
 
   const latestVersion = (result.latest_version ?? null) as unknown as VersionFacts | null;
-  const back = (
-    <p>
-      <TextLink href="/learn/results">Back to your results</TextLink>
-    </p>
-  );
 
   if (result.state !== "released") {
     return (
       <div className="page">
         <PageHeader
+          back={{ href: "/learn/results", label: "Results" }}
           lead={result.cohort_name}
           meta={
             <Tag shape="half" tone="info">
@@ -61,7 +56,6 @@ export default async function LearnResultPage({ params }: { params: Promise<{ re
             moderated={result.moderated}
             taskId={result.task_id}
           />
-          {back}
         </div>
       </div>
     );
@@ -95,6 +89,7 @@ export default async function LearnResultPage({ params }: { params: Promise<{ re
   return (
     <div className="page">
       <PageHeader
+        back={{ href: "/learn/results", label: "Results" }}
         lead={result.cohort_name}
         meta={
           <Tag tone={released.outcome === "competent" ? "positive" : "caution"}>{OUTCOME_LABELS[released.outcome]}</Tag>
@@ -104,7 +99,6 @@ export default async function LearnResultPage({ params }: { params: Promise<{ re
       />
       <div className="stack stack--lg">
         <ReleasedResultView now={new Date()} result={released} />
-        {back}
       </div>
     </div>
   );

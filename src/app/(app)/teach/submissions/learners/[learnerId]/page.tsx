@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/shell/page-header";
-import { TextLink } from "@/components/ui/link";
 import { Tag } from "@/components/ui/status";
 import { formatDateTime } from "@/lib/dates";
 import { getLearnerSubmissionHistory } from "@/modules/submissions/dashboard-queries";
@@ -32,7 +31,12 @@ export default async function LearnerSubmissionsPage({ params }: { params: Promi
 
   return (
     <div className="page">
-      <PageHeader lead={learner.learner_number ?? undefined} title={learner.full_name} workspace="Teaching" />
+      <PageHeader
+        back={{ href: "/teach/submissions", label: "Submissions" }}
+        lead={learner.learner_number ?? undefined}
+        title={learner.full_name}
+        workspace="Teaching"
+      />
       <div className="stack stack--lg">
         {history.map((task) => {
           const versions = task.versions as unknown as Version[];
@@ -94,9 +98,6 @@ export default async function LearnerSubmissionsPage({ params }: { params: Promi
             </section>
           );
         })}
-        <p>
-          <TextLink href="/teach/submissions">Back to submissions</TextLink>
-        </p>
       </div>
     </div>
   );

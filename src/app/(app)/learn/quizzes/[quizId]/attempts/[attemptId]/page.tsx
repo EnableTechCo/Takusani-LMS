@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/shell/page-header";
-import { TextLink } from "@/components/ui/link";
 import { Banner, Tag } from "@/components/ui/status";
 import { AttemptForm } from "@/modules/learning/quiz-forms";
 import { getMyQuizAttempt } from "@/modules/learning/quiz-queries";
@@ -27,6 +26,7 @@ export default async function QuizAttemptPage({
   return (
     <div className="page page--prose">
       <PageHeader
+        back={{ href: `/learn/quizzes/${quizId}`, label: "Quiz" }}
         meta={
           <>
             <Tag>Practice</Tag>
@@ -96,9 +96,6 @@ export default async function QuizAttemptPage({
         ) : (
           <AttemptForm attemptId={attempt.attempt_id} items={attempt.items} quizId={quizId} />
         )}
-        <p>
-          <TextLink href={`/learn/quizzes/${quizId}`}>Back to the quiz</TextLink>
-        </p>
       </div>
     </div>
   );

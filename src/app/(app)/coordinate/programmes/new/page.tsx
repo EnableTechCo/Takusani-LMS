@@ -9,6 +9,7 @@ export default function NewProgrammePage() {
   return (
     <div className="page page--form">
       <PageHeader
+        back={{ href: "/coordinate/cohorts", label: "Cohorts" }}
         workspace="Coordinating"
         title="New programme"
         lead="A programme groups its qualifications, units and cohorts."

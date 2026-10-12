@@ -19,6 +19,7 @@ export default async function NewSessionPage() {
   return (
     <div className="page page--form">
       <PageHeader
+        back={{ href: "/teach/sessions", label: "Sessions" }}
         lead="It goes on the cohort's calendar at once, and every learner in the cohort is told."
         title="Schedule a session"
         workspace="Teaching"

@@ -1,5 +1,4 @@
 import { PageHeader } from "@/components/shell/page-header";
-import { TextLink } from "@/components/ui/link";
 import { formatDayOf } from "@/lib/dates";
 import { NoteForm } from "@/modules/learning/notes-forms";
 import { listMyNoteFolders, listNoteLinkTargets } from "@/modules/learning/notes-queries";
@@ -19,16 +18,18 @@ export default async function NewNotePage({ searchParams }: { searchParams: Prom
 
   return (
     <div className="page page--form">
-      <PageHeader lead="Only you can see this note." title="New note" workspace="Learning" />
+      <PageHeader
+        back={{ href: "/learn/notes", label: "Notes" }}
+        lead="Only you can see this note."
+        title="New note"
+        workspace="Learning"
+      />
       <div className="stack stack--lg">
         <NoteForm
           defaultLink={options.some((option) => option.value === asked) ? asked : ""}
           folders={folders.map((entry) => entry.folder)}
           targets={options}
         />
-        <p>
-          <TextLink href="/learn/notes">All notes</TextLink>
-        </p>
       </div>
     </div>
   );

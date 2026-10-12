@@ -105,16 +105,15 @@ export default async function LearnMarkedWorkPage({ params }: { params: Promise<
   if (!view || view.status === "not_found" || view.status === "not_a_view" || view.status === "unauthenticated") {
     notFound();
   }
-  const back = (
-    <p>
-      <TextLink href={`/learn/appeals/${appealId}`}>Back to your appeal</TextLink>
-    </p>
-  );
 
   if (view.status !== "ok") {
     return (
       <div className="page page--form">
-        <PageHeader title="Your marked work" workspace="Learning" />
+        <PageHeader
+          back={{ href: `/learn/appeals/${appealId}`, label: "Your appeal" }}
+          title="Your marked work"
+          workspace="Learning"
+        />
         <div className="stack stack--lg">
           {view.status === "refused" ? (
             <Banner icon="scales" role="note" title="Your request was not accepted" tone="readonly">
@@ -125,7 +124,6 @@ export default async function LearnMarkedWorkPage({ params }: { params: Promise<
               <p>You will be told when you can see your marked work.</p>
             </Banner>
           )}
-          {back}
         </div>
       </div>
     );
@@ -139,6 +137,7 @@ export default async function LearnMarkedWorkPage({ params }: { params: Promise<
   return (
     <div className="page">
       <PageHeader
+        back={{ href: `/learn/appeals/${appealId}`, label: "Your appeal" }}
         lead={`${view.cohort_name} · appeal ${view.reference}`}
         meta={<Tag tone={outcome === "competent" ? "positive" : "caution"}>{OUTCOME_LABELS[outcome]}</Tag>}
         title={`Your marked work for ${view.item_title}`}
@@ -225,7 +224,6 @@ export default async function LearnMarkedWorkPage({ params }: { params: Promise<
                 ) : null}
               </div>
             </div>
-            {back}
           </aside>
         </div>
       </div>

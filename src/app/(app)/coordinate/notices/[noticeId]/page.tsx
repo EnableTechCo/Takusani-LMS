@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/shell/page-header";
 import { Button } from "@/components/ui/button";
-import { TextLink } from "@/components/ui/link";
 import { Banner, EmptyState, Tag } from "@/components/ui/status";
 import { DataTable } from "@/components/ui/table";
 import { formatDateTime } from "@/lib/dates";
@@ -38,6 +37,7 @@ export default async function NoticePage({
   return (
     <div className="page">
       <PageHeader
+        back={{ href: "/coordinate/notices", label: "Notices" }}
         lead={`From ${notice.sender_name}. For: ${audienceLabel(notice)}.`}
         meta={
           <>
@@ -142,7 +142,6 @@ export default async function NoticePage({
         ) : null}
 
         <div className="cluster cluster--between">
-          <TextLink href="/coordinate/notices">All notices</TextLink>
           {notice.can_cancel ? (
             <form action={cancelNotice.bind(null, notice.id)}>
               <Button type="submit" variant="ghost">

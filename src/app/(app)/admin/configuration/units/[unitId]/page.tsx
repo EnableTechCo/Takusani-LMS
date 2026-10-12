@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/shell/page-header";
-import { TextLink } from "@/components/ui/link";
 import { Banner, Tag } from "@/components/ui/status";
 import { DataTable } from "@/components/ui/table";
 import { formatDateTime } from "@/lib/dates";
@@ -38,6 +37,7 @@ export default async function UnitCreditPage({
   return (
     <div className="page">
       <PageHeader
+        back={{ href: "/admin/configuration", label: "Configuration" }}
         lead={`Credit value per unit, ${unit.programme_title}. Credits already awarded keep the value they were awarded with.`}
         meta={
           <>
@@ -106,9 +106,6 @@ export default async function UnitCreditPage({
             rows={versions}
           />
         </section>
-        <p>
-          <TextLink href="/admin/configuration">All configuration</TextLink>
-        </p>
       </div>
     </div>
   );

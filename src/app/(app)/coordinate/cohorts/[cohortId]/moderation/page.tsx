@@ -109,6 +109,7 @@ export default async function ModerationPlanningPage({
   return (
     <div className="page">
       <PageHeader
+        back={{ href: "/coordinate/cohorts", label: "Cohorts" }}
         lead={poolLead(summary, now)}
         meta={
           <>

@@ -11,7 +11,12 @@ export default async function NewCohortPage({ searchParams }: { searchParams: Pr
 
   return (
     <div className="page page--form">
-      <PageHeader workspace="Coordinating" title="New cohort" lead="A group of learners taking a programme together." />
+      <PageHeader
+        back={{ href: "/coordinate/cohorts", label: "Cohorts" }}
+        workspace="Coordinating"
+        title="New cohort"
+        lead="A group of learners taking a programme together."
+      />
       <div className="card">
         <div className="card__body">
           {programmes.length === 0 ? (

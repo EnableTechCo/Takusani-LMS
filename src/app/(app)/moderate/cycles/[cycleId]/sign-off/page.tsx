@@ -48,6 +48,7 @@ export default async function SignOffPage({
   return (
     <div className="page">
       <PageHeader
+        back={{ href: `/moderate/cycles/${cycleId}`, label: "Cycle" }}
         lead="Sign-off releases the results that were frozen into this cycle. It is the only way a result in a moderated cohort reaches its learner, and it cannot be undone."
         meta={
           <>
@@ -296,10 +297,6 @@ export default async function SignOffPage({
             </div>
           </section>
         ) : null}
-
-        <p>
-          <TextLink href={`/moderate/cycles/${cycleId}`}>Back to the cycle</TextLink>
-        </p>
       </div>
     </div>
   );

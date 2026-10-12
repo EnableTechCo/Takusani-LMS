@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/shell/page-header";
-import { ButtonLink, TextLink } from "@/components/ui/link";
+import { ButtonLink } from "@/components/ui/link";
 import { Banner, Tag } from "@/components/ui/status";
 import { formatDateTime, formatLongDayOf, formatTime, sastInputValue } from "@/lib/dates";
 import { CancelSessionForm, SessionForm } from "@/modules/learning/sessions-forms";
@@ -45,6 +45,7 @@ export default async function SessionPage({
   return (
     <div className="page">
       <PageHeader
+        back={{ href: "/teach/sessions", label: "Sessions" }}
         lead={session.cohort_name}
         meta={
           <>
@@ -201,10 +202,6 @@ export default async function SessionPage({
         {held && !cancelled ? (
           <p className="text-muted">This session took place on {formatDateTime(session.starts_at)} (SAST).</p>
         ) : null}
-
-        <p>
-          <TextLink href="/teach/sessions">All sessions</TextLink>
-        </p>
       </div>
     </div>
   );

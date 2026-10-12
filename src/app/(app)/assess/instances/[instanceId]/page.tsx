@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/shell/page-header";
-import { TextLink } from "@/components/ui/link";
 import { Banner, Tag } from "@/components/ui/status";
 import { formatDateTime } from "@/lib/dates";
 import { getMyAccess } from "@/modules/identity/session";
@@ -42,6 +41,7 @@ export default async function MarkingPage({ params }: { params: Promise<{ instan
   return (
     <div className="page page--full">
       <PageHeader
+        back={{ href: "/assess", label: "Queue" }}
         workspace="Assessing"
         title={`${item.learner_name}: ${item.task_title}`}
         lead={`${item.cohort_name}${item.learner_number ? ` · ${item.learner_number}` : ""}. Version ${
@@ -99,9 +99,6 @@ export default async function MarkingPage({ params }: { params: Promise<{ instan
         }
         versions={versions}
       />
-      <p className="u-mt-6">
-        <TextLink href="/assess">Back to the queue</TextLink>
-      </p>
     </div>
   );
 }

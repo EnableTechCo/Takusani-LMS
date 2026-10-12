@@ -35,6 +35,7 @@ export default async function AccountRolesPage({
   return (
     <div className="page">
       <PageHeader
+        back={{ href: `/admin/accounts/${profileId}`, label: account.full_name }}
         lead="A role says what a person may be given. It does not give them any piece of work. Separation of duties is checked for each item when work is allocated."
         meta={
           <>
@@ -258,9 +259,6 @@ export default async function AccountRolesPage({
                 label={`Changes to ${account.full_name}'s roles and account, newest first. Times in SAST.`}
               />
             )}
-            <p>
-              <TextLink href={`/admin/accounts/${profileId}`}>Account details</TextLink>
-            </p>
             <p>
               <TextLink href="/admin/accounts">All accounts</TextLink>
             </p>

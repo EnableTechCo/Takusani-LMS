@@ -1,6 +1,5 @@
 import { headers } from "next/headers";
 import { PageHeader } from "@/components/shell/page-header";
-import { TextLink } from "@/components/ui/link";
 import { Banner, Tag } from "@/components/ui/status";
 import { formatDateTime } from "@/lib/dates";
 import { FeedLinkPanel } from "@/modules/learning/calendar-feed-forms";
@@ -19,6 +18,7 @@ export default async function SubscribePage({ searchParams }: { searchParams: Pr
   return (
     <div className="page page--form">
       <PageHeader
+        back={{ href: "/learn/calendar", label: "Calendar" }}
         lead="See your sessions and due dates in your phone or computer calendar. It updates by itself, about once an hour."
         meta={
           feed ? (
@@ -105,10 +105,6 @@ export default async function SubscribePage({ searchParams }: { searchParams: Pr
             </li>
           </ul>
         </section>
-
-        <p>
-          <TextLink href="/learn/calendar">Back to your calendar</TextLink>
-        </p>
       </div>
     </div>
   );

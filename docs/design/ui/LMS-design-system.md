@@ -295,7 +295,7 @@ Class names follow `.block`, `.block__element`, `.block--modifier`; state is `.i
 
 **Bottom tabs** `.bottom-tabs` / `__item`: phones only, at most five (four destinations + More), icon above an always-visible label, 44px+ targets, current tab has a top bar and semibold accent text. Hidden automatically while an `.action-bar` or `.decision-bar` is present.
 
-**PageHeader** `.page-header`: `.breadcrumb` (from lg), `__workspace` (accent overline: "Assessing"), `__title` (display H1, one per page), `__lead`, `__meta` (**one** status tag, cohort name + policy tag, reference), `__actions` (**at most one** primary button and an overflow `menu-wrap`). Don't: put two primaries, or a status tag per fact.
+**PageHeader** `.page-header`: `__back` (on every page below a navigation destination: one quiet "← Parent" link to the list it came from or the record it belongs to, read as "Back to Parent"; the same on every such page, so the way back never depends on browser history), `__workspace` (accent overline: "Assessing"), `__title` (display H1, one per page), `__lead`, `__meta` (**one** status tag, cohort name + policy tag, reference), `__actions` (**at most one** primary button and an overflow `menu-wrap`). Don't: put two primaries, or a status tag per fact.
 
 **Sticky regions and WCAG 2.4.11.** Every sticky region feeds `--sticky-top` or `--sticky-bottom` on `html` through `:has()`, and `scroll-padding-top/bottom` is derived from them, so a control scrolled into view by focus or by an anchor is never hidden behind the top bar, section switcher, bottom tabs, action bar, decision bar, exam bar or exam action bar. The marking panel, being its own scroller from xl, has its own `scroll-padding-block`.
 

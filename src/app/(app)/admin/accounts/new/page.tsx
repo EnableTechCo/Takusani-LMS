@@ -8,6 +8,7 @@ export default function NewAccountPage() {
   return (
     <div className="page page--form">
       <PageHeader
+        back={{ href: "/admin/accounts", label: "Accounts" }}
         workspace="Administration"
         title="New account"
         lead="Create an account and send the person an invitation to choose their password."

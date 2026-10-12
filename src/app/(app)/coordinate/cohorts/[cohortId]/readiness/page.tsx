@@ -32,6 +32,7 @@ export default async function ReadinessPage({ params }: { params: Promise<{ coho
   return (
     <div className="page">
       <PageHeader
+        back={{ href: "/coordinate/cohorts", label: "Cohorts" }}
         lead={cohort.programme_title}
         meta={
           <span>

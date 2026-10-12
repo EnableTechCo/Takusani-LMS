@@ -10,6 +10,7 @@ export default async function NewMaterialPage() {
   return (
     <div className="page page--form">
       <PageHeader
+        back={{ href: "/teach/materials", label: "Materials" }}
         lead="Start with the cohort and a title. Nothing is visible to learners until you publish it."
         title="New material"
         workspace="Teaching"

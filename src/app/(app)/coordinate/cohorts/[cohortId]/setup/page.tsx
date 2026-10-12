@@ -35,6 +35,7 @@ export default async function CohortSetupPage({
   return (
     <div className="page">
       <PageHeader
+        back={{ href: "/coordinate/cohorts", label: "Cohorts" }}
         lead={cohort.programme_title}
         meta={
           <>

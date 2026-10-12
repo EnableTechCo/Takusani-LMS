@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/shell/page-header";
-import { TextLink } from "@/components/ui/link";
 import { Banner, Tag } from "@/components/ui/status";
 import { formatDateTime } from "@/lib/dates";
 import { QueryActionsForm, RouteQueryForm } from "@/modules/programmes/query-forms";
@@ -36,6 +35,7 @@ export default async function CoordinateQueryPage({
   return (
     <div className="page">
       <PageHeader
+        back={{ href: "/coordinate/queries", label: "Queries" }}
         lead={`${query.source_name} (${QUERY_SOURCE_LABELS[query.source_type]?.toLowerCase()}) about ${query.programme_title}${
           query.cohort_name ? `, ${query.cohort_name}` : ""
         }.`}
@@ -131,9 +131,6 @@ export default async function CoordinateQueryPage({
               <QueryActionsForm queryId={query.id} state={query.state} steps={events.length} />
             </div>
           </section>
-          <p>
-            <TextLink href="/coordinate/queries">All queries</TextLink>
-          </p>
         </div>
 
         <aside aria-labelledby="history-h" className="page-layout__aside">
