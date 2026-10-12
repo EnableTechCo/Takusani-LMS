@@ -1,10 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 176 32" width="176" height="32" role="img" aria-labelledby="takusani-logo-title">
-  <title id="takusani-logo-title">Takusani LMS</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 168 32" width="168" height="32" role="img" aria-labelledby="inurture-logo-title">
+  <title id="inurture-logo-title">iNurture LMS</title>
   <!-- Mark: identical geometry to mark.svg -->
-  <path fill="currentColor" fill-rule="evenodd" d="M7 0H25A7 7 0 0 1 32 7V25A7 7 0 0 1 25 32H7A7 7 0 0 1 0 25V7A7 7 0 0 1 7 0ZM7 8.5H25V12H17.75V24H14.25V12H7ZM8.25 17.5A1.75 1.75 0 1 0 11.75 17.5A1.75 1.75 0 1 0 8.25 17.5ZM20.25 17.5A1.75 1.75 0 1 0 23.75 17.5A1.75 1.75 0 1 0 20.25 17.5Z"/>
-  <!-- Wordmark: Newsreader Medium, -0.02em tracking, sentence case. Live text so it inherits the page's loaded
-       font when inlined; when used as <img> it falls back to the serif stack. Outline to paths before
-       production use on external media (see LMS-design-system.md, Brand). -->
-  <text x="42" y="23.5" fill="currentColor" font-family="Newsreader, 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif" font-size="25" font-weight="500" letter-spacing="-0.5">Takusani</text>
-  <text x="143" y="23.5" fill="currentColor" fill-opacity="0.72" font-family="'Geist Mono', 'Cascadia Mono', Consolas, Menlo, monospace" font-size="10.5" font-weight="500" letter-spacing="1">LMS</text>
+  <path fill="#97C05D" fill-rule="evenodd" d="M16 2C24.5 8.5 27 18 22.6 25.4C20.2 29.6 11.8 29.6 9.4 25.4C5 18 7.5 8.5 16 2ZM14.5 14.25A1.5 1.5 0 0 1 17.5 14.25V24.25A1.5 1.5 0 0 1 14.5 24.25ZM14.1 9.6A1.9 1.9 0 1 0 17.9 9.6A1.9 1.9 0 1 0 14.1 9.6Z"/>
+  <!-- Wordmark: Outfit Bold, -0.01em tracking. Live text so it inherits the page's loaded font when inlined; when used
+       as <img> it falls back to the sans stack. Outline to paths before production use on external media
+       (see LMS-design-system.md, Brand). -->
+  <text x="38" y="23.5" fill="currentColor" font-family="Outfit, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="25" font-weight="700" letter-spacing="-0.25">iNurture</text>
+  <text x="138" y="23.5" fill="currentColor" fill-opacity="0.72" font-family="'Geist Mono', 'Cascadia Mono', Consolas, Menlo, monospace" font-size="10.5" font-weight="500" letter-spacing="1">LMS</text>
 </svg>

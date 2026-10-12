@@ -1,9 +1,15 @@
-/** The Takusani mark: a T whose crossbar carries two equal weights, a level balance (design system, brand). */
-function BrandMark({ className = "brand__mark" }: { className?: string }) {
+import { INSTITUTION } from "@/config/institution";
+
+/**
+ * The iNurture mark: a leaf whose vein is a cut-out "i" with its dot near the tip, drawn after the institution's logo.
+ * The cut-outs show whatever is behind it, so it reads on both themes. Replace with the official vector logo when
+ * iNurture supplies one.
+ */
+export function BrandMark({ className = "brand__mark" }: { className?: string }) {
   return (
     <svg aria-hidden="true" className={className} viewBox="0 0 32 32">
       <path
-        d="M7 0H25A7 7 0 0 1 32 7V25A7 7 0 0 1 25 32H7A7 7 0 0 1 0 25V7A7 7 0 0 1 7 0ZM7 8.5H25V12H17.75V24H14.25V12H7ZM8.25 17.5A1.75 1.75 0 1 0 11.75 17.5A1.75 1.75 0 1 0 8.25 17.5ZM20.25 17.5A1.75 1.75 0 1 0 23.75 17.5A1.75 1.75 0 1 0 20.25 17.5Z"
+        d="M16 2C24.5 8.5 27 18 22.6 25.4C20.2 29.6 11.8 29.6 9.4 25.4C5 18 7.5 8.5 16 2ZM14.5 14.25A1.5 1.5 0 0 1 17.5 14.25V24.25A1.5 1.5 0 0 1 14.5 24.25ZM14.1 9.6A1.9 1.9 0 1 0 17.9 9.6A1.9 1.9 0 1 0 14.1 9.6Z"
         fill="currentColor"
         fillRule="evenodd"
       />
@@ -16,7 +22,7 @@ export function Brand() {
   return (
     <>
       <BrandMark />
-      <span className="brand__name">Takusani</span>
+      <span className="brand__name">{INSTITUTION.name}</span>
       <span className="brand__suffix">LMS</span>
     </>
   );

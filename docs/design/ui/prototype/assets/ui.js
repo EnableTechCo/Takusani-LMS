@@ -1,4 +1,4 @@
-/* Takusani LMS — ui.js
+/* iNurture LMS — ui.js
    Progressive enhancement only; every component is readable and operable as plain HTML without it.
    No dependencies. Hooks are data-* attributes, never classes:
      details[data-menu]                       dropdown (context selector, account menu, overflow): outside click and Escape close it

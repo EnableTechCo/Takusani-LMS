@@ -3,6 +3,7 @@
  * title, start, end, place and a link into the LMS. The database has already left out everything else (results,
  * notices, Teams join links), and this adds nothing personal: not even the learner's name.
  */
+import { INSTITUTION } from "@/config/institution";
 
 export interface FeedEvent {
   kind: "session" | "due";
@@ -55,10 +56,10 @@ export function buildCalendar(events: FeedEvent[], { appUrl, now }: { appUrl: st
   const lines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Takusani//LMS calendar feed//EN",
+    `PRODID:-//${INSTITUTION.name}//LMS calendar feed//EN`,
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
-    "X-WR-CALNAME:Takusani LMS",
+    `X-WR-CALNAME:${INSTITUTION.product}`,
     "X-WR-TIMEZONE:Africa/Johannesburg",
     "REFRESH-INTERVAL;VALUE=DURATION:PT1H",
     "X-PUBLISHED-TTL:PT1H",
