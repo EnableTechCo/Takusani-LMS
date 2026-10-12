@@ -194,6 +194,12 @@ failed.
    it send email.
 5. Point the uptime monitor at `GET /api/health/outbox`. It returns 503 when the oldest undelivered email or queue
    message is more than five minutes old; page when it stays 503 for 15 minutes.
+6. Set the sign-in emails. Until a project has custom SMTP, Supabase sends its own default invite and password-reset
+   emails ("You've been invited", "Reset your password") and the dashboard will not let them be edited; staging is
+   in that state. Once Supabase's custom SMTP is set (Authentication, Emails, SMTP Settings), copy the subjects from
+   `supabase/config.toml` (`[auth.email.template.invite]` and `.recovery`) and the bodies from `supabase/email/` into
+   the Invite user and Reset password templates. They carry the institution's name (iNurture LMS) and link to
+   `/auth/confirm`, which the default emails do not.
 
 **Trying email locally:** set `EMAIL_PROVIDER=mailpit` in `.env.local`, and in the local database run
 `update notifications.settings set email_enabled = true;` (a `db reset` switches it off again). Emails appear in the
