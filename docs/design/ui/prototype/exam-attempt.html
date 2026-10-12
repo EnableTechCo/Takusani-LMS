@@ -487,7 +487,7 @@
     var from = s.proto; s.proto = id;
     window.clearTimeout(s.bannerTimer); window.clearTimeout(s.sendTimer);
     shell.inert = false;
-    if (dialog.open && id !== 'submit-confirm') window.TakusaniUI.closeModal(dialog);
+    if (dialog.open && id !== 'submit-confirm') window.iNurtureUI.closeModal(dialog);
     if (s.locked && id !== 'time-up') { lock(false); }
     $$('[data-clock]').forEach(function (el) { el.textContent = clock(); });
 
@@ -534,7 +534,7 @@
   function openSubmit(opener) {
     renderReview();
     var ack = $('#ack-submit'); ack.checked = false; ack.dispatchEvent(new Event('change', { bubbles: true }));
-    if (!dialog.open) window.TakusaniUI.openModal('m-submit-exam', opener || submit);
+    if (!dialog.open) window.iNurtureUI.openModal('m-submit-exam', opener || submit);
   }
 
   /* ---- wiring */

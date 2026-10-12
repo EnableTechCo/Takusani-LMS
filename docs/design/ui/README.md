@@ -11,7 +11,7 @@ The design follows the architecture package in the parent folder and SRS version
 ## Contents
 
 1. [UX architecture](LMS-ux-architecture.md): design principles from the SRS, navigation for people who hold several roles, a sitemap per role with every functional requirement placed, the screen inventory, key flows, the status vocabulary, the exam-mode specification, responsive rules, microcopy, accessibility requirements, and open questions.
-2. [Design system](LMS-design-system.md): the proposed Takusani brand, design tokens with measured contrast ratios, the status vocabulary mapped to tones, component specifications, layout, and how the tokens map to Tailwind CSS and an accessible component base for the Next.js build.
+2. [Design system](LMS-design-system.md): the iNurture brand (first proposed as Takusani), design tokens with measured contrast ratios, the status vocabulary mapped to tones, component specifications, layout, and how the tokens map to Tailwind CSS and an accessible component base for the Next.js build.
 3. [Prototype](prototype/index.html): the 18 priority screens across all six roles, a [component gallery](prototype/components.html), and the shared stylesheet they are built on.
 
 ## Viewing the prototype

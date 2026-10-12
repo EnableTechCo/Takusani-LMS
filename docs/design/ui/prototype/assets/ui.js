@@ -11,7 +11,7 @@
      data-select-mode="#tableWrapId"          phones: explicit "Select" mode for bulk actions on card lists
      data-density-toggle="#selector"          comfortable <-> compact on the target
      data-select-all="#tableId" · data-select-row · data-selected-count
-     data-toast="Message" (+ data-toast-meta) demo trigger; or call TakusaniUI.toast({ title, body, meta })
+     data-toast="Message" (+ data-toast-meta) demo trigger; or call iNurtureUI.toast({ title, body, meta })
    Also injects the inline SVG icon sprite (works from file://, no network). */
 (function () {
   'use strict';
@@ -65,15 +65,15 @@
     'grid': 'M4 4h6.5v6.5H4zM13.5 4H20v6.5h-6.5zM4 13.5h6.5V20H4zM13.5 13.5H20V20h-6.5z'
   };
   function injectSprite() {
-    if (doc.getElementById('takusani-icons')) return;
-    var html = '<svg id="takusani-icons" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">';
+    if (doc.getElementById('inurture-icons')) return;
+    var html = '<svg id="inurture-icons" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">';
     Object.keys(ICONS).forEach(function (k) { html += '<symbol id="i-' + k + '" viewBox="0 0 24 24"><path d="' + ICONS[k] + '"/></symbol>'; });
     var holder = doc.createElement('div'); holder.innerHTML = html + '</svg>';
     doc.body.insertBefore(holder.firstChild, doc.body.firstChild);
   }
 
   /* ---- Theme */
-  var THEME_KEY = 'takusani-theme';
+  var THEME_KEY = 'inurture-theme';
   function storedTheme() { try { return localStorage.getItem(THEME_KEY); } catch (e) { return null; } }
   function setTheme(t, persist) {
     root.setAttribute('data-theme', t);
@@ -213,5 +213,5 @@
   }
   if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', init); else init();
 
-  window.TakusaniUI = { toast: toast, openModal: openModal, closeModal: closeModal, setTheme: setTheme };
+  window.iNurtureUI = { toast: toast, openModal: openModal, closeModal: closeModal, setTheme: setTheme };
 })();

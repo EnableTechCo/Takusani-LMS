@@ -436,13 +436,13 @@
   reason.addEventListener('input', function () { if (reason.value.trim()) clearError(); preview(); });
   form.addEventListener('submit', function (e) {
     e.preventDefault();
-    if (choice() === 'admit') { window.TakusaniUI.openModal('m-admit', document.getElementById('adm-submit')); return; }
+    if (choice() === 'admit') { window.iNurtureUI.openModal('m-admit', document.getElementById('adm-submit')); return; }
     if (!reason.value.trim()) {
       summary.hidden = false; err.hidden = false; reason.setAttribute('aria-invalid', 'true');
       reason.setAttribute('aria-describedby', 'adm-reason-help adm-reason-err'); summary.focus(); return;
     }
     document.getElementById('m-in-reason').textContent = reason.value.trim();
-    window.TakusaniUI.openModal('m-inadmissible', document.getElementById('adm-submit'));
+    window.iNurtureUI.openModal('m-inadmissible', document.getElementById('adm-submit'));
   });
 })();
 </script>

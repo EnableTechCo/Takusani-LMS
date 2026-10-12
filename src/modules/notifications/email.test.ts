@@ -59,14 +59,14 @@ describe("emailSender", () => {
     const fetch = respond(200, { ID: "mp1" });
     const mailpit = emailSender({
       EMAIL_PROVIDER: "mailpit",
-      EMAIL_FROM: "Takusani LMS <lms@takusani.test>",
+      EMAIL_FROM: "iNurture LMS <lms@inurture.test>",
       MAILPIT_URL: "http://127.0.0.1:54324",
     })!;
     await expect(mailpit.send(email)).resolves.toEqual({ outcome: "accepted", providerMessageId: "mp1" });
     expect(fetch.mock.calls[0][0]).toBe("http://127.0.0.1:54324/api/v1/send");
     expect(JSON.parse(fetch.mock.calls[0][1]!.body as string).From).toEqual({
-      Email: "lms@takusani.test",
-      Name: "Takusani LMS",
+      Email: "lms@inurture.test",
+      Name: "iNurture LMS",
     });
   });
 });

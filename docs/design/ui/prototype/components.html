@@ -1140,7 +1140,7 @@ html:has(.sg-frame) { --sticky-top: var(--topbar-height); --sticky-bottom: 0px; 
   if (window.matchMedia) { var mq = matchMedia('(prefers-color-scheme: dark)'); if (mq.addEventListener) mq.addEventListener('change', render); }
 
   var list = document.getElementById('icon-list');
-  Array.prototype.forEach.call(document.querySelectorAll('#takusani-icons symbol'), function (s) {
+  Array.prototype.forEach.call(document.querySelectorAll('#inurture-icons symbol'), function (s) {
     var name = s.id.replace('i-', ''), li = document.createElement('li');
     li.innerHTML = '<svg class="icon icon--lg" aria-hidden="true"><use href="#' + s.id + '"/></svg>' + name; list.appendChild(li);
   });

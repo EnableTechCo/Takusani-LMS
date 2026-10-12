@@ -559,7 +559,7 @@ ol.pg-steps { padding-left: var(--space-5); list-style: decimal; display: grid; 
     var b = e.target.closest('[data-pg-focus]'); if (b) { go(b.getAttribute('data-pg-focus')); return; }
     b = e.target.closest('[data-pg-next]'); if (b) { location.hash = 'state=' + b.getAttribute('data-pg-next'); window.scrollTo(0, 0); return; }
     b = e.target.closest('[data-pg-finalise]');
-    if (b) { var s = document.body.getAttribute('data-proto-current'); var id = { draft: 'm-finalise-held', draftnm: 'm-finalise-release', returned: 'm-finalise-remark' }[s]; if (id) TakusaniUI.openModal(id); else if (s === 'error') go('error-summary'); }
+    if (b) { var s = document.body.getAttribute('data-proto-current'); var id = { draft: 'm-finalise-held', draftnm: 'm-finalise-release', returned: 'm-finalise-remark' }[s]; if (id) iNurtureUI.openModal(id); else if (s === 'error') go('error-summary'); }
   });
 
   var forms = ['ws-rubric', 'ws-feedback', 'ws-decision'].map(function (id) { return document.getElementById(id); });
