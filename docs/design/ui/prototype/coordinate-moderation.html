@@ -447,7 +447,7 @@
   $('p-submit').addEventListener('click', function () {
     var overlap = document.body.getAttribute('data-proto-current') === 'overlap';
     if (overlap && $('p-t3').checked) { $('ov-h').focus(); return; }
-    if (overlap) { window.TakusaniUI.toast({ title: 'Cycle planned', body: 'Task 4 and the Unit 2 exam: 11 results', meta: 'Thu 17 Sep 2026, 10:28' }); return; }
+    if (overlap) { window.iNurtureUI.toast({ title: 'Cycle planned', body: 'Task 4 and the Unit 2 exam: 11 results', meta: 'Thu 17 Sep 2026, 10:28' }); return; }
     location.hash = 'state=planned';
   });
   $('ov-fix').addEventListener('click', function () {

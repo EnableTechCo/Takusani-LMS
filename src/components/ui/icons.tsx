@@ -75,7 +75,7 @@ export function IconSprite() {
     <svg
       aria-hidden="true"
       focusable="false"
-      id="takusani-icons"
+      id="inurture-icons"
       style={{ position: "absolute", width: 0, height: 0, overflow: "hidden" }}
       xmlns="http://www.w3.org/2000/svg"
     >

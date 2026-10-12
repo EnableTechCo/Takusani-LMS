@@ -8,8 +8,8 @@
 export const WARN_BEFORE_MS = 2 * 60 * 1000;
 
 /** Where tabs share the moment of the last activity, and tell each other that the session ended. */
-export const ACTIVITY_KEY = "takusani.last-activity";
-export const SIGNED_OUT_KEY = "takusani.signed-out";
+export const ACTIVITY_KEY = "inurture.last-activity";
+export const SIGNED_OUT_KEY = "inurture.signed-out";
 
 export type IdlePhase = { phase: "active" } | { phase: "warning"; msLeft: number } | { phase: "expired" };
 

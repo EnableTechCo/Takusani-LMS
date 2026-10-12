@@ -305,7 +305,7 @@
         row.className = 'dl__row'; dt.textContent = td.getAttribute('data-label'); dd.textContent = td.textContent.replace(/\s+/g, ' ').trim();
         row.appendChild(dt); row.appendChild(dd); dl.appendChild(row);
       });
-      TakusaniUI.openModal('m-history', h); return;
+      iNurtureUI.openModal('m-history', h); return;
     }
     if (e.target.closest('#btn-remind')) {
       var picked = $$('[data-select-row]:checked', table).map(function (cb) { return cb.closest('tr'); });
@@ -322,7 +322,7 @@
         $('[data-pg-reminder]', r).innerHTML = '7 Sep 2026, 08:45<span class="table__secondary">Sent by you</span>';
       });
       resync(); selectMode(false);
-      TakusaniUI.toast({ title: 'Reminder sent', body: 'to ' + n + (n === 1 ? ' learner' : ' learners') + ' and logged on each learner\'s record', meta: '7 Sep 2026, 08:45' });
+      iNurtureUI.toast({ title: 'Reminder sent', body: 'to ' + n + (n === 1 ? ' learner' : ' learners') + ' and logged on each learner\'s record', meta: '7 Sep 2026, 08:45' });
     }
   });
   $('#f-learner').addEventListener('input', render);

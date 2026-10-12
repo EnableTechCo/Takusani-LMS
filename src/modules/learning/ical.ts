@@ -74,7 +74,7 @@ export function buildCalendar(events: FeedEvent[], { appUrl, now }: { appUrl: st
         : `Hand it in through the LMS: ${link}`;
     lines.push(
       "BEGIN:VEVENT",
-      `UID:${event.kind}-${event.id}@takusani-lms`,
+      `UID:${event.kind}-${event.id}@inurture-lms`,
       `DTSTAMP:${stamp}`,
       `LAST-MODIFIED:${icalInstant(event.updated_at)}`,
       `DTSTART:${icalInstant(event.starts_at)}`,

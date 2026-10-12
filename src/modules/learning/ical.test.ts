@@ -56,7 +56,7 @@ describe("buildCalendar", () => {
 
   it("gives each event a stable identifier, its times, and a link into the LMS", () => {
     const unfolded = document.replace(/\r\n /g, "");
-    expect(unfolded).toContain("UID:session-s1@takusani-lms");
+    expect(unfolded).toContain("UID:session-s1@inurture-lms");
     expect(unfolded).toContain("DTSTART:20261005T060000Z\r\nDTEND:20261005T073000Z");
     expect(unfolded).toContain("SUMMARY:Session 14: Minutes\\, agendas\\; and notes");
     expect(unfolded).toContain("URL:https://lms.example/learn/calendar#session-s1");
@@ -67,8 +67,8 @@ describe("buildCalendar", () => {
     const unfolded = document.replace(/\r\n /g, "");
     expect(unfolded).toContain("SUMMARY:Due: Task 3: Workplace records portfolio");
     expect(unfolded).toContain("URL:https://lms.example/learn/tasks/t3");
-    expect(unfolded).toMatch(/UID:due-t3@takusani-lms[\s\S]*?TRANSP:TRANSPARENT/);
-    expect(unfolded).toMatch(/UID:session-s2@takusani-lms[\s\S]*?STATUS:CANCELLED/);
+    expect(unfolded).toMatch(/UID:due-t3@inurture-lms[\s\S]*?TRANSP:TRANSPARENT/);
+    expect(unfolded).toMatch(/UID:session-s2@inurture-lms[\s\S]*?STATUS:CANCELLED/);
   });
 
   it("names nobody and links to nothing outside the LMS", () => {

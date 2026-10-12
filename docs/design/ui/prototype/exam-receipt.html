@@ -101,7 +101,7 @@
   document.getElementById('rc-print').addEventListener('click', function () { window.print(); });
   document.getElementById('rc-copy').addEventListener('click', function () {
     var id = document.getElementById('rc-id').textContent;
-    function done(ok) { window.TakusaniUI.toast(ok ? { title: 'Reference copied', meta: id } : { title: 'Select the reference to copy it', meta: id, icon: 'info' }); }
+    function done(ok) { window.iNurtureUI.toast(ok ? { title: 'Reference copied', meta: id } : { title: 'Select the reference to copy it', meta: id, icon: 'info' }); }
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(id).then(function () { done(true); }, function () { done(false); });
     else done(false);
   });

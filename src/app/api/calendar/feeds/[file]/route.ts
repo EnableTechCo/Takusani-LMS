@@ -50,7 +50,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ file
     "content-type": "text/calendar; charset=utf-8",
     "cache-control": "private, max-age=900",
     etag,
-    "content-disposition": 'inline; filename="takusani.ics"',
+    "content-disposition": 'inline; filename="inurture.ics"',
   };
   if (request.headers.get("if-none-match") === etag) return new Response(null, { status: 304, headers });
   return new Response(body, { status: 200, headers });
