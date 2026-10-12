@@ -2,23 +2,27 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { INSTITUTION } from "@/config/institution";
 import { Icon } from "@/components/ui/icons";
+import type { SidenavMode } from "@/lib/sidenav";
 import type { Theme } from "@/lib/theme";
 import type { AccountSummary } from "@/modules/identity/access";
 import type { Workspace } from "@/modules/identity/navigation";
 import { AccountMenu } from "./account-menu";
 import { BottomTabs } from "./bottom-tabs";
+import { HistoryButtons } from "./history-buttons";
 import { IdleSignOut } from "./idle-sign-out";
 import { Brand } from "./brand";
 import { SideNav } from "./side-nav";
 
 /**
- * AppShell (UX architecture section 3; the prototype's .app-shell): top bar, side navigation grouped by the
- * workspaces the person holds, and phone bottom tabs. The main landmark wraps every page.
+ * AppShell (UX architecture section 3; the prototype's .app-shell): top bar with Back and Forward, side navigation
+ * grouped by the workspaces the person holds (collapsed to an icon rail or pinned open, as they chose), and phone
+ * bottom tabs. The main landmark wraps every page.
  */
 export function AppShell({
   workspaces,
   account,
   theme,
+  sidenav,
   unreadNotifications,
   idleMinutes = 0,
   children,
@@ -26,6 +30,8 @@ export function AppShell({
   workspaces: Workspace[];
   account: AccountSummary;
   theme: Theme;
+  /** The side menu from tablet width up: an icon rail that opens on hover, or pinned open. */
+  sidenav: SidenavMode;
   /** Shown on the bell; 0 shows none. */
   unreadNotifications: number;
   /** Sign out after this long doing nothing, with a warning first (A11Y-07); 0 for no limit. */
@@ -37,11 +43,12 @@ export function AppShell({
       <a className="skip-link" href="#main">
         Skip to main content
       </a>
-      <div className="app-shell">
+      <div className="app-shell" data-sidenav={sidenav}>
         <header className="app-shell__topbar">
           <Link aria-label={`${INSTITUTION.product}, go to your home page`} className="brand" href="/">
             <Brand />
           </Link>
+          <HistoryButtons />
           <span className="topbar__spacer" />
           <form action="/search" className="topbar__search" role="search">
             <label className="input-icon">
@@ -63,7 +70,7 @@ export function AppShell({
                 </span>
               ) : null}
             </Link>
-            <AccountMenu account={account} theme={theme} />
+            <AccountMenu account={account} sidenav={sidenav} theme={theme} />
           </div>
         </header>
 

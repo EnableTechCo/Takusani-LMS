@@ -1,11 +1,24 @@
 import { INSTITUTION } from "@/config/institution";
 import { Menu, MenuButton, MenuDivider, MenuLink, MenuSection } from "@/components/ui/menu";
+import type { SidenavMode } from "@/lib/sidenav";
 import type { Theme } from "@/lib/theme";
 import type { AccountSummary } from "@/modules/identity/access";
+import { SidenavControl } from "./sidenav-control";
 import { ThemeControl } from "./theme-control";
 
-/** The account menu in the top bar (UX section 3.7): who you are, your roles, appearance, help and sign out. */
-export function AccountMenu({ account, theme }: { account: AccountSummary; theme: Theme }) {
+/**
+ * The account menu in the top bar (UX section 3.7): who you are, your roles, appearance, how the side menu behaves,
+ * help and sign out.
+ */
+export function AccountMenu({
+  account,
+  theme,
+  sidenav,
+}: {
+  account: AccountSummary;
+  theme: Theme;
+  sidenav: SidenavMode;
+}) {
   return (
     <Menu
       align="end"
@@ -33,6 +46,7 @@ export function AccountMenu({ account, theme }: { account: AccountSummary; theme
       </MenuLink>
       <MenuSection>
         <ThemeControl current={theme} />
+        <SidenavControl current={sidenav} />
       </MenuSection>
       <MenuDivider />
       <MenuLink href={`mailto:${INSTITUTION.helpEmail}`} icon="help">

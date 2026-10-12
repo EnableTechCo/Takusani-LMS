@@ -129,6 +129,21 @@ a:hover, .link:hover { color: var(--color-accent-hover); text-decoration-thickne
   .app-shell > .bottom-tabs { display: none; }
 }
 @media (min-width: 64rem) { .app-shell { grid-template-columns: var(--sidenav-width) minmax(0, 1fr); } .app-shell__sidenav { padding: var(--space-4) var(--space-3); } }
+/* Side menu, collapsed (the default; account menu, "Side menu"): an icon rail at every width from tablet up that opens
+   over the page, without moving it, while the pointer is over it or the keyboard is in it. Closed, each item is its
+   icon, with its name still read by screen readers; open, the names and workspace headings show. A mouse click does
+   not hold it open (:focus-visible, not :focus-within). "Always open" (data-sidenav="pinned") is the layout above. */
+@media (min-width: 48rem) {
+  .app-shell[data-sidenav="collapsed"] { grid-template-columns: var(--rail-width) minmax(0, 1fr); }
+  .app-shell[data-sidenav="collapsed"] .app-shell__sidenav { z-index: var(--z-sticky); width: var(--rail-width); padding: var(--space-3) var(--space-1); overflow-x: hidden; transition: width var(--duration-base) var(--ease-standard), box-shadow var(--duration-base) var(--ease-standard); }
+  .app-shell[data-sidenav="collapsed"] .app-shell__sidenav:is(:hover, :has(:focus-visible)) { width: var(--sidenav-width); box-shadow: var(--shadow-overlay); }
+  .app-shell[data-sidenav="collapsed"] .sidenav__item { flex-direction: row; justify-content: flex-start; gap: var(--space-3); min-height: 2.75rem; padding: var(--space-2) calc((var(--rail-width) - 2 * var(--space-1) - 1.25rem) / 2); text-align: left; white-space: nowrap; }
+  .app-shell[data-sidenav="collapsed"] .sidenav__short { display: none; }
+  .app-shell[data-sidenav="collapsed"] .sidenav__label, .app-shell[data-sidenav="collapsed"] .sidenav__heading { position: static; width: auto; height: auto; overflow: hidden; clip-path: none; white-space: nowrap; text-overflow: ellipsis; }
+  .app-shell[data-sidenav="collapsed"] .sidenav__count { position: static; min-width: 1.5rem; line-height: 1.375rem; font-size: var(--text-xs); }
+  .app-shell[data-sidenav="collapsed"] .app-shell__sidenav:not(:hover, :has(:focus-visible)) :is(.sidenav__label, .sidenav__heading) { position: absolute; width: 1px; height: 1px; clip-path: inset(50%); }
+  .app-shell[data-sidenav="collapsed"] .app-shell__sidenav:not(:hover, :has(:focus-visible)) .sidenav__count { position: absolute; top: 2px; right: 4px; min-width: 1.25rem; line-height: 1.125rem; font-size: 0.6875rem; }
+}
 
 /* TopBar parts: the institution's brand, context selector, search, bell, account. Never holds page actions. */
 .brand { display: inline-flex; align-items: center; gap: var(--space-2); color: var(--color-text-strong); text-decoration: none; min-height: 2.75rem; }
@@ -138,6 +153,10 @@ a:hover, .link:hover { color: var(--color-accent-hover); text-decoration-thickne
 .brand__name { font-family: var(--font-display); font-size: 1.375rem; font-weight: 700; letter-spacing: -0.01em; line-height: 1; }
 .brand__suffix { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-text-secondary); align-self: flex-end; padding-bottom: 0.2em; }
 .topbar__spacer { flex: 1; }
+/* Back and Forward: the browser's history. Phones keep Back only; Forward is rarely needed there and space is short. */
+.topbar__history { display: flex; align-items: center; gap: 2px; }
+.topbar__history .btn:disabled { background: transparent; border-color: transparent; color: var(--color-text-disabled); }
+@media (max-width: 47.99rem) { .topbar__history .topbar__forward { display: none; } }
 .topbar__context, .topbar__search { display: none; }
 .topbar__search { flex: 0 1 18rem; }
 .topbar__actions { display: flex; align-items: center; gap: var(--space-1); }
@@ -269,6 +288,7 @@ a:hover, .link:hover { color: var(--color-accent-hover); text-decoration-thickne
 .account__name { font-weight: var(--weight-semibold); color: var(--color-text-strong); }
 .account__email { font-size: var(--text-sm); color: var(--color-text-secondary); overflow-wrap: anywhere; }
 .account__roles { margin-top: var(--space-2); font-size: var(--text-xs); color: var(--color-text-secondary); }
+.account__sidenav { margin-top: var(--space-3); }
 
 /* Segmented control: Appearance (Light / Dark / System), and any 2 to 4 way exclusive choice. Radios inside. */
 .segmented { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 2px; padding: 2px; border: var(--border-control); border-radius: var(--radius-sm); background: var(--color-surface-sunken); }

@@ -92,7 +92,7 @@ Keeping exam mode in its own route group means its layout cannot inherit navigat
 ```text
 Desktop (>= 1024 px)
 +----------------------------------------------------------------------------+
-| TopBar:  [Institution]   [Context selector]      [Search] [Bell] [Account] |
+| TopBar:  [Institution] [<-][->]  [Context selector]  [Search] [Bell] [Account] |
 +-------------+--------------------------------------------------------------+
 | SideNav     | PageHeader: breadcrumb, title, status tag, primary action     |
 | (256 px)    +-----------------------------------------------+--------------+
@@ -101,8 +101,14 @@ Desktop (>= 1024 px)
 |             |                                               | 320-400 px)  |
 +-------------+-----------------------------------------------+--------------+
 
-Tablet (768-1023 px): SideNav collapses to a 72 px rail (icon plus short label);
-Aside drops below Main.
+Side menu (768 px and up), the person's choice in the Account menu (section 3.7), remembered per browser:
+  * Show on hover (the default): a 72 px icon rail at every width that opens to 256 px over the page, without
+    moving it, while the pointer is over it or the keyboard is in it. A mouse click does not hold it open.
+  * Always open: 256 px beside the page from 1024 px; at 768-1023 px a 72 px rail (icon plus short label).
+Tablet (768-1023 px): Aside drops below Main.
+
+Back and Forward (top bar, after the brand): the browser's own history, so they go where the browser's buttons
+would, disabled when there is nowhere to go. Phones show Back only.
 
 Phone (< 768 px)
 +--------------------------------------+
@@ -220,6 +226,7 @@ Results are grouped by type, with at most five per group and a "See all" link. O
 | Notification preferences | Non-mandatory categories only (section 3.5). |
 | Calendar subscription | Learners only; links to `/learn/calendar/subscribe` (FR-304). |
 | Appearance | Light, Dark, System. |
+| Side menu | Show on hover (default) or Always open (section 3.2). Applies at once; remembered in a cookie so the next page renders the same way. No effect on phones, which use the bottom tabs. |
 | Help | One consistent location on every page (WCAG 3.2.6): how-to pages and the coordinator's contact details. |
 | Sign out | Ends the session. Disabled inside `ExamShell`, which has no account menu at all. |
 
@@ -1515,7 +1522,7 @@ Target: **WCAG 2.2 level AA** for every screen, including exam mode. The criteri
 | Topic | Decision the design system must support |
 |---|---|
 | Shells | Three: `AuthShell`, `AppShell`, `ExamShell`. `ExamShell` shares tokens but none of the navigation components. |
-| Navigation | Unified SideNav grouped by workspace (up to seven groups, flat for single-role users); 72 px rail at `md`; BottomTabs (max five) plus a workspace picker sheet at `base`. |
+| Navigation | Unified SideNav grouped by workspace (up to seven groups, flat for single-role users); collapsed to a 72 px rail that opens on hover or keyboard focus by default, or pinned open by choice; Back and Forward in the TopBar; BottomTabs (max five) plus a workspace picker sheet at `base`. |
 | Breakpoints | 320 base, 768 `md`, 1024 `lg`, 1280 `xl`, 1440 `2xl`. Two-pane workspaces only from `xl`. Content cap 1200 px; prose measure 720 px. |
 | Status tags | Five tones: `neutral`, `info`, `positive`, `caution`, `critical`. "Late", "Held", "Not yet competent", "Returned", and "Amended: lower" are `caution`. `critical` is reserved for system faults and the "cannot keep a safety copy" state. All tags carry text. |
 | Components needed beyond the basics | Status line (autosave), upload row with seven states, version history list, decision history list, conflict panel, consequence dialog, receipt block, delivery-evidence disclosure, deadline line (appeal and resubmission), timeline (appeal tracker), evidence viewer frame, rubric row, sticky decision bar and decision sheet, exam bar, question navigator with four states, integrity overlay, takeover screen, offline banner, mobile gate, read-only (archived) banner, tier-grouped candidate list with disabled rows and visible reasons. |
