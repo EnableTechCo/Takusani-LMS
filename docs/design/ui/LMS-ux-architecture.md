@@ -364,6 +364,8 @@ Every node carries the FR identifiers it serves. "(assumption)" marks a route wi
 ├── /admin/imports                         X-05  FR-103
 │   ├── /admin/imports/new                 X-05  FR-103
 │   └── /admin/imports/[batchId]           X-05  FR-103
+├── /admin/programmes                      X-12  FR-701, FR-108, FR-801 (qualifications, units and credit values; SRS AS-03)
+│   └── /admin/programmes/[programmeId]    X-12  add, correct, remove while unused, import a unit list (CSV)
 ├── /admin/configuration                   X-06  FR-108
 │   └── /admin/configuration/[key]         X-06  FR-108, FR-109, NFR-09
 ├── /admin/integration                     X-07  FR-110, FR-1002 (rejected requests visible)
@@ -543,6 +545,7 @@ Priority: **P0** must be prototyped (18 screens, chosen to prove the design acro
 | X-09 | Audit log | `/admin/audit` | Administrator | Reconstruct who changed what | Filter | Actor, acting role and scope, action, object, before and after, time | FR-107, NFR-02 | P1 |
 | X-10 | Cohort archive | `/admin/cohorts` | Administrator | Archive when preconditions hold; otherwise see what blocks it | Archive cohort | Preconditions checklist: moderation signed off, no pending or held results, all appeal windows closed, no open appeal | FR-111, FR-112 | P2 |
 | X-11 | Credit reconciliation | `/admin/credits` | Administrator | See whether the credit ledger agrees with the awards and the requirements | None (read-only; nothing is repaired automatically) | The last run and its outcome; each difference by learner, unit and kind. Administrators are told in the LMS when a run finds any | FR-801 to FR-804, ADR-022 | P2 |
+| X-12 | Programmes | `/admin/programmes`, `/[programmeId]` | Administrator, or a coordinator whose scope covers the programme | Set up each programme's qualifications and units with their credit values | Create programme; Add qualification; Add unit; Save; Remove unit (only while nothing uses it); Check the file; Import units | Each qualification with its units, credit values (a scheduled change shown), whether each unit is in use, and its total. Every unit is compulsory, so the total is the sum of its units. A unit list imports as CSV: every line is checked first, nothing is added while any line has a problem, and units already present are left as they are. A unit's credit value changes under Configuration, dated and kept | FR-701, FR-108, FR-801, AS-03 | P1 |
 
 ### 5.2 P0 screen specifications
 
