@@ -285,7 +285,16 @@ insert into expected_grants values
   ('function', 'api', 'download_report_export(p_export_id uuid)', 'authenticated', 'EXECUTE'),
   -- Cohort archival (20261118090000): administrators only, checked inside each function.
   ('function', 'api', 'archive_cohort(p_cohort_id uuid)', 'authenticated', 'EXECUTE'),
-  ('function', 'api', 'list_cohort_archival()', 'authenticated', 'EXECUTE');
+  ('function', 'api', 'list_cohort_archival()', 'authenticated', 'EXECUTE'),
+  -- Programme structure (20261119090000): administrators, or coordinators whose scope covers the programme, checked
+  -- inside each function.
+  ('function', 'api', 'update_qualification(p_qualification_id uuid, p_code text, p_title text)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'update_unit(p_unit_id uuid, p_code text, p_title text)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'remove_unit(p_unit_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'remove_qualification(p_qualification_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'list_programme_structures()', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'get_programme_structure(p_programme_id uuid)', 'authenticated', 'EXECUTE'),
+  ('function', 'api', 'import_units(p_programme_id uuid, p_rows jsonb, p_apply boolean)', 'authenticated', 'EXECUTE');
 
 create temporary view actual_grants as
 with app_schemas(schema_name) as (

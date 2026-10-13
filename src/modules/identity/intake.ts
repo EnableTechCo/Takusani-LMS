@@ -3,6 +3,10 @@
  * columns we need. Every row's content is checked in the database (api.create_import_batch), so the rules for a
  * learner live in one place.
  */
+import { parseCsv } from "@/lib/csv";
+
+// The reader moved to lib/csv.ts so the unit-list import uses the same one; re-exported for existing callers.
+export { parseCsv };
 
 /** Under Next.js's 1 MB limit on a server action's body, with room for the form. 5,000 learners is about 400 KB. */
 export const MAX_INTAKE_BYTES = 900 * 1024;
@@ -38,52 +42,6 @@ export type IntakeRow = {
 export type IntakeRead =
   | { ok: true; rows: IntakeRow[] }
   | { ok: false; problem: "empty" | "missing_columns" | "too_many_rows" | "unreadable"; detail?: string };
-
-/**
- * RFC 4180: fields separated by commas, rows by CRLF or LF; a field in double quotes may hold commas, line breaks and
- * doubled quotes. A byte-order mark at the start is ignored. Returns null when a quoted field never closes.
- */
-export function parseCsv(text: string): string[][] | null {
-  const input = text.charCodeAt(0) === 0xfeff ? text.slice(1) : text;
-  const rows: string[][] = [];
-  let row: string[] = [];
-  let field = "";
-  let quoted = false;
-  for (let i = 0; i < input.length; i++) {
-    const char = input[i];
-    if (quoted) {
-      if (char === '"') {
-        if (input[i + 1] === '"') {
-          field += '"';
-          i++;
-        } else {
-          quoted = false;
-        }
-      } else {
-        field += char;
-      }
-    } else if (char === '"' && field === "") {
-      quoted = true;
-    } else if (char === ",") {
-      row.push(field);
-      field = "";
-    } else if (char === "\n" || char === "\r") {
-      if (char === "\r" && input[i + 1] === "\n") i++;
-      row.push(field);
-      rows.push(row);
-      row = [];
-      field = "";
-    } else {
-      field += char;
-    }
-  }
-  if (quoted) return null;
-  if (field !== "" || row.length > 0) {
-    row.push(field);
-    rows.push(row);
-  }
-  return rows;
-}
 
 const headerKey = (value: string) =>
   value

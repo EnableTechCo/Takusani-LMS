@@ -46,6 +46,7 @@ These are the working and open decisions. Each is applied in the documents as sh
 | P-19 | Storage recovery objective | None assumed; external scheduled replication designed | Operations, management | Go-live |
 | P-20 | Availability target | 99.9% monthly for planning | Product, operations | Nothing |
 | P-21 | Department credential standard | Opaque 256-bit bearer secret, HMAC-verified, rotation overlap; OAuth or mutual TLS only if mandated | Department integration owner | Department API build |
+| P-22 | How does a learner complete a qualification, and can credits come from outside the LMS? | Every unit of a qualification is compulsory: the qualification's total is the sum of its units, with no electives or separate minimum. The credit-bearing blocks are called units ("modules" stay as groupings of material). No credit for prior learning or transfer **Confirmed by the owner, 13 Oct 2026**. The unit list and credit values (SRS AS-03) are entered under Administration, Programmes, by screen or CSV import. | Academic policy | Credit totals; the learner's credits record |
 
 ## 2. Fix register: independent review
 

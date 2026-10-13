@@ -102,6 +102,7 @@ export const WORKSPACES: readonly Workspace[] = [
       { label: "Overview", href: "/admin" },
       { label: "Accounts", href: "/admin/accounts" },
       { label: "Imports", href: "/admin/imports" },
+      { label: "Programmes", href: "/admin/programmes" },
       { label: "Configuration", href: "/admin/configuration" },
       { label: "Department integration", href: "/admin/integration" },
       { label: "Audit log", href: "/admin/audit" },

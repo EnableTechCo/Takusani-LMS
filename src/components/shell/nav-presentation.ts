@@ -38,6 +38,7 @@ export const NAV_ICONS: Record<string, IconName> = {
   "/admin": "grid",
   "/admin/accounts": "users",
   "/admin/imports": "upload",
+  "/admin/programmes": "book",
   "/admin/configuration": "sliders",
   "/admin/integration": "external",
   "/admin/audit": "clipboard",
