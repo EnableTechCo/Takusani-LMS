@@ -50,9 +50,14 @@ jobs:
           fetch-depth: 0 # the migration rules compare against the base branch
       - name: Migration rules (names, immutability, order)
         run: bash scripts/check-migrations.sh ${{ github.event_name == 'pull_request' && format('origin/{0}', github.base_ref) || '' }}
+      # The CLI version comes from the supabase devDependency, so a Dependabot update moves CI with it: two
+      # versions generate src/types/database.ts differently, and the types check would fail.
+      - name: Supabase CLI version from package.json
+        id: supabase-cli
+        run: echo "version=$(node -p "require('./package.json').devDependencies.supabase.replace(/^[\^~]/, '')")" >> "$GITHUB_OUTPUT"
       - uses: supabase/setup-cli@v3
         with:
-          version: 2.118.0 # keep in step with the supabase devDependency
+          version: ${{ steps.supabase-cli.outputs.version }}
       - run: supabase start
       - run: supabase db lint --local --level warning
       - run: supabase test db

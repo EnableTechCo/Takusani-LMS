@@ -68,9 +68,14 @@ jobs:
       - name: Vercel region matches the Supabase region (ADR-027)
         run: node scripts/deploy-region.mjs "$SUPABASE_PROJECT_ID"
 
+      # The CLI version comes from the supabase devDependency, so a Dependabot update moves CI with it: two
+      # versions generate src/types/database.ts differently, and the types check would fail.
+      - name: Supabase CLI version from package.json
+        id: supabase-cli
+        run: echo "version=$(node -p "require('./package.json').devDependencies.supabase.replace(/^[\^~]/, '')")" >> "$GITHUB_OUTPUT"
       - uses: supabase/setup-cli@v3
         with:
-          version: 2.118.0 # keep in step with the supabase devDependency
+          version: ${{ steps.supabase-cli.outputs.version }}
 
       - run: supabase link --project-ref "$SUPABASE_PROJECT_ID" --password "$SUPABASE_DB_PASSWORD"
 
